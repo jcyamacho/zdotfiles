@@ -5,13 +5,17 @@ _install_direnv() {
   unset bin_path
 }
 
-if (( $+commands[direnv] )); then
+_has_direnv() {
+  (( $+commands[direnv] ))
+}
+
+if _has_direnv; then
   eval "$(direnv hook zsh)"
 
   uninstall-direnv() {
     info "Uninstalling direnv..."
     local bin_file="$CUSTOM_TOOLS_DIR/direnv"
-    rm $bin_file
+    command rm $bin_file
     reload
   }
 

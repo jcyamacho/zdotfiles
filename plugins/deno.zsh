@@ -10,7 +10,7 @@ if _has_deno; then
 
   uninstall-deno() {
     info "Uninstalling deno..."
-    rm -rf "$DENO_INSTALL"
+    command rm -rf "$DENO_INSTALL"
     reload
   }
 

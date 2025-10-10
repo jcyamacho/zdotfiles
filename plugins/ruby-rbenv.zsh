@@ -7,7 +7,7 @@ _has_ruby() {
   (( $+commands[ruby] ))
 }
 
-if (( ! $+commands[brew] )); then
+if ! _has_brew; then
   return
 fi
 
@@ -35,7 +35,7 @@ if _has_rbenv; then
   uninstall-rbenv() {
     info "Uninstalling rbenv..."
     brew uninstall rbenv
-    rm -rf $HOME/.rbenv
+    command rm -rf "$HOME/.rbenv"
     reload
   }
 

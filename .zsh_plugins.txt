@@ -10,61 +10,63 @@ $ZDOTFILES_DIR/plugins/bat.zsh
 $ZDOTFILES_DIR/plugins/bun.zsh
 ohmyzsh/ohmyzsh path:plugins/bun conditional:_has_bun
 
-$ZDOTFILES_DIR/plugins/cloudflare.sh
+$ZDOTFILES_DIR/plugins/cloudflare.zsh
 
-$ZDOTFILES_DIR/plugins/code.sh
+$ZDOTFILES_DIR/plugins/code.zsh
 
-$ZDOTFILES_DIR/plugins/cursor.sh
+$ZDOTFILES_DIR/plugins/cursor.zsh
 
-$ZDOTFILES_DIR/plugins/deno.sh
+$ZDOTFILES_DIR/plugins/deno.zsh
 ohmyzsh/ohmyzsh path:plugins/deno conditional:_has_deno
 
-$ZDOTFILES_DIR/plugins/direnv.sh
+$ZDOTFILES_DIR/plugins/direnv.zsh
 
-$ZDOTFILES_DIR/plugins/docker.sh
+$ZDOTFILES_DIR/plugins/docker.zsh
 ohmyzsh/ohmyzsh path:plugins/docker conditional:_has_docker
 
-$ZDOTFILES_DIR/plugins/fabric-ai.sh
+$ZDOTFILES_DIR/plugins/fabric-ai.zsh
 
-$ZDOTFILES_DIR/plugins/fonts.sh
+$ZDOTFILES_DIR/plugins/fonts.zsh
 
-$ZDOTFILES_DIR/plugins/github-cli.sh
+$ZDOTFILES_DIR/plugins/github-cli.zsh
 ohmyzsh/ohmyzsh path:plugins/gh conditional:_has_github_cli
 
 $ZDOTFILES_DIR/plugins/golang
 ohmyzsh/ohmyzsh path:plugins/golang conditional:_has_golang
 
-$ZDOTFILES_DIR/plugins/jq.sh
+$ZDOTFILES_DIR/plugins/jq.zsh
 
-$ZDOTFILES_DIR/plugins/mise.sh
+$ZDOTFILES_DIR/plugins/mise.zsh
 ohmyzsh/ohmyzsh path:plugins/mise conditional:_has_mise
 
-$ZDOTFILES_DIR/plugins/node-fnm.sh
+$ZDOTFILES_DIR/plugins/node-fnm.zsh
 ohmyzsh/ohmyzsh path:plugins/fnm conditional:_has_fnm
 
-$ZDOTFILES_DIR/plugins/ollama.sh
+$ZDOTFILES_DIR/plugins/ollama.zsh
 
-$ZDOTFILES_DIR/plugins/python-uv.sh
+$ZDOTFILES_DIR/plugins/python-uv.zsh
 ohmyzsh/ohmyzsh path:plugins/uv conditional:_has_uv
 
-$ZDOTFILES_DIR/plugins/rust.sh
+$ZDOTFILES_DIR/plugins/rust.zsh
 ohmyzsh/ohmyzsh path:plugins/rust conditional:_has_rust
 
-$ZDOTFILES_DIR/plugins/ruby-rbenv.sh
+$ZDOTFILES_DIR/plugins/ruby-rbenv.zsh
 ohmyzsh/ohmyzsh path:plugins/rbenv conditional:_has_rbenv
 ohmyzsh/ohmyzsh path:plugins/ruby conditional:_has_ruby
 
-$ZDOTFILES_DIR/plugins/zed.sh
+$ZDOTFILES_DIR/plugins/zed.zsh
 
-$ZDOTFILES_DIR/plugins/zig.sh
+$ZDOTFILES_DIR/plugins/zig.zsh
 
-$ZDOTFILES_DIR/plugins/zoxide.sh
+$ZDOTFILES_DIR/plugins/zoxide.zsh
 
-$ZDOTFILES_DIR/plugins/gemini-cli.sh
+$ZDOTFILES_DIR/plugins/gemini-cli.zsh
 
-$ZDOTFILES_DIR/plugins/codex.sh
+$ZDOTFILES_DIR/plugins/codex.zsh
 
-$ZDOTFILES_DIR/plugins/claude-code.sh
+$ZDOTFILES_DIR/plugins/claude-code.zsh
+
+$ZDOTFILES_DIR/plugins/lsd.zsh
 
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-syntax-highlighting

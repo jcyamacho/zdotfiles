@@ -1,9 +1,13 @@
 # jq (command-line JSON processor): https://jqlang.org/
-if (( ! $+commands[brew] )); then
+_has_jq() {
+  (( $+commands[jq] ))
+}
+
+if ! _has_brew; then
   return
 fi
 
-if (( $+commands[jq] )); then
+if _has_jq; then
   uninstall-jq() {
     info "Uninstalling jq..."
     brew uninstall jq

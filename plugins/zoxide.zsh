@@ -1,15 +1,20 @@
 # ZOXIDE (smarter cd command): https://github.com/ajeetdsouza/zoxide
+
+_has_zoxide() {
+  (( $+commands[zoxide] ))
+}
+
 _install_zoxide() {
   curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh -s -- --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
 }
 
-if (( $+commands[zoxide] )); then
+if _has_zoxide; then
   eval "$(zoxide init zsh)"
 
   alias uninstall-z="uninstall-zoxide"
   uninstall-zoxide() {
     info "Uninstalling zoxide..."
-    rm -f "$CUSTOM_TOOLS_DIR/zoxide"
+    command rm -f "$CUSTOM_TOOLS_DIR/zoxide"
     reload
   }
 

@@ -86,7 +86,7 @@ update-starship() {
 
 _update_starship() {
   info "Updating starship..."
-  curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$CUSTOM_TOOLS_DIR"
+  curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
 }
 
 updates+=(_update_starship)

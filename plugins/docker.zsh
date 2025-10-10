@@ -3,9 +3,7 @@ _has_docker() {
 }
 
 if _has_docker; then
-  return
+  docker-run-it() {
+    docker run -it "$(docker build -q .)"
+  }
 fi
-
-docker-run-it() {
-  docker run -it "$(docker build -q .)"
-}

@@ -3,6 +3,14 @@ _has_fnm() {
   (( $+commands[fnm] ))
 }
 
+_has_node() {
+  (( $+commands[node] ))
+}
+
+_has_npm() {
+  (( $+commands[npm] ))
+}
+
 if ! _has_brew; then
   return
 fi

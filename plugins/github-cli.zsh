@@ -3,11 +3,11 @@ _has_github_cli() {
   (( $+commands[gh] ))
 }
 
-if ! _has_github_cli; then
+if ! _has_brew; then
   return
 fi
 
-if (( $+commands[gh] )); then
+if _has_github_cli; then
   uninstall-gh() {
     info "Uninstalling gh-cli..."
     brew uninstall gh

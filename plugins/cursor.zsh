@@ -1,14 +1,21 @@
 # Cursor (IDE): https://www.cursor.com/
-if (( ! $+commands[brew] )); then
-  return
-fi
 
-if (( $+commands[cursor] )); then
+_has_cursor() {
+  (( $+commands[cursor] ))
+}
+
+if _has_cursor; then
   cr() {
     local dir="${1:-$(pwd)}"
     cursor "$dir"
   }
+fi
 
+if ! _has_brew; then
+  return
+fi
+
+if _has_cursor; then
   uninstall-cursor() {
     info "Uninstalling cursor..."
     brew uninstall cursor

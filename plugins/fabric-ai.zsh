@@ -1,17 +1,21 @@
 # FABRIC_AI (AI prompts framework): https://github.com/danielmiessler/fabric
-if (( ! $+commands[brew] )); then
+_has_fabric_ai() {
+  (( $+commands[fabric-ai] ))
+}
+
+if ! _has_brew; then
   return
 fi
 
-if (( $+commands[fabric-ai] )); then
+if _has_fabric_ai; then
   alias fabric="fabric-ai"
 
   export FABRIC_AI_DIR="$HOME/.config/fabric"
   export FABRIC_AI_PATTERNS_DIR="$FABRIC_AI_DIR/patterns"
 
-  if [ -d $FABRIC_AI_PATTERNS_DIR ]; then
+  if [ -d "$FABRIC_AI_PATTERNS_DIR" ]; then
     # Loop through all files in the ~/.config/fabric-ai/patterns directory
-    for pattern_file in $FABRIC_AI_PATTERNS_DIR/*; do
+    for pattern_file in "$FABRIC_AI_PATTERNS_DIR/*"; do
       # Get the base name of the file (i.e., remove the directory path)
       pattern_name=$(basename "$pattern_file")
 
@@ -20,7 +24,7 @@ if (( $+commands[fabric-ai] )); then
 
       # Create an alias
       eval "
-      alias $pattern_name='fabric --pattern $pattern_name --stream'
+      alias $pattern_name="fabric --pattern $pattern_name --stream"
       "
     done
   fi
@@ -28,18 +32,18 @@ if (( $+commands[fabric-ai] )); then
   uninstall-fabric-ai() {
     info "Uninstalling fabric-ai..."
     brew uninstall fabric-ai
-    rm -rf "$FABRIC_AI_DIR"
+    command rm -rf "$FABRIC_AI_DIR"
     reload
   }
 
   yt() {
     if [ "$#" -eq 0 ] || [ "$#" -gt 2 ]; then
-      echo "Usage: yt [-t | --timestamps] youtube-link"
-      echo "Use the '-t' flag to get the transcript with timestamps."
+      print "Usage: yt [-t | --timestamps] youtube-link"
+      print "Use the '-t' flag to get the transcript with timestamps."
       return 1
     fi
 
-    transcript_flag="--transcript"
+    local transcript_flag="--transcript"
     if [ "$1" = "-t" ] || [ "$1" = "--timestamps" ]; then
       transcript_flag="--transcript-with-timestamps"
       shift
