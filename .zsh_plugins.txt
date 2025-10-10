@@ -1,0 +1,71 @@
+getantidote/use-omz
+
+ohmyzsh/ohmyzsh path:plugins/git
+
+ohmyzsh/ohmyzsh path:plugins/brew
+$ZDOTFILES_DIR/plugins/brew.zsh
+
+$ZDOTFILES_DIR/plugins/bat.zsh
+
+$ZDOTFILES_DIR/plugins/bun.zsh
+ohmyzsh/ohmyzsh path:plugins/bun conditional:_has_bun
+
+$ZDOTFILES_DIR/plugins/cloudflare.sh
+
+$ZDOTFILES_DIR/plugins/code.sh
+
+$ZDOTFILES_DIR/plugins/cursor.sh
+
+$ZDOTFILES_DIR/plugins/deno.sh
+ohmyzsh/ohmyzsh path:plugins/deno conditional:_has_deno
+
+$ZDOTFILES_DIR/plugins/direnv.sh
+
+$ZDOTFILES_DIR/plugins/docker.sh
+ohmyzsh/ohmyzsh path:plugins/docker conditional:_has_docker
+
+$ZDOTFILES_DIR/plugins/fabric-ai.sh
+
+$ZDOTFILES_DIR/plugins/fonts.sh
+
+$ZDOTFILES_DIR/plugins/github-cli.sh
+ohmyzsh/ohmyzsh path:plugins/gh conditional:_has_github_cli
+
+$ZDOTFILES_DIR/plugins/golang
+ohmyzsh/ohmyzsh path:plugins/golang conditional:_has_golang
+
+$ZDOTFILES_DIR/plugins/jq.sh
+
+$ZDOTFILES_DIR/plugins/mise.sh
+ohmyzsh/ohmyzsh path:plugins/mise conditional:_has_mise
+
+$ZDOTFILES_DIR/plugins/node-fnm.sh
+ohmyzsh/ohmyzsh path:plugins/fnm conditional:_has_fnm
+
+$ZDOTFILES_DIR/plugins/ollama.sh
+
+$ZDOTFILES_DIR/plugins/python-uv.sh
+ohmyzsh/ohmyzsh path:plugins/uv conditional:_has_uv
+
+$ZDOTFILES_DIR/plugins/rust.sh
+ohmyzsh/ohmyzsh path:plugins/rust conditional:_has_rust
+
+$ZDOTFILES_DIR/plugins/ruby-rbenv.sh
+ohmyzsh/ohmyzsh path:plugins/rbenv conditional:_has_rbenv
+ohmyzsh/ohmyzsh path:plugins/ruby conditional:_has_ruby
+
+$ZDOTFILES_DIR/plugins/zed.sh
+
+$ZDOTFILES_DIR/plugins/zig.sh
+
+$ZDOTFILES_DIR/plugins/zoxide.sh
+
+$ZDOTFILES_DIR/plugins/gemini-cli.sh
+
+$ZDOTFILES_DIR/plugins/codex.sh
+
+$ZDOTFILES_DIR/plugins/claude-code.sh
+
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-syntax-highlighting
+z-shell/zsh-navigation-tools kind:defer
