@@ -22,7 +22,7 @@ if _has_golang; then
     go mod init $namespace
 
     if [ ! -f main.go ]; then
-      cp "$ZDOTFILES_DIR/plugins/golang/templates/main.go" .
+      command cp "$ZDOTFILES_DIR/plugins/golang/main.go" .
     fi
   }
 fi

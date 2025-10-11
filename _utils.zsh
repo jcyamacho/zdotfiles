@@ -1,11 +1,11 @@
 autoload -Uz colors 2>/dev/null && colors
 
-typeset -g _reset_color=${reset_color:-$'\e[0m'}
+typeset -r _reset_color=${reset_color:-$'\e[0m'}
 
 mkcd() {
   local target=${1:?mkcd: missing directory name}
-  command mkdir -p -- "$target" || return
-  builtin cd -- "$target"
+  command mkdir -p "$target"
+  builtin cd "$target"
 }
 
 reload() {
@@ -13,15 +13,15 @@ reload() {
 }
 
 info() {
-  print -r -- "${fg_bold[cyan]}$*${_reset_color}"
+  print -r "${fg_bold[cyan]}$*${_reset_color}"
 }
 
 warn() {
-  print -r -- "${fg_bold[yellow]}$*${_reset_color}"
+  print -r "${fg_bold[yellow]}$*${_reset_color}"
 }
 
 error() {
-  print -r -- "${fg_bold[red]}$*${_reset_color}"
+  print -r "${fg_bold[red]}$*${_reset_color}"
 }
 
 is-macos() {
@@ -33,7 +33,7 @@ alias rmf="rm -rf"
 alias cd..="cd .."
 
 home() {
-  builtin cd -- "$HOME"
+  builtin cd "$HOME"
 }
 
 zshconfig() {
