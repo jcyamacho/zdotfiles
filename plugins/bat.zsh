@@ -1,5 +1,5 @@
 # BAT (A cat(1) clone with wings): https://github.com/sharkdp/bat
-if (( ! $+commands[brew] )); then
+if ! _has_brew; then
   return
 fi
 

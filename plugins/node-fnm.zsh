@@ -16,15 +16,15 @@ if ! _has_brew; then
 fi
 
 _update_node() {
-  info "  - Activating latest LTS node..."
+  info "Activating latest LTS node..."
   fnm install --lts
   fnm use --install-if-missing lts-latest
 
   local current_version=$(fnm current)
   fnm default "$current_version"
-  info "  - Current Node.js version: $current_version"
+  info "Current Node.js version: $current_version"
 
-  info "  - Updating npm..."
+  info "Updating npm..."
   npm install -g npm@latest > /dev/null
 }
 

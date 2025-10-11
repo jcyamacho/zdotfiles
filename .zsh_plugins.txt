@@ -21,7 +21,7 @@ $ZDOTFILES_DIR/plugins/cursor.zsh
 $ZDOTFILES_DIR/plugins/deno.zsh
 ohmyzsh/ohmyzsh path:plugins/deno conditional:_has_deno
 
-$ZDOTFILES_DIR/plugins/direnv.zsh
+$ZDOTFILES_DIR/plugins/direnv
 
 $ZDOTFILES_DIR/plugins/docker.zsh
 ohmyzsh/ohmyzsh path:plugins/docker conditional:_has_docker
