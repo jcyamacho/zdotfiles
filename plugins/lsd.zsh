@@ -5,7 +5,7 @@ _has_lsd() {
 }
 
 if _has_lsd; then
-  ls() {
+  ll() {
     lsd -l --git "$@"
   }
 fi
