@@ -1,14 +1,10 @@
 # ZIG (programming language): https://ziglang.org/
 
-_has_zig() {
-  (( $+commands[zig] ))
-}
-
-if ! _has_brew; then
+if ! exists brew; then
   return
 fi
 
-if _has_zig; then
+if exists zig; then
   uninstall-zig() {
     info "Uninstalling zig..."
     brew uninstall zig

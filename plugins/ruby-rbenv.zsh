@@ -1,13 +1,6 @@
 # rbenv (Ruby version manager): https://github.com/rbenv/rbenv
-_has_rbenv() {
-  (( $+commands[rbenv] ))
-}
 
-_has_ruby() {
-  (( $+commands[ruby] ))
-}
-
-if ! _has_brew; then
+if ! exists brew; then
   return
 fi
 
@@ -28,7 +21,7 @@ _update_ruby() {
   info "Current Ruby version: $latest_version"
 }
 
-if _has_rbenv; then
+if exists rbenv; then
   eval "$(rbenv init - --no-rehash zsh)"
 
   alias uninstall-ruby="uninstall-rbenv"

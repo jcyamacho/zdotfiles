@@ -1,9 +1,21 @@
-_has_docker() {
-  (( $+commands[docker] ))
-}
+# docker (containerization platform): https://www.docker.com/
 
-if _has_docker; then
+if exists docker; then
   docker-run-it() {
     docker run -it "$(docker build -q .)"
+  }
+fi
+
+if ! exists brew; then
+  return
+fi
+
+if exists docker; then
+  uninstall-docker() {
+    brew uninstall docker
+  }
+else
+  install-docker() {
+    brew install docker
   }
 fi

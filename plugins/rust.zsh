@@ -1,11 +1,8 @@
 # RUST (programming language): https://www.rust-lang.org/
-_has_rust() {
-  (( $+commands[rustup] && $+commands[cargo] ))
-}
 
 export CARGO_DIR="$HOME/.cargo"
 
-if [ -s "$CARGO_DIR/env" ]; then
+if [ -f "$CARGO_DIR/env" ]; then
   source "$CARGO_DIR/env"
 
   uninstall-rust() {

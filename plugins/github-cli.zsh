@@ -1,13 +1,9 @@
 # GITHUB_CLI (GitHub on the command line): https://github.com/cli/cli
-_has_github_cli() {
-  (( $+commands[gh] ))
-}
-
-if ! _has_brew; then
+if ! exists brew; then
   return
 fi
 
-if _has_github_cli; then
+if exists gh; then
   uninstall-gh() {
     info "Uninstalling gh-cli..."
     brew uninstall gh

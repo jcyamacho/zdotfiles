@@ -5,11 +5,7 @@ if [ -s "$BUN_INSTALL" ]; then
   path=("$BUN_INSTALL/bin" $path)
 fi
 
-_has_bun() {
-  (( $+commands[bun] ))
-}
-
-if _has_bun; then
+if exists bun; then
   uninstall-bun() {
     info "Uninstalling bun..."
     command rm -rf "$BUN_INSTALL"

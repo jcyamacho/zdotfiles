@@ -10,7 +10,7 @@ $ZDOTFILES_DIR/plugins/brew.zsh
 $ZDOTFILES_DIR/plugins/bat.zsh
 
 $ZDOTFILES_DIR/plugins/bun.zsh
-ohmyzsh/ohmyzsh path:plugins/bun conditional:_has_bun
+ohmyzsh/ohmyzsh path:plugins/bun conditional:"exists bun"
 
 $ZDOTFILES_DIR/plugins/cloudflare.zsh
 
@@ -19,42 +19,42 @@ $ZDOTFILES_DIR/plugins/code.zsh
 $ZDOTFILES_DIR/plugins/cursor.zsh
 
 $ZDOTFILES_DIR/plugins/deno.zsh
-ohmyzsh/ohmyzsh path:plugins/deno conditional:_has_deno
+ohmyzsh/ohmyzsh path:plugins/deno conditional:"exists deno"
 
 $ZDOTFILES_DIR/plugins/direnv
 
 $ZDOTFILES_DIR/plugins/docker.zsh
-ohmyzsh/ohmyzsh path:plugins/docker conditional:_has_docker
+ohmyzsh/ohmyzsh path:plugins/docker conditional:"exists docker"
 
 $ZDOTFILES_DIR/plugins/fabric-ai.zsh
 
 $ZDOTFILES_DIR/plugins/fonts.zsh
 
 $ZDOTFILES_DIR/plugins/github-cli.zsh
-ohmyzsh/ohmyzsh path:plugins/gh conditional:_has_github_cli
+ohmyzsh/ohmyzsh path:plugins/gh conditional:"exists gh"
 
 $ZDOTFILES_DIR/plugins/golang
-ohmyzsh/ohmyzsh path:plugins/golang conditional:_has_golang
+ohmyzsh/ohmyzsh path:plugins/golang conditional:"exists go"
 
 $ZDOTFILES_DIR/plugins/jq.zsh
 
 $ZDOTFILES_DIR/plugins/mise.zsh
-ohmyzsh/ohmyzsh path:plugins/mise conditional:_has_mise
+ohmyzsh/ohmyzsh path:plugins/mise conditional:"exists mise"
 
 $ZDOTFILES_DIR/plugins/node-fnm.zsh
-ohmyzsh/ohmyzsh path:plugins/fnm conditional:_has_fnm
+ohmyzsh/ohmyzsh path:plugins/fnm conditional:"exists fnm"
 
 $ZDOTFILES_DIR/plugins/ollama.zsh
 
 $ZDOTFILES_DIR/plugins/python-uv.zsh
-ohmyzsh/ohmyzsh path:plugins/uv conditional:_has_uv
+ohmyzsh/ohmyzsh path:plugins/uv conditional:"exists uv"
 
 $ZDOTFILES_DIR/plugins/rust.zsh
-ohmyzsh/ohmyzsh path:plugins/rust conditional:_has_rust
+ohmyzsh/ohmyzsh path:plugins/rust conditional:"exists cargo"
 
 $ZDOTFILES_DIR/plugins/ruby-rbenv.zsh
-ohmyzsh/ohmyzsh path:plugins/rbenv conditional:_has_rbenv
-ohmyzsh/ohmyzsh path:plugins/ruby conditional:_has_ruby
+ohmyzsh/ohmyzsh path:plugins/rbenv conditional:"exists rbenv"
+ohmyzsh/ohmyzsh path:plugins/ruby conditional:"exists ruby"
 
 $ZDOTFILES_DIR/plugins/zed.zsh
 

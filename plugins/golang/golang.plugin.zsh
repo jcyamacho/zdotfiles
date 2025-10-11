@@ -1,11 +1,7 @@
 # go (Go programming language): https://golang.org/
 # golangci-lint (Go linter): https://golangci-lint.run/
 
-_has_golang() {
-  (( $+commands[go] ))
-}
-
-if _has_golang; then
+if exists go; then
   # change the default GOPATH from $HOME/go to $HOME/.go
   export GOPATH="$HOME/.go"
 
@@ -27,11 +23,11 @@ if _has_golang; then
   }
 fi
 
-if ! _has_brew; then
+if ! exists brew; then
   return
 fi
 
-if _has_golang; then
+if exists go; then
   uninstall-go() {
     info "Uninstalling golangci-lint..."
     brew uninstall golangci-lint

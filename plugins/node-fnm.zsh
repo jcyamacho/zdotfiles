@@ -1,17 +1,6 @@
 # fnm (Fast Node Manager): https://github.com/Schniz/fnm
-_has_fnm() {
-  (( $+commands[fnm] ))
-}
 
-_has_node() {
-  (( $+commands[node] ))
-}
-
-_has_npm() {
-  (( $+commands[npm] ))
-}
-
-if ! _has_brew; then
+if ! exists brew; then
   return
 fi
 
@@ -28,7 +17,7 @@ _update_node() {
   npm install -g npm@latest > /dev/null
 }
 
-if _has_fnm; then
+if exists fnm; then
   eval "$(fnm env --use-on-cd --shell zsh)"
 
   alias uninstall-node="uninstall-fnm"

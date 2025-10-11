@@ -2,16 +2,6 @@ autoload -Uz colors 2>/dev/null && colors
 
 typeset -r _reset_color=${reset_color:-$'\e[0m'}
 
-mkcd() {
-  local target=${1:?mkcd: missing directory name}
-  command mkdir -p "$target"
-  builtin cd "$target"
-}
-
-reload() {
-  source "$ZDOTFILES_DIR/zshrc.sh"
-}
-
 info() {
   print -r "${fg_bold[cyan]}$*${_reset_color}"
 }
@@ -22,6 +12,20 @@ warn() {
 
 error() {
   print -r "${fg_bold[red]}$*${_reset_color}"
+}
+
+mkcd() {
+  local target=${1:?mkcd: missing directory name}
+  command mkdir -p "$target"
+  builtin cd "$target"
+}
+
+exists() {
+  (( $+commands[$1] ))
+}
+
+reload() {
+  source "$ZDOTFILES_DIR/zshrc.sh"
 }
 
 is-macos() {

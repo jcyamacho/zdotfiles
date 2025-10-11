@@ -1,9 +1,9 @@
 # BAT (A cat(1) clone with wings): https://github.com/sharkdp/bat
-if ! _has_brew; then
+if ! exists brew; then
   return
 fi
 
-if (( $+commands[bat] )); then
+if exists bat; then
   uninstall-bat() {
     info "Uninstalling bat..."
     brew uninstall bat

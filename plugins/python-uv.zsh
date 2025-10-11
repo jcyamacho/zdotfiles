@@ -1,13 +1,6 @@
 # uv (An extremely fast Python package and project manager, written in Rust): https://docs.astral.sh/uv/
-_has_uv() {
-  (( $+commands[uv] ))
-}
 
-_has_python() {
-  (( $+commands[python] ))
-}
-
-if _has_python; then
+if exists python; then
   alias py="python3"
 
   pyclean() {
@@ -33,14 +26,14 @@ if _has_python; then
   }
 fi
 
-if ! _has_uv; then
+if ! exists uv; then
   alias install-python="install-uv"
   install-uv() {
     info "Installing uv..."
     curl -LsSf https://astral.sh/uv/install.sh | sh
 
     # Install Python
-    if ! _has_python; then
+    if ! exists python; then
       info "Installing python..."
       uv python install --default --preview
     fi

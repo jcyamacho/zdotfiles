@@ -3,11 +3,7 @@ export CODEX_HOME="$HOME/.codex"
 export CODEX_PROMPTS_DIR="$CODEX_HOME/prompts"
 export CODEX_SECURE_MODE=1
 
-_has_codex() {
-  (( $+commands[codex] ))
-}
-
-if _has_codex; then
+if exists codex; then
   cdx() {
     codex --search --sandbox workspace-write --ask-for-approval on-request "$@"
   }
@@ -17,11 +13,11 @@ if _has_codex; then
   }
 fi
 
-if ! _has_npm; then
+if ! exists npm; then
   return
 fi
 
-if _has_codex; then
+if exists codex; then
   update-codex() {
     info "Updating codex..."
     npm install -g @openai/codex@latest > /dev/null

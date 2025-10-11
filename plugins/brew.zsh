@@ -1,10 +1,7 @@
 # HOMEBREW (package manager for OSX): https://brew.sh/
+export HOMEBREW_NO_ENV_HINTS=1
 
-_has_brew() {
-  (( $+commands[brew] ))
-}
-
-if ! _has_brew; then
+if ! exists brew; then
   info "Installing brew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi

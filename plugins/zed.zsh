@@ -1,21 +1,17 @@
 # ZED (A modern text editor): https://zed.dev/
 
-_has_zed() {
-  (( $+commands[zed] ))
-}
-
-if _has_zed; then
+if exists zed; then
   zd() {
     local dir="${1:-$(pwd)}"
     zed $dir
   }
 fi
 
-if ! _has_brew; then
+if ! exists brew; then
   return
 fi
 
-if _has_zed; then
+if exists zed; then
   uninstall-zed() {
     info "Uninstalling zed..."
     brew uninstall zed

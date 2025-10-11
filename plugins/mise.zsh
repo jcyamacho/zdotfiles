@@ -1,9 +1,6 @@
 # MISE (dev tools, env vars, task runner): https://mise.jdx.dev/
-_has_mise() {
-  (( $+commands[mise] ))
-}
 
-if _has_mise; then
+if exists mise; then
   uninstall-mise() {
     info "Uninstalling mise..."
     mise implode --yes

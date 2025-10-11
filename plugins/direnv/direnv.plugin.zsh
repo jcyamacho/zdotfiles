@@ -13,11 +13,7 @@ _install_direnv() {
   fi
 }
 
-_has_direnv() {
-  (( $+commands[direnv] ))
-}
-
-if _has_direnv; then
+if exists direnv; then
   eval "$(direnv hook zsh)"
 
   uninstall-direnv() {

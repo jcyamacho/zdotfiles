@@ -1,5 +1,5 @@
 # fonts
-if ! _has_brew; then
+if ! exists brew; then
   return
 fi
 

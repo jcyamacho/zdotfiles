@@ -1,13 +1,9 @@
 # Gemini CLI: https://github.com/google/gemini-cli
-_has_gemini() {
-  (( $+commands[gemini] ))
-}
-
-if ! _has_npm; then
+if ! exists npm; then
   return
 fi
 
-if _has_gemini; then
+if exists gemini; then
   update-gemini() {
     info "Updating gemini..."
     npm install -g @google/gemini-cli@latest  > /dev/null

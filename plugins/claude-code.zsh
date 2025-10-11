@@ -1,11 +1,7 @@
 # Claude Code CLI: https://www.anthropic.com/claude-code
 export CLAUDE_CODE_PATH="$HOME/.claude"
 
-_has_claude() {
-  (( $+commands[claude] ))
-}
-
-if ! _has_npm; then
+if ! exists npm; then
   return
 fi
 
@@ -45,7 +41,7 @@ _install_claude() {
   _update_commands
 }
 
-if _has_claude; then
+if exists claude; then
   update-claude() {
     info "Updating claude..."
     _install_claude
