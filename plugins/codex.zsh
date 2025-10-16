@@ -36,6 +36,15 @@ else
     info "Installing codex..."
     npm install -g @openai/codex@latest > /dev/null
     command mkdir -p "$CODEX_PROMPTS_DIR"
+
+    if exists brew; then
+      info "Installing tools for Codex CLI..."
+      brew install ripgrep
+      brew install fd
+      brew install jq
+      brew install fzf
+    fi
+
     reload
   }
 fi
