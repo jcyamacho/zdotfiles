@@ -19,5 +19,6 @@ else
   install-lsd() {
     info "Installing lsd..."
     brew install lsd
+    reload
   }
 fi
