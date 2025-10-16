@@ -18,7 +18,7 @@ source "$ZDOTFILES_DIR/_utils.zsh"
 typeset -gUa updates
 
 _update_zdotfiles() {
-  info "Updating zdotdir..."
+  info "Updating zdotfiles..."
   command git -C "$ZDOTFILES_DIR" pull --ff-only
 }
 
