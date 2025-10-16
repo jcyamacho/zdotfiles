@@ -65,6 +65,7 @@ fi
 _get_latest_python_version() {
   # Extract and return the latest stable cpython version from uv python list output
   uv python list "$@" \
+    | awk '{print $1}' \
     | grep -E '^cpython-[0-9]+\.[0-9]+\.[0-9]+-' \
     | sort -V \
     | tail -n1
