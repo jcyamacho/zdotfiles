@@ -3,15 +3,15 @@ autoload -Uz colors 2>/dev/null && colors
 typeset -r _reset_color=${reset_color:-$'\e[0m'}
 
 info() {
-  print -r "${fg_bold[cyan]}$*${_reset_color}"
+  print -r "${fg_bold[cyan]}$*$_reset_color"
 }
 
 warn() {
-  print -r "${fg_bold[yellow]}$*${_reset_color}"
+  print -r "${fg_bold[yellow]}$*$_reset_color"
 }
 
 error() {
-  print -r "${fg_bold[red]}$*${_reset_color}"
+  print -r "${fg_bold[red]}$*$_reset_color"
 }
 
 mkcd() {
@@ -40,7 +40,18 @@ home() {
   builtin cd "$HOME"
 }
 
+typeset -r _zshrc_file="$HOME/.zshrc"
+
+_lock_zshrc() {
+  command chmod -w "$_zshrc_file"
+}
+
+_unlock_zshrc() {
+  command chmod +w "$_zshrc_file"
+}
+
 zshconfig() {
-  $EDITOR --wait "$HOME/.zshrc"
+  _unlock_zshrc
+  $EDITOR --wait "$_zshrc_file"
   reload
 }

@@ -14,17 +14,18 @@ if exists bun; then
 
   update-bun() {
     info "Updating bun..."
+    _lock_zshrc
     bun upgrade
+    _unlock_zshrc
   }
 
   updates+=(update-bun)
 else
   install-bun() {
-    local zshrc_file="$HOME/.zshrc"
     info "Installing bun..."
-    command chmod -w "$zshrc_file"
+    _lock_zshrc
     curl -fsSL https://bun.sh/install | sh
-    command chmod +w "$zshrc_file"
+    _unlock_zshrc
     reload
   }
 fi

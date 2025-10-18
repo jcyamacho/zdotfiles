@@ -70,6 +70,8 @@ $ZDOTFILES_DIR/plugins/claude-code.zsh
 
 $ZDOTFILES_DIR/plugins/lsd.zsh
 
+$ZDOTFILES_DIR/plugins/opencode.zsh
+
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-syntax-highlighting
 z-shell/zsh-navigation-tools kind:defer
