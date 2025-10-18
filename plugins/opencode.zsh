@@ -20,6 +20,10 @@ if exists opencode; then
     _unlock_zshrc
   }
 
+  opencode-config() {
+    $EDITOR "$OPENCODE_HOME"
+  }
+
   updates+=(update-opencode)
 else
   install-opencode() {
