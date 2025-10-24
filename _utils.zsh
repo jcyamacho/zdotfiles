@@ -50,8 +50,18 @@ _unlock_zshrc() {
   command chmod +w "$_zshrc_file"
 }
 
-zshconfig() {
+edit() {
+  local -a editor_cmd
+   if [[ -n $EDITOR ]]; then
+     editor_cmd=("${(z)EDITOR}")
+   else
+     editor_cmd=(vim)
+   fi
+   "${editor_cmd[@]}" "$@"
+}
+
+zsh-config() {
   _unlock_zshrc
-  $EDITOR --wait "$_zshrc_file"
+  edit "$_zshrc_file"
   reload
 }

@@ -1,6 +1,9 @@
 # ZED (A modern text editor): https://zed.dev/
 
 if exists zed; then
+  # Use ZED as the default editor if EDITOR is not set
+  export EDITOR="${EDITOR:-zed --wait}"
+
   zd() {
     local dir="${1:-$(pwd)}"
     zed $dir

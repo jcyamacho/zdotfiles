@@ -1,5 +1,4 @@
 export ZDOTFILES_DIR="${ZDOTFILES_DIR:-$HOME/.zdotfiles}"
-export EDITOR="${EDITOR:-zed}"
 
 typeset -gU path
 typeset -gU fpath
