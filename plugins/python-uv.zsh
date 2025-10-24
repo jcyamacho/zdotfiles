@@ -39,19 +39,19 @@ if ! exists uv; then
     fi
 
     # Install Ruff: https://docs.astral.sh/ruff/
-    if (( ! $+commands[ruff] )); then
+    if ! exists ruff; then
       info "Installing ruff..."
       uv tool install ruff@latest
     fi
 
     # Install BasedPyright: https://docs.basedpyright.com/latest/
-    if (( ! $+commands[basedpyright] )); then
+    if ! exists basedpyright; then
       info "Installing basedpyright..."
       uv tool install basedpyright@latest
     fi
 
     # Install ty: https://docs.astral.sh/ty/
-    if (( ! $+commands[ty] )); then
+    if ! exists ty; then
       info "Installing ty..."
       uv tool install ty@latest
     fi

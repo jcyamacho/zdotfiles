@@ -65,3 +65,9 @@ zsh-config() {
   edit "$_zshrc_file"
   reload
 }
+
+zsh-startup-bench() {
+  for i in $(seq 10); do
+    command time zsh -lic exit
+  done
+}

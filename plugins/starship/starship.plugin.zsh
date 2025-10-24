@@ -14,7 +14,7 @@ _update_starship() {
 
 updates+=(_update_starship)
 
-if (( ! $+commands[starship] )); then
+if ! exists starship; then
   _update_starship
   reload
 fi
