@@ -7,6 +7,9 @@ ohmyzsh/ohmyzsh path:plugins/git
 ohmyzsh/ohmyzsh path:plugins/brew
 $ZDOTFILES_DIR/plugins/brew.zsh
 
+$ZDOTFILES_DIR/plugins/github-cli.zsh
+ohmyzsh/ohmyzsh path:plugins/gh conditional:"exists gh"
+
 $ZDOTFILES_DIR/plugins/bat.zsh
 
 $ZDOTFILES_DIR/plugins/bun.zsh
@@ -29,9 +32,6 @@ ohmyzsh/ohmyzsh path:plugins/docker conditional:"exists docker"
 $ZDOTFILES_DIR/plugins/fabric-ai.zsh
 
 $ZDOTFILES_DIR/plugins/fonts.zsh
-
-$ZDOTFILES_DIR/plugins/github-cli.zsh
-ohmyzsh/ohmyzsh path:plugins/gh conditional:"exists gh"
 
 $ZDOTFILES_DIR/plugins/golang
 ohmyzsh/ohmyzsh path:plugins/golang conditional:"exists go"
