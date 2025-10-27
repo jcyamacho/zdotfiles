@@ -64,7 +64,7 @@ $ZDOTFILES_DIR/plugins/zoxide.zsh
 
 $ZDOTFILES_DIR/plugins/gemini-cli.zsh
 
-$ZDOTFILES_DIR/plugins/codex.zsh
+$ZDOTFILES_DIR/plugins/codex
 
 $ZDOTFILES_DIR/plugins/claude-code.zsh
 
