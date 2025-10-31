@@ -5,7 +5,7 @@ export CODEX_SECURE_MODE=1
 
 if exists codex; then
   cdx() {
-    codex --search --sandbox workspace-write --ask-for-approval on-request "$@"
+    codex --enable web_search_request --sandbox workspace-write --ask-for-approval on-request "$@"
   }
 
   codex-config() {
