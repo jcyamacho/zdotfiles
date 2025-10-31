@@ -1,0 +1,14 @@
+font-family = Hack Nerd Font Mono
+font-size = 14
+font-style = Bold
+theme = catppuccin-mocha.conf
+cursor-style = bar
+shell-integration-features = no-cursor
+macos-titlebar-style = tabs
+macos-icon = xray
+window-padding-x = 10
+window-padding-y = 0,10
+window-width = 120
+window-height = 40
+confirm-close-surface = false
+quit-after-last-window-closed = true
