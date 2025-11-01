@@ -74,6 +74,9 @@ $ZDOTFILES_DIR/plugins/lsd.zsh
 
 $ZDOTFILES_DIR/plugins/opencode.zsh
 
+$ZDOTFILES_DIR/plugins/flutter.zsh
+ohmyzsh/ohmyzsh path:plugins/flutter conditional:"exists flutter"
+
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-syntax-highlighting
 z-shell/zsh-navigation-tools kind:defer
