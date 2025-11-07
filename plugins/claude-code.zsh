@@ -5,6 +5,7 @@ if exists claude; then
     info "Uninstalling claude..."
     command rm "$(which claude)"
     command rm -rf "$HOME/.local/share/claude"
+    command rm -rf "$HOME/.claude"
     reload
   }
 
