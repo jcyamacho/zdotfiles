@@ -4,7 +4,11 @@ export LSD_CONFIG_FILE="$LSD_CONFIG_DIR/config.yaml"
 
 if exists lsd; then
   ll() {
-    lsd -lahr --git "$@"
+    lsd -lahg "$@"
+  }
+
+  lt() {
+    lsd --tree "$@"
   }
 
   lsd-config() {
