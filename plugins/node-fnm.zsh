@@ -17,8 +17,12 @@ _update_node() {
   npm install -g npm@latest > /dev/null
 }
 
-if exists fnm; then
+_fnm_env() {
   eval "$(fnm env --use-on-cd --shell zsh)"
+}
+
+if exists fnm; then
+  _fnm_env
 
   alias uninstall-node="uninstall-fnm"
   uninstall-fnm() {
@@ -48,6 +52,7 @@ else
   install-fnm() {
     info "Installing fnm..."
     brew install fnm
+    _fnm_env
     _update_node
     reload
   }
