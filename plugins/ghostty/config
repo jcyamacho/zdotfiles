@@ -1,8 +1,7 @@
-font-family = FiraCode Nerd Font Mono
+font-family = Monaspace Neon
 background-opacity = 0.95
 background-blur-radius = 15
 font-size = 14
-font-style = Bold
 theme = catppuccin-mocha.conf
 cursor-style = bar
 shell-integration-features = no-cursor
