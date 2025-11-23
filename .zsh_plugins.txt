@@ -23,6 +23,8 @@ $ZDOTFILES_DIR/plugins/code.zsh
 
 $ZDOTFILES_DIR/plugins/cursor.zsh
 
+$ZDOTFILES_DIR/plugins/antigravity.zsh
+
 $ZDOTFILES_DIR/plugins/deno.zsh
 ohmyzsh/ohmyzsh path:plugins/deno conditional:"exists deno"
 
