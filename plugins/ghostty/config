@@ -13,3 +13,18 @@ window-width = 120
 window-height = 40
 confirm-close-surface = false
 quit-after-last-window-closed = true
+
+# Ghostty doesn't support keyboard-initiated text selection
+# These bindings prevent shift+arrow from sending malformed escape sequences
+keybind = shift+left=ignore
+keybind = shift+right=ignore
+keybind = shift+up=ignore
+keybind = shift+down=ignore
+keybind = shift+cmd+left=ignore
+keybind = shift+cmd+right=ignore
+keybind = shift+cmd+up=ignore
+keybind = shift+cmd+down=ignore
+keybind = shift+ctrl+left=ignore
+keybind = shift+ctrl+right=ignore
+keybind = shift+ctrl+up=ignore
+keybind = shift+ctrl+down=ignore

@@ -7,6 +7,10 @@ if [ -d "$ATUIN_BIN_DIR" ]; then
 
   eval "$(atuin init zsh)"
 
+  atuin-config() {
+    edit "$HOME/.config/atuin/config.toml"
+  }
+
   uninstall-atuin() {
     info "Uninstalling atuin..."
     command rm -rf "$ATUIN_DIR"
