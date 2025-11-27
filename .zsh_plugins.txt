@@ -81,6 +81,10 @@ $ZDOTFILES_DIR/plugins/opencode.zsh
 $ZDOTFILES_DIR/plugins/flutter.zsh
 ohmyzsh/ohmyzsh path:plugins/flutter conditional:"exists flutter"
 
+$ZDOTFILES_DIR/plugins/fzf.zsh
+Aloxaf/fzf-tab conditional:"exists fzf"
+
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-syntax-highlighting
 z-shell/zsh-navigation-tools kind:defer
+MichaelAquilina/zsh-you-should-use
