@@ -5,10 +5,13 @@ Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) 
 ## Install
 
 1. Clone the repo (defaults to `~/.zdotfiles`):
+
    ```sh
    git clone git@github.com:jcyamacho/zdotfiles.git "$HOME/.zdotfiles"
    ```
+
 2. Source the main file from your `~/.zshrc`:
+
    ```sh
    source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
    ```
@@ -22,6 +25,30 @@ Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) 
 ## Plugins
 
 Antidote reads `.zsh_plugins.txt` and, by default, pulls in `getantidote/use-omz` so you get Oh My Zsh core helpers along with curated `ohmyzsh/ohmyzsh` plugins (git, brew, docker, etc.) plus a handful of local snippets under `plugins/`.
+
+## Recommended Tools
+
+To enhance your shell experience, consider installing these optional tools:
+
+- **[fzf](https://junegunn.github.io/fzf/)** – Fuzzy finder for command-line autocomplete and file searching
+
+  ```sh
+  install-fzf
+  ```
+
+- **[Carapace](https://carapace.sh/)** – Multi-shell completion engine with 1000+ completers
+
+  ```sh
+  install-carapace
+  ```
+
+- **[Atuin](https://atuin.sh/)** – Magical shell history with sync, search, and context
+
+  ```sh
+  install-atuin
+  ```
+
+These tools integrate seamlessly once installed and will significantly improve your command-line workflow.
 
 ## Updating
 
