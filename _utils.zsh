@@ -52,12 +52,12 @@ _unlock_zshrc() {
 
 edit() {
   local -a editor_cmd
-   if [[ -n $EDITOR ]]; then
-     editor_cmd=("${(z)EDITOR}")
-   else
-     editor_cmd=(vim)
-   fi
-   "${editor_cmd[@]}" "$@"
+  if [[ -n $EDITOR ]]; then
+    editor_cmd=("${(z)EDITOR}")
+  else
+    editor_cmd=(vim)
+  fi
+  "${editor_cmd[@]}" "$@"
 }
 
 zsh-config() {

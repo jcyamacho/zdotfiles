@@ -15,10 +15,10 @@ if exists gh; then
 
     local gist_id=$(_find_gist_id "${file_description}")
     if [[ -n $gist_id ]]; then
-      info "Updating gist: ${gist_id}"
+      info "Updating gist: ${gist_id} (${file_description})"
       gh gist edit "${gist_id}" "${file_path}" --desc "${file_description}"
     else
-      info "Creating new gist"
+      info "Creating new gist: ${file_description}"
       gh gist create "${file_path}" --desc "${file_description}"
     fi
   }
@@ -41,6 +41,70 @@ if exists gh; then
       error "Gist \"${file_description}\" not found"
       return 1
     fi
+  }
+
+  save-dir-to-gist() {
+    local dir_path="$1"
+    local dir_description="$2"
+
+    if [[ -z $dir_path || -z $dir_description ]]; then
+      error "Usage: save-dir-to-gist <dir_path> <dir_description>"
+      return 1
+    fi
+
+    if [[ ! -d $dir_path ]]; then
+      error "Directory not found: ${dir_path}"
+      return 1
+    fi
+
+    local files=()
+    for f in "${dir_path}"/*(N.); do
+      [[ -s $f ]] && files+=("$f")
+    done
+
+    if [[ ${#files[@]} -eq 0 ]]; then
+      warn "No non-empty files found in ${dir_path}, nothing to save"
+      return
+    fi
+
+    local gist_id=$(_find_gist_id "${dir_description}")
+    if [[ -n $gist_id ]]; then
+      info "Updating gist: ${gist_id} (${dir_description}) with ${#files[@]} files"
+      for f in "${files[@]}"; do
+        info "Adding/Updating $(basename "$f")..."
+        gh gist edit "${gist_id}" --add "$f"
+      done
+    else
+      info "Creating new gist (${dir_description}) with ${#files[@]} files"
+      gh gist create "${files[@]}" --desc "${dir_description}"
+    fi
+  }
+
+  load-dir-from-gist() {
+    local dir_path="$1"
+    local dir_description="$2"
+
+    if [[ -z $dir_path || -z $dir_description ]]; then
+      error "Usage: load-dir-from-gist <dir_path> <dir_description>"
+      return 1
+    fi
+
+    local gist_id=$(_find_gist_id "${dir_description}")
+    if [[ -z $gist_id ]]; then
+      error "Gist \"${dir_description}\" not found"
+      return 1
+    fi
+
+    info "Loading files from gist: ${gist_id}"
+    command mkdir -p "${dir_path}"
+
+    local filenames
+    filenames=$(gh api "/gists/${gist_id}" --jq '.files | keys[]')
+
+    while IFS= read -r filename; do
+      info "Restoring ${filename}..."
+      gh gist view "${gist_id}" --filename "${filename}" --raw > "${dir_path}/${filename}"
+    done <<< "$filenames"
   }
 fi
 
