@@ -7,6 +7,8 @@ if [ -s "$OPENCODE_HOME" ]; then
 fi
 
 if exists opencode; then
+  alias oc="opencode"
+
   uninstall-opencode() {
     info "Uninstalling opencode..."
     command rm -rf "$OPENCODE_HOME"
