@@ -9,7 +9,11 @@ fi
 if exists opencode; then
   typeset -r _opencode_config_dir="$HOME/.config/opencode"
   typeset -r _opencode_agent_dir="$_opencode_config_dir/agent"
+  typeset -r _opencode_command_dir="$_opencode_config_dir/command"
+  typeset -r _opencode_tool_dir="$_opencode_config_dir/tool"
+  typeset -r _opencode_plugin_dir="$_opencode_config_dir/plugin"
   typeset -r _opencode_settings_file="$_opencode_config_dir/opencode.json"
+  typeset -r _opencode_global_rules_file="$_opencode_config_dir/AGENTS.md"
 
   alias oc="opencode"
 
@@ -19,9 +23,28 @@ if exists opencode; then
       command mkdir -p "$_opencode_agent_dir"
     fi
 
+    if [ ! -d "$_opencode_command_dir" ]; then
+      # https://opencode.ai/docs/commands#markdown
+      command mkdir -p "$_opencode_command_dir"
+    fi
+
+    if [ ! -d "$_opencode_tool_dir" ]; then
+      # https://opencode.ai/docs/custom-tools
+      command mkdir -p "$_opencode_tool_dir"
+    fi
+
+    if [ ! -f "$_opencode_global_rules_file" ]; then
+      # https://opencode.ai/docs/rules/#global
+      command touch "$_opencode_global_rules_file"
+    fi
+
+    if [ ! -d "$_opencode_plugin_dir" ]; then
+      # https://opencode.ai/docs/plugins
+      command mkdir -p "$_opencode_plugin_dir"
+    fi
+
     if [ ! -f "$_opencode_settings_file" ]; then
-      command mkdir -p "$_opencode_config_dir"
-      echo '{ "$schema": "https://opencode.ai/config.json" }' > "$settings_file_path"
+      echo '{ "$schema": "https://opencode.ai/config.json" }' > "$_opencode_settings_file"
     fi
 
     edit "$_opencode_config_dir"
@@ -36,6 +59,8 @@ if exists opencode; then
 
   update-opencode() {
     info "Updating opencode..."
+    # force opencode to reinstall plugins
+    command rm -rf "$HOME/.cache/opencode"
     _lock_zshrc
     opencode upgrade
     _unlock_zshrc
@@ -46,15 +71,28 @@ if exists opencode; then
   if exists gh; then
     typeset -r _opencode_settings_gist_description="opencode-settings"
     typeset -r _opencode_agent_gist_description="opencode-agent-dir"
+    typeset -r _opencode_command_gist_description="opencode-command-dir"
+    typeset -r _opencode_tool_gist_description="opencode-tool-dir"
+    typeset -r _opencode_global_rules_gist_description="opencode-global-rules"
+    typeset -r _opencode_plugin_gist_description="opencode-plugin-dir"
+
 
     opencode-settings-load-from-gist() {
       load-file-from-gist "${_opencode_settings_file}" "${_opencode_settings_gist_description}"
+      load-file-from-gist "${_opencode_global_rules_file}" "${_opencode_global_rules_gist_description}"
       load-dir-from-gist "${_opencode_agent_dir}" "${_opencode_agent_gist_description}"
+      load-dir-from-gist "${_opencode_command_dir}" "${_opencode_command_gist_description}"
+      load-dir-from-gist "${_opencode_tool_dir}" "${_opencode_tool_gist_description}"
+      load-dir-from-gist "${_opencode_plugin_dir}" "${_opencode_plugin_gist_description}"
     }
 
     opencode-settings-save-to-gist() {
       save-file-to-gist "${_opencode_settings_file}" "${_opencode_settings_gist_description}"
+      save-file-to-gist "${_opencode_global_rules_file}" "${_opencode_global_rules_gist_description}"
       save-dir-to-gist "${_opencode_agent_dir}" "${_opencode_agent_gist_description}"
+      save-dir-to-gist "${_opencode_command_dir}" "${_opencode_command_gist_description}"
+      save-dir-to-gist "${_opencode_tool_dir}" "${_opencode_tool_gist_description}"
+      save-dir-to-gist "${_opencode_plugin_dir}" "${_opencode_plugin_gist_description}"
     }
   fi
 else
