@@ -66,8 +66,6 @@ zsh-config() {
   reload
 }
 
-zsh-startup-bench() {
-  for i in $(seq 10); do
-    command time zsh -lic exit
-  done
+zsh-startup-profile() {
+  ZDOTFILES_PROFILE_STARTUP=1 command time zsh -lic exit
 }

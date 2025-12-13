@@ -1,3 +1,9 @@
+# STARTUP_PROFILING
+if [[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]]; then
+  zmodload zsh/zprof
+fi
+# STARTUP_PROFILING end
+
 export ZDOTFILES_DIR="${ZDOTFILES_DIR:-$HOME/.zdotfiles}"
 
 typeset -gU path
@@ -72,3 +78,9 @@ update-antidote() {
 
 updates+=(_antidote_update)
 # ANTIDOTE end
+
+# STARTUP_PROFILING_RESULTS
+if [[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]]; then
+  zprof
+fi
+# STARTUP_PROFILING_RESULTS end
