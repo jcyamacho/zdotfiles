@@ -101,6 +101,7 @@ These are specific patterns used in this repository:
 4. Provide `install-<tool>` and `uninstall-<tool>` functions
 5. If updatable, add `update-<tool>` and register `_update_<tool>` in `updates` array
 6. For tools with init code, use `source-cached-init` and call `clear-cached-init` on update
+7. Update `README.md` to include the new tool in the **Installable Tools** list (with a link), so the README stays a complete reference of what this repo contains.
 
 ## Debugging
 

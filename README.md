@@ -24,37 +24,58 @@ Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) 
 
 ## Plugins
 
-Antidote reads `.zsh_plugins.txt` and, by default, pulls in `getantidote/use-omz` so you get Oh My Zsh core helpers along with curated `ohmyzsh/ohmyzsh` plugins (git, brew, docker, etc.) plus a handful of local snippets under `plugins/`.
+Antidote reads `.zsh_plugins.txt` and builds a static `.zsh_plugins.zsh`. The default setup enables:
 
-## Recommended Tools
+- **Always-on shell UX**: Starship prompt, `zsh-autosuggestions`, syntax highlighting (`F-Sy-H`), and “you-should-use”.
+- **Oh My Zsh helpers + curated plugins**: pulls in OMZ core helpers plus plugins like `git` and `brew`.
+- **Local plugin helpers**: small `plugins/*` scripts that add `install-*`, `update-*`, `uninstall-*`, and `*-config` helpers.
 
-To enhance your shell experience, consider installing these optional tools:
+Many integrations are **conditional** (they only activate when the underlying binary exists) to keep startup fast and avoid errors.
 
-- **[fzf](https://junegunn.github.io/fzf/)** – Fuzzy finder for command-line autocomplete and file searching
+## Installable Tools
 
-  ```sh
-  install-fzf
-  ```
+These are the tool install helpers shipped in `plugins/` (run the command to install; once installed the integration auto-wires on next shell start):
 
-- **[Carapace](https://carapace.sh/)** – Multi-shell completion engine with 1000+ completers
+- `install-atuin` – [Atuin](https://atuin.sh/) history
+- `install-bun` – [Bun](https://bun.sh/) runtime
+- `install-carapace` – [Carapace](https://carapace.sh/) completions
+- `install-claude-code` – [Claude Code](https://www.anthropic.com/claude-code) CLI
+- `install-code` – [VS Code](https://code.visualstudio.com/)
+- `install-codex` – [OpenAI Codex CLI](https://developers.openai.com/codex/cli)
+- `install-cursor` – [Cursor](https://www.cursor.com/)
+- `install-deno` – [Deno](https://deno.land/) runtime
+- `install-direnv` – [direnv](https://direnv.net/) + hook
+- `install-docker` – [Docker](https://www.docker.com/) CLI
+- `install-fabric-ai` – [Fabric](https://github.com/danielmiessler/fabric)
+- `install-flutter` – [Flutter](https://flutter.dev/) SDK
+- `install-fnm` (or `install-node`) – [fnm](https://github.com/Schniz/fnm) + LTS activation
+- `install-fzf` – [fzf](https://junegunn.github.io/fzf/) (enables `fzf-tab` if present)
+- `install-gemini` – [Gemini CLI](https://github.com/google/gemini-cli)
+- `install-ghostty` – [Ghostty](https://ghostty.org/) terminal + config restore
+- `install-gh` – [GitHub CLI](https://github.com/cli/cli)
+- `install-go` – [Go](https://golang.org/) + [golangci-lint](https://golangci-lint.run/)
+- `install-jq` – [jq](https://jqlang.org/)
+- `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
+- `install-mise` – [mise](https://mise.jdx.dev/)
+- `install-ollama` – [Ollama](https://ollama.com/)
+- `install-opencode` – [OpenCode](https://opencode.ai/)
+- `install-rbenv` (or `install-ruby`) – [rbenv](https://github.com/rbenv/rbenv)
+- `install-rust` – [rustup](https://rustup.rs/)
+- `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling
+- `install-zed` – [Zed](https://zed.dev/)
+- `install-zig` – [Zig](https://ziglang.org/)
+- `install-zoxide` (or `install-z`) – [zoxide](https://github.com/ajeetdsouza/zoxide)
+- `install-antigravity` – [Antigravity](https://antigravity.google/)
+- `install-fonts` – [Homebrew](https://brew.sh/) font casks
 
-  ```sh
-  install-carapace
-  ```
-
-- **[Atuin](https://atuin.sh/)** – Magical shell history with sync, search, and context
-
-  ```sh
-  install-atuin
-  ```
-
-These tools integrate seamlessly once installed and will significantly improve your command-line workflow.
+Tip: use `update-all` to run every registered updater in one shot.
 
 ## Updating
 
-Run `update-zdotdir` to pull the latest repo changes and reload automatically. `update-all` is also available if you want a one-liner that refreshes everything before reloading the shell.
+Run `update-zdotfiles` to pull the latest repo changes and reload automatically. `update-all` runs all registered updaters (including `update-zdotfiles`) and reloads at the end.
 
 ## Performance
 
 - Benchmark before/after changes with `zsh-startup-bench`.
 - Use `zsh-startup-profile` for a quick zprof-enabled timing run.
+- Quick sanity check without launching an interactive shell: `zsh -lic exit`.
