@@ -4,7 +4,6 @@ unset ZSH_THEME
 
 export STARSHIP_CONFIG_FILE="$HOME/.config/starship.toml"
 
-
 update-starship() {
   _update_starship
   reload
