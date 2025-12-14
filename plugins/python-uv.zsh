@@ -18,7 +18,7 @@ if exists python; then
 
     for venv_dir in "${venv_dirs[@]}"; do
       local activate_file="${cwd}/${venv_dir}/bin/activate"
-      if [ -s "$activate_file" ]; then
+      if [[ -s $activate_file ]]; then
         source "$activate_file"
         break
       fi
@@ -76,17 +76,17 @@ _update_python() {
   uv python upgrade --preview
 
   # get latest downloadable stable version (exclude prereleases)
-  latest=$(_get_latest_python_version --only-downloads)
+  local latest="$(_get_latest_python_version --only-downloads)"
 
-  if [ -z "$latest" ]; then
+  if [[ -z $latest ]]; then
     warn "No downloadable python version found."
     return
   fi
 
   # get latest installed version
-  installed=$(_get_latest_python_version --only-installed)
+  local installed="$(_get_latest_python_version --only-installed)"
 
-  if [ "$latest" != "$installed" ]; then
+  if [[ $latest != "$installed" ]]; then
     info "Installing new version: $latest..."
     uv python install "$latest" --default --preview
   fi

@@ -33,7 +33,7 @@ if exists fnm; then
   }
 
   uninstall-unused-node-versions() {
-    local current_version=$(fnm current)
+    local current_version="$(fnm current)"
     info "Cleaning up unused Node.js versions (keeping $current_version)..."
 
     fnm list | command grep -v "$current_version" | command grep -Eo 'v[0-9]+\.[0-9]+\.[0-9]+' | while IFS= read -r version; do

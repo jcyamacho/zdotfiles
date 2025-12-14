@@ -13,7 +13,7 @@ if ! exists brew; then
   return
 fi
 
-if [ -f "$ANTIGRAVITY_BIN" ]; then
+if [[ -f $ANTIGRAVITY_BIN ]]; then
   uninstall-antigravity() {
     info "Uninstalling antigravity..."
     command brew uninstall antigravity

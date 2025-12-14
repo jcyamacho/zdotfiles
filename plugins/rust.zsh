@@ -2,12 +2,12 @@
 
 export CARGO_DIR="$HOME/.cargo"
 
-if [ -f "$CARGO_DIR/env" ]; then
+if [[ -f $CARGO_DIR/env ]]; then
   source "$CARGO_DIR/env"
 
   uninstall-rust() {
     info "Uninstalling rust..."
-     command rustup self uninstall -y
+    command rustup self uninstall -y
 
     info "Removing $CARGO_DIR..."
     command rm -rf -- "$CARGO_DIR"
@@ -16,8 +16,7 @@ if [ -f "$CARGO_DIR/env" ]; then
 
   update-rust() {
     info "Updating rust..."
-     command rustup update
-
+    command rustup update
   }
 
   updates+=(update-rust)

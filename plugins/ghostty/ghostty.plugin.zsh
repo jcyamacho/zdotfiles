@@ -16,7 +16,7 @@ _ghostty_update_themes() {
   command mkdir -p -- "$GHOSTTY_THEMES_DIR"
 
   for theme in "${themes[@]}"; do
-    builtin print "Downloading ${theme}..."
+    builtin print -r "Downloading ${theme}..."
     command curl -fsSL "${themes_url}/${theme}.conf" -o "$GHOSTTY_THEMES_DIR/${theme}.conf"
   done
 }
@@ -27,7 +27,7 @@ _ghostty_restore_config() {
 
   _ghostty_update_themes
 
-  builtin print "Copying default config..."
+  builtin print -r "Copying default config..."
   command mkdir -p -- "$GHOSTTY_CONFIG_DIR"
   command cp -- "$ZDOTFILES_DIR/plugins/ghostty/config" "$GHOSTTY_CONFIG_FILE"
 }

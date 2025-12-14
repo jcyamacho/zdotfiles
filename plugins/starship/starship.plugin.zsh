@@ -33,7 +33,7 @@ starship-preset-custom() {
   command cp -- "$ZDOTFILES_DIR/plugins/starship/starship.toml" "$STARSHIP_CONFIG_FILE"
 }
 
-starshipconfig() {
+starship-config() {
   edit "$STARSHIP_CONFIG_FILE"
   reload
 }

@@ -6,10 +6,10 @@ fi
 
 _update_ruby() {
   info "Activating latest Ruby..."
-  local latest_version=$(rbenv install -l | grep -v - | tail -1)
-  local actual_version=$(rbenv global)
+  local latest_version="$(rbenv install -l | command grep -v - | command tail -1)"
+  local actual_version="$(rbenv global)"
 
-  if [ "$actual_version" = "$latest_version" ]; then
+  if [[ $actual_version == "$latest_version" ]]; then
     info "Ruby $latest_version is already active."
     return
   fi
@@ -34,10 +34,10 @@ if exists rbenv; then
   }
 
   uninstall-unused-ruby-versions() {
-    local current_version=$(rbenv global)
+    local current_version="$(rbenv global)"
     info "Cleaning up unused Ruby versions (keeping $current_version)..."
 
-    rbenv versions --bare | grep -v "^$current_version$" | grep -v "^system$" | while read -r version; do
+    rbenv versions --bare | command grep -v "^$current_version$" | command grep -v "^system$" | while read -r version; do
       info "Removing Ruby $version..."
       rbenv uninstall --force "$version"
     done
