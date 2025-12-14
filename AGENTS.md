@@ -30,6 +30,16 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **Updates array**: Add callables to `updates` that are safe to run from `update-all` (quoted invocation), and prefer clearing cached init when updating tools that generate init code
 - **Cache invalidation**: Prefer `clear-cached-init <cmd>` after installs/updates so next shell regen is clean
 - **Structure**: Simple tools = single `.zsh` file; complex tools = subdirectory with `.plugin.zsh`
+- **Conditionals**: Prefer `[[ ]]` over `[ ]` for tests (zsh-native, supports pattern matching, safer with unquoted vars)
+- **Local variables**: Declare function-local variables with `local` to avoid polluting global scope
+- **Subshell avoidance**: Prefer `<<< "$var"` (here-string) over `echo "$var" |` when piping to a single command
+- **Blank lines**: Use single blank lines for separation; avoid multiple consecutive blank lines
+- **Config functions**: Name config-editing helpers as `<tool>-config` (hyphenated) for consistency
+- **Print statements**: Use `builtin print -r` instead of `echo` for reliable output (no escape interpretation)
+- **Command substitution quoting**: Always quote command substitutions in assignments and tests: `local var="$(cmd)"`
+- **Loop variables**: Use `_` for intentionally ignored loop variables (e.g., `for _ in {1..10}`)
+- **Early returns**: Structure conditionally loaded plugins as guard → early return → main code (not nested if/else)
+- **Whitespace**: No leading whitespace before `command`/`builtin` prefixes; keep indentation consistent
 
 ## Adding a New Plugin
 
