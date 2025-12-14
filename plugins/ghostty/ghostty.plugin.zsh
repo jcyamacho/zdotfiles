@@ -13,7 +13,7 @@ _ghostty_update_themes() {
     catppuccin-frappe
   )
 
-  command mkdir -p "$GHOSTTY_THEMES_DIR"
+  command mkdir -p -- "$GHOSTTY_THEMES_DIR"
 
   for theme in "${themes[@]}"; do
     builtin print "Downloading ${theme}..."
@@ -23,13 +23,13 @@ _ghostty_update_themes() {
 
 _ghostty_restore_config() {
   # Remove existing macOS config file
-  command rm -f "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+  command rm -f -- "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
 
   _ghostty_update_themes
 
   builtin print "Copying default config..."
-  command mkdir -p "$GHOSTTY_CONFIG_DIR"
-  command cp "$ZDOTFILES_DIR/plugins/ghostty/config" "$GHOSTTY_CONFIG_FILE"
+  command mkdir -p -- "$GHOSTTY_CONFIG_DIR"
+  command cp -- "$ZDOTFILES_DIR/plugins/ghostty/config" "$GHOSTTY_CONFIG_FILE"
 }
 
 if exists ghostty; then

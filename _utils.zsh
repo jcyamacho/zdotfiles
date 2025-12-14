@@ -16,7 +16,7 @@ error() {
 
 mkcd() {
   local target=${1:?mkcd: missing directory name}
-  command mkdir -p "$target"
+  command mkdir -p -- "$target"
   builtin cd "$target"
 }
 

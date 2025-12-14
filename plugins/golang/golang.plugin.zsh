@@ -20,7 +20,7 @@ if exists go; then
     command go mod init "$namespace"
 
     if [[ ! -f main.go ]]; then
-      command cp "$ZDOTFILES_DIR/plugins/golang/main.go" .
+      command cp -- "$ZDOTFILES_DIR/plugins/golang/main.go" .
     fi
   }
 fi

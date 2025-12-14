@@ -96,7 +96,7 @@ if exists gh; then
     fi
 
     info "Loading files from gist: ${gist_id}"
-    command mkdir -p "${dir_path}"
+    command mkdir -p -- "${dir_path}"
 
     local filenames
     filenames=$(command gh api "/gists/${gist_id}" --jq '.files | keys[]')

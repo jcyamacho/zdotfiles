@@ -4,10 +4,10 @@ if exists python; then
   alias py="python3"
 
   pyclean() {
-    find "${@:-.}" -type f -name "*.py[co]" -delete
-    find "${@:-.}" -type d -name "__pycache__" -delete
-    find "${@:-.}" -depth -type d -name ".mypy_cache" -exec rm -r "{}" +
-    find "${@:-.}" -depth -type d -name ".pytest_cache" -exec rm -r "{}" +
+    command find "${@:-.}" -type f -name "*.py[co]" -delete
+    command find "${@:-.}" -type d -name "__pycache__" -delete
+    command find "${@:-.}" -depth -type d -name ".mypy_cache" -exec rm -rf -- "{}" +
+    command find "${@:-.}" -depth -type d -name ".pytest_cache" -exec rm -rf -- "{}" +
   }
 
   venv() {
@@ -65,10 +65,10 @@ fi
 _get_latest_python_version() {
   # Extract and return the latest stable cpython version from uv python list output
   uv python list "$@" \
-    | awk '{print $1}' \
-    | grep -E '^cpython-[0-9]+\.[0-9]+\.[0-9]+-' \
-    | sort -V \
-    | tail -n1
+    | command awk '{print $1}' \
+    | command grep -E '^cpython-[0-9]+\.[0-9]+\.[0-9]+-' \
+    | command sort -V \
+    | command tail -n1
 }
 
 _update_python() {

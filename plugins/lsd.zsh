@@ -17,7 +17,7 @@ if exists lsd; then
 fi
 
 _lsd_restore_config() {
-  command mkdir -p "$LSD_CONFIG_DIR"
+  command mkdir -p -- "$LSD_CONFIG_DIR"
   info "Downloading color theme..."
   command curl -fsSL https://raw.githubusercontent.com/catppuccin/lsd/refs/heads/main/themes/catppuccin-mocha/colors.yaml -o "$LSD_CONFIG_DIR/colors.yaml"
   info "Writing config file..."

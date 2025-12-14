@@ -18,7 +18,7 @@ else
   install-codex() {
     info "Installing codex..."
     command npm install -g @openai/codex@latest > /dev/null
-    command mkdir -p "$CODEX_PROMPTS_DIR"
+    command mkdir -p -- "$CODEX_PROMPTS_DIR"
     reload
   }
 fi

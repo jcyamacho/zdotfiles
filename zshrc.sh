@@ -41,7 +41,7 @@ updates+=(_update_zdotfiles)
 
 update-all() {
   for update in "${updates[@]}"; do
-    $update
+    "$update"
     print
   done
 

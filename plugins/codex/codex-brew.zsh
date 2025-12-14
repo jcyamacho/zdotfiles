@@ -11,7 +11,7 @@ else
   install-codex() {
     info "Installing codex..."
     command brew install codex
-    command mkdir -p "$CODEX_PROMPTS_DIR"
+    command mkdir -p -- "$CODEX_PROMPTS_DIR"
     reload
   }
 fi

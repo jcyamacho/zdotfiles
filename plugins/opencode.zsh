@@ -20,27 +20,27 @@ if exists opencode; then
   opencode-config() {
     if [ ! -d "$_opencode_agent_dir" ]; then
       # https://opencode.ai/docs/agents#markdown
-      command mkdir -p "$_opencode_agent_dir"
+      command mkdir -p -- "$_opencode_agent_dir"
     fi
 
     if [ ! -d "$_opencode_command_dir" ]; then
       # https://opencode.ai/docs/commands#markdown
-      command mkdir -p "$_opencode_command_dir"
+      command mkdir -p -- "$_opencode_command_dir"
     fi
 
     if [ ! -d "$_opencode_tool_dir" ]; then
       # https://opencode.ai/docs/custom-tools
-      command mkdir -p "$_opencode_tool_dir"
+      command mkdir -p -- "$_opencode_tool_dir"
     fi
 
     if [ ! -f "$_opencode_global_rules_file" ]; then
       # https://opencode.ai/docs/rules/#global
-      command touch "$_opencode_global_rules_file"
+      command touch -- "$_opencode_global_rules_file"
     fi
 
     if [ ! -d "$_opencode_plugin_dir" ]; then
       # https://opencode.ai/docs/plugins
-      command mkdir -p "$_opencode_plugin_dir"
+      command mkdir -p -- "$_opencode_plugin_dir"
     fi
 
     if [ ! -f "$_opencode_settings_file" ]; then
