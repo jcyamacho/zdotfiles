@@ -3,15 +3,15 @@ autoload -Uz colors 2>/dev/null && colors
 typeset -r _reset_color=${reset_color:-$'\e[0m'}
 
 info() {
-  print -r "${fg_bold[cyan]}$*$_reset_color"
+  builtin print -r -- "${fg_bold[cyan]}$*$_reset_color"
 }
 
 warn() {
-  print -r "${fg_bold[yellow]}$*$_reset_color"
+  builtin print -r -- "${fg_bold[yellow]}$*$_reset_color"
 }
 
 error() {
-  print -r "${fg_bold[red]}$*$_reset_color"
+  builtin print -r -- "${fg_bold[red]}$*$_reset_color"
 }
 
 mkcd() {
@@ -25,7 +25,7 @@ exists() {
 }
 
 reload() {
-  source "$ZDOTFILES_DIR/zshrc.sh"
+  builtin source "$ZDOTFILES_DIR/zshrc.sh"
 }
 
 _cache_cmd_output() {
@@ -48,7 +48,8 @@ _cache_cmd_output() {
   local cache_dir=${cache_file:h}
   [[ -d $cache_dir ]] || command mkdir -p -- "$cache_dir" || return 1
 
-  local tmp_file="${cache_file}.tmp.${$}"
+  local tmp_file
+  tmp_file="$(command mktemp "${cache_file}.tmp.XXXXXXXX" 2>/dev/null)" || return 1
 
   if ! command "$cmd" "$@" >| "$tmp_file"; then
     warn "Failed generating cache: $cache_file ($cmd $*)"
@@ -90,6 +91,11 @@ source-cached-init() {
     return 0
   fi
 
+  # This is the one place we intentionally allow eval, and only as a fallback when
+  # the cached init file couldn't be generated/read. Many CLI tools (e.g. starship,
+  # direnv, fnm) emit shell init code that must be evaluated in the current shell
+  # to set env vars/functions/hooks. We only eval the stdout of an executable we
+  # invoke directly via `command`, not arbitrary user-provided strings.
   builtin eval "$(command "$cmd" "$@")"
 }
 
