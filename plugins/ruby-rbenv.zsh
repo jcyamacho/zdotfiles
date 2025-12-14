@@ -28,7 +28,7 @@ if exists rbenv; then
   uninstall-rbenv() {
     info "Uninstalling rbenv..."
     command brew uninstall rbenv
-    command rm -rf "$HOME/.rbenv"
+    command rm -rf -- "$HOME/.rbenv"
     clear-cached-init rbenv
     reload
   }

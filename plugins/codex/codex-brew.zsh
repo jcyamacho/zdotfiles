@@ -1,14 +1,16 @@
+# codex (Homebrew install/uninstall): https://developers.openai.com/codex/cli
+
 if exists codex; then
   uninstall-codex() {
     info "Uninstalling codex..."
-    brew uninstall codex
-    command rm -rf "$CODEX_HOME"
+    command brew uninstall codex
+    command rm -rf -- "$CODEX_HOME"
     reload
   }
 else
   install-codex() {
     info "Installing codex..."
-    brew install codex
+    command brew install codex
     command mkdir -p "$CODEX_PROMPTS_DIR"
     reload
   }

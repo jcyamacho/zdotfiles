@@ -4,7 +4,7 @@ export DIRENV_CONFIG_FILE="$DIRENV_CONFIG_DIR/direnv.toml"
 
 _install_direnv() {
   export bin_path="$CUSTOM_TOOLS_DIR"
-  curl -sfL https://direnv.net/install.sh | bash > /dev/null
+  command curl -sfL https://direnv.net/install.sh | command bash > /dev/null
   unset bin_path
 
   if [ ! -f "$DIRENV_CONFIG_FILE" ]; then
@@ -18,8 +18,8 @@ if exists direnv; then
 
   uninstall-direnv() {
     info "Uninstalling direnv..."
-    command rm "$CUSTOM_TOOLS_DIR/direnv"
-    command rm -rf "$DIRENV_CONFIG_DIR"
+    command rm -f -- "$CUSTOM_TOOLS_DIR/direnv"
+    command rm -rf -- "$DIRENV_CONFIG_DIR"
     clear-cached-init direnv
     reload
   }

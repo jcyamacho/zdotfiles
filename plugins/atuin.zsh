@@ -18,14 +18,15 @@ if [ -d "$ATUIN_BIN_DIR" ]; then
 
   uninstall-atuin() {
     info "Uninstalling atuin..."
-    command rm -rf "$ATUIN_DIR"
+    command rm -rf -- "$ATUIN_DIR"
+    clear-cached-init atuin
     reload
   }
 
   update-atuin() {
     info "Updating atuin..."
     _lock_zshrc
-    if atuin update; then
+    if command atuin update; then
       clear-cached-init atuin
     fi
     _unlock_zshrc
@@ -36,7 +37,7 @@ else
   install-atuin() {
     info "Installing atuin..."
     _lock_zshrc
-    curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+    command curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | command sh
     _unlock_zshrc
     reload
   }

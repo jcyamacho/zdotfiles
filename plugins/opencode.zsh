@@ -2,7 +2,7 @@
 
 export OPENCODE_HOME="$HOME/.opencode"
 
-if [ -s "$OPENCODE_HOME" ]; then
+if [[ -d $OPENCODE_HOME/bin ]]; then
   path=("$OPENCODE_HOME/bin" $path)
 fi
 
@@ -44,25 +44,35 @@ if exists opencode; then
     fi
 
     if [ ! -f "$_opencode_settings_file" ]; then
-      echo '{ "$schema": "https://opencode.ai/config.json" }' > "$_opencode_settings_file"
+      builtin print -r -- '{ "$schema": "https://opencode.ai/config.json" }' > "$_opencode_settings_file"
     fi
 
     edit "$_opencode_config_dir"
   }
 
+  opencode-install-agents() {
+    if ! exists bunx; then
+      warn "Missing bunx; install bun first"
+      return 1
+    fi
+
+    info "Installing agents via agentic-cli..."
+    command bunx agentic-cli pull -g
+  }
+
   uninstall-opencode() {
     info "Uninstalling opencode..."
-    command rm -rf "$OPENCODE_HOME"
-    command rm -rf "$_opencode_config_dir"
+    command rm -rf -- "$OPENCODE_HOME"
+    command rm -rf -- "$_opencode_config_dir"
     reload
   }
 
   update-opencode() {
     info "Updating opencode..."
     # force opencode to reinstall plugins
-    command rm -rf "$HOME/.cache/opencode"
+    command rm -rf -- "$HOME/.cache/opencode"
     _lock_zshrc
-    opencode upgrade
+    command opencode upgrade
     _unlock_zshrc
   }
 
@@ -99,7 +109,7 @@ else
   install-opencode() {
     info "Installing opencode..."
     _lock_zshrc
-    curl -fsSL https://opencode.ai/install | sh
+    command curl -fsSL https://opencode.ai/install | command sh
     _unlock_zshrc
     reload
   }

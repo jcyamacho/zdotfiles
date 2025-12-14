@@ -12,7 +12,7 @@ update-starship() {
 
 _update_starship() {
   info "Updating starship..."
-  curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
+  command curl -sS https://starship.rs/install.sh | command sh -s -- --yes --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
   clear-cached-init starship
 }
 
@@ -34,6 +34,6 @@ starship-preset-custom() {
 }
 
 starshipconfig() {
-  $EDITOR --wait "$STARSHIP_CONFIG_FILE"
+  edit "$STARSHIP_CONFIG_FILE"
   reload
 }

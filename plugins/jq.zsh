@@ -7,13 +7,13 @@ fi
 if exists jq; then
   uninstall-jq() {
     info "Uninstalling jq..."
-    brew uninstall jq
+    command brew uninstall jq
     reload
   }
 else
   install-jq() {
     info "Installing jq..."
-    brew install jq
+    command brew install jq
     reload
   }
 fi

@@ -3,16 +3,16 @@ export HOMEBREW_NO_ENV_HINTS=1
 
 if ! exists brew; then
   info "Installing brew..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash -c "$(command curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 _update_brew() {
   info "Updating brew..."
-  brew update
+  command brew update
   info "Upgrading brew packages..."
-  brew upgrade --greedy
+  command brew upgrade --greedy
   info "Cleaning up brew..."
-  brew cleanup --prune=all
+  command brew cleanup --prune=all
 }
 
 update-brew() {

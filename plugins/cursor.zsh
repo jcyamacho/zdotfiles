@@ -2,8 +2,8 @@
 
 if exists cursor; then
   cr() {
-    local dir="${1:-$(pwd)}"
-    cursor "$dir"
+    local dir=${1:-$PWD}
+    command cursor "$dir"
   }
 fi
 
@@ -14,13 +14,13 @@ fi
 if exists cursor; then
   uninstall-cursor() {
     info "Uninstalling cursor..."
-    brew uninstall cursor
+    command brew uninstall --cask cursor
     reload
   }
 else
   install-cursor() {
     info "Installing cursor..."
-    brew install --cask cursor
+    command brew install --cask cursor
     reload
   }
 fi

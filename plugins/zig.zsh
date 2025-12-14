@@ -7,13 +7,13 @@ fi
 if exists zig; then
   uninstall-zig() {
     info "Uninstalling zig..."
-    brew uninstall zig
+    command brew uninstall zig
     reload
   }
 else
   install-zig() {
     info "Installing zig..."
-    brew install zig
+    command brew install zig
     reload
   }
 fi

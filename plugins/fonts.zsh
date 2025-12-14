@@ -5,10 +5,10 @@ fi
 
 install-fonts() {
   info "Installing fonts..."
-  brew install --cask font-monaspace
-  brew install --cask font-hack-nerd-font
-  brew install --cask font-jetbrains-mono
-  brew install --cask font-jetbrains-mono-nerd-font
-  brew install --cask font-fira-code
-  brew install --cask font-fira-code-nerd-font
+  command brew install --cask font-monaspace
+  command brew install --cask font-hack-nerd-font
+  command brew install --cask font-jetbrains-mono
+  command brew install --cask font-jetbrains-mono-nerd-font
+  command brew install --cask font-fira-code
+  command brew install --cask font-fira-code-nerd-font
 }

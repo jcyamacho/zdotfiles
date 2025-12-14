@@ -1,3 +1,4 @@
+# ghostty (terminal emulator): https://ghostty.org/
 export GHOSTTY_CONFIG_DIR="$HOME/.config/ghostty"
 export GHOSTTY_THEMES_DIR="$GHOSTTY_CONFIG_DIR/themes"
 export GHOSTTY_CONFIG_FILE="$GHOSTTY_CONFIG_DIR/config"
@@ -50,13 +51,14 @@ fi
 if exists ghostty; then
   uninstall-ghostty() {
     info "Uninstalling ghostty..."
-    brew uninstall ghostty
-    command rm -rf "$GHOSTTY_CONFIG_DIR"
+    command brew uninstall --cask ghostty
+    command rm -rf -- "$GHOSTTY_CONFIG_DIR"
+    reload
   }
 else
   install-ghostty() {
     info "Installing ghostty..."
-    brew install --cask ghostty
+    command brew install --cask ghostty
     _ghostty_restore_config
     reload
   }

@@ -5,13 +5,13 @@ if exists zed; then
   export EDITOR="${EDITOR:-zed --wait}"
 
   zd() {
-    local dir="${1:-$(pwd)}"
-    zed $dir
+    local dir=${1:-$PWD}
+    command zed "$dir"
   }
 
   # Save/Load Zed Settings using GitHub Gist
   if exists gh; then
-    typeset -r _zed_settings_path="$HOME/.config/zed/${_zed_settings_filename}/settings.json"
+    typeset -r _zed_settings_path="$HOME/.config/zed/settings.json"
     typeset -r _zed_gist_description="zed-settings"
 
     zed-settings-load-from-gist() {
@@ -31,13 +31,13 @@ fi
 if exists zed; then
   uninstall-zed() {
     info "Uninstalling zed..."
-    brew uninstall zed
+    command brew uninstall --cask zed
     reload
   }
 else
   install-zed() {
     info "Installing zed..."
-    brew install --cask zed
+    command brew install --cask zed
     reload
   }
 fi

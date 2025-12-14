@@ -18,6 +18,11 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **Naming**: `install-<tool>`, `uninstall-<tool>`, `update-<tool>` (public), `_update_<tool>` (private)
 - **Functions/aliases**: lowercase with hyphens; env vars: UPPERCASE
 - **Builtins**: Prefix with `command` or `builtin` to bypass aliases (e.g., `command mkdir -p`)
+- **No `eval`**: Avoid `eval` in plugins; if a tool outputs init shell code, use `source-cached-init` instead
+- **Paths**: Prefer `$PWD` over `$(pwd)` to avoid subshells
+- **Removals**: Use `command rm -f -- "$path"` / `command rm -rf -- "$path"` and quote variables
+- **No `sudo`**: Avoid `sudo` in plugin functions; keep installs/updates non-interactive
+- **Editor**: Prefer the `edit` helper over invoking `$EDITOR` directly
 - **Required params**: Use `${1:?error message}` syntax
 - **Output**: Use `info`, `warn`, `error` helpers from `_utils.zsh`
 - **Caching init**: Prefer `source-cached-init <cmd> [args...]` for tools that emit shell init code (uses `$ZDOTFILES_CACHE_DIR/<cmd>/init.zsh` and falls back to sourcing an existing cache or `eval` when needed)

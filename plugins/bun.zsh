@@ -1,21 +1,21 @@
 # BUN (javascript runtime): https://bun.sh/
 export BUN_INSTALL="$HOME/.bun"
 
-if [ -s "$BUN_INSTALL" ]; then
+if [[ -d $BUN_INSTALL/bin ]]; then
   path=("$BUN_INSTALL/bin" $path)
 fi
 
 if exists bun; then
   uninstall-bun() {
     info "Uninstalling bun..."
-    command rm -rf "$BUN_INSTALL"
+    command rm -rf -- "$BUN_INSTALL"
     reload
   }
 
   update-bun() {
     info "Updating bun..."
     _lock_zshrc
-    bun upgrade
+    command bun upgrade
     _unlock_zshrc
   }
 
@@ -24,7 +24,7 @@ else
   install-bun() {
     info "Installing bun..."
     _lock_zshrc
-    curl -fsSL https://bun.sh/install | sh
+    command curl -fsSL https://bun.sh/install | command sh
     _unlock_zshrc
     reload
   }

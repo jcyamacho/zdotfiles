@@ -7,22 +7,24 @@ if [ -f "$CARGO_DIR/env" ]; then
 
   uninstall-rust() {
     info "Uninstalling rust..."
-    rustup self uninstall -y
+     command rustup self uninstall -y
+
     info "Removing $CARGO_DIR..."
-    command rm -rf "$CARGO_DIR"
+    command rm -rf -- "$CARGO_DIR"
     reload
   }
 
   update-rust() {
     info "Updating rust..."
-    rustup update
+     command rustup update
+
   }
 
   updates+=(update-rust)
 else
   install-rust() {
     info "Installing rust..."
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    command curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | command sh -s -- -y
     reload
   }
 fi

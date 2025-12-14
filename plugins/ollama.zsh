@@ -3,9 +3,10 @@
 if exists ollama; then
   update-ollama-models() {
     info "Updating ollama models..."
-    ollama list | awk 'NR>1 {print $1}' | while read package; do
-        info "Updating $package..."
-        ollama pull "$package"
+    command ollama list | command awk 'NR>1 {print $1}' | while IFS= read -r package; do
+      [[ -n $package ]] || continue
+      info "Updating $package..."
+      command ollama pull "$package"
     done
   }
 
@@ -19,11 +20,13 @@ fi
 if exists ollama; then
   uninstall-ollama() {
     info "Uninstalling ollama..."
-    brew uninstall ollama
+    command brew uninstall ollama
+    reload
   }
 else
   install-ollama() {
     info "Installing ollama..."
-    brew install ollama
+    command brew install ollama
+    reload
   }
 fi

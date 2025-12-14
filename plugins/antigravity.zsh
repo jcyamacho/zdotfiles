@@ -4,8 +4,8 @@ export ANTIGRAVITY_BIN="$ANTIGRAVITY_DIR/antigravity/bin/antigravity"
 
 if [ -f "$ANTIGRAVITY_BIN" ]; then
   ag() {
-    local dir="${1:-$(pwd)}"
-    $ANTIGRAVITY_BIN -- "$dir"
+    local dir=${1:-$PWD}
+    "$ANTIGRAVITY_BIN" -- "$dir"
   }
 fi
 
@@ -16,13 +16,13 @@ fi
 if [ -f "$ANTIGRAVITY_BIN" ]; then
   uninstall-antigravity() {
     info "Uninstalling antigravity..."
-    brew uninstall antigravity
+    command brew uninstall antigravity
     reload
   }
 else
   install-antigravity() {
     info "Installing antigravity..."
-    brew install --cask antigravity
+    command brew install --cask antigravity
     reload
   }
 fi

@@ -1,7 +1,7 @@
 # GITHUB_CLI (GitHub on the command line): https://github.com/cli/cli
 if exists gh; then
   _find_gist_id() {
-    gh api /gists --jq ".[] | select((.description==\"$1\") and (.public==false)) | .id" | head -n1
+    command gh api /gists --jq ".[] | select((.description==\"$1\") and (.public==false)) | .id" | command head -n1
   }
 
   save-file-to-gist() {
@@ -16,10 +16,10 @@ if exists gh; then
     local gist_id=$(_find_gist_id "${file_description}")
     if [[ -n $gist_id ]]; then
       info "Updating gist: ${gist_id} (${file_description})"
-      gh gist edit "${gist_id}" "${file_path}" --desc "${file_description}"
+      command gh gist edit "${gist_id}" "${file_path}" --desc "${file_description}"
     else
       info "Creating new gist: ${file_description}"
-      gh gist create "${file_path}" --desc "${file_description}"
+      command gh gist create "${file_path}" --desc "${file_description}"
     fi
   }
 
@@ -36,7 +36,7 @@ if exists gh; then
     local gist_id=$(_find_gist_id "${file_description}")
     if [[ -n $gist_id ]]; then
       info "Loading \"${file_description}\" from gist: ${gist_id}"
-      gh gist view "${gist_id}" --filename "${gist_filename}" --raw > "${file_path}"
+      command gh gist view "${gist_id}" --filename "${gist_filename}" --raw > "${file_path}"
     else
       error "Gist \"${file_description}\" not found"
       return 1
@@ -71,12 +71,12 @@ if exists gh; then
     if [[ -n $gist_id ]]; then
       info "Updating gist: ${gist_id} (${dir_description}) with ${#files[@]} files"
       for f in "${files[@]}"; do
-        info "Adding/Updating $(basename "$f")..."
-        gh gist edit "${gist_id}" --add "$f"
+        info "Adding/Updating ${f:t}..."
+        command gh gist edit "${gist_id}" --add "$f"
       done
     else
       info "Creating new gist (${dir_description}) with ${#files[@]} files"
-      gh gist create "${files[@]}" --desc "${dir_description}"
+      command gh gist create "${files[@]}" --desc "${dir_description}"
     fi
   }
 
@@ -99,11 +99,11 @@ if exists gh; then
     command mkdir -p "${dir_path}"
 
     local filenames
-    filenames=$(gh api "/gists/${gist_id}" --jq '.files | keys[]')
+    filenames=$(command gh api "/gists/${gist_id}" --jq '.files | keys[]')
 
     while IFS= read -r filename; do
       info "Restoring ${filename}..."
-      gh gist view "${gist_id}" --filename "${filename}" --raw > "${dir_path}/${filename}"
+      command gh gist view "${gist_id}" --filename "${filename}" --raw > "${dir_path}/${filename}"
     done <<< "$filenames"
   }
 fi
@@ -115,13 +115,13 @@ fi
 if exists gh; then
   uninstall-gh() {
     info "Uninstalling gh-cli..."
-    brew uninstall gh
+    command brew uninstall gh
     reload
   }
 else
   install-gh() {
     info "Installing gh-cli..."
-    brew install gh
+    command brew install gh
     reload
   }
 fi

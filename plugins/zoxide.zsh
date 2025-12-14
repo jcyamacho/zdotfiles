@@ -1,7 +1,7 @@
 # ZOXIDE (smarter cd command): https://github.com/ajeetdsouza/zoxide
 
 _install_zoxide() {
-  curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh -s -- --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
+  command curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | command sh -s -- --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
 }
 
 if exists zoxide; then
@@ -10,7 +10,7 @@ if exists zoxide; then
   alias uninstall-z="uninstall-zoxide"
   uninstall-zoxide() {
     info "Uninstalling zoxide..."
-    command rm -f "$CUSTOM_TOOLS_DIR/zoxide"
+    command rm -f -- "$CUSTOM_TOOLS_DIR/zoxide"
     clear-cached-init zoxide
     reload
   }

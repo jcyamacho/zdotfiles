@@ -7,13 +7,13 @@ fi
 if exists fzf; then
   uninstall-fzf() {
     info "Uninstalling fzf..."
-    brew uninstall fzf
+    command brew uninstall fzf
     reload
   }
 else
   install-fzf() {
     info "Installing fzf..."
-    brew install fzf
+    command brew install fzf
     reload
   }
 fi

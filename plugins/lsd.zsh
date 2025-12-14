@@ -1,14 +1,14 @@
 # lsd (ls alternative): https://github.com/lsd-rs/lsd
-export LSD_CONFIG_DIR="$HOME/.config/lsd/"
+export LSD_CONFIG_DIR="$HOME/.config/lsd"
 export LSD_CONFIG_FILE="$LSD_CONFIG_DIR/config.yaml"
 
 if exists lsd; then
   ll() {
-    lsd -lahg "$@"
+    command lsd -lahg "$@"
   }
 
   lt() {
-    lsd --tree "$@"
+    command lsd --tree "$@"
   }
 
   lsd-config() {
@@ -19,7 +19,7 @@ fi
 _lsd_restore_config() {
   command mkdir -p "$LSD_CONFIG_DIR"
   info "Downloading color theme..."
-  curl -fsSL https://raw.githubusercontent.com/catppuccin/lsd/refs/heads/main/themes/catppuccin-mocha/colors.yaml -o "$LSD_CONFIG_DIR/colors.yaml"
+  command curl -fsSL https://raw.githubusercontent.com/catppuccin/lsd/refs/heads/main/themes/catppuccin-mocha/colors.yaml -o "$LSD_CONFIG_DIR/colors.yaml"
   info "Writing config file..."
   builtin print "color:\n  theme: custom" > "$LSD_CONFIG_FILE"
 }
@@ -31,13 +31,15 @@ fi
 if exists lsd; then
   uninstall-lsd() {
     info "Uninstalling lsd..."
-    brew uninstall lsd
-    command rm -rf "$LSD_CONFIG_DIR"
+    command brew uninstall lsd
+    command rm -rf -- "$LSD_CONFIG_DIR"
+    reload
   }
+
 else
   install-lsd() {
     info "Installing lsd..."
-    brew install lsd
+    command brew install lsd
     _lsd_restore_config
     reload
   }

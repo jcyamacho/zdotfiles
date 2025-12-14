@@ -6,12 +6,12 @@ fi
 if exists gemini; then
   update-gemini() {
     info "Updating gemini..."
-    npm install -g @google/gemini-cli@latest  > /dev/null
+    command npm install -g @google/gemini-cli@latest > /dev/null
   }
 
   uninstall-gemini() {
     info "Uninstalling gemini..."
-    npm uninstall -g @google/gemini-cli  > /dev/null
+    command npm uninstall -g @google/gemini-cli > /dev/null
     reload
   }
 
@@ -19,7 +19,7 @@ if exists gemini; then
 else
   install-gemini() {
     info "Installing gemini..."
-    npm install -g @google/gemini-cli@latest  > /dev/null
+    command npm install -g @google/gemini-cli@latest > /dev/null
     reload
   }
 fi

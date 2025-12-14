@@ -6,20 +6,20 @@ if [ -f "$DENO_INSTALL/bin/deno" ]; then
 
   uninstall-deno() {
     info "Uninstalling deno..."
-    command rm -rf "$DENO_INSTALL"
+    command rm -rf -- "$DENO_INSTALL"
     reload
   }
 
   update-deno() {
     info "Updating deno..."
-    deno upgrade
+    command deno upgrade
   }
 
   updates+=(update-deno)
 else
   install-deno() {
     info "Installing deno..."
-    curl -fsSL https://deno.land/install.sh | sh -s -- --no-modify-path -y
+    command curl -fsSL https://deno.land/install.sh | command sh -s -- --no-modify-path -y
     reload
   }
 fi

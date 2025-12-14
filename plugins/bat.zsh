@@ -6,13 +6,13 @@ fi
 if exists bat; then
   uninstall-bat() {
     info "Uninstalling bat..."
-    brew uninstall bat
+    command brew uninstall bat
     reload
   }
 else
   install-bat() {
     info "Installing bat..."
-    brew install bat
+    command brew install bat
     reload
   }
 fi
