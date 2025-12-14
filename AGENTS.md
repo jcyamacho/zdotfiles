@@ -15,10 +15,11 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **Indentation**: 2 spaces, LF line endings, UTF-8 (see `.editorconfig`)
 - **Header**: Start each plugin with `# <tool> (<short description>): https://...` (description optional, but if present keep it)
 - **Guard pattern**: Use `exists <cmd>` before tool-specific code; early `return` if missing
+- **Startup installs**: Auto-installing missing tools during shell startup is acceptable only for bootstrapping defaults (currently Antidote in `zshrc.sh`, Homebrew in `plugins/brew.zsh`, and Starship in `plugins/starship/starship.plugin.zsh`); avoid adding startup installs for other tools—prefer `install-<tool>` instead
 - **Naming**: `install-<tool>`, `uninstall-<tool>`, `update-<tool>` (public), `_update_<tool>` (private)
 - **Functions/aliases**: lowercase with hyphens; env vars: UPPERCASE
 - **Builtins**: Prefix with `command` or `builtin` to bypass aliases (e.g., `command mkdir -p`)
-- **No `eval`**: Avoid `eval` in plugins; if a tool outputs init shell code, use `source-cached-init` instead
+- **No `eval`**: Avoid `eval` in plugins; if a tool outputs init shell code, use `source-cached-init` instead (note: `_utils.zsh` may use `eval` only as a last-resort fallback when no cache exists)
 - **Paths**: Prefer `$PWD` over `$(pwd)` to avoid subshells
 - **Removals**: Use `command rm -f -- "$path"` / `command rm -rf -- "$path"` and quote variables
 - **No `sudo`**: Avoid `sudo` in plugin functions; keep installs/updates non-interactive
@@ -26,6 +27,7 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **Required params**: Use `${1:?error message}` syntax
 - **Output**: Use `info`, `warn`, `error` helpers from `_utils.zsh`
 - **Caching init**: Prefer `source-cached-init <cmd> [args...]` for tools that emit shell init code (uses `$ZDOTFILES_CACHE_DIR/<cmd>/init.zsh` and falls back to sourcing an existing cache or `eval` when needed)
+- **Updates array**: Add callables to `updates` that are safe to run from `update-all` (quoted invocation), and prefer clearing cached init when updating tools that generate init code
 - **Cache invalidation**: Prefer `clear-cached-init <cmd>` after installs/updates so next shell regen is clean
 - **Structure**: Simple tools = single `.zsh` file; complex tools = subdirectory with `.plugin.zsh`
 
