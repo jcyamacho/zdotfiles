@@ -14,11 +14,11 @@ _update_node() {
   info "Current Node.js version: $current_version"
 
   info "Updating npm..."
-  npm install -g npm@latest > /dev/null
+  command npm install -g npm@latest > /dev/null
 }
 
 _fnm_env() {
-  eval "$(fnm env --use-on-cd --shell zsh)"
+  source-cached-init fnm env --use-on-cd --shell zsh
 }
 
 if exists fnm; then
@@ -26,8 +26,9 @@ if exists fnm; then
 
   alias uninstall-node="uninstall-fnm"
   uninstall-fnm() {
-    brew uninstall fnm
-    rm -rf "$HOME/.local/state/fnm_multishells"
+    command brew uninstall fnm
+    command rm -rf -- "$HOME/.local/state/fnm_multishells"
+    clear-cached-init fnm
     reload
   }
 
@@ -35,7 +36,7 @@ if exists fnm; then
     local current_version=$(fnm current)
     info "Cleaning up unused Node.js versions (keeping $current_version)..."
 
-    fnm list | grep -v "$current_version" | grep -o "v[0-9]\+\.[0-9]\+\.[0-9]\+" | while read -r version; do
+    fnm list | command grep -v "$current_version" | command grep -o "v[0-9]\+\.[0-9]\+\.[0-9]\+" | while read -r version; do
       info "Removing $version..."
       fnm uninstall "$version"
     done
@@ -43,7 +44,9 @@ if exists fnm; then
 
   update-node() {
     info "Updating Node.js..."
-    _update_node
+    if _update_node; then
+      clear-cached-init fnm
+    fi
   }
 
   updates+=(update-node)
@@ -51,7 +54,7 @@ else
   alias install-node="install-fnm"
   install-fnm() {
     info "Installing fnm..."
-    brew install fnm
+    command brew install fnm
     _fnm_env
     _update_node
     reload

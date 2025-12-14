@@ -5,12 +5,13 @@ _install_zoxide() {
 }
 
 if exists zoxide; then
-  eval "$(zoxide init zsh)"
+  source-cached-init zoxide init zsh
 
   alias uninstall-z="uninstall-zoxide"
   uninstall-zoxide() {
     info "Uninstalling zoxide..."
     command rm -f "$CUSTOM_TOOLS_DIR/zoxide"
+    clear-cached-init zoxide
     reload
   }
 
@@ -18,6 +19,7 @@ if exists zoxide; then
   update-zoxide() {
     info "Updating zoxide..."
     _install_zoxide
+    clear-cached-init zoxide
   }
 
   updates+=(update-zoxide)
@@ -26,6 +28,7 @@ else
   install-zoxide() {
     info "Installing zoxide..."
     _install_zoxide
+    clear-cached-init zoxide
     reload
   }
 fi

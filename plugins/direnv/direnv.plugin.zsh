@@ -14,22 +14,24 @@ _install_direnv() {
 }
 
 if exists direnv; then
-  eval "$(direnv hook zsh)"
+  source-cached-init direnv hook zsh
 
   uninstall-direnv() {
     info "Uninstalling direnv..."
     command rm "$CUSTOM_TOOLS_DIR/direnv"
     command rm -rf "$DIRENV_CONFIG_DIR"
+    clear-cached-init direnv
     reload
   }
 
   update-direnv() {
     info "Updating direnv..."
     _install_direnv
+    clear-cached-init direnv
   }
 
   direnvconfig() {
-    $EDITOR "$DIRENV_CONFIG_FILE"
+    edit "$DIRENV_CONFIG_FILE"
   }
 
   updates+=(update-direnv)
@@ -37,6 +39,7 @@ else
   install-direnv() {
     info "Installing direnv..."
     _install_direnv
+    clear-cached-init direnv
     reload
   }
 

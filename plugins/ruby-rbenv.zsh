@@ -22,13 +22,14 @@ _update_ruby() {
 }
 
 if exists rbenv; then
-  eval "$(rbenv init - --no-rehash zsh)"
+  source-cached-init rbenv init - --no-rehash zsh
 
   alias uninstall-ruby="uninstall-rbenv"
   uninstall-rbenv() {
     info "Uninstalling rbenv..."
-    brew uninstall rbenv
+    command brew uninstall rbenv
     command rm -rf "$HOME/.rbenv"
+    clear-cached-init rbenv
     reload
   }
 
@@ -49,7 +50,8 @@ else
   alias install-ruby="install-rbenv"
   install-rbenv() {
     info "Installing rbenv..."
-    brew install rbenv
+    command brew install rbenv
+    clear-cached-init rbenv
     _update_ruby
     reload
   }

@@ -1,6 +1,9 @@
+# starship: https://starship.rs
+
 unset ZSH_THEME
 
 export STARSHIP_CONFIG_FILE="$HOME/.config/starship.toml"
+
 
 update-starship() {
   _update_starship
@@ -10,6 +13,7 @@ update-starship() {
 _update_starship() {
   info "Updating starship..."
   curl -sS https://starship.rs/install.sh | sh -s -- --yes --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
+  clear-cached-init starship
 }
 
 updates+=(_update_starship)
@@ -19,7 +23,7 @@ if ! exists starship; then
   reload
 fi
 
-eval "$(starship init zsh)"
+source-cached-init starship init zsh
 
 alias starship-preset-nerd-fonts='starship preset nerd-font-symbols > "$STARSHIP_CONFIG_FILE"'
 alias starship-preset-no-nerd-font='starship preset no-nerd-font > "$STARSHIP_CONFIG_FILE"'

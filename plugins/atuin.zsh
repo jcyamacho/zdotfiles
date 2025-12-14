@@ -2,10 +2,15 @@
 export ATUIN_DIR="$HOME/.atuin"
 export ATUIN_BIN_DIR="$ATUIN_DIR/bin"
 
+
 if [ -d "$ATUIN_BIN_DIR" ]; then
   path=("$ATUIN_BIN_DIR" $path)
 
-  eval "$(atuin init zsh)"
+  if ! exists atuin; then
+    return
+  fi
+
+  source-cached-init atuin init zsh
 
   atuin-config() {
     edit "$HOME/.config/atuin/config.toml"
@@ -20,7 +25,9 @@ if [ -d "$ATUIN_BIN_DIR" ]; then
   update-atuin() {
     info "Updating atuin..."
     _lock_zshrc
-    atuin update
+    if atuin update; then
+      clear-cached-init atuin
+    fi
     _unlock_zshrc
   }
 
