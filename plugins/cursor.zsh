@@ -2,7 +2,7 @@
 
 if exists cursor; then
   cr() {
-    local dir=${1:-$PWD}
+    local dir="${1:-$PWD}"
     command cursor "$dir"
   }
 fi

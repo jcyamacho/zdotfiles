@@ -1,4 +1,4 @@
-# fonts
+# fonts (brew casks): https://brew.sh/
 if ! exists brew; then
   return
 fi

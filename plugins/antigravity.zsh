@@ -4,7 +4,7 @@ export ANTIGRAVITY_BIN="$ANTIGRAVITY_DIR/antigravity/bin/antigravity"
 
 if [[ -f "$ANTIGRAVITY_BIN" ]]; then
   ag() {
-    local dir=${1:-$PWD}
+    local dir="${1:-$PWD}"
     "$ANTIGRAVITY_BIN" -- "$dir"
   }
 fi

@@ -22,8 +22,10 @@ _ghostty_update_themes() {
 }
 
 _ghostty_restore_config() {
-  # Remove existing macOS config file
-  command rm -f -- "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+  if is-macos; then
+    # Remove existing macOS config file
+    command rm -f -- "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+  fi
 
   _ghostty_update_themes
 

@@ -44,7 +44,7 @@ if exists opencode; then
     fi
 
     if [[ ! -f $_opencode_settings_file ]]; then
-      builtin print -r -- '{ "$schema": "https://opencode.ai/config.json" }' > "$_opencode_settings_file"
+      builtin print -r -- '{ "$schema": "https://opencode.ai/config.json" }' >| "$_opencode_settings_file"
     fi
 
     edit "$_opencode_config_dir"

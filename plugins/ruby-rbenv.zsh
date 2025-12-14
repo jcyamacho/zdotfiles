@@ -37,7 +37,7 @@ if exists rbenv; then
     local current_version="$(rbenv global)"
     info "Cleaning up unused Ruby versions (keeping $current_version)..."
 
-    rbenv versions --bare | command grep -v "^$current_version$" | command grep -v "^system$" | while read -r version; do
+    rbenv versions --bare | command grep -v "^$current_version$" | command grep -v "^system$" | while IFS= read -r version; do
       info "Removing Ruby $version..."
       rbenv uninstall --force "$version"
     done

@@ -19,7 +19,7 @@ if exists python; then
     for venv_dir in "${venv_dirs[@]}"; do
       local activate_file="${cwd}/${venv_dir}/bin/activate"
       if [[ -s $activate_file ]]; then
-        source "$activate_file"
+        builtin source "$activate_file"
         break
       fi
     done
@@ -110,8 +110,17 @@ alias uninstall-python="uninstall-uv"
 uninstall-uv() {
   info "Uninstalling uv..."
   uv cache clean
-  command rm -rf -- "$(uv python dir)"
-  command rm -rf -- "$(uv tool dir)"
+
+  local uv_python_dir="$(uv python dir)"
+  if [[ -n $uv_python_dir && $uv_python_dir == "$HOME"/* ]]; then
+    command rm -rf -- "$uv_python_dir"
+  fi
+
+  local uv_tool_dir="$(uv tool dir)"
+  if [[ -n $uv_tool_dir && $uv_tool_dir == "$HOME"/* ]]; then
+    command rm -rf -- "$uv_tool_dir"
+  fi
+
   command rm -f -- "$HOME/.local/bin/uv"
   command rm -f -- "$HOME/.local/bin/uvx"
   reload

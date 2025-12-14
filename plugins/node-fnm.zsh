@@ -9,7 +9,7 @@ _update_node() {
   fnm install --lts
   fnm use --install-if-missing lts-latest
 
-  local current_version=$(fnm current)
+  local current_version="$(fnm current)"
   fnm default "$current_version"
   info "Current Node.js version: $current_version"
 

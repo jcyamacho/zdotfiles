@@ -3,7 +3,7 @@
 export CARGO_DIR="$HOME/.cargo"
 
 if [[ -f $CARGO_DIR/env ]]; then
-  source "$CARGO_DIR/env"
+  builtin source "$CARGO_DIR/env"
 
   uninstall-rust() {
     info "Uninstalling rust..."

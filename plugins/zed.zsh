@@ -5,7 +5,7 @@ if exists zed; then
   export EDITOR="${EDITOR:-zed --wait}"
 
   zd() {
-    local dir=${1:-$PWD}
+    local dir="${1:-$PWD}"
     command zed "$dir"
   }
 

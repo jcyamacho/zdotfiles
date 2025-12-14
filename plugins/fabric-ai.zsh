@@ -7,6 +7,8 @@ if exists fabric-ai; then
   export FABRIC_AI_PATTERNS_DIR="$FABRIC_AI_DIR/patterns"
 
   if [[ -d $FABRIC_AI_PATTERNS_DIR ]]; then
+    local pattern_file
+    local pattern_name
     for pattern_file in "$FABRIC_AI_PATTERNS_DIR"/*(N-.); do
       pattern_name=${pattern_file:t}
       unalias "$pattern_name" 2>/dev/null

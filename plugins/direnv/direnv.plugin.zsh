@@ -3,7 +3,8 @@ export DIRENV_CONFIG_DIR="$HOME/.config/direnv"
 export DIRENV_CONFIG_FILE="$DIRENV_CONFIG_DIR/direnv.toml"
 
 _install_direnv() {
-  export bin_path="$CUSTOM_TOOLS_DIR"
+  local bin_path="$CUSTOM_TOOLS_DIR"
+  export bin_path
   command curl -sfL https://direnv.net/install.sh | command bash > /dev/null
   unset bin_path
 

@@ -5,7 +5,7 @@ export CODEX_SECURE_MODE=1
 
 if exists codex; then
   cdx() {
-    codex --enable web_search_request --sandbox workspace-write --ask-for-approval on-request "$@"
+    command codex --enable web_search_request --sandbox workspace-write --ask-for-approval on-request "$@"
   }
 
   codex-config() {
@@ -15,7 +15,7 @@ fi
 
 # prioritize brew install
 if exists brew; then
-  source "$ZDOTFILES_DIR/plugins/codex/codex-brew.zsh"
+  builtin source "$ZDOTFILES_DIR/plugins/codex/codex-brew.zsh"
 elif exists npm; then
-  source "$ZDOTFILES_DIR/plugins/codex/codex-npm.zsh"
+  builtin source "$ZDOTFILES_DIR/plugins/codex/codex-npm.zsh"
 fi

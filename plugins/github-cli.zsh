@@ -1,7 +1,11 @@
 # GITHUB_CLI (GitHub on the command line): https://github.com/cli/cli
 if exists gh; then
   _find_gist_id() {
-    command gh api /gists --jq ".[] | select((.description==\"$1\") and (.public==false)) | .id" | command head -n1
+    local gist_description=${1:?_find_gist_id: missing gist description}
+    local jq_description=${gist_description//\\/\\\\}
+    jq_description=${jq_description//"/\\"}
+
+    command gh api /gists --jq ".[] | select((.description==\"${jq_description}\") and (.public==false)) | .id" | command head -n1
   }
 
   save-file-to-gist() {
@@ -32,7 +36,7 @@ if exists gh; then
       return 1
     fi
 
-    local gist_filename=$(command basename "${file_path}")
+    local gist_filename="${file_path:t}"
     local gist_id=$(_find_gist_id "${file_description}")
     if [[ -n $gist_id ]]; then
       info "Loading \"${file_description}\" from gist: ${gist_id}"

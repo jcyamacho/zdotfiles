@@ -2,7 +2,7 @@
 
 if exists code; then
   c() {
-    local dir=${1:-$PWD}
+    local dir="${1:-$PWD}"
     command code "$dir"
   }
 fi
