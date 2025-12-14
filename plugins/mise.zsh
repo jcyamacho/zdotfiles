@@ -19,4 +19,6 @@ else
     curl https://mise.run | MISE_INSTALL_PATH="$CUSTOM_TOOLS_DIR/mise" sh > /dev/null
     reload
   }
+
+  _mise_hook_precmd() {}
 fi
