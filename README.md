@@ -53,3 +53,8 @@ These tools integrate seamlessly once installed and will significantly improve y
 ## Updating
 
 Run `update-zdotdir` to pull the latest repo changes and reload automatically. `update-all` is also available if you want a one-liner that refreshes everything before reloading the shell.
+
+## Performance
+
+- Benchmark before/after changes with `zsh-startup-bench`.
+- Use `zsh-startup-profile` for a quick zprof-enabled timing run.

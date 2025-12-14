@@ -6,6 +6,11 @@ fi
 
 export ZDOTFILES_DIR="${ZDOTFILES_DIR:-$HOME/.zdotfiles}"
 
+# CACHE
+export ZDOTFILES_CACHE_DIR="${ZDOTFILES_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zdotfiles}"
+[[ -d $ZDOTFILES_CACHE_DIR ]] || command mkdir -p -- "$ZDOTFILES_CACHE_DIR"
+# CACHE end
+
 typeset -gU path
 typeset -gU fpath
 
