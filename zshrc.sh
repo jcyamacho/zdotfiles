@@ -68,6 +68,13 @@ if [[ ! "${zsh_plugins}.zsh" -nt "${zsh_plugins}.txt" ]]; then
   antidote bundle < "${zsh_plugins}.txt" >| "${zsh_plugins}.zsh"
 fi
 
+# Compile the static plugins file for faster sourcing.
+if [[ -f "${zsh_plugins}.zsh" ]]; then
+  if [[ ! -f "${zsh_plugins}.zsh.zwc" || "${zsh_plugins}.zsh" -nt "${zsh_plugins}.zsh.zwc" ]]; then
+    builtin zcompile "${zsh_plugins}.zsh" 2>/dev/null || :
+  fi
+fi
+
 # Source your static plugins file.
 builtin source "${zsh_plugins}.zsh"
 unset zsh_plugins

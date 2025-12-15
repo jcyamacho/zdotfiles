@@ -22,7 +22,9 @@ if ! exists starship; then
   reload
 fi
 
-source-cached-init starship init zsh
+if [[ $TERM != dumb ]]; then
+  source-cached-init starship init zsh
+fi
 
 alias starship-preset-nerd-fonts='starship preset nerd-font-symbols > "$STARSHIP_CONFIG_FILE"'
 alias starship-preset-no-nerd-font='starship preset no-nerd-font > "$STARSHIP_CONFIG_FILE"'

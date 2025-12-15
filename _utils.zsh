@@ -71,22 +71,24 @@ _cache_cmd_output() {
 
 _cached_init_file() {
   local cmd=${1:?_cached_init_file: missing command}
-  print -r -- "${ZDOTFILES_CACHE_DIR:?_cached_init_file: missing ZDOTFILES_CACHE_DIR}/$cmd/init.zsh"
+  REPLY="${ZDOTFILES_CACHE_DIR:?_cached_init_file: missing ZDOTFILES_CACHE_DIR}/$cmd/init.zsh"
 }
 
 source-cached-init() {
   local cmd=${1:?source-cached-init: missing command}
   shift
 
-  local cache_file
-  cache_file="$(_cached_init_file "$cmd")"
+  _cached_init_file "$cmd"
+  local cache_file=$REPLY
+  local cache_zwc="${cache_file}.zwc"
 
-  if _cache_cmd_output "$cache_file" "$cmd" "$@"; then
-    builtin source "$cache_file"
-    return 0
-  fi
+  _cache_cmd_output "$cache_file" "$cmd" "$@" || :
 
   if [[ -f $cache_file ]]; then
+    if [[ ! -f $cache_zwc || $cache_file -nt $cache_zwc ]]; then
+      builtin zcompile "$cache_file" 2>/dev/null || :
+    fi
+
     builtin source "$cache_file"
     return 0
   fi
@@ -101,7 +103,9 @@ source-cached-init() {
 
 clear-cached-init() {
   local cmd=${1:?clear-cached-init: missing command}
-  command rm -f -- "$(_cached_init_file "$cmd")" 2>/dev/null
+  _cached_init_file "$cmd"
+  local cache_file=$REPLY
+  command rm -f -- "$cache_file" "${cache_file}.zwc" 2>/dev/null
 }
 
 is-macos() {
