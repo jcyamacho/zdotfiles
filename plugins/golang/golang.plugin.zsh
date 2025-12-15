@@ -5,8 +5,6 @@ if exists go; then
   # change the default GOPATH from $HOME/go to $HOME/.go
   export GOPATH="$HOME/.go"
 
-  command go telemetry off 2>/dev/null
-
   alias gmt="go mod tidy"
 
   gmi() {
@@ -23,32 +21,30 @@ if exists go; then
       command cp -- "$ZDOTFILES_DIR/plugins/golang/main.go" .
     fi
   }
-fi
 
-if ! exists brew; then
-  return
-fi
+  if exists brew; then
+    uninstall-go() {
+      info "Uninstalling golangci-lint..."
+      command brew uninstall golangci-lint
 
-if exists go; then
-  uninstall-go() {
-    info "Uninstalling golangci-lint..."
-    command brew uninstall golangci-lint
+      info "Uninstalling go..."
+      command brew uninstall go
 
-    info "Uninstalling go..."
-    command brew uninstall go
+      info "Removing $GOPATH..."
+      command rm -rf -- "$GOPATH"
 
-    info "Removing $GOPATH..."
-    command rm -rf -- "$GOPATH"
-
-    reload
-  }
-else
+      reload
+    }
+  fi
+elif exists brew; then
   install-go() {
     info "Installing go..."
     command brew install go
 
     info "Installing golangci-lint..."
     command brew install golangci-lint
+
+    command go telemetry off 2>/dev/null
 
     reload
   }

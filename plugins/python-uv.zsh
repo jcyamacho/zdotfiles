@@ -32,29 +32,20 @@ if ! exists uv; then
     info "Installing uv..."
     command curl -LsSf https://astral.sh/uv/install.sh | command sh
 
-    # Install Python
-    if ! exists python; then
-      info "Installing python..."
-      uv python install --default --preview
-    fi
+    info "Installing python..."
+    uv python install --default --preview
 
     # Install Ruff: https://docs.astral.sh/ruff/
-    if ! exists ruff; then
-      info "Installing ruff..."
-      uv tool install ruff@latest
-    fi
+    info "Installing ruff..."
+    uv tool install ruff@latest
 
     # Install BasedPyright: https://docs.basedpyright.com/latest/
-    if ! exists basedpyright; then
-      info "Installing basedpyright..."
-      uv tool install basedpyright@latest
-    fi
+    info "Installing basedpyright..."
+    uv tool install basedpyright@latest
 
     # Install ty: https://docs.astral.sh/ty/
-    if ! exists ty; then
-      info "Installing ty..."
-      uv tool install ty@latest
-    fi
+    info "Installing ty..."
+    uv tool install ty@latest
 
     reload
   }

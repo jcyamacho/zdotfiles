@@ -32,20 +32,16 @@ if exists fabric-ai; then
     local video_link="$1"
     command fabric-ai -y "$video_link" "$transcript_flag"
   }
-fi
 
-if ! exists brew; then
-  return
-fi
-
-if exists fabric-ai; then
-  uninstall-fabric-ai() {
-    info "Uninstalling fabric-ai..."
-    command brew uninstall fabric-ai
-    command rm -rf -- "$FABRIC_AI_DIR"
-    reload
-  }
-else
+  if exists brew; then
+    uninstall-fabric-ai() {
+      info "Uninstalling fabric-ai..."
+      command brew uninstall fabric-ai
+      command rm -rf -- "$FABRIC_AI_DIR"
+      reload
+    }
+  fi
+elif exists brew; then
   install-fabric-ai() {
     info "Installing fabric-ai..."
     command brew install fabric-ai

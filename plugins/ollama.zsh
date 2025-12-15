@@ -11,19 +11,15 @@ if exists ollama; then
   }
 
   updates+=(update-ollama-models)
-fi
 
-if ! exists brew; then
-  return
-fi
-
-if exists ollama; then
-  uninstall-ollama() {
-    info "Uninstalling ollama..."
-    command brew uninstall ollama
-    reload
-  }
-else
+  if exists brew; then
+    uninstall-ollama() {
+      info "Uninstalling ollama..."
+      command brew uninstall ollama
+      reload
+    }
+  fi
+elif exists brew; then
   install-ollama() {
     info "Installing ollama..."
     command brew install ollama
