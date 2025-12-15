@@ -47,6 +47,10 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **Avoid subshells**: Prefer `$PWD` over `$(pwd)`, `${var:h}` over `$(dirname "$var")`, `${var:t}` over `$(basename "$var")`
 - **Here-strings over pipes**: Prefer `cmd <<< "$var"` over `builtin print -r -- "$var" | cmd` (avoids subshell)
 - **Cache tool init**: Use `source-cached-init <cmd> [args...]` for tools that emit shell init code
+- **Antidote conditionals**: Prefer `conditional:"exists tool"` for consistency (fast `$+commands[...]` lookup via `exists()`)
+- **Minimize command checks**: Avoid repeated `exists <cmd>` within the same file; structure as `if exists foo; then ... elif exists brew; then ... fi`
+- **Skip prompt init in dumb terminals**: Guard prompt tooling like Starship with `[[ $TERM != dumb ]]` to avoid errors in non-interactive contexts
+- **Compile generated plugin list**: When generating `.zsh_plugins.zsh`, also `zcompile` it to speed startup. Note: source the `.zsh` file; zsh will prefer the `.zwc` when present and newer.
 - **Lazy loading**: Defer initialization of tools not needed at every shell start
 - **Native operations**: Prefer zsh parameter expansion over external commands:
   - `${array[(r)pattern]}` instead of `grep`
