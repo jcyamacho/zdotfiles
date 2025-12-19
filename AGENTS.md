@@ -97,6 +97,13 @@ These are specific patterns used in this repository:
 - **Function existence**: Use `(( $+functions[name] ))` to check before calling
 - **Telemetry opt-out**: Disable analytics/telemetry where tools support it
 
+### Pure Utility Plugins
+
+While most plugins wrap external tools and require lifecycle functions, some plugins are **pure utilities** (e.g., `git-worktree.zsh`). For these:
+- Lifecycle functions (`install-`, `uninstall-`, `update-`) are optional.
+- They do not need to be listed in the `README.md` "Installable Tools" section if they don't require an explicit installation step.
+- They should still follow all other conventions (headers, guards, performance, etc.).
+
 ## Adding a New Plugin
 
 1. Create `plugins/<tool>.zsh` (or `plugins/<tool>/<tool>.plugin.zsh` for complex tools)
