@@ -32,7 +32,7 @@ git-worktree-new() {
   command git fetch origin "$default_branch:$default_branch" 2>/dev/null || command git fetch origin "$default_branch"
 
   local worktree_name="${branch_name//\//-}"
-  local worktree_path="${repo_root:h}/${actual_repo_name}-${worktree_name}"
+  local worktree_path="${GIT_WORKTREE_BASE:-${repo_root:h}}/${actual_repo_name}-${worktree_name}"
 
   info "Creating worktree at '$worktree_path' branched from 'origin/$default_branch'..."
   command git worktree add -b "$branch_name" "$worktree_path" "origin/$default_branch" || return 1
@@ -91,11 +91,11 @@ git-worktree-delete() {
   command git worktree remove "$wt_path" || return 1
 
   if [[ -n "$branch" ]]; then
-    warn "Delete associated branch '$branch'? (y/N)"
+    warn "Delete associated branch '$branch'? (Y/n)"
     local choice
     builtin read -k 1 "choice? "
     builtin print ""
-    if [[ "$choice" == [yY] ]]; then
+    if [[ "$choice" != [nN] ]]; then
       command git branch -D "$branch"
     fi
   fi
