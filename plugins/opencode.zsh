@@ -14,6 +14,7 @@ if exists opencode; then
   typeset -r _opencode_plugin_dir="$_opencode_config_dir/plugin"
   typeset -r _opencode_settings_file="$_opencode_config_dir/opencode.json"
   typeset -r _opencode_global_rules_file="$_opencode_config_dir/AGENTS.md"
+  typeset -r _opencode_cache_dir="$HOME/.cache/opencode"
 
   alias oc="opencode"
 
@@ -64,13 +65,12 @@ if exists opencode; then
     info "Uninstalling opencode..."
     command rm -rf -- "$OPENCODE_HOME"
     command rm -rf -- "$_opencode_config_dir"
+    command rm -rf -- "$_opencode_cache_dir"
     reload
   }
 
   update-opencode() {
     info "Updating opencode..."
-    # force opencode to reinstall plugins
-    command rm -rf -- "$HOME/.cache/opencode"
     _lock_zshrc
     command opencode upgrade
     _unlock_zshrc
