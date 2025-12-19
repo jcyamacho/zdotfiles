@@ -4,12 +4,22 @@
 
 Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`.
 
+## Repo Layout
+
+- `zshrc.sh` – entry point sourced by your `~/.zshrc`.
+- `.zsh_plugins.txt` – source-of-truth plugin list for Antidote.
+- `plugins/` – local plugins + `install-*`/`update-*`/`uninstall-*` helpers.
+- `_utils.zsh` – shared helpers (`exists`, `reload`, caching, output).
+
 ## Commands
 
-- `reload` - Reload shell config after changes
-- `zsh-startup-bench` - Benchmark startup (10 iterations)
-- `zsh-startup-profile` - Profile startup with zprof
-- Test manually with `zsh -lic exit`
+- `reload` – reload shell config after changes
+- `update-zdotfiles` – pull repo updates and reload
+- `update-antidote` – update Antidote and reload
+- `update-all` – run all registered updaters and reload
+- `zsh-startup-bench` – benchmark startup (10 iterations)
+- `zsh-startup-profile` – profile startup with zprof
+- Manual sanity check: `zsh -lic exit`
 
 ## Code Style
 
@@ -83,7 +93,7 @@ These are specific patterns used in this repository:
 
 - **Guard pattern**: Use `exists <cmd>` before tool-specific code; early `return` if missing
 - **Startup installs**: Only bootstrap essentials (Antidote, Homebrew, Starship); other tools use `install-<tool>`
-- **Updates array**: Register `_update_<tool>` in `updates` array for `update-all` support
+- **Updates array**: Register an updater in `updates` for `update-all` (prefer `_update_<tool>` that does not call `reload`)
 - **Cache invalidation**: Call `clear-cached-init <cmd>` after installs/updates
 - **Structure**: Simple tools = single `.zsh` file; complex tools = subdirectory with `.plugin.zsh`
 - **Early returns**: Structure as guard → early return → main code (not nested if/else)
@@ -107,12 +117,13 @@ While most plugins wrap external tools and require lifecycle functions, some plu
 ## Adding a New Plugin
 
 1. Create `plugins/<tool>.zsh` (or `plugins/<tool>/<tool>.plugin.zsh` for complex tools)
-2. Add header comment with tool name and URL
-3. Guard with `exists <tool> || return` (or check for package manager first)
-4. Provide `install-<tool>` and `uninstall-<tool>` functions
-5. If updatable, add `update-<tool>` and register `_update_<tool>` in `updates` array
-6. For tools with init code, use `source-cached-init` and call `clear-cached-init` on update
-7. Update `README.md` to include the new tool in the **Installable Tools** list (with a link), so the README stays a complete reference of what this repo contains.
+2. Add it to `.zsh_plugins.txt` (use `conditional:"exists <tool>"` when appropriate)
+3. Add header comment with tool name and URL
+4. Guard with `exists <tool> || return` (or check for package manager first)
+5. Provide `install-<tool>` and `uninstall-<tool>` functions
+6. If updatable, add an updater and register it in `updates` for `update-all` support
+7. For tools with init code, use `source-cached-init` and call `clear-cached-init` on update
+8. Update `README.md` to include the new tool in the **Installable Tools** list (with a link), so the README stays a complete reference of what this repo contains.
 
 ## Debugging
 
