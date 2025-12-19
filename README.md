@@ -21,7 +21,7 @@ Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) 
 - Keep the repo elsewhere by setting `ZDOTFILES_DIR` before sourcing.
 - Change the editor used by helper commands by exporting `EDITOR`.
 - Adjust where tools like Starship install by overriding `CUSTOM_TOOLS_DIR`.
-- Set `GIT_WORKTREE_BASE` to change where `gwt-new` creates worktrees (defaults to `..`, i.e., sibling directories).
+- Set `GIT_WORKTREE_BASE` to change where `gwt-new` creates worktrees.
 
 ## Plugins
 
@@ -35,9 +35,10 @@ Many integrations are **conditional** (they only activate when the underlying bi
 
 ## Installable Tools
 
-These are the tool install helpers shipped in `plugins/` (run the command to install; once installed the integration auto-wires on next shell start):
+These are the `install-*` helpers (run the command to install; integrations load on `reload`/next shell start):
 
 - `install-atuin` – [Atuin](https://atuin.sh/) history
+- `install-bat` – [bat](https://github.com/sharkdp/bat) `cat` clone
 - `install-bun` – [Bun](https://bun.sh/) runtime
 - `install-carapace` – [Carapace](https://carapace.sh/) completions
 - `install-claude-code` – [Claude Code](https://www.anthropic.com/claude-code) CLI
@@ -69,34 +70,37 @@ These are the tool install helpers shipped in `plugins/` (run the command to ins
 - `install-antigravity` – [Antigravity](https://antigravity.google/)
 - `install-fonts` – [Homebrew](https://brew.sh/) font casks
 
-Tip: use `update-all` to run every registered updater in one shot.
-
 ## Git Worktree Utilities
 
-Helpers for managing Git worktrees effectively. These utilities automate the creation of worktrees (by default in sibling directories) to keep your main repository clean.
+`gwt-*` helpers for creating branches as separate working directories (Git worktrees) so your main checkout stays clean.
 
-- `gwt-new <branch>` – Creates a new worktree branched from the remote's default branch and automatically switches to it. The location is controlled by `GIT_WORKTREE_BASE` (defaults to `..`).
-- `gwt-ls` – Lists all active worktrees.
-- `gwt-rm` (or `gwt-delete`) – Interactively select a worktree to delete using `fzf`. It also prompts to delete the associated branch.
-- `gwt-prune` – Cleans up stale worktree information.
+- `gwt-new <branch>` – Create a new worktree for `<branch>` from the remote default branch and switch to it.
+- `gwt-ls` – List active worktrees.
+- `gwt-rm` (or `gwt-delete`) – Select a worktree to remove via `fzf`, then optionally delete its branch.
+- `gwt-prune` – Prune stale worktree metadata.
 
-### Customizing Worktree Location
-By default, `gwt-new` creates worktrees in the parent directory of your repository (e.g., if your repo is at `~/projects/my-repo`, the worktree will be at `~/projects/my-repo-branch-name`).
+### Worktree Location
+`gwt-new` places new worktrees under `GIT_WORKTREE_BASE`:
 
-You can override this by setting `GIT_WORKTREE_BASE`:
-- **Absolute path**: `export GIT_WORKTREE_BASE="$HOME/worktrees"` will place all worktrees in that specific directory.
-- **Relative path**: `export GIT_WORKTREE_BASE=".worktrees"` will place worktrees inside a `.worktrees` folder in your repo root.
+- Default: `..` (next to the repo directory)
+- Example (centralized): `export GIT_WORKTREE_BASE="$HOME/worktrees"`
+- Example (inside repo): `export GIT_WORKTREE_BASE=".worktrees"`
+- Note: relative paths are resolved from where you run `gwt-new`
 
-### Hook System
-When creating a new worktree with `gwt-new`, the utility looks for a setup script to automate environment initialization (e.g., running `npm install` or `direnv allow`):
-1. Local: `$GIT_COMMON_DIR/setup-worktree.sh`
-2. Shared: `.git-setup-worktree.sh` (in the repo root)
+### Setup Hook
+On `gwt-new`, if a setup script exists it is executed to bootstrap the environment (e.g., `npm install`, `direnv allow`):
 
-The environment variable `$ROOT_WORKTREE_PATH` is available during the execution of these scripts.
+1. `$GIT_COMMON_DIR/setup-worktree.sh`
+2. `.git-setup-worktree.sh` (repo root)
+
+The environment variable `$ROOT_WORKTREE_PATH` is available while the script runs.
 
 ## Updating
 
-Run `update-zdotfiles` to pull the latest repo changes and reload automatically. `update-all` runs all registered updaters (including `update-zdotfiles`) and reloads at the end.
+- `reload` – reload the configuration.
+- `update-zdotfiles` – pull the latest repo changes and reload.
+- `update-antidote` – update Antidote and reload.
+- `update-all` – run all registered updaters and reload.
 
 ## Performance
 
