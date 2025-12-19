@@ -13,18 +13,31 @@ if exists python; then
   venv() {
     (( $+functions[deactivate] )) && deactivate
 
-    local cwd=$PWD
     local venv_dirs=(".venv" "venv")
 
     for venv_dir in "${venv_dirs[@]}"; do
-      local activate_file="${cwd}/${venv_dir}/bin/activate"
+      local activate_file="$PWD/${venv_dir}/bin/activate"
       if [[ -s $activate_file ]]; then
         builtin source "$activate_file"
         break
       fi
     done
   }
+
+  pytest() {
+    venv
+    info "Running pytest..."
+    command pytest "$@"
+  }
 fi
+
+enable-venv-hook() {
+  _hook_venv() {
+    venv 2>/dev/null
+  }
+
+  add-zsh-hook chpwd _hook_venv
+}
 
 if ! exists uv; then
   alias install-python="install-uv"
