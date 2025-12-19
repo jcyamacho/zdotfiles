@@ -48,10 +48,10 @@ git-worktree-new() {
   export ROOT_WORKTREE_PATH="$repo_root"
   if [[ -f "$local_setup" ]]; then
     info "Running local setup script: $local_setup"
-    command zsh "$local_setup"
+    source "$local_setup"
   elif [[ -f "$repo_setup" ]]; then
     info "Running repo setup script: $repo_setup"
-    command zsh "$repo_setup"
+    source "$repo_setup"
   else
     builtin print ""
     info "Hook system: No setup script found. You can place a setup script at:"
