@@ -50,6 +50,7 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **Safe line iteration**: Use `while IFS= read -r var` to preserve whitespace and handle backslashes
 - **Glob qualifiers**: Use `(N)` for null-glob to avoid errors on no matches: `for f in dir/*(N); do`
 - **Read-only constants**: Use `typeset -r` for values that should never change
+- **Ignore failure**: Use `|| :` to suppress a command's exit status when failure is acceptable (e.g., `command rm -f file || :`). The `:` is the null builtin that always succeeds
 
 ### Performance
 
