@@ -9,7 +9,7 @@ if [[ -d $ATUIN_BIN_DIR ]]; then
     return
   fi
 
-  source-cached-init atuin init zsh
+  source-cached-init atuin init zsh --disable-up-arrow
 
   atuin-config() {
     edit "$HOME/.config/atuin/config.toml"
