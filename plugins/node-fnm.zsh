@@ -18,7 +18,7 @@ _update_node() {
 }
 
 _fnm_env() {
-  source-cached-init fnm env --use-on-cd --shell zsh
+  source-cached-init fnm env --shell zsh
 }
 
 if exists fnm; then
