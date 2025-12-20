@@ -1,30 +1,56 @@
+# Typography
 font-family = Monaspace Neon
-background-opacity = 0.95
-background-blur-radius = 15
 font-size = 14
+
+# Theme & readability
 theme = catppuccin-mocha.conf
-cursor-style = bar
-shell-integration-features = no-cursor
-macos-titlebar-style = tabs
-macos-icon = xray
-window-padding-x = 10
-window-padding-y = 0,10
+minimum-contrast = 1.3
+
+# Rendering (macOS)
+# Richer color output on wide-gamut displays.
+window-colorspace = display-p3
+# Match macOS' native blending to reduce halos on translucent text.
+alpha-blending = native
+# Ensure window chrome stays dark with a dark theme.
+window-theme = dark
+
+# Window layout
 window-width = 120
 window-height = 40
+window-padding-x = 10
+window-padding-y = 0,10
+window-padding-balance = false
+window-padding-color = extend
+
+# Transparency (macOS requires restart to apply)
+background-opacity = 0.92
+background-blur = 18
+# Apply opacity to cells too (helps with Neovim/tmux backgrounds)
+background-opacity-cells = true
+
+# Cursor & input
+cursor-style = bar
+cursor-style-blink = false
+cursor-color = cell-foreground
+cursor-click-to-move = true
+mouse-hide-while-typing = true
+# Keep shell integration from forcing a prompt cursor style
+shell-integration-features = no-cursor
+
+# Clipboard UX & safety
+clipboard-paste-protection = true
+clipboard-trim-trailing-spaces = true
+right-click-action = copy-or-paste
+link-previews = osc8
+
+# macOS window chrome
+# "tabs" looks great but reduces draggable space; "transparent" is easier to drag.
+macos-titlebar-style = transparent
+macos-icon = xray
+
+# Behavior
+window-inherit-working-directory = true
+window-new-tab-position = current
+scrollback-limit = 67108864
 confirm-close-surface = false
 quit-after-last-window-closed = true
-
-# Ghostty doesn't support keyboard-initiated text selection
-# These bindings prevent shift+arrow from sending malformed escape sequences
-keybind = shift+left=ignore
-keybind = shift+right=ignore
-keybind = shift+up=ignore
-keybind = shift+down=ignore
-keybind = shift+cmd+left=ignore
-keybind = shift+cmd+right=ignore
-keybind = shift+cmd+up=ignore
-keybind = shift+cmd+down=ignore
-keybind = shift+ctrl+left=ignore
-keybind = shift+ctrl+right=ignore
-keybind = shift+ctrl+up=ignore
-keybind = shift+ctrl+down=ignore
