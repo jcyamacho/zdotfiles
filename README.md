@@ -54,6 +54,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-fzf` – [fzf](https://junegunn.github.io/fzf/) (enables `fzf-tab` if present)
 - `install-gemini` – [Gemini CLI](https://github.com/google/gemini-cli)
 - `install-ghostty` – [Ghostty](https://ghostty.org/) terminal + config restore
+- `install-wezterm` – [WezTerm](https://wezterm.org/) terminal + config restore
 - `install-gh` – [GitHub CLI](https://github.com/cli/cli)
 - `install-go` – [Go](https://golang.org/) + [golangci-lint](https://golangci-lint.run/)
 - `install-jq` – [jq](https://jqlang.org/)
