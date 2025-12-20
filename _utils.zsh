@@ -1,6 +1,6 @@
 autoload -Uz colors 2>/dev/null && colors
 
-typeset -r _reset_color=${reset_color:-$'\e[0m'}
+[[ -n ${_reset_color-} ]] || typeset -gr _reset_color=${reset_color:-$'\e[0m'}
 
 info() {
   builtin print -r -- "${fg_bold[cyan]}$*$_reset_color"
@@ -20,92 +20,50 @@ mkcd() {
   builtin cd "$target"
 }
 
+typeset -gA _tool_exists_cache
+
 exists() {
-  (( $+commands[$1] ))
+  # Cache the *exit status* of the lookup (0=exists, 1=missing).
+  if [[ -z ${_tool_exists_cache[$1]-} ]]; then
+    (( $+commands[$1] ))
+    _tool_exists_cache[$1]=$?
+  fi
+  return $_tool_exists_cache[$1]
 }
 
 reload() {
+  _tool_exists_cache=()
   builtin source "$ZDOTFILES_DIR/zshrc.sh"
 }
 
-_cache_cmd_output() {
-  local cache_file=${1:?_cache_cmd_output: missing cache_file}
-  shift
-  local cmd=${1:?_cache_cmd_output: missing command}
-  shift
-
-  local cmd_path=${commands[$cmd]:-}
-  if [[ -z $cmd_path ]]; then
-    warn "Cache skipped; missing command: $cmd"
-    return 1
-  fi
-
-  # Fast path: cache exists and command is not newer.
-  if [[ -s $cache_file && ! $cmd_path -nt $cache_file ]]; then
-    return 0
-  fi
-
-  local cache_dir=${cache_file:h}
-  [[ -d $cache_dir ]] || command mkdir -p -- "$cache_dir" || return 1
-
-  local tmp_file
-  tmp_file="$(command mktemp "${cache_file}.tmp.XXXXXXXX" 2>/dev/null)" || return 1
-
-  if ! command "$cmd" "$@" >| "$tmp_file"; then
-    warn "Failed generating cache: $cache_file ($cmd $*)"
-    command rm -f -- "$tmp_file" 2>/dev/null
-    return 1
-  fi
-
-  if [[ ! -s $tmp_file ]]; then
-    warn "Generated empty cache: $cache_file ($cmd $*)"
-    command rm -f -- "$tmp_file" 2>/dev/null
-    return 1
-  fi
-
-  command mv -f -- "$tmp_file" "$cache_file" || {
-    command rm -f -- "$tmp_file" 2>/dev/null
-    return 1
-  }
-}
-
-_cached_init_file() {
-  local cmd=${1:?_cached_init_file: missing command}
-  REPLY="${ZDOTFILES_CACHE_DIR:?_cached_init_file: missing ZDOTFILES_CACHE_DIR}/$cmd/init.zsh"
-}
-
+# Caches the output of `cmd args...` (e.g., `starship init zsh`) and sources it.
+# Regenerates when the tool binary is newer than the cache.
 source-cached-init() {
   local cmd=${1:?source-cached-init: missing command}
   shift
+  local cache="${ZDOTFILES_CACHE_DIR}/${cmd}-init.zsh"
+  local cmd_path=${commands[$cmd]:-}
 
-  _cached_init_file "$cmd"
-  local cache_file=$REPLY
-  local cache_zwc="${cache_file}.zwc"
-
-  _cache_cmd_output "$cache_file" "$cmd" "$@" || :
-
-  if [[ -f $cache_file ]]; then
-    if [[ ! -f $cache_zwc || $cache_file -nt $cache_zwc ]]; then
-      builtin zcompile "$cache_file" 2>/dev/null || :
+  # Regenerate if missing or tool binary is newer
+  if [[ ! -s $cache || ($cmd_path && $cmd_path -nt $cache) ]]; then
+    local tmp="$(command mktemp "${cache}.XXXXXX")"
+    if command "$cmd" "$@" >| "$tmp" && [[ -s $tmp ]]; then
+      command mv -f -- "$tmp" "$cache"
+      builtin zcompile "$cache" 2>/dev/null || :
+    else
+      command rm -f -- "$tmp"
+      builtin eval "$(command "$cmd" "$@")"
+      return
     fi
-
-    builtin source "$cache_file"
-    return 0
   fi
 
-  # This is the one place we intentionally allow eval, and only as a fallback when
-  # the cached init file couldn't be generated/read. Many CLI tools (e.g. starship,
-  # direnv, fnm) emit shell init code that must be evaluated in the current shell
-  # to set env vars/functions/hooks. We only eval the stdout of an executable we
-  # invoke directly via `command`, not arbitrary user-provided strings.
-  builtin eval "$(command "$cmd" "$@")"
+  builtin source "$cache"
 }
 
 clear-cached-init() {
   local cmd=${1:?clear-cached-init: missing command}
-  _cached_init_file "$cmd"
-  local cache_file=$REPLY
-  command rm -f -- "$cache_file" "${cache_file}.zwc" 2>/dev/null
+  local cache="${ZDOTFILES_CACHE_DIR}/${cmd}-init.zsh"
+  command rm -f -- "$cache" "${cache}.zwc" 2>/dev/null
 }
 
 is-macos() {
@@ -120,7 +78,7 @@ home() {
   builtin cd "$HOME"
 }
 
-typeset -r _zshrc_file="$HOME/.zshrc"
+[[ -n ${_zshrc_file-} ]] || typeset -gr _zshrc_file="$HOME/.zshrc"
 
 _lock_zshrc() {
   command chmod -w "$_zshrc_file"
