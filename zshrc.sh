@@ -4,6 +4,9 @@ if [[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]]; then
 fi
 # STARTUP_PROFILING end
 
+# DISABLE_OMZ_UPDATE_CHECK
+zstyle ':omz:update' mode disabled
+
 export ZDOTFILES_DIR="${ZDOTFILES_DIR:-$HOME/.zdotfiles}"
 
 # CACHE
