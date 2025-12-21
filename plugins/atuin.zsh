@@ -2,8 +2,8 @@
 export ATUIN_DIR="$HOME/.atuin"
 export ATUIN_BIN_DIR="$ATUIN_DIR/bin"
 
-if [[ -d $ATUIN_BIN_DIR ]]; then
-  path=("$ATUIN_BIN_DIR" $path)
+if [[ -d "$ATUIN_BIN_DIR" ]]; then
+  path=("$ATUIN_BIN_DIR" "${path[@]}")
 
   if ! exists atuin; then
     return

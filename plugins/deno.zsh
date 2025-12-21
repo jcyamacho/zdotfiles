@@ -1,8 +1,8 @@
 # DENO (javascript runtime): https://deno.land/
 export DENO_INSTALL="$HOME/.deno"
 
-if [[ -f $DENO_INSTALL/bin/deno ]]; then
-  path=("$DENO_INSTALL/bin" $path)
+if [[ -f "$DENO_INSTALL/bin/deno" ]]; then
+  path=("$DENO_INSTALL/bin" "${path[@]}")
 
   uninstall-deno() {
     info "Uninstalling deno..."

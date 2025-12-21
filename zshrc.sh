@@ -11,7 +11,7 @@ export ZDOTFILES_DIR="${ZDOTFILES_DIR:-$HOME/.zdotfiles}"
 
 # CACHE
 export ZDOTFILES_CACHE_DIR="${ZDOTFILES_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zdotfiles}"
-[[ -d $ZDOTFILES_CACHE_DIR ]] || command mkdir -p -- "$ZDOTFILES_CACHE_DIR"
+[[ -d "$ZDOTFILES_CACHE_DIR" ]] || command mkdir -p -- "$ZDOTFILES_CACHE_DIR"
 # CACHE end
 
 typeset -gU path
@@ -19,7 +19,7 @@ typeset -gU fpath
 
 # CUSTOM_TOOLS_DIR
 export CUSTOM_TOOLS_DIR="${CUSTOM_TOOLS_DIR:-$HOME/.local/bin}"
-[[ -d $CUSTOM_TOOLS_DIR ]] || command mkdir -p -- "$CUSTOM_TOOLS_DIR"
+[[ -d "$CUSTOM_TOOLS_DIR" ]] || command mkdir -p -- "$CUSTOM_TOOLS_DIR"
 path=("$CUSTOM_TOOLS_DIR" "${path[@]}")
 # CUSTOM_TOOLS_DIR end
 
@@ -56,7 +56,7 @@ update-all() {
 # ANTIDOTE
 export ANTIDOTE_DIR="${ANTIDOTE_DIR:-$HOME/.antidote}"
 export ANTIDOTE_HOME="${ANTIDOTE_HOME:-$HOME/.cache/antidote}"
-[[ -d $ANTIDOTE_DIR ]] || command git clone --depth=1 https://github.com/mattmc3/antidote.git "$ANTIDOTE_DIR"
+[[ -d "$ANTIDOTE_DIR" ]] || command git clone --depth=1 https://github.com/mattmc3/antidote.git "$ANTIDOTE_DIR"
 
 # Lazy-load antidote from its functions directory.
 fpath=("$ANTIDOTE_DIR/functions" "${fpath[@]}")
