@@ -3,7 +3,7 @@
 
 if exists carapace; then
   export CARAPACE_BRIDGES="zsh"
-  source-cached-init carapace _carapace
+  source-cached-init carapace _carapace zsh
 
   if exists brew; then
     uninstall-carapace() {
