@@ -93,13 +93,13 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 These are specific patterns used in this repository:
 
 - **Guard pattern**: Use `exists <cmd>` before tool-specific code; early `return` if missing
-- **Startup installs**: Only bootstrap essentials (Antidote, Homebrew, Starship); other tools use `install-<tool>`
+- **Startup installs**: Only bootstrap essentials (Antidote, Homebrew, Starship); these are one-time installs on first load, then not run again. Other tools use `install-<tool>`
 - **Updates array**: Register an updater in `updates` for `update-all` (prefer `_update_<tool>` that does not call `reload`)
 - **Cache invalidation**: Call `clear-cached-init <cmd>` after installs/updates
 - **Structure**: Simple tools = single `.zsh` file; complex tools = subdirectory with `.plugin.zsh`
 - **Early returns**: Structure as guard → early return → main code (not nested if/else)
 - **Lock zshrc**: Use `_lock_zshrc` / `_unlock_zshrc` when external installers might modify `.zshrc`
-- **Path prepend**: Use `path=("$NEW_DIR" $path)` pattern; `typeset -gU path` handles deduplication
+- **Path prepend**: Use `path=("$NEW_DIR" "${path[@]}")` pattern; `typeset -gU path` handles deduplication
 - **Friendly aliases**: Provide alternatives like `alias install-node="install-fnm"`
 - **Config exports**: Export `<TOOL>_CONFIG_DIR`, `<TOOL>_CONFIG_FILE` for tools with config
 - **Editor helper**: Use `edit` helper instead of `$EDITOR` directly
