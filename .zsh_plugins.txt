@@ -8,7 +8,7 @@ $ZDOTFILES_DIR/plugins/git-worktree.zsh
 ohmyzsh/ohmyzsh path:plugins/brew
 $ZDOTFILES_DIR/plugins/brew.zsh
 
-$ZDOTFILES_DIR/plugins/carapace.zsh
+$ZDOTFILES_DIR/plugins/carapace.zsh kind:defer
 
 $ZDOTFILES_DIR/plugins/github-cli.zsh
 ohmyzsh/ohmyzsh path:plugins/gh conditional:"exists gh"
@@ -85,10 +85,10 @@ $ZDOTFILES_DIR/plugins/flutter.zsh
 ohmyzsh/ohmyzsh path:plugins/flutter conditional:"exists flutter"
 
 $ZDOTFILES_DIR/plugins/fzf.zsh
-Aloxaf/fzf-tab conditional:"exists fzf"
+Aloxaf/fzf-tab kind:defer conditional:"exists fzf"
 
 $ZDOTFILES_DIR/plugins/atuin.zsh
 
 zsh-users/zsh-autosuggestions
-z-shell/F-Sy-H
+z-shell/F-Sy-H kind:defer
 MichaelAquilina/zsh-you-should-use
