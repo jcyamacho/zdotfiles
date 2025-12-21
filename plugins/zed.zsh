@@ -11,8 +11,8 @@ if exists zed; then
 
   # Save/Load Zed Settings using GitHub Gist
   if exists gh; then
-    typeset -r _zed_settings_path="$HOME/.config/zed/settings.json"
-    typeset -r _zed_gist_description="zed-settings"
+    typeset -gr _zed_settings_path="$HOME/.config/zed/settings.json"
+    typeset -gr _zed_gist_description="zed-settings"
 
     zed-settings-load-from-gist() {
       load-file-from-gist "${_zed_settings_path}" "${_zed_gist_description}"

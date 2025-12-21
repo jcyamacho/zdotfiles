@@ -7,14 +7,14 @@ if [[ -d "$OPENCODE_HOME/bin" ]]; then
 fi
 
 if exists opencode; then
-  typeset -r _opencode_config_dir="$HOME/.config/opencode"
-  typeset -r _opencode_agent_dir="$_opencode_config_dir/agent"
-  typeset -r _opencode_command_dir="$_opencode_config_dir/command"
-  typeset -r _opencode_tool_dir="$_opencode_config_dir/tool"
-  typeset -r _opencode_plugin_dir="$_opencode_config_dir/plugin"
-  typeset -r _opencode_settings_file="$_opencode_config_dir/opencode.json"
-  typeset -r _opencode_global_rules_file="$_opencode_config_dir/AGENTS.md"
-  typeset -r _opencode_cache_dir="$HOME/.cache/opencode"
+  typeset -gr _opencode_config_dir="$HOME/.config/opencode"
+  typeset -gr _opencode_agent_dir="$_opencode_config_dir/agent"
+  typeset -gr _opencode_command_dir="$_opencode_config_dir/command"
+  typeset -gr _opencode_tool_dir="$_opencode_config_dir/tool"
+  typeset -gr _opencode_plugin_dir="$_opencode_config_dir/plugin"
+  typeset -gr _opencode_settings_file="$_opencode_config_dir/opencode.json"
+  typeset -gr _opencode_global_rules_file="$_opencode_config_dir/AGENTS.md"
+  typeset -gr _opencode_cache_dir="$HOME/.cache/opencode"
 
   alias oc="opencode"
 
@@ -79,12 +79,12 @@ if exists opencode; then
   updates+=(update-opencode)
 
   if exists gh; then
-    typeset -r _opencode_settings_gist_description="opencode-settings"
-    typeset -r _opencode_agent_gist_description="opencode-agent-dir"
-    typeset -r _opencode_command_gist_description="opencode-command-dir"
-    typeset -r _opencode_tool_gist_description="opencode-tool-dir"
-    typeset -r _opencode_global_rules_gist_description="opencode-global-rules"
-    typeset -r _opencode_plugin_gist_description="opencode-plugin-dir"
+    typeset -gr _opencode_settings_gist_description="opencode-settings"
+    typeset -gr _opencode_agent_gist_description="opencode-agent-dir"
+    typeset -gr _opencode_command_gist_description="opencode-command-dir"
+    typeset -gr _opencode_tool_gist_description="opencode-tool-dir"
+    typeset -gr _opencode_global_rules_gist_description="opencode-global-rules"
+    typeset -gr _opencode_plugin_gist_description="opencode-plugin-dir"
 
 
     opencode-settings-load-from-gist() {
