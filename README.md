@@ -102,6 +102,7 @@ The environment variable `$ROOT_WORKTREE_PATH` is available while the script run
 - `update-zdotfiles` – pull the latest repo changes and reload.
 - `update-antidote` – update Antidote and reload.
 - `update-all` – run all registered updaters and reload.
+- `clear-all-cached-init` – remove all cached tool init files (regenerate on next reload).
 
 ## Performance
 

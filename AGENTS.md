@@ -17,6 +17,7 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - `update-zdotfiles` – pull repo updates and reload
 - `update-antidote` – update Antidote and reload
 - `update-all` – run all registered updaters and reload
+- `clear-all-cached-init` – remove all cached tool init files (regenerate on next reload)
 - `zsh-startup-bench` – benchmark startup (10 iterations)
 - `zsh-startup-profile` – profile startup with zprof
 - Manual sanity check: `zsh -lic exit`
@@ -57,7 +58,7 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **Bypass aliases**: Prefix external commands with `command` and builtins with `builtin` to ensure predictable behavior: `command mkdir`, `builtin print`
 - **Avoid subshells**: Prefer `$PWD` over `$(pwd)`, `${var:h}` over `$(dirname "$var")`, `${var:t}` over `$(basename "$var")`
 - **Here-strings over pipes**: Prefer `cmd <<< "$var"` over `builtin print -r -- "$var" | cmd` (avoids subshell)
-- **Cache tool init**: Use `source-cached-init <cmd> [args...]` for tools that emit shell init code
+- **Cache tool init**: Use `source-cached-init <cmd> [args...]` for tools that emit shell init code; it auto-regenerates when the tool binary is newer
 - **Antidote conditionals**: Prefer `conditional:"exists tool"` for consistency (fast `$+commands[...]` lookup via `exists()`)
 - **Minimize command checks**: Avoid repeated `exists <cmd>` within the same file; structure as `if exists foo; then ... elif exists brew; then ... fi`
 - **Skip prompt init in dumb terminals**: Guard prompt tooling like Starship with `[[ $TERM != dumb ]]` to avoid errors in non-interactive contexts
@@ -95,7 +96,7 @@ These are specific patterns used in this repository:
 - **Guard pattern**: Use `exists <cmd>` before tool-specific code; early `return` if missing
 - **Startup installs**: Only bootstrap essentials (Antidote, Homebrew, Starship); these are one-time installs on first load, then not run again. Other tools use `install-<tool>`
 - **Updates array**: Register an updater in `updates` for `update-all` (prefer `_update_<tool>` that does not call `reload`)
-- **Cache invalidation**: Call `clear-cached-init <cmd>` after installs/updates
+- **Cache invalidation**: Call `clear-cached-init <cmd>` after installs/updates; use `clear-all-cached-init` to reset all init caches
 - **Structure**: Simple tools = single `.zsh` file; complex tools = subdirectory with `.plugin.zsh`
 - **Early returns**: Structure as guard → early return → main code (not nested if/else)
 - **Lock zshrc**: Use `_lock_zshrc` / `_unlock_zshrc` when external installers might modify `.zshrc`
