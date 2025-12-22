@@ -1,8 +1,6 @@
 # fnm (Fast Node Manager): https://github.com/Schniz/fnm
 
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 _update_node() {
   info "Activating latest LTS node..."

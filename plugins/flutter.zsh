@@ -9,9 +9,7 @@ if exists flutter; then
   updates+=(update-flutter)
 fi
 
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 if exists flutter; then
   uninstall-flutter() {

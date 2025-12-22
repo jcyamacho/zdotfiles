@@ -9,9 +9,7 @@ if [[ -f "$ANTIGRAVITY_BIN" ]]; then
   }
 fi
 
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 if [[ -f "$ANTIGRAVITY_BIN" ]]; then
   uninstall-antigravity() {

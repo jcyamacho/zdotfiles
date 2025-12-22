@@ -1,7 +1,5 @@
 # fonts (brew casks): https://brew.sh/
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 install-fonts() {
   info "Installing fonts..."

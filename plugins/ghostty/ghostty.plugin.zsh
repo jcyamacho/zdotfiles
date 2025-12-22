@@ -46,9 +46,7 @@ if exists ghostty; then
   updates+=(ghostty-update-themes)
 fi
 
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 if exists ghostty; then
   uninstall-ghostty() {

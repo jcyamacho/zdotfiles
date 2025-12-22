@@ -24,9 +24,7 @@ if exists zed; then
   fi
 fi
 
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 if exists zed; then
   uninstall-zed() {

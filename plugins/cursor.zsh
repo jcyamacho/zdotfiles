@@ -7,9 +7,7 @@ if exists cursor; then
   }
 fi
 
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 if exists cursor; then
   uninstall-cursor() {

@@ -7,9 +7,7 @@ if exists code; then
   }
 fi
 
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 if exists code; then
   uninstall-code() {

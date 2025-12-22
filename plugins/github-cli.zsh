@@ -112,9 +112,7 @@ if exists gh; then
   }
 fi
 
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 if exists gh; then
   uninstall-gh() {

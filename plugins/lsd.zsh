@@ -24,9 +24,7 @@ _lsd_restore_config() {
   builtin print -r -- $'color:\n  theme: custom\n' >| "$LSD_CONFIG_FILE"
 }
 
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 if exists lsd; then
   uninstall-lsd() {

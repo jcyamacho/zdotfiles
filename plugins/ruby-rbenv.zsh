@@ -1,8 +1,6 @@
 # rbenv (Ruby version manager): https://github.com/rbenv/rbenv
 
-if ! exists brew; then
-  return
-fi
+exists brew || return
 
 _update_ruby() {
   info "Activating latest Ruby..."
