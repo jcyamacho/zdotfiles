@@ -75,6 +75,10 @@ clear-cached-init() {
   command rm -f -- "$cache" "${cache}.zwc" 2>/dev/null
 }
 
+clear-all-cached-init() {
+  command rm -f -- "${ZDOTFILES_CACHE_DIR}/"*-init.zsh(N) "${ZDOTFILES_CACHE_DIR}/"*-init.zsh.zwc(N) 2>/dev/null
+}
+
 is-macos() {
   [[ $OSTYPE == darwin* ]]
 }
