@@ -1,7 +1,5 @@
 # Gemini CLI: https://github.com/google/gemini-cli
-if ! exists npm; then
-  return
-fi
+exists npm || return
 
 if exists gemini; then
   update-gemini() {

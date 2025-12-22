@@ -2,9 +2,7 @@
 
 export OPENCODE_HOME="$HOME/.opencode"
 
-if [[ -d "$OPENCODE_HOME/bin" ]]; then
-  path=("$OPENCODE_HOME/bin" "${path[@]}")
-fi
+[[ -d "$OPENCODE_HOME/bin" ]] && path=("$OPENCODE_HOME/bin" "${path[@]}")
 
 if exists opencode; then
   typeset -gr _opencode_config_dir="$HOME/.config/opencode"
@@ -19,43 +17,31 @@ if exists opencode; then
   alias oc="opencode"
 
   opencode-config() {
-    if [[ ! -d "$_opencode_agent_dir" ]]; then
-      # https://opencode.ai/docs/agents#markdown
-      command mkdir -p -- "$_opencode_agent_dir"
-    fi
+    # https://opencode.ai/docs/agents#markdown
+    [[ -d "$_opencode_agent_dir" ]] || command mkdir -p -- "$_opencode_agent_dir"
 
-    if [[ ! -d "$_opencode_command_dir" ]]; then
-      # https://opencode.ai/docs/commands#markdown
-      command mkdir -p -- "$_opencode_command_dir"
-    fi
+    # https://opencode.ai/docs/commands#markdown
+    [[ -d "$_opencode_command_dir" ]] || command mkdir -p -- "$_opencode_command_dir"
 
-    if [[ ! -d "$_opencode_tool_dir" ]]; then
-      # https://opencode.ai/docs/custom-tools
-      command mkdir -p -- "$_opencode_tool_dir"
-    fi
+    # https://opencode.ai/docs/custom-tools
+    [[ -d "$_opencode_tool_dir" ]] || command mkdir -p -- "$_opencode_tool_dir"
 
-    if [[ ! -f "$_opencode_global_rules_file" ]]; then
-      # https://opencode.ai/docs/rules/#global
-      command touch -- "$_opencode_global_rules_file"
-    fi
+    # https://opencode.ai/docs/rules/#global
+    [[ -f "$_opencode_global_rules_file" ]] || command touch -- "$_opencode_global_rules_file"
 
-    if [[ ! -d "$_opencode_plugin_dir" ]]; then
-      # https://opencode.ai/docs/plugins
-      command mkdir -p -- "$_opencode_plugin_dir"
-    fi
+    # https://opencode.ai/docs/plugins
+    [[ -d "$_opencode_plugin_dir" ]] || command mkdir -p -- "$_opencode_plugin_dir"
 
-    if [[ ! -f "$_opencode_settings_file" ]]; then
-      builtin print -r -- '{ "$schema": "https://opencode.ai/config.json" }' >| "$_opencode_settings_file"
-    fi
+    [[ -f "$_opencode_settings_file" ]] || builtin print -r -- '{ "$schema": "https://opencode.ai/config.json" }' >| "$_opencode_settings_file"
 
     edit "$_opencode_config_dir"
   }
 
   opencode-install-agents() {
-    if ! exists bunx; then
+    exists bunx || {
       warn "Missing bunx; install bun first"
       return 1
-    fi
+    }
 
     info "Installing agents via agentic-cli..."
     command bunx agentic-cli pull -g

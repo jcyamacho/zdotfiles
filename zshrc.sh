@@ -1,7 +1,5 @@
 # STARTUP_PROFILING
-if [[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]]; then
-  zmodload zsh/zprof
-fi
+[[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]] && zmodload zsh/zprof
 # STARTUP_PROFILING end
 
 # DISABLE_OMZ_UPDATE_CHECK
@@ -96,7 +94,5 @@ updates+=(_antidote_update)
 # ANTIDOTE end
 
 # STARTUP_PROFILING_RESULTS
-if [[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]]; then
-  zprof
-fi
+[[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]] && zprof
 # STARTUP_PROFILING_RESULTS end

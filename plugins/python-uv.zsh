@@ -39,7 +39,7 @@ enable-venv-hook() {
   add-zsh-hook chpwd _hook_venv
 }
 
-if ! exists uv; then
+exists uv || {
   alias install-python="install-uv"
   install-uv() {
     info "Installing uv..."
@@ -64,7 +64,7 @@ if ! exists uv; then
   }
 
   return
-fi
+}
 
 _get_latest_python_version() {
   # Extract and return the latest stable cpython version from uv python list output

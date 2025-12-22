@@ -5,9 +5,7 @@ export ATUIN_BIN_DIR="$ATUIN_DIR/bin"
 if [[ -d "$ATUIN_BIN_DIR" ]]; then
   path=("$ATUIN_BIN_DIR" "${path[@]}")
 
-  if ! exists atuin; then
-    return
-  fi
+  exists atuin || return
 
   source-cached-init atuin init zsh --disable-up-arrow
 

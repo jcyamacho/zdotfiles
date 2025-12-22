@@ -17,10 +17,10 @@ _update_starship() {
 
 updates+=(_update_starship)
 
-if ! exists starship; then
+exists starship || {
   _update_starship
   reload
-fi
+}
 
 if [[ $TERM != dumb ]]; then
   source-cached-init starship init zsh

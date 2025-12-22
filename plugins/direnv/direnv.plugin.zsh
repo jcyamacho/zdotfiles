@@ -8,10 +8,10 @@ _install_direnv() {
   command curl -sfL https://direnv.net/install.sh | command bash > /dev/null
   unset bin_path
 
-  if [[ ! -f "$DIRENV_CONFIG_FILE" ]]; then
+  [[ -f "$DIRENV_CONFIG_FILE" ]] || {
     command mkdir -p -- "$DIRENV_CONFIG_DIR"
     command cp -- "$ZDOTFILES_DIR/plugins/direnv/direnv.toml" "$DIRENV_CONFIG_FILE"
-  fi
+  }
 }
 
 if exists direnv; then
