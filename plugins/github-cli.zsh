@@ -1,11 +1,11 @@
 # GITHUB_CLI (GitHub on the command line): https://github.com/cli/cli
 if exists gh; then
   _find_gist_id() {
-    local gist_description=${1:?_find_gist_id: missing gist description}
-    local jq_description=${gist_description//\\/\\\\}
+    local gist_description="${1:?_find_gist_id: missing gist description}"
+    local jq_description="${gist_description//\\/\\\\}"
     jq_description=${jq_description//"/\\"}
 
-    command gh api /gists --jq ".[] | select((.description==\"${jq_description}\") and (.public==false)) | .id" | command head -n1
+    command gh api /gists --paginate --jq ".[] | select((.description==\"${jq_description}\") and (.public==false)) | .id" | command head -n1
   }
 
   save-file-to-gist() {
@@ -17,7 +17,7 @@ if exists gh; then
       return 1
     fi
 
-    local gist_id=$(_find_gist_id "${file_description}")
+    local gist_id="$(_find_gist_id "${file_description}")"
     if [[ -n $gist_id ]]; then
       info "Updating gist: ${gist_id} (${file_description})"
       command gh gist edit "${gist_id}" "${file_path}" --desc "${file_description}"
@@ -37,7 +37,7 @@ if exists gh; then
     fi
 
     local gist_filename="${file_path:t}"
-    local gist_id=$(_find_gist_id "${file_description}")
+    local gist_id="$(_find_gist_id "${file_description}")"
     if [[ -n $gist_id ]]; then
       info "Loading \"${file_description}\" from gist: ${gist_id}"
       command gh gist view "${gist_id}" --filename "${gist_filename}" --raw > "${file_path}"
@@ -71,7 +71,7 @@ if exists gh; then
       return
     fi
 
-    local gist_id=$(_find_gist_id "${dir_description}")
+    local gist_id="$(_find_gist_id "${dir_description}")"
     if [[ -n $gist_id ]]; then
       info "Updating gist: ${gist_id} (${dir_description}) with ${#files[@]} files"
       for f in "${files[@]}"; do
@@ -93,7 +93,7 @@ if exists gh; then
       return 1
     fi
 
-    local gist_id=$(_find_gist_id "${dir_description}")
+    local gist_id="$(_find_gist_id "${dir_description}")"
     if [[ -z $gist_id ]]; then
       error "Gist \"${dir_description}\" not found"
       return 1
@@ -103,13 +103,23 @@ if exists gh; then
     command mkdir -p -- "${dir_path}"
 
     local filenames
-    filenames=$(command gh api "/gists/${gist_id}" --jq '.files | keys[]')
+    filenames="$(command gh api "/gists/${gist_id}" --jq '.files | keys[]')"
 
     while IFS= read -r filename; do
       info "Restoring ${filename}..."
       command gh gist view "${gist_id}" --filename "${filename}" --raw > "${dir_path}/${filename}"
     done <<< "$filenames"
   }
+else
+  _require-gh() {
+    error "GitHub CLI is required. Run install-gh."
+    return 1
+  }
+
+  save-file-to-gist() { _require-gh; }
+  load-file-from-gist() { _require-gh; }
+  save-dir-to-gist() { _require-gh; }
+  load-dir-from-gist() { _require-gh; }
 fi
 
 exists brew || return
