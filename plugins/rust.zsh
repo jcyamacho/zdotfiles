@@ -23,7 +23,7 @@ if [[ -f $CARGO_DIR/env ]]; then
 else
   install-rust() {
     info "Installing rust..."
-    command curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | command sh -s -- -y
+    _run_remote_installer "https://sh.rustup.rs" "sh" -- -y
     reload
   }
 fi

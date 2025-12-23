@@ -43,7 +43,7 @@ exists uv || {
   alias install-python="install-uv"
   install-uv() {
     info "Installing uv..."
-    command curl -LsSf https://astral.sh/uv/install.sh | command sh
+    _run_remote_installer "https://astral.sh/uv/install.sh"
 
     info "Installing python..."
     uv python install --default --preview

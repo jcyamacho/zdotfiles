@@ -21,9 +21,7 @@ if exists bun; then
 else
   install-bun() {
     info "Installing bun..."
-    _lock_zshrc
-    command curl -fsSL https://bun.sh/install | command sh
-    _unlock_zshrc
+    _run_remote_installer "https://bun.sh/install"
     reload
   }
 fi

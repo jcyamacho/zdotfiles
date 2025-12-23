@@ -18,7 +18,7 @@ if exists claude; then
 else
   install-claude-code() {
     info "Installing claude code..."
-    command curl -fsSL https://claude.ai/install.sh | command bash
+    _run_remote_installer "https://claude.ai/install.sh" "bash"
     info "Intelligent automation and multi-agent orchestration for Claude Code: https://github.com/wshobson/agents"
     reload
   }

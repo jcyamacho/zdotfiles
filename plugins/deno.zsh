@@ -19,7 +19,7 @@ if [[ -f "$DENO_INSTALL/bin/deno" ]]; then
 else
   install-deno() {
     info "Installing deno..."
-    command curl -fsSL https://deno.land/install.sh | command sh -s -- --no-modify-path -y
+    _run_remote_installer "https://deno.land/install.sh" "sh" -- --no-modify-path -y
     reload
   }
 fi

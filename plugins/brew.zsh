@@ -3,7 +3,8 @@ export HOMEBREW_NO_ENV_HINTS=1
 
 exists brew || {
   info "Installing brew..."
-  /bin/bash -c "$(command curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  _run_remote_installer "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" "bash" --env "NONINTERACTIVE=1"
+  reload
 }
 
 _update_brew() {

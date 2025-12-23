@@ -33,9 +33,7 @@ if [[ -d "$ATUIN_BIN_DIR" ]]; then
 else
   install-atuin() {
     info "Installing atuin..."
-    _lock_zshrc
-    command curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | command sh
-    _unlock_zshrc
+    _run_remote_installer "https://setup.atuin.sh"
     reload
   }
 fi

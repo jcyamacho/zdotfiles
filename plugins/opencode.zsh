@@ -94,9 +94,7 @@ if exists opencode; then
 else
   install-opencode() {
     info "Installing opencode..."
-    _lock_zshrc
-    command curl -fsSL https://opencode.ai/install | command sh
-    _unlock_zshrc
+    _run_remote_installer "https://opencode.ai/install"
     reload
   }
 fi

@@ -11,7 +11,7 @@ update-starship() {
 
 _update_starship() {
   info "Updating starship..."
-  command curl -sS https://starship.rs/install.sh | command sh -s -- --yes --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
+  _run_remote_installer "https://starship.rs/install.sh" "sh" -- --yes --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
   clear-cached-init starship
 }
 

@@ -1,7 +1,7 @@
 # ZOXIDE (smarter cd command): https://github.com/ajeetdsouza/zoxide
 
 _install_zoxide() {
-  command curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | command sh -s -- --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
+  _run_remote_installer "https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh" "sh" -- --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
 }
 
 if exists zoxide; then
