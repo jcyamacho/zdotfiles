@@ -75,12 +75,13 @@ These are the `install-*` helpers (run the command to install; integrations load
 
 `gwt-*` helpers for creating branches as separate working directories (Git worktrees) so your main checkout stays clean.
 
-- `gwt-new <branch>` – Create a new worktree for `<branch>` from the remote default branch and switch to it.
+- `gwt-new <branch> [base-ref]` – Create a new worktree for `<branch>` from the remote default branch, or from `base-ref` if provided, then switch to it.
 - `gwt-ls` – List active worktrees.
-- `gwt-rm` (or `gwt-delete`) – Select a worktree to remove via `fzf`, then optionally delete its branch.
+- `gwt-rm` (or `gwt-delete`) – Select a worktree path via `fzf`, remove it, then optionally delete its branch (if attached).
 - `gwt-prune` – Prune stale worktree metadata.
 
 ### Worktree Location
+
 `gwt-new` places new worktrees under `GIT_WORKTREE_BASE`:
 
 - Default: `..` (next to the repo directory)
@@ -89,6 +90,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - Note: relative paths are resolved from where you run `gwt-new`
 
 ### Setup Hook
+
 On `gwt-new`, if a setup script exists it is executed to bootstrap the environment (e.g., `npm install`, `direnv allow`):
 
 1. `$GIT_COMMON_DIR/setup-worktree.sh`
