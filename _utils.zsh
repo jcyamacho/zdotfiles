@@ -69,6 +69,42 @@ source-cached-init() {
   builtin source "$cache"
 }
 
+_run_remote_installer() {
+  local url="${1:?_run_remote_installer: missing url}"
+  local shell="${2:-sh}"
+  if (( $# >= 2 )); then
+    shift 2
+  else
+    shift 1
+  fi
+
+  local -a envs=()
+  while [[ ${1-} == "--env" ]]; do
+    envs+=("$2")
+    shift 2
+  done
+
+  if [[ ${1-} == "--" ]]; then
+    shift 1
+  fi
+
+  local tmp
+  tmp="$(command mktemp "${TMPDIR:-$ZDOTFILES_CACHE_DIR}/zdotfiles-installer.XXXXXX")" || return 1
+
+  local exit_status=0
+  _lock_zshrc
+
+  if ! command curl --proto '=https' --tlsv1.2 -fsSL "$url" -o "$tmp"; then
+    exit_status=1
+  elif ! command env "${envs[@]}" "$shell" "$tmp" "$@"; then
+    exit_status=$?
+  fi
+
+  _unlock_zshrc
+  command rm -f -- "$tmp"
+  return $exit_status
+}
+
 clear-cached-init() {
   local cmd=${1:?clear-cached-init: missing command}
   local cache="${ZDOTFILES_CACHE_DIR}/${cmd}-init.zsh"

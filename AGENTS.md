@@ -37,6 +37,7 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **No eval on untrusted input**: Never use `eval` on strings derived from user input/environment. For tool init code, prefer `source-cached-init` over repeated `eval`
 - **Avoid prompt expansion on untrusted text**: Don't use `print -P` with untrusted content; with `setopt promptsubst` it can execute `$()`/backticks. Prefer `builtin print -r -- "$text"` or disable prompt substitution locally with `setopt local_options nopromptsubst`
 - **No sudo**: Avoid `sudo` in plugin functions; keep installs/updates non-interactive (principle of least privilege)
+- **Non-interactive installers**: All install/update flows must be non-interactive (use `--yes`/`-y`/equivalent flags). Never `curl | sh`; use `_run_remote_installer "<url>" ["sh"|"bash"] [--env "KEY=VALUE"] -- [args...]`. It downloads to `mktemp`, runs under `_lock_zshrc`/`_unlock_zshrc`, and preserves env via `--env`.
 - **Secure temp files**: Use `mktemp` for temporary files, not predictable paths
 - **Secrets handling**: Never log, cache, or store sensitive data (API keys, tokens) in world-readable files
 - **Escape % in prompts**: When placing untrusted content into prompts, replace `%` with `%%` to prevent prompt escapes from expanding
@@ -112,6 +113,7 @@ These are specific patterns used in this repository:
 ### Pure Utility Plugins
 
 While most plugins wrap external tools and require lifecycle functions, some plugins are **pure utilities** (e.g., `git-worktree.zsh`). For these:
+
 - Lifecycle functions (`install-`, `uninstall-`, `update-`) are optional.
 - They do not need to be listed in the `README.md` "Installable Tools" section if they don't require an explicit installation step.
 - They should still follow all other conventions (headers, guards, performance, etc.).
