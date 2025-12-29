@@ -35,23 +35,29 @@ Many integrations are **conditional** (they only activate when the underlying bi
 
 ## Installable Tools
 
-These are the `install-*` helpers (run the command to install; integrations load on `reload`/next shell start):
+These are the `install-*` helpers (run the command to install; integrations load on `reload`/next shell start). Tools are grouped by how useful they are for the default shell experience.
 
-- `install-atuin` – [Atuin](https://atuin.sh/) history
+### Recommended (not installed by default)
+
+- `install-fzf` – [fzf](https://junegunn.github.io/fzf/) fuzzy finder (enables `fzf-tab` if present)
+- `install-zoxide` (or `install-z`) – [zoxide](https://github.com/ajeetdsouza/zoxide) smarter `cd`
+- `install-atuin` – [Atuin](https://atuin.sh/) synced, searchable history
+- `install-carapace` – [Carapace](https://carapace.sh/) completions
+- `install-direnv` – [direnv](https://direnv.net/) + hook
+
+### Optional
+
 - `install-bat` – [bat](https://github.com/sharkdp/bat) `cat` clone
 - `install-bun` – [Bun](https://bun.sh/) runtime
-- `install-carapace` – [Carapace](https://carapace.sh/) completions
 - `install-claude-code` – [Claude Code](https://www.anthropic.com/claude-code) CLI
 - `install-code` – [VS Code](https://code.visualstudio.com/)
 - `install-codex` – [OpenAI Codex CLI](https://developers.openai.com/codex/cli)
 - `install-cursor` – [Cursor](https://www.cursor.com/)
 - `install-deno` – [Deno](https://deno.land/) runtime
-- `install-direnv` – [direnv](https://direnv.net/) + hook
 - `install-docker` – [Docker](https://www.docker.com/) CLI
 - `install-fabric` – [Fabric](https://github.com/danielmiessler/fabric)
 - `install-flutter` – [Flutter](https://flutter.dev/) SDK
 - `install-fnm` (or `install-node`) – [fnm](https://github.com/Schniz/fnm) + LTS activation
-- `install-fzf` – [fzf](https://junegunn.github.io/fzf/) (enables `fzf-tab` if present)
 - `install-gemini` – [Gemini CLI](https://github.com/google/gemini-cli)
 - `install-ghostty` – [Ghostty](https://ghostty.org/) terminal + config restore
 - `install-wezterm` – [WezTerm](https://wezterm.org/) terminal + config restore
@@ -67,7 +73,6 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling
 - `install-zed` – [Zed](https://zed.dev/)
 - `install-zig` – [Zig](https://ziglang.org/)
-- `install-zoxide` (or `install-z`) – [zoxide](https://github.com/ajeetdsouza/zoxide)
 - `install-antigravity` – [Antigravity](https://antigravity.google/)
 - `install-fonts` – [Homebrew](https://brew.sh/) font casks
 
