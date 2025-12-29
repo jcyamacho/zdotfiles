@@ -46,23 +46,15 @@ source-cached-init() {
 
   # Regenerate if missing or tool binary is newer
   if [[ ! -s "$cache" || ( -n "$cmd_path" && "$cmd_path" -nt "$cache" ) ]]; then
-    local tmp="$(command mktemp "${cache}.XXXXXX")"
-    if command "$cmd" "$@" >| "$tmp"; then
-      if [[ -s "$tmp" ]]; then
-        command mv -f -- "$tmp" "$cache"
-        builtin zcompile "$cache" 2>/dev/null || :
-      else
-        command rm -f -- "$tmp"
-        return 1
-      fi
+    local tmp
+    tmp="$(command mktemp "${cache}.XXXXXX")"
+    command "$cmd" "$@" >| "$tmp" || :
+    if [[ -s "$tmp" ]]; then
+      command mv -f -- "$tmp" "$cache"
+      builtin zcompile "$cache" 2>/dev/null || :
     else
-      if [[ -s "$tmp" ]]; then
-        command mv -f -- "$tmp" "$cache"
-        builtin zcompile "$cache" 2>/dev/null || :
-      else
-        command rm -f -- "$tmp"
-        return 1
-      fi
+      command rm -f -- "$tmp"
+      return 1
     fi
   fi
 
