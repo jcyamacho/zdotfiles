@@ -51,7 +51,7 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **Required params**: Use `${1:?error message}` syntax for mandatory parameters
 - **Safe line iteration**: Use `while IFS= read -r var` to preserve whitespace and handle backslashes
 - **Glob qualifiers**: Use `(N)` for null-glob to avoid errors on no matches: `for f in dir/*(N); do`
-- **Read-only constants**: Use `typeset -r` for function-local constants. Use `typeset -gr` for globals (especially in deferred plugins) to avoid accidental local scoping
+- **Read-only constants**: Use `typeset -r` for function-local constants. Use `typeset -gr` for globals (especially in deferred plugins) to avoid accidental local scoping. Guard global read-only variables with `(( $+_var_name )) ||` to prevent errors on `reload`: `(( $+_my_var )) || typeset -gr _my_var="value"`
 - **Ignore failure**: Use `|| :` to suppress a command's exit status when failure is acceptable (e.g., `command rm -f file || :`). The `:` is the null builtin that always succeeds
 
 ### Performance
