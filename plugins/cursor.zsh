@@ -13,6 +13,7 @@ if exists cursor; then
   uninstall-cursor() {
     info "Uninstalling cursor..."
     command brew uninstall --cask cursor
+    builtin rehash
     reload
   }
 else

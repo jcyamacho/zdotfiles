@@ -23,6 +23,7 @@ elif exists brew; then
   install-ollama() {
     info "Installing ollama..."
     command brew install ollama
+    builtin rehash
     reload
   }
 fi
