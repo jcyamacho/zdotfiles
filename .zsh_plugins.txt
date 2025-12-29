@@ -34,7 +34,7 @@ $ZDOTFILES_DIR/plugins/direnv
 $ZDOTFILES_DIR/plugins/docker.zsh kind:defer
 ohmyzsh/ohmyzsh path:plugins/docker kind:defer conditional:"exists docker"
 
-$ZDOTFILES_DIR/plugins/fabric-ai.zsh kind:defer
+$ZDOTFILES_DIR/plugins/fabric.zsh kind:defer
 
 $ZDOTFILES_DIR/plugins/fonts.zsh kind:defer
 

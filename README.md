@@ -48,7 +48,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-deno` – [Deno](https://deno.land/) runtime
 - `install-direnv` – [direnv](https://direnv.net/) + hook
 - `install-docker` – [Docker](https://www.docker.com/) CLI
-- `install-fabric-ai` – [Fabric](https://github.com/danielmiessler/fabric)
+- `install-fabric` – [Fabric](https://github.com/danielmiessler/fabric)
 - `install-flutter` – [Flutter](https://flutter.dev/) SDK
 - `install-fnm` (or `install-node`) – [fnm](https://github.com/Schniz/fnm) + LTS activation
 - `install-fzf` – [fzf](https://junegunn.github.io/fzf/) (enables `fzf-tab` if present)
