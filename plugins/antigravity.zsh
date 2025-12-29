@@ -1,23 +1,20 @@
 # Antigravity (AI Editor): https://antigravity.google/
-export ANTIGRAVITY_DIR="$HOME/.antigravity"
-export ANTIGRAVITY_BIN="$ANTIGRAVITY_DIR/antigravity/bin/antigravity"
+(( $+_antigravity_bin )) || typeset -gr _antigravity_bin="$HOME/.antigravity/antigravity/bin/antigravity"
 
-if [[ -f "$ANTIGRAVITY_BIN" ]]; then
+if [[ -f "$_antigravity_bin" ]]; then
   ag() {
     local dir="${1:-$PWD}"
-    "$ANTIGRAVITY_BIN" -- "$dir"
+    "$_antigravity_bin" -- "$dir"
   }
-fi
 
-exists brew || return
-
-if [[ -f "$ANTIGRAVITY_BIN" ]]; then
-  uninstall-antigravity() {
-    info "Uninstalling antigravity..."
-    command brew uninstall antigravity
-    reload
-  }
-else
+  if exists brew; then
+    uninstall-antigravity() {
+      info "Uninstalling antigravity..."
+      command brew uninstall antigravity
+      reload
+    }
+  fi
+elif exists brew; then
   install-antigravity() {
     info "Installing antigravity..."
     command brew install --cask antigravity

@@ -1,12 +1,15 @@
 # BUN (javascript runtime): https://bun.sh/
-export BUN_INSTALL="$HOME/.bun"
+(( $+_bun_dir )) || typeset -gr _bun_dir="$HOME/.bun"
+(( $+_bun_bin_dir )) || typeset -gr _bun_bin_dir="$_bun_dir/bin"
 
-[[ -d "$BUN_INSTALL/bin" ]] && path=("$BUN_INSTALL/bin" "${path[@]}")
+if [[ -d "$_bun_bin_dir" ]]; then
+  path=("$_bun_bin_dir" "${path[@]}")
 
-if exists bun; then
+  exists bun || return
+
   uninstall-bun() {
     info "Uninstalling bun..."
-    command rm -rf -- "$BUN_INSTALL"
+    command rm -rf -- "$_bun_dir"
     reload
   }
 
@@ -21,7 +24,7 @@ if exists bun; then
 else
   install-bun() {
     info "Installing bun..."
-    _run_remote_installer "https://bun.sh/install"
+    _run_remote_installer "https://bun.sh/install" "sh" --env "BUN_INSTALL=$_bun_dir"
     reload
   }
 fi

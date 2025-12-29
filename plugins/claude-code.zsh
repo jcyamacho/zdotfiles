@@ -1,17 +1,18 @@
 # Claude Code CLI: https://www.anthropic.com/claude-code
-export CLAUDE_HOME="$HOME/.claude"
-
 if exists claude; then
+  (( $+_claude_home )) || typeset -gr _claude_home="$HOME/.claude"
+
   uninstall-claude-code() {
     info "Uninstalling claude..."
     command rm -f -- "${commands[claude]}"
     command rm -rf -- "$HOME/.local/share/claude"
-    command rm -rf -- "$CLAUDE_HOME"
+    command rm -rf -- "$HOME/.claude-worktrees"
+    command rm -rf -- "$_claude_home"
     reload
   }
 
   claude-config() {
-    edit "$CLAUDE_HOME"
+    edit "$_claude_home"
   }
 
   update-claude-code() {

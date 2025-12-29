@@ -1,9 +1,9 @@
 # atuin (command-line history): https://atuin.sh/
-export ATUIN_DIR="$HOME/.atuin"
-export ATUIN_BIN_DIR="$ATUIN_DIR/bin"
+(( $+_atuin_dir )) || typeset -gr _atuin_dir="$HOME/.atuin"
+(( $+_atuin_bin_dir )) || typeset -gr _atuin_bin_dir="$_atuin_dir/bin"
 
-if [[ -d "$ATUIN_BIN_DIR" ]]; then
-  path=("$ATUIN_BIN_DIR" "${path[@]}")
+if [[ -d "$_atuin_bin_dir" ]]; then
+  path=("$_atuin_bin_dir" "${path[@]}")
 
   exists atuin || return
 
@@ -15,7 +15,7 @@ if [[ -d "$ATUIN_BIN_DIR" ]]; then
 
   uninstall-atuin() {
     info "Uninstalling atuin..."
-    command rm -rf -- "$ATUIN_DIR"
+    command rm -rf -- "$_atuin_dir"
     clear-cached-init atuin
     reload
   }

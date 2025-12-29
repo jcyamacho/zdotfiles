@@ -1,12 +1,15 @@
 # DENO (javascript runtime): https://deno.land/
-export DENO_INSTALL="$HOME/.deno"
+(( $+_deno_dir )) || typeset -gr _deno_dir="$HOME/.deno"
+(( $+_deno_bin_dir )) || typeset -gr _deno_bin_dir="$_deno_dir/bin"
 
-if [[ -f "$DENO_INSTALL/bin/deno" ]]; then
-  path=("$DENO_INSTALL/bin" "${path[@]}")
+if [[ -d "$_deno_bin_dir" ]]; then
+  path=("$_deno_bin_dir" "${path[@]}")
+
+  exists deno || return
 
   uninstall-deno() {
     info "Uninstalling deno..."
-    command rm -rf -- "$DENO_INSTALL"
+    command rm -rf -- "$_deno_dir"
     reload
   }
 
@@ -19,7 +22,7 @@ if [[ -f "$DENO_INSTALL/bin/deno" ]]; then
 else
   install-deno() {
     info "Installing deno..."
-    _run_remote_installer "https://deno.land/install.sh" "sh" -- --no-modify-path -y
+    _run_remote_installer "https://deno.land/install.sh" "sh" --env "DENO_INSTALL=$_deno_dir" -- --no-modify-path -y
     reload
   }
 fi

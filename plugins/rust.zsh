@@ -1,16 +1,14 @@
 # RUST (programming language): https://www.rust-lang.org/
+(( $+_cargo_dir )) || typeset -gr _cargo_dir="$HOME/.cargo"
 
-export CARGO_DIR="$HOME/.cargo"
-
-if [[ -f $CARGO_DIR/env ]]; then
-  builtin source "$CARGO_DIR/env"
+if [[ -f "$_cargo_dir/env" ]]; then
+  builtin source "$_cargo_dir/env"
 
   uninstall-rust() {
     info "Uninstalling rust..."
     command rustup self uninstall -y
-
-    info "Removing $CARGO_DIR..."
-    command rm -rf -- "$CARGO_DIR"
+    info "Removing $_cargo_dir..."
+    command rm -rf -- "$_cargo_dir"
     reload
   }
 
