@@ -110,6 +110,14 @@ These are specific patterns used in this repository:
 - **Function existence**: Use `(( $+functions[name] ))` to check before calling
 - **Telemetry opt-out**: Disable analytics/telemetry where tools support it
 
+### Update Functions
+
+Not all tools need a dedicated `update-<tool>` function:
+
+- **Brew-installed tools**: Updated automatically via `update-brew` (runs `brew upgrade --greedy`). No individual updater needed unless the tool has additional update steps (e.g., clearing cached init, downloading themes).
+- **Self-updating tools**: Tools with their own update mechanism (e.g., `rustup update`, `bun upgrade`, `mise self-update`) should register an updater in `updates`.
+- **Tools with cached init**: If a tool uses `source-cached-init`, its updater must call `clear-cached-init <tool>` after updating to regenerate the cache.
+
 ### Pure Utility Plugins
 
 While most plugins wrap external tools and require lifecycle functions, some plugins are **pure utilities** (e.g., `git-worktree.zsh`). For these:
