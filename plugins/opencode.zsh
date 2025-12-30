@@ -7,6 +7,8 @@ if [[ -d "$_opencode_bin_dir" ]]; then
 
   exists opencode || return
 
+  source-cached-init opencode completion
+
   (( $+_opencode_config_dir )) || typeset -gr _opencode_config_dir="$HOME/.config/opencode"
   (( $+_opencode_agent_dir )) || typeset -gr _opencode_agent_dir="$_opencode_config_dir/agent"
   (( $+_opencode_command_dir )) || typeset -gr _opencode_command_dir="$_opencode_config_dir/command"
@@ -62,6 +64,7 @@ if [[ -d "$_opencode_bin_dir" ]]; then
     _lock_zshrc
     command opencode upgrade
     _unlock_zshrc
+    clear-cached-init opencode
   }
 
   updates+=(update-opencode)
