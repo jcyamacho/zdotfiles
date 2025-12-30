@@ -16,6 +16,7 @@ if [[ -d "$_atuin_bin_dir" ]]; then
   uninstall-atuin() {
     info "Uninstalling atuin..."
     command rm -rf -- "$_atuin_dir"
+    command rm -rf -- "$HOME/.local/share/atuin"
     clear-cached-init atuin
     reload
   }
