@@ -72,6 +72,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-rust` – [rustup](https://rustup.rs/)
 - `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling
 - `install-zed` – [Zed](https://zed.dev/)
+- `install-zellij` – [Zellij](https://zellij.dev/) terminal workspace
 - `install-zig` – [Zig](https://ziglang.org/)
 - `install-antigravity` – [Antigravity](https://antigravity.google/)
 - `install-fonts` – [Homebrew](https://brew.sh/) font casks
