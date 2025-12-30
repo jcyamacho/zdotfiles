@@ -54,3 +54,5 @@ window-new-tab-position = current
 scrollback-limit = 67108864
 confirm-close-surface = false
 quit-after-last-window-closed = true
+
+macos-option-as-alt = true
