@@ -21,7 +21,7 @@ Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) 
 - Keep the repo elsewhere by setting `ZDOTFILES_DIR` before sourcing.
 - Change the editor used by helper commands by exporting `EDITOR`.
 - Adjust where tools like Starship install by overriding `CUSTOM_TOOLS_DIR`.
-- Set `GIT_WORKTREE_BASE` to change where `gwt-new` creates worktrees.
+- Set `GIT_WORKTREE_BASE` to change where `gwt-new` creates worktrees (see [git-worktree](plugins/git-worktree/README.md)).
 
 ## Plugins
 
@@ -77,32 +77,12 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-antigravity` – [Antigravity](https://antigravity.google/)
 - `install-fonts` – [Homebrew](https://brew.sh/) font casks
 
-## Git Worktree Utilities
+## Utility Plugins
 
-`gwt-*` helpers for creating branches as separate working directories (Git worktrees) so your main checkout stays clean.
+Additional helper functions (no external tool required):
 
-- `gwt-new <branch> [base-ref]` – Create a new worktree for `<branch>` from the remote default branch, or from `base-ref` if provided, then switch to it.
-- `gwt-ls` – List active worktrees.
-- `gwt-rm` (or `gwt-delete`) – Select a worktree path via `fzf`, remove it, then optionally delete its branch (if attached).
-- `gwt-prune` – Prune stale worktree metadata.
-
-### Worktree Location
-
-`gwt-new` places new worktrees under `GIT_WORKTREE_BASE`:
-
-- Default: `..` (next to the repo directory)
-- Example (centralized): `export GIT_WORKTREE_BASE="$HOME/worktrees"`
-- Example (inside repo): `export GIT_WORKTREE_BASE=".worktrees"`
-- Note: relative paths are resolved from where you run `gwt-new`
-
-### Setup Hook
-
-On `gwt-new`, if a setup script exists it is executed to bootstrap the environment (e.g., `npm install`, `direnv allow`):
-
-1. `$GIT_COMMON_DIR/setup-worktree.sh`
-2. `.git-setup-worktree.sh` (repo root)
-
-The environment variable `$ROOT_WORKTREE_PATH` is available while the script runs.
+- [git-utils](plugins/git-utils/README.md) – `git-pull`, `git-pull-all` with hook support
+- [git-worktree](plugins/git-worktree/README.md) – `gwt-*` helpers for managing Git worktrees
 
 ## Updating
 

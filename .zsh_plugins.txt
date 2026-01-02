@@ -3,7 +3,8 @@ getantidote/use-omz
 $ZDOTFILES_DIR/plugins/starship
 
 ohmyzsh/ohmyzsh path:plugins/git
-$ZDOTFILES_DIR/plugins/git-worktree.zsh kind:defer
+$ZDOTFILES_DIR/plugins/git-utils kind:defer
+$ZDOTFILES_DIR/plugins/git-worktree kind:defer
 
 ohmyzsh/ohmyzsh path:plugins/brew
 $ZDOTFILES_DIR/plugins/brew.zsh

@@ -98,7 +98,7 @@ These are specific patterns used in this repository:
 - **Startup installs**: Only bootstrap essentials (Antidote, Homebrew, Starship); these are one-time installs on first load, then not run again. Other tools use `install-<tool>`
 - **Updates array**: Register an updater in `updates` for `update-all` (prefer `_update_<tool>` that does not call `reload`)
 - **Cache invalidation**: Call `clear-cached-init <cmd>` after installs/updates; use `clear-all-cached-init` to reset all init caches
-- **Structure**: Simple tools = single `.zsh` file; complex tools = subdirectory with `.plugin.zsh`
+- **Structure**: Simple tools = single `.zsh` file; complex tools or utility plugins = subdirectory with `.plugin.zsh` and `README.md`
 - **Early returns**: Structure as guard → early return → main code (not nested if/else)
 - **Lock zshrc**: Use `_lock_zshrc` / `_unlock_zshrc` when external installers might modify `.zshrc`
 - **Path prepend**: Use `path=("$NEW_DIR" "${path[@]}")` pattern; `typeset -gU path` handles deduplication
@@ -120,11 +120,13 @@ Not all tools need a dedicated `update-<tool>` function:
 
 ### Pure Utility Plugins
 
-While most plugins wrap external tools and require lifecycle functions, some plugins are **pure utilities** (e.g., `git-worktree.zsh`). For these:
+While most plugins wrap external tools and require lifecycle functions, some plugins are **pure utilities** (e.g., `git-utils`, `git-worktree`). For these:
 
 - Lifecycle functions (`install-`, `uninstall-`, `update-`) are optional.
 - They do not need to be listed in the `README.md` "Installable Tools" section if they don't require an explicit installation step.
 - They should still follow all other conventions (headers, guards, performance, etc.).
+- **Prefer subdirectory structure** (`plugins/<name>/<name>.plugin.zsh` + `README.md`) to document the provided functions and usage.
+- **Reference from main README**: Add an entry to the "Utility Plugins" section in the project `README.md` linking to the plugin's `README.md`.
 
 ## Adding a New Plugin
 
