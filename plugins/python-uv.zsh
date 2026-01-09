@@ -48,18 +48,6 @@ exists uv || {
     info "Installing python..."
     uv python install --default --preview
 
-    # Install Ruff: https://docs.astral.sh/ruff/
-    info "Installing ruff..."
-    uv tool install ruff@latest
-
-    # Install BasedPyright: https://docs.basedpyright.com/latest/
-    info "Installing basedpyright..."
-    uv tool install basedpyright@latest
-
-    # Install ty: https://docs.astral.sh/ty/
-    info "Installing ty..."
-    uv tool install ty@latest
-
     reload
   }
 
@@ -102,12 +90,36 @@ update-uv() {
   uv self update
   info "Updating python..."
   _update_python
-  info "Updating ruff..."
-  uv tool update ruff
-  info "Updating basedpyright..."
-  uv tool update basedpyright
-  info "Updating ty..."
-  uv tool update ty
+  info "Updating tools..."
+  uv tool upgrade --all
+}
+
+exists ruff || {
+  install-python-ruff() {
+    info "Installing ruff..."
+    uv tool install ruff@latest
+  }
+}
+
+exists basedpyright || {
+  install-python-basedpyright() {
+    info "Installing basedpyright..."
+    uv tool install basedpyright@latest
+  }
+}
+
+exists ty || {
+  install-python-ty() {
+    info "Installing ty..."
+    uv tool install ty@latest
+  }
+}
+
+exists pyrefly || {
+  install-python-pyrefly() {
+    info "Installing pyrefly..."
+    uv tool install pyrefly@latest
+  }
 }
 
 alias uninstall-python="uninstall-uv"
