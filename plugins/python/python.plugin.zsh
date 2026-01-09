@@ -1,4 +1,4 @@
-# uv (An extremely fast Python package and project manager, written in Rust): https://docs.astral.sh/uv/
+# python (uv-based Python tooling): https://docs.astral.sh/uv/
 
 if exists python; then
   alias py="python3"

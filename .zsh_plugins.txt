@@ -48,7 +48,7 @@ $ZDOTFILES_DIR/plugins/node-fnm.zsh
 
 $ZDOTFILES_DIR/plugins/ollama.zsh kind:defer
 
-$ZDOTFILES_DIR/plugins/python-uv.zsh
+$ZDOTFILES_DIR/plugins/python
 ohmyzsh/ohmyzsh path:plugins/uv conditional:"exists uv"
 
 $ZDOTFILES_DIR/plugins/rust.zsh

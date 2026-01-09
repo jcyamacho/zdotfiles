@@ -70,7 +70,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-opencode` – [OpenCode](https://opencode.ai/)
 - `install-rbenv` (or `install-ruby`) – [rbenv](https://github.com/rbenv/rbenv)
 - `install-rust` – [rustup](https://rustup.rs/)
-- `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling
+- `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling ([python](plugins/python/README.md))
 - `install-zed` – [Zed](https://zed.dev/)
 - `install-zellij` – [Zellij](https://zellij.dev/) terminal workspace
 - `install-zig` – [Zig](https://ziglang.org/)
