@@ -1,9 +1,9 @@
-# GITHUB_CLI (GitHub on the command line): https://github.com/cli/cli
+# github-cli (GitHub on the command line): https://github.com/cli/cli
 if exists gh; then
   _find_gist_id() {
     local gist_description="${1:?_find_gist_id: missing gist description}"
     local jq_description="${gist_description//\\/\\\\}"
-    jq_description=${jq_description//"/\\"}
+    jq_description=${jq_description//\"/\\\"}
 
     command gh api /gists --paginate --jq ".[] | select((.description==\"${jq_description}\") and (.public==false)) | .id" | command head -n1
   }

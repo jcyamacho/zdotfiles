@@ -11,7 +11,7 @@ $ZDOTFILES_DIR/plugins/brew.zsh
 
 $ZDOTFILES_DIR/plugins/carapace.zsh kind:defer
 
-$ZDOTFILES_DIR/plugins/github-cli.zsh
+$ZDOTFILES_DIR/plugins/github-cli
 ohmyzsh/ohmyzsh path:plugins/gh conditional:"exists gh"
 
 $ZDOTFILES_DIR/plugins/bat.zsh kind:defer
