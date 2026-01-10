@@ -1,5 +1,6 @@
 # OpenCode (AI coding agent built for the terminal): https://opencode.ai/
-(( $+_opencode_bin_dir )) || typeset -gr _opencode_bin_dir="$HOME/.opencode/bin"
+(( $+_opencode_dir )) || typeset -gr _opencode_dir="$HOME/.opencode"
+(( $+_opencode_bin_dir )) || typeset -gr _opencode_bin_dir="$_opencode_dir/bin"
 
 if [[ -d "$_opencode_bin_dir" ]]; then
   path=("$_opencode_bin_dir" "${path[@]}")
