@@ -84,6 +84,10 @@ Additional helper functions (no external tool required):
 - [git-utils](plugins/git-utils/README.md) – `git-pull`, `git-pull-all` with hook support
 - [git-worktree](plugins/git-worktree/README.md) – `gwt-*` helpers for managing Git worktrees
 
+## Gist Sync
+
+Sync files and directories to/from private GitHub Gists. See [github-cli](plugins/github-cli/README.md) for details on `save-file-to-gist`, `load-file-from-gist`, and related functions.
+
 ## Updating
 
 - `reload` – reload the configuration.
@@ -91,6 +95,22 @@ Additional helper functions (no external tool required):
 - `update-antidote` – update Antidote and reload.
 - `update-all` – run all registered updaters and reload.
 - `clear-all-cached-init` – remove all cached tool init files (regenerate on next reload).
+
+### The `updates` Array
+
+`update-all` iterates over the `updates` array and calls each registered function. Plugins register their updaters like this:
+
+```zsh
+_update_mytool() {
+  info "Updating mytool..."
+  # update logic here
+  clear-cached-init mytool  # if using cached init
+}
+
+updates+=(_update_mytool)
+```
+
+Use an internal `_update_*` function (no `reload`) so `update-all` can batch updates and reload once at the end. Tools installed via Homebrew don't need individual updaters since `update-brew` runs `brew upgrade --greedy`.
 
 ## Performance
 
