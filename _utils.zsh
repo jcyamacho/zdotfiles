@@ -154,3 +154,15 @@ zsh-startup-bench() {
     command time zsh -lic exit
   done
 }
+
+kill-port() {
+  local port=${1:?kill-port: missing port number}
+  local pid
+  pid="$(command lsof -ti :"$port" 2>/dev/null)"
+  if [[ -z $pid ]]; then
+    warn "No process found on port $port"
+    return 1
+  fi
+  info "Killing process $pid on port $port"
+  command kill -9 "$pid"
+}
