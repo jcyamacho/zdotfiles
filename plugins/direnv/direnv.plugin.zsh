@@ -1,4 +1,4 @@
-# DIRENV (per directory env vars via .envrc): https://direnv.net/
+# direnv (per-directory env vars via .envrc): https://direnv.net/
 export DIRENV_CONFIG_DIR="$HOME/.config/direnv"
 export DIRENV_CONFIG_FILE="$DIRENV_CONFIG_DIR/direnv.toml"
 

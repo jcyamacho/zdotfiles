@@ -1,4 +1,4 @@
-# ZED (A modern text editor): https://zed.dev/
+# zed (modern text editor): https://zed.dev/
 
 if exists zed; then
   # Use ZED as the default editor if EDITOR is not set

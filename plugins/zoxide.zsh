@@ -1,4 +1,4 @@
-# ZOXIDE (smarter cd command): https://github.com/ajeetdsouza/zoxide
+# zoxide (smarter cd command): https://github.com/ajeetdsouza/zoxide
 
 _install_zoxide() {
   _run_remote_installer "https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh" "sh" -- --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null

@@ -1,4 +1,4 @@
-# BUN (javascript runtime): https://bun.sh/
+# bun (JavaScript runtime): https://bun.sh/
 (( $+_bun_dir )) || typeset -gr _bun_dir="$HOME/.bun"
 (( $+_bun_bin_dir )) || typeset -gr _bun_bin_dir="$_bun_dir/bin"
 

@@ -1,4 +1,4 @@
-# DENO (javascript runtime): https://deno.land/
+# deno (JavaScript runtime): https://deno.land/
 (( $+_deno_dir )) || typeset -gr _deno_dir="$HOME/.deno"
 (( $+_deno_bin_dir )) || typeset -gr _deno_bin_dir="$_deno_dir/bin"
 

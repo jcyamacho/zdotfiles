@@ -1,4 +1,4 @@
-# BAT (A cat(1) clone with wings): https://github.com/sharkdp/bat
+# bat (cat clone with wings): https://github.com/sharkdp/bat
 
 exists brew || return
 

@@ -1,4 +1,4 @@
-# MISE (dev tools, env vars, task runner): https://mise.jdx.dev/
+# mise (dev tools, env vars, task runner): https://mise.jdx.dev/
 
 if exists mise; then
   source-cached-init mise activate zsh

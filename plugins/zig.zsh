@@ -1,4 +1,4 @@
-# ZIG (programming language): https://ziglang.org/
+# zig (programming language): https://ziglang.org/
 
 exists brew || return
 

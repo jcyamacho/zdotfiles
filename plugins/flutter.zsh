@@ -1,4 +1,4 @@
-# FLUTTER (open source framework for building multi-platform applications): https://flutter.dev/
+# flutter (multi-platform app framework): https://flutter.dev/
 
 if exists flutter; then
   update-flutter() {
