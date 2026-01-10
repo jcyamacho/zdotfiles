@@ -44,18 +44,16 @@ if exists ghostty; then
   }
 
   updates+=(ghostty-update-themes)
-fi
 
-exists brew || return
-
-if exists ghostty; then
-  uninstall-ghostty() {
-    info "Uninstalling ghostty..."
-    command brew uninstall --cask ghostty
-    command rm -rf -- "$GHOSTTY_CONFIG_DIR"
-    reload
-  }
-else
+  if exists brew; then
+    uninstall-ghostty() {
+      info "Uninstalling ghostty..."
+      command brew uninstall --cask ghostty
+      command rm -rf -- "$GHOSTTY_CONFIG_DIR"
+      reload
+    }
+  fi
+elif exists brew; then
   install-ghostty() {
     info "Installing ghostty..."
     command brew install --cask ghostty

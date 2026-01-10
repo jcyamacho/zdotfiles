@@ -13,23 +13,19 @@ if exists wezterm; then
   alias wezterm-restore-config="_wezterm_restore_config"
   alias wezterm-config='edit "$WEZTERM_CONFIG_FILE"'
 
-  exists brew || return
-
-  uninstall-wezterm() {
-    info "Uninstalling wezterm..."
-    command brew uninstall --cask wezterm
-    command rm -rf -- "$WEZTERM_CONFIG_DIR"
+  if exists brew; then
+    uninstall-wezterm() {
+      info "Uninstalling wezterm..."
+      command brew uninstall --cask wezterm
+      command rm -rf -- "$WEZTERM_CONFIG_DIR"
+      reload
+    }
+  fi
+elif exists brew; then
+  install-wezterm() {
+    info "Installing wezterm..."
+    command brew install --cask wezterm
+    _wezterm_restore_config
     reload
   }
-
-  return
 fi
-
-exists brew || return
-
-install-wezterm() {
-  info "Installing wezterm..."
-  command brew install --cask wezterm
-  _wezterm_restore_config
-  reload
-}
