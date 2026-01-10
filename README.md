@@ -84,6 +84,19 @@ Additional helper functions (no external tool required):
 - [git-utils](plugins/git-utils/README.md) – `git-pull`, `git-pull-all` with hook support
 - [git-worktree](plugins/git-worktree/README.md) – `gwt-*` helpers for managing Git worktrees
 
+## Utility Functions
+
+Shell helpers from `_utils.zsh`:
+
+- `mkcd <dir>` – create a directory and cd into it
+- `edit <file>` – open a file in `$EDITOR` (defaults to vim)
+- `home` – cd to `$HOME`
+- `zsh-config` – edit `~/.zshrc` and reload
+- `kill-port <port>` – kill the process listening on a given port
+- `cls` – alias for `clear`
+- `rmf` – alias for `rm -rf`
+- `cd..` – alias for `cd ..`
+
 ## Gist Sync
 
 Sync files and directories to/from private GitHub Gists. See [github-cli](plugins/github-cli/README.md) for details on `save-file-to-gist`, `load-file-from-gist`, and related functions.
