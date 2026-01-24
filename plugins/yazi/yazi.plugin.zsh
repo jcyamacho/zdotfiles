@@ -34,7 +34,10 @@ if exists yazi; then
   bindkey '^o' _yazi_widget
 
   alias yazi-restore-config="_yazi_restore_config"
-  alias yazi-config='edit "$YAZI_CONFIG_HOME"'
+
+  yazi-config() {
+    edit "$YAZI_CONFIG_HOME"
+  }
 
   if exists brew; then
     uninstall-yazi() {
@@ -47,7 +50,7 @@ if exists yazi; then
 elif exists brew; then
   install-yazi() {
     info "Installing yazi..."
-    command brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide resvg imagemagick
+    command brew install yazi
     _yazi_restore_config
     reload
   }

@@ -11,7 +11,10 @@ _wezterm_restore_config() {
 
 if exists wezterm; then
   alias wezterm-restore-config="_wezterm_restore_config"
-  alias wezterm-config='edit "$WEZTERM_CONFIG_FILE"'
+
+  wezterm-config() {
+    edit "$WEZTERM_CONFIG_FILE"
+  }
 
   if exists brew; then
     uninstall-wezterm() {
