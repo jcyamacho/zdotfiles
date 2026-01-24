@@ -17,7 +17,6 @@ elif exists brew; then
   install-carapace() {
     info "Installing carapace..."
     command brew install carapace
-    clear-cached-init carapace
     reload
   }
 else

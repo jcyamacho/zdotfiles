@@ -5,7 +5,8 @@ if exists gh; then
     local jq_description="${gist_description//\\/\\\\}"
     jq_description=${jq_description//\"/\\\"}
 
-    command gh api /gists --paginate --jq ".[] | select((.description==\"${jq_description}\") and (.public==false)) | .id" | command head -n1
+    local -a ids=("${(@f)$(command gh api /gists --paginate --jq ".[] | select((.description==\"${jq_description}\") and (.public==false)) | .id")}")
+    builtin print -r -- "${ids[1]}"
   }
 
   save-file-to-gist() {

@@ -1,4 +1,4 @@
-# git-utils (git helper functions)
+# git-utils (git helper functions for pulling repos)
 
 # Pull a single repo with optional post-pull hook
 git-pull() {
@@ -53,7 +53,7 @@ git-pull-all() {
   for dir in "$base_dir"/*(N/); do
     [[ -d "$dir/.git" ]] || continue
 
-    builtin print -P "%F{cyan}→%f ${dir:t}"
+    builtin print -P "%F{cyan}->%f ${dir:t}"
 
     if git-pull "$dir" 2>&1 | command sed 's/^/  /'; then
       ((pulled++))

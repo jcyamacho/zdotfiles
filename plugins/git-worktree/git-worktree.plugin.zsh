@@ -26,7 +26,8 @@ git-worktree-new() {
 
   if [[ -z "$base_ref" ]]; then
     # Get default branch from origin (most reliable)
-    local default_branch="$(command git remote show origin 2>/dev/null | command grep 'HEAD branch' | command awk '{print $NF}')"
+    local default_branch
+    default_branch="$(command git remote show origin 2>/dev/null | command grep 'HEAD branch' | command awk '{print $NF}')"
     : "${default_branch:=main}"
 
     info "Fetching latest '$default_branch' from origin..."
