@@ -5,17 +5,15 @@ if exists code; then
     local dir="${1:-$PWD}"
     command code "$dir"
   }
-fi
 
-exists brew || return
-
-if exists code; then
-  uninstall-code() {
-    info "Uninstalling visual studio code..."
-    command brew uninstall --cask visual-studio-code
-    reload
-  }
-else
+  if exists brew; then
+    uninstall-code() {
+      info "Uninstalling visual studio code..."
+      command brew uninstall --cask visual-studio-code
+      reload
+    }
+  fi
+elif exists brew; then
   install-code() {
     info "Installing visual studio code..."
     command brew install --cask visual-studio-code

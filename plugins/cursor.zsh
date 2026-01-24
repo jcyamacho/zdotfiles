@@ -5,18 +5,16 @@ if exists cursor; then
     local dir="${1:-$PWD}"
     command cursor "$dir"
   }
-fi
 
-exists brew || return
-
-if exists cursor; then
-  uninstall-cursor() {
-    info "Uninstalling cursor..."
-    command brew uninstall --cask cursor
-    builtin rehash
-    reload
-  }
-else
+  if exists brew; then
+    uninstall-cursor() {
+      info "Uninstalling cursor..."
+      command brew uninstall --cask cursor
+      builtin rehash
+      reload
+    }
+  fi
+elif exists brew; then
   install-cursor() {
     info "Installing cursor..."
     command brew install --cask cursor
