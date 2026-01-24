@@ -1,12 +1,17 @@
 # flutter (multi-platform app framework): https://flutter.dev/
 
 if exists flutter; then
-  update-flutter() {
+  _update_flutter() {
     info "Updating Flutter..."
     command flutter upgrade
   }
 
-  updates+=(update-flutter)
+  update-flutter() {
+    _update_flutter
+    reload
+  }
+
+  updates+=(_update_flutter)
 fi
 
 exists brew || return

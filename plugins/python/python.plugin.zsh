@@ -84,14 +84,19 @@ _update_python() {
   fi
 }
 
-alias update-python="update-uv"
-update-uv() {
+_update_uv() {
   info "Updating uv..."
   uv self update
   info "Updating python..."
   _update_python
   info "Updating tools..."
   uv tool upgrade --all
+}
+
+alias update-python="update-uv"
+update-uv() {
+  _update_uv
+  reload
 }
 
 exists ruff || {
@@ -142,4 +147,4 @@ uninstall-uv() {
   reload
 }
 
-updates+=(update-uv)
+updates+=(_update_uv)

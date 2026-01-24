@@ -19,7 +19,7 @@ _fabric_load_patterns() {
   local pattern_name
   for pattern_file in "$_fabric_patterns_dir"/*(N-.); do
     pattern_name="${pattern_file:t}"
-    unalias "$pattern_name" 2>/dev/null || :
+    unalias "$pattern_name" || :
     alias "$pattern_name"="fabric --pattern ${(q)pattern_name} --stream"
   done
 }
@@ -50,13 +50,18 @@ uninstall-fabric() {
   reload
 }
 
-update-fabric() {
+_update_fabric() {
   info "Updating fabric..."
   _run_remote_installer "https://raw.githubusercontent.com/danielmiessler/fabric/main/scripts/installer/install.sh" "bash" \
     --env "INSTALL_DIR=$CUSTOM_TOOLS_DIR"
 }
 
-updates+=(update-fabric)
+update-fabric() {
+  _update_fabric
+  reload
+}
+
+updates+=(_update_fabric)
 
 fabric-config() {
   edit "$_fabric_config_dir"

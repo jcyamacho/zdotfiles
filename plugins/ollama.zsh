@@ -1,16 +1,23 @@
 # ollama (Local tool for running LLMs): https://ollama.com/
 
 if exists ollama; then
-  update-ollama-models() {
+  _update_ollama_models() {
     info "Updating ollama models..."
-    command ollama list | command awk 'NR>1 {print $1}' | while IFS= read -r package; do
+    local -a lines=("${(@f)$(command ollama list)}")
+    local line package
+    for line in "${lines[@]:1}"; do
+      package="${line%% *}"
       [[ -n $package ]] || continue
       info "Updating $package..."
       command ollama pull "$package"
     done
   }
 
-  updates+=(update-ollama-models)
+  update-ollama-models() {
+    _update_ollama_models
+  }
+
+  updates+=(_update_ollama_models)
 
   if exists brew; then
     uninstall-ollama() {

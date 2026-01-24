@@ -10,13 +10,18 @@ if exists mise; then
     reload
   }
 
-  update-mise() {
+  _update_mise() {
     info "Updating mise..."
     command mise self-update --yes
     clear-cached-init mise
   }
 
-  updates+=(update-mise)
+  update-mise() {
+    _update_mise
+    reload
+  }
+
+  updates+=(_update_mise)
 else
   install-mise() {
     info "Installing mise..."
@@ -24,7 +29,7 @@ else
     reload
   }
 
+  # Stub functions to prevent errors when mise isn't installed but other plugins expect these hooks
   _mise_hook_precmd() {}
-
   _mise_hook_chpwd() {}
 fi

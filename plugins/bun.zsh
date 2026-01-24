@@ -13,14 +13,19 @@ if [[ -d "$_bun_bin_dir" ]]; then
     reload
   }
 
-  update-bun() {
+  _update_bun() {
     info "Updating bun..."
     _lock_zshrc
     command bun upgrade
     _unlock_zshrc
   }
 
-  updates+=(update-bun)
+  update-bun() {
+    _update_bun
+    reload
+  }
+
+  updates+=(_update_bun)
 else
   install-bun() {
     info "Installing bun..."

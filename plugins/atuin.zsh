@@ -21,7 +21,7 @@ if [[ -d "$_atuin_bin_dir" ]]; then
     reload
   }
 
-  update-atuin() {
+  _update_atuin() {
     info "Updating atuin..."
     _lock_zshrc
     if command atuin update; then
@@ -30,7 +30,12 @@ if [[ -d "$_atuin_bin_dir" ]]; then
     _unlock_zshrc
   }
 
-  updates+=(update-atuin)
+  update-atuin() {
+    _update_atuin
+    reload
+  }
+
+  updates+=(_update_atuin)
 else
   install-atuin() {
     info "Installing atuin..."

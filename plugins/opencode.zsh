@@ -59,7 +59,7 @@ if [[ -d "$_opencode_bin_dir" ]]; then
     reload
   }
 
-  update-opencode() {
+  _update_opencode() {
     info "Updating opencode..."
     _lock_zshrc
     command opencode upgrade
@@ -67,7 +67,12 @@ if [[ -d "$_opencode_bin_dir" ]]; then
     clear-cached-init opencode
   }
 
-  updates+=(update-opencode)
+  update-opencode() {
+    _update_opencode
+    reload
+  }
+
+  updates+=(_update_opencode)
 
   (( $+_opencode_settings_gist_description )) || typeset -gr _opencode_settings_gist_description="opencode-settings"
   (( $+_opencode_agent_gist_description )) || typeset -gr _opencode_agent_gist_description="opencode-agent-dir"

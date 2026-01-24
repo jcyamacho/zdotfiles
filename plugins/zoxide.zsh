@@ -15,14 +15,19 @@ if exists zoxide; then
     reload
   }
 
-  alias update-z="update-zoxide"
-  update-zoxide() {
+  _update_zoxide() {
     info "Updating zoxide..."
     _install_zoxide
     clear-cached-init zoxide
   }
 
-  updates+=(update-zoxide)
+  alias update-z="update-zoxide"
+  update-zoxide() {
+    _update_zoxide
+    reload
+  }
+
+  updates+=(_update_zoxide)
 else
   alias install-z="install-zoxide"
   install-zoxide() {

@@ -15,12 +15,17 @@ if exists claude; then
     edit "$_claude_home"
   }
 
-  update-claude-code() {
+  _update_claude_code() {
     info "Updating claude code..."
     command claude update
   }
 
-  updates+=(update-claude-code)
+  update-claude-code() {
+    _update_claude_code
+    reload
+  }
+
+  updates+=(_update_claude_code)
 else
   install-claude-code() {
     info "Installing claude code..."

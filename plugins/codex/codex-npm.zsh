@@ -1,9 +1,14 @@
 # codex (npm install/update): https://developers.openai.com/codex/cli
 
 if exists codex; then
-  update-codex() {
+  _update_codex() {
     info "Updating codex..."
     command npm install -g @openai/codex@latest > /dev/null
+  }
+
+  update-codex() {
+    _update_codex
+    reload
   }
 
   uninstall-codex() {
@@ -13,7 +18,7 @@ if exists codex; then
     reload
   }
 
-  updates+=(update-codex)
+  updates+=(_update_codex)
 else
   install-codex() {
     info "Installing codex..."

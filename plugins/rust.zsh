@@ -12,12 +12,17 @@ if [[ -f "$_cargo_dir/env" ]]; then
     reload
   }
 
-  update-rust() {
+  _update_rust() {
     info "Updating rust..."
     command rustup update
   }
 
-  updates+=(update-rust)
+  update-rust() {
+    _update_rust
+    reload
+  }
+
+  updates+=(_update_rust)
 else
   install-rust() {
     info "Installing rust..."

@@ -22,17 +22,22 @@ if exists direnv; then
     reload
   }
 
-  update-direnv() {
+  _update_direnv() {
     info "Updating direnv..."
     _install_direnv
     clear-cached-init direnv
+  }
+
+  update-direnv() {
+    _update_direnv
+    reload
   }
 
   direnv-config() {
     edit "$DIRENV_CONFIG_FILE"
   }
 
-  updates+=(update-direnv)
+  updates+=(_update_direnv)
 else
   install-direnv() {
     info "Installing direnv..."

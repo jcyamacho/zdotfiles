@@ -13,12 +13,17 @@ if [[ -d "$_deno_bin_dir" ]]; then
     reload
   }
 
-  update-deno() {
+  _update_deno() {
     info "Updating deno..."
     command deno upgrade
   }
 
-  updates+=(update-deno)
+  update-deno() {
+    _update_deno
+    reload
+  }
+
+  updates+=(_update_deno)
 else
   install-deno() {
     info "Installing deno..."

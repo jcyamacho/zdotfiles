@@ -1,10 +1,16 @@
 # Gemini CLI: https://github.com/google/gemini-cli
+
 exists npm || return
 
 if exists gemini; then
-  update-gemini() {
+  _update_gemini() {
     info "Updating gemini..."
     command npm install -g @google/gemini-cli@latest > /dev/null
+  }
+
+  update-gemini() {
+    _update_gemini
+    reload
   }
 
   uninstall-gemini() {
@@ -13,7 +19,7 @@ if exists gemini; then
     reload
   }
 
-  updates+=(update-gemini)
+  updates+=(_update_gemini)
 else
   install-gemini() {
     info "Installing gemini..."
