@@ -76,6 +76,8 @@ $ZDOTFILES_DIR/plugins/claude-code.zsh kind:defer
 
 $ZDOTFILES_DIR/plugins/lsd.zsh kind:defer
 
+$ZDOTFILES_DIR/plugins/yazi kind:defer
+
 $ZDOTFILES_DIR/plugins/opencode.zsh kind:defer
 
 $ZDOTFILES_DIR/plugins/flutter.zsh kind:defer
