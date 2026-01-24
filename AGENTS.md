@@ -65,10 +65,11 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **Skip prompt init in dumb terminals**: Guard prompt tooling like Starship with `[[ $TERM != dumb ]]` to avoid errors in non-interactive contexts
 - **Compile generated plugin list**: When generating `.zsh_plugins.zsh`, also `zcompile` it to speed startup. Note: source the `.zsh` file; zsh will prefer the `.zwc` when present and newer.
 - **Lazy loading**: Defer initialization of tools not needed at every shell start
-- **Native operations**: Prefer zsh parameter expansion over external commands:
+- **Native operations**: Prefer zsh parameter expansion for simple cases:
   - `${array[(r)pattern]}` instead of `grep`
   - `${var//old/new}` instead of `sed`
   - `${(s:,:)var}` instead of `cut` or `awk`
+  - Exception: complex parsing (e.g., git output, version strings with regex) is better left to external commands for readability and reliability
 
 ### Output
 
@@ -82,7 +83,7 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 - **Environment variables**: UPPERCASE with underscores (e.g., `TOOL_CONFIG_DIR`)
 - **Private functions**: Prefix with underscore (e.g., `_update_tool`, `_helper_func`)
 - **Public API**: `install-<tool>`, `uninstall-<tool>`, `update-<tool>`
-- **Config helpers**: `<tool>-config` for editing tool configuration
+- **Config helpers**: `<tool>-config` function (not alias) for editing tool configuration
 
 ### File Operations
 
@@ -94,9 +95,9 @@ Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`
 
 These are specific patterns used in this repository:
 
-- **Guard pattern**: Use `exists <cmd>` before tool-specific code; early `return` if missing
+- **Guard pattern**: Use `exists <cmd>` before tool-specific code. For package manager checks: if all plugin functionality depends on the package manager (e.g., npm-only tools with no extra utilities), use early `return` if missing; if the plugin provides utilities that work regardless of installation method (e.g., `c()` helper for VSCode), only check package manager inside lifecycle functions
 - **Startup installs**: Only bootstrap essentials (Antidote, Homebrew, Starship); these are one-time installs on first load, then not run again. Other tools use `install-<tool>`
-- **Updates array**: Register an updater in `updates` for `update-all` (prefer `_update_<tool>` that does not call `reload`)
+- **Updates array**: Register `_update_<tool>` (no reload) in `updates` for `update-all`. Provide `update-<tool>` wrapper that calls `_update_<tool>` then `reload` for manual use. Exception: updates that don't affect shell state (e.g., downloading themes) can register the public function directly with a comment explaining why
 - **Cache invalidation**: Call `clear-cached-init <cmd>` after installs/updates; use `clear-all-cached-init` to reset all init caches
 - **Structure**: Simple tools = single `.zsh` file; complex tools or utility plugins = subdirectory with `.plugin.zsh` and `README.md`
 - **Early returns**: Structure as guard → early return → main code (not nested if/else)
@@ -133,7 +134,7 @@ While most plugins wrap external tools and require lifecycle functions, some plu
 1. Create `plugins/<tool>.zsh` (or `plugins/<tool>/<tool>.plugin.zsh` for complex tools)
 2. Add it to `.zsh_plugins.txt` (use `conditional:"exists <tool>"` when appropriate)
 3. Add header comment with tool name and URL
-4. Guard with `exists <tool> || return` (or check for package manager first)
+4. Guard with `exists <tool>` check (see **Guard pattern** for package manager handling)
 5. Provide `install-<tool>` and `uninstall-<tool>` functions
 6. If updatable, add an updater and register it in `updates` for `update-all` support
 7. For tools with init code, use `source-cached-init` and call `clear-cached-init` on update
