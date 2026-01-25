@@ -1,5 +1,6 @@
 # brew (package manager for macOS): https://brew.sh/
 export HOMEBREW_NO_ENV_HINTS=1
+export HOMEBREW_NO_ANALYTICS=1
 
 exists brew || {
   info "Installing brew..."
