@@ -42,6 +42,9 @@ git-worktree-new() {
   info "Creating worktree at '$worktree_path' branched from '$base_ref'..."
   command git worktree add -b "$branch_name" "$worktree_path" "$base_ref" || return 1
 
+  # Remove inherited upstream tracking so branch behaves like a regular new branch
+  command git -C "$worktree_path" branch --unset-upstream 2>/dev/null || :
+
   # Change to the new worktree directory in the current shell
   builtin cd "$worktree_path" || return 1
 
