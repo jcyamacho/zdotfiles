@@ -25,6 +25,15 @@ if exists claude; then
     reload
   }
 
+  cl() {
+    # OSC 11: set background to dark gray
+    printf '\033]11;#1e1e1e\033\\'
+    clear
+    command claude "$@"
+    # OSC 111: reset background to terminal default
+    printf '\033]111\033\\'
+  }
+
   updates+=(_update_claude_code)
 else
   install-claude-code() {
