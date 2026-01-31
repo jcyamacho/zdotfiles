@@ -25,7 +25,7 @@ if exists claude; then
     reload
   }
 
-  cl() {
+  cc() {
     # OSC 11: set background to dark gray
     printf '\033]11;#1e1e1e\033\\'
     clear
