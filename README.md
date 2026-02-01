@@ -73,7 +73,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling ([python](plugins/python/README.md))
 - `install-yazi` – [yazi](https://yazi-rs.github.io/) terminal file manager
 - `install-zed` – [Zed](https://zed.dev/)
-- `install-zellij` – [Zellij](https://zellij.dev/) terminal workspace
+- `install-zellij` – [Zellij](https://zellij.dev/) terminal workspace ([zellij](plugins/zellij/README.md))
 - `install-zig` – [Zig](https://ziglang.org/)
 - `install-antigravity` – [Antigravity](https://antigravity.google/)
 - `install-fonts` – [Homebrew](https://brew.sh/) font casks

@@ -86,7 +86,7 @@ ohmyzsh/ohmyzsh path:plugins/flutter kind:defer conditional:"exists flutter"
 $ZDOTFILES_DIR/plugins/fzf.zsh kind:defer
 Aloxaf/fzf-tab kind:defer conditional:"exists fzf"
 
-$ZDOTFILES_DIR/plugins/zellij.zsh kind:defer
+$ZDOTFILES_DIR/plugins/zellij kind:defer
 
 $ZDOTFILES_DIR/plugins/atuin.zsh
 
