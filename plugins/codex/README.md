@@ -14,13 +14,14 @@ OpenAI Codex CLI for AI-assisted coding.
 
 ## Functions
 
-| Function         | Description                                    |
-| ---------------- | ---------------------------------------------- |
-| `install-codex`  | Install Codex (Homebrew preferred, npm fallback) |
-| `uninstall-codex` | Remove Codex and its configuration            |
-| `update-codex`   | Update Codex (npm install only)                |
-| `codex-config`   | Open the Codex home directory in your editor   |
-| `cdx`            | Run Codex with sensible defaults               |
+| Function | Description |
+| --- | --- |
+| `install-codex` | Install Codex (Homebrew preferred, npm fallback) |
+| `uninstall-codex` | Remove Codex and its configuration |
+| `update-codex` | Update Codex (npm install only) |
+| `codex-config` | Open the Codex home directory in your editor |
+| `cdx` | Run Codex with sensible defaults |
+| `codex-clear-archived-sessions` | Remove archived Codex session directories |
 
 ## Notes
 
