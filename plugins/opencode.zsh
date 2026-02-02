@@ -17,6 +17,8 @@ if [[ -d "$_opencode_bin_dir" ]]; then
   (( $+_opencode_settings_file )) || typeset -gr _opencode_settings_file="$_opencode_config_dir/opencode.json"
   (( $+_opencode_global_rules_file )) || typeset -gr _opencode_global_rules_file="$_opencode_config_dir/AGENTS.md"
   (( $+_opencode_cache_dir )) || typeset -gr _opencode_cache_dir="$HOME/.cache/opencode"
+  (( $+_opencode_data_dir )) || typeset -gr _opencode_data_dir="$HOME/.local/share/opencode"
+  (( $+_opencode_storage_dir )) || typeset -gr _opencode_storage_dir="$_opencode_data_dir/storage"
 
   alias oc="opencode"
 
@@ -56,6 +58,7 @@ if [[ -d "$_opencode_bin_dir" ]]; then
     command rm -rf -- "$_opencode_dir"
     command rm -rf -- "$_opencode_config_dir"
     command rm -rf -- "$_opencode_cache_dir"
+    command rm -rf -- "$_opencode_data_dir"
     reload
   }
 
@@ -73,6 +76,17 @@ if [[ -d "$_opencode_bin_dir" ]]; then
   }
 
   updates+=(_update_opencode)
+
+  opencode-clear-sessions() {
+    warn "This will delete ALL opencode sessions and project data"
+    builtin print -n "Continue? [y/N] "
+    local response
+    builtin read -r response
+    [[ $response == [yY] ]] || { info "Aborted"; return 0; }
+
+    command rm -rf -- "$_opencode_storage_dir"
+    info "All sessions cleared"
+  }
 
   (( $+_opencode_settings_gist_description )) || typeset -gr _opencode_settings_gist_description="opencode-settings"
   (( $+_opencode_agent_gist_description )) || typeset -gr _opencode_agent_gist_description="opencode-agent-dir"
