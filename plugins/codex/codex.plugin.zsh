@@ -7,7 +7,7 @@ if exists codex; then
   source-cached-init codex completion zsh
 
   cdx() {
-    command codex --enable web_search_request --sandbox workspace-write --ask-for-approval on-request "$@"
+    command codex --search --sandbox workspace-write --ask-for-approval on-request "$@"
   }
 
   codex-config() {
