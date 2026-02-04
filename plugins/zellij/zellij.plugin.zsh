@@ -3,7 +3,8 @@
 export ZELLIJ_CONFIG_DIR="$HOME/.config/zellij"
 
 if exists zellij; then
-  source-cached-init zellij setup --generate-completion zsh
+  # Completions must be deferred - they call _arguments which only works in completion context
+  zsh-defer source-cached-init zellij setup --generate-completion zsh
 
   alias zj="zellij"
 
