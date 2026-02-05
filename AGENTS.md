@@ -1,154 +1,76 @@
 # AGENTS.md - Zsh Dotfiles Repository
 
-## Overview
+Repo defaults for AI agents editing this zsh dotfiles project.
+Prioritize secure, fast startup and minimal diffs.
 
-Modular zsh configuration using Antidote plugin manager. Entry point: `zshrc.sh`.
+## Entry Points
 
-## Repo Layout
+- `zshrc.sh` -> main entry sourced by `~/.zshrc`
+- `.zsh_plugins.txt` -> source of truth for Antidote plugin list
+- `plugins/` -> local plugins and `install-*`/`uninstall-*`/`update-*` functions
+- `_utils.zsh` -> shared helpers (`exists`, `reload`, cache/output helpers)
 
-- `zshrc.sh` – entry point sourced by your `~/.zshrc`.
-- `.zsh_plugins.txt` – source-of-truth plugin list for Antidote.
-- `plugins/` – local plugins + `install-*`/`update-*`/`uninstall-*` helpers.
-- `_utils.zsh` – shared helpers (`exists`, `reload`, caching, output).
+## Core Rules
 
-## Commands
+- Use 2-space indentation, LF endings, UTF-8, and single blank lines.
+- Start plugin files with `# <tool> (<short description>): https://...`.
+- Quote scalars (`"$var"`); pass arrays as `"${array[@]}"`.
+- Use `[[ ... ]]`, `local`, `${1:?message}`, and `while IFS= read -r line`.
+- Use `builtin print -r --` instead of `echo` and `command`/`builtin`
+  to bypass aliases.
+- Prefer zsh native expansion over subshells/pipes for simple transforms.
+- Use `command mkdir -p -- "$dir"` and `command rm -f -- "$path"`.
+- Never use `sudo`, interactive installers, or `curl | sh`.
+- Never run `eval` on untrusted input; prefer `source-cached-init` for tool init.
+- Use `mktemp` for temp files; do not log or cache secrets.
+- Escape `%` in untrusted prompt text as `%%`.
 
-- `reload` – reload shell config after changes
-- `update-zdotfiles` – pull repo updates and reload
-- `update-antidote` – update Antidote and reload
-- `update-all` – run all registered updaters and reload
-- `clear-all-cached-init` – remove all cached tool init files (regenerate on next reload)
-- `zsh-startup-bench` – benchmark startup (10 iterations)
-- `zsh-startup-profile` – profile startup with zprof
-- Manual sanity check: `zsh -lic exit`
+## Plugin Patterns
 
-## Code Style
+- Default guard pattern: check tool first, then package manager for lifecycle functions.
+- Use early return (`exists <pkg_mgr> || return`) only when the
+  entire file depends on that package manager.
+- Keep simple tools in `plugins/<tool>.zsh`; use
+  `plugins/<tool>/<tool>.plugin.zsh` + `README.md` for complex
+  or utility plugins.
+- Register `_update_<tool>` in `updates`; expose `update-<tool>`
+  wrapper that calls updater then `reload`.
+- After install/update of tools using shell init, run `clear-cached-init <tool>`.
+- Bootstrap only essentials at startup (Antidote, Homebrew, Starship);
+  everything else installs via `install-<tool>`.
+- Prefer `path=("$NEW_DIR" "${path[@]}")` with `typeset -gU path` for deduped prepends.
+- Disable tool telemetry when supported.
 
-### Formatting
+## Update and Utility Conventions
 
-- **Indentation**: 2 spaces, LF line endings, UTF-8 (see `.editorconfig`)
-- **Blank lines**: Single blank lines for separation; no multiple consecutive blank lines
-- **Header**: Start each plugin with `# <tool> (<short description>): https://...` (description optional, but keep it short)
+- Brew-managed tools are updated by `update-brew` unless they
+  require extra post-update steps.
+- Self-managed tools (for example `rustup`, `bun`, `mise`)
+  should register explicit updater functions.
+- Utility-only plugins may omit lifecycle functions but must
+  still follow security/performance rules.
+- List installable tools in root `README.md`; list utility
+  plugins in the Utility Plugins section.
 
-### Security (Critical)
+## Adding a Plugin (Checklist)
 
-- **Quote variables**: Quote scalars to prevent word splitting and globbing: `"$var"`, `"${var}"`. For arrays, follow the **Array expansions** rule below
-- **Prefer arrays for command arguments**: Avoid constructing commands as strings; use arrays and invoke with `"${cmd[@]}"` to preserve argument boundaries
-- **No eval on untrusted input**: Never use `eval` on strings derived from user input/environment. For tool init code, prefer `source-cached-init` over repeated `eval`
-- **Avoid prompt expansion on untrusted text**: Don't use `print -P` with untrusted content; with `setopt promptsubst` it can execute `$()`/backticks. Prefer `builtin print -r -- "$text"` or disable prompt substitution locally with `setopt local_options nopromptsubst`
-- **No sudo**: Avoid `sudo` in plugin functions; keep installs/updates non-interactive (principle of least privilege)
-- **Non-interactive installers**: All install/update flows must be non-interactive (use `--yes`/`-y`/equivalent flags). Never `curl | sh`; use `_run_remote_installer "<url>" ["sh"|"bash"] [--env "KEY=VALUE"] -- [args...]`. It downloads to `mktemp`, runs under `_lock_zshrc`/`_unlock_zshrc`, and preserves env via `--env`.
-- **Secure temp files**: Use `mktemp` for temporary files, not predictable paths
-- **Secrets handling**: Never log, cache, or store sensitive data (API keys, tokens) in world-readable files
-- **Escape % in prompts**: When placing untrusted content into prompts, replace `%` with `%%` to prevent prompt escapes from expanding
+1. Create plugin file (`plugins/<tool>.zsh` or subdirectory layout for complex plugins).
+2. Add plugin to `.zsh_plugins.txt` (use `conditional:"exists <tool>"` where useful).
+3. Add file header with tool name and URL.
+4. Add guard logic following the guard pattern rules.
+5. Add `install-<tool>` and `uninstall-<tool>` when lifecycle management is needed.
+6. Add updater registration when the tool has an independent update path.
+7. Add cache invalidation if the tool emits shell init code.
+8. Update `README.md` with the appropriate tool listing.
 
-### Correctness
+## Validation Before Finish
 
-- **Conditionals**: Use `[[ ]]` over `[ ]` (zsh-native, supports pattern matching, safer with unquoted vars)
-- **Command substitution quoting**: Always quote: `local var="$(cmd)"` not `local var=$(cmd)`
-- **Array expansions**: Quote scalars as `"$var"`. When passing arrays, use `"${array[@]}"` (or `"${(@)array}"`) to preserve elements and whitespace
-- **Local variables**: Declare function-local variables with `local` to avoid polluting global scope
-- **Required params**: Use `${1:?error message}` syntax for mandatory parameters
-- **Safe line iteration**: Use `while IFS= read -r var` to preserve whitespace and handle backslashes
-- **Glob qualifiers**: Use `(N)` for null-glob to avoid errors on no matches: `for f in dir/*(N); do`
-- **Read-only constants**: Use `typeset -r` for function-local constants. Use `typeset -gr` for globals (especially in deferred plugins) to avoid accidental local scoping. Guard global read-only variables with `(( $+_var_name )) ||` to prevent errors on `reload`: `(( $+_my_var )) || typeset -gr _my_var="value"`
-- **Ignore failure**: Use `|| :` to suppress a command's exit status when failure is acceptable (e.g., `command rm -f file || :`). The `:` is the null builtin that always succeeds
-
-### Performance
-
-- **Bypass aliases**: Prefix external commands with `command` and builtins with `builtin` to ensure predictable behavior: `command mkdir`, `builtin print`
-- **Avoid subshells**: Prefer `$PWD` over `$(pwd)`, `${var:h}` over `$(dirname "$var")`, `${var:t}` over `$(basename "$var")`
-- **Here-strings over pipes**: Prefer `cmd <<< "$var"` over `builtin print -r -- "$var" | cmd` (avoids subshell)
-- **Cache tool init**: Use `source-cached-init <cmd> [args...]` for tools that emit shell init code; it auto-regenerates when the tool binary is newer
-- **Antidote conditionals**: Prefer `conditional:"exists tool"` for consistency (fast `$+commands[...]` lookup via `exists()`)
-- **Minimize command checks**: Avoid repeated `exists <cmd>` within the same file; structure as `if exists foo; then ... elif exists brew; then ... fi`
-- **Skip prompt init in dumb terminals**: Guard prompt tooling like Starship with `[[ $TERM != dumb ]]` to avoid errors in non-interactive contexts
-- **Compile generated plugin list**: When generating `.zsh_plugins.zsh`, also `zcompile` it to speed startup. Note: source the `.zsh` file; zsh will prefer the `.zwc` when present and newer.
-- **Lazy loading**: Defer initialization of tools not needed at every shell start
-- **Native operations**: Prefer zsh parameter expansion for simple cases:
-  - `${array[(r)pattern]}` instead of `grep`
-  - `${var//old/new}` instead of `sed`
-  - `${(s:,:)var}` instead of `cut` or `awk`
-  - Exception: complex parsing (e.g., git output, version strings with regex) is better left to external commands for readability and reliability
-
-### Output
-
-- **Print statements**: Use `builtin print -r --` instead of `echo` (no escape interpretation, predictable)
-- **Colored output**: Use `info`, `warn`, `error` helpers from `_utils.zsh`
-- **Output suppression**: Use `> /dev/null` for noisy commands during install/update
-
-### Naming Conventions
-
-- **Functions/aliases**: lowercase with hyphens (e.g., `install-tool`, `update-all`)
-- **Environment variables**: UPPERCASE with underscores (e.g., `TOOL_CONFIG_DIR`)
-- **Private functions**: Prefix with underscore (e.g., `_update_tool`, `_helper_func`)
-- **Public API**: `install-<tool>`, `uninstall-<tool>`, `update-<tool>`
-- **Config helpers**: `<tool>-config` function (not alias) for editing tool configuration
-
-### File Operations
-
-- **Removals**: Use `command rm -f -- "$path"` (quote path, use `--` to handle names starting with `-`)
-- **Directory creation**: Use `command mkdir -p -- "$dir"`
-- **Path safety**: Always quote paths, especially those from variables or command substitution
-
-## Project Conventions
-
-These are specific patterns used in this repository:
-
-- **Guard pattern**: Use `exists <cmd>` before tool-specific code. For package manager checks: if all plugin functionality depends on the package manager (e.g., npm-only tools with no extra utilities), use early `return` if missing; if the plugin provides utilities that work regardless of installation method (e.g., `c()` helper for VSCode), only check package manager inside lifecycle functions
-- **Startup installs**: Only bootstrap essentials (Antidote, Homebrew, Starship); these are one-time installs on first load, then not run again. Other tools use `install-<tool>`
-- **Updates array**: Register `_update_<tool>` (no reload) in `updates` for `update-all`. Provide `update-<tool>` wrapper that calls `_update_<tool>` then `reload` for manual use. Exception: updates that don't affect shell state (e.g., downloading themes) can register the public function directly with a comment explaining why
-- **Cache invalidation**: Call `clear-cached-init <cmd>` after installs/updates; use `clear-all-cached-init` to reset all init caches
-- **Structure**: Simple tools = single `.zsh` file; complex tools or utility plugins = subdirectory with `.plugin.zsh` and `README.md`
-- **Early returns**: Structure as guard → early return → main code (not nested if/else)
-- **Lock zshrc**: Use `_lock_zshrc` / `_unlock_zshrc` when external installers might modify `.zshrc`
-- **Path prepend**: Use `path=("$NEW_DIR" "${path[@]}")` pattern; `typeset -gU path` handles deduplication
-- **Friendly aliases**: Provide alternatives like `alias install-node="install-fnm"`
-- **Config exports**: Export `<TOOL>_CONFIG_DIR`, `<TOOL>_CONFIG_FILE` for tools with config
-- **Editor helper**: Use `edit` helper instead of `$EDITOR` directly
-- **Loop variables**: Use `_` for intentionally ignored variables: `for _ in {1..10}`
-- **Unset temporary vars**: Clean up with `unset varname` when no longer needed
-- **Function existence**: Use `(( $+functions[name] ))` to check before calling
-- **Telemetry opt-out**: Disable analytics/telemetry where tools support it
-
-### Update Functions
-
-Not all tools need a dedicated `update-<tool>` function:
-
-- **Brew-installed tools**: Updated automatically via `update-brew` (runs `brew upgrade --greedy`). No individual updater needed unless the tool has additional update steps (e.g., clearing cached init, downloading themes).
-- **Self-updating tools**: Tools with their own update mechanism (e.g., `rustup update`, `bun upgrade`, `mise self-update`) should register an updater in `updates`.
-- **Tools with cached init**: If a tool uses `source-cached-init`, its updater must call `clear-cached-init <tool>` after updating to regenerate the cache.
-
-### Pure Utility Plugins
-
-While most plugins wrap external tools and require lifecycle functions, some plugins are **pure utilities** (e.g., `git-utils`, `git-worktree`). For these:
-
-- Lifecycle functions (`install-`, `uninstall-`, `update-`) are optional.
-- They do not need to be listed in the `README.md` "Installable Tools" section if they don't require an explicit installation step.
-- They should still follow all other conventions (headers, guards, performance, etc.).
-- **Prefer subdirectory structure** (`plugins/<name>/<name>.plugin.zsh` + `README.md`) to document the provided functions and usage.
-- **Reference from main README**: Add an entry to the "Utility Plugins" section in the project `README.md` linking to the plugin's `README.md`.
-
-## Adding a New Plugin
-
-1. Create `plugins/<tool>.zsh` (or `plugins/<tool>/<tool>.plugin.zsh` for complex tools)
-2. Add it to `.zsh_plugins.txt` (use `conditional:"exists <tool>"` when appropriate)
-3. Add header comment with tool name and URL
-4. Guard with `exists <tool>` check (see **Guard pattern** for package manager handling)
-5. Provide `install-<tool>` and `uninstall-<tool>` functions
-6. If updatable, add an updater and register it in `updates` for `update-all` support
-7. For tools with init code, use `source-cached-init` and call `clear-cached-init` on update
-8. Update `README.md` to include the new tool in the **Installable Tools** list (with a link), so the README stays a complete reference of what this repo contains.
-
-## Debugging
-
-- **Profile startup**: `ZDOTFILES_PROFILE_STARTUP=1 zsh -lic exit` or use `zsh-startup-profile`
-- **Trace execution**: `set -x` / `set +x` around problematic code
-- **Check variables**: `typeset -p varname` to inspect variable state
-- **Syntax check**: Use `zsh -n <file>` for quick validation
+- `zsh -n <file>` for syntax checks on edited files
+- `zsh -lic exit` for functional startup sanity
+- `zsh-startup-bench` or `zsh-startup-profile` when startup behavior changes
 
 ## References
 
-- [Zsh Native Scripting Handbook](https://wiki.zshell.dev/community/zsh_handbook)
-- [Oh My Zsh Secure Code Guidelines](https://github.com/ohmyzsh/ohmyzsh/wiki/Secure-Code)
-- [Zsh Best Practices Gist](https://gist.github.com/ChristopherA/562c2e62d01cf60458c5fa87df046fbd)
+- <https://wiki.zshell.dev/community/zsh_handbook>
+- <https://github.com/ohmyzsh/ohmyzsh/wiki/Secure-Code>
+- <https://gist.github.com/ChristopherA/562c2e62d01cf60458c5fa87df046fbd>
