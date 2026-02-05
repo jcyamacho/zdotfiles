@@ -23,7 +23,7 @@ mkcd() {
 typeset -gA _tool_exists_cache
 
 exists() {
-  # Cache the *exit status* of the lookup (0=exists, 1=missing).
+  # Cache persists until `reload`; manual `brew install` won't be detected immediately.
   if [[ -z ${_tool_exists_cache[$1]-} ]]; then
     (( $+commands[$1] ))
     _tool_exists_cache[$1]=$?
@@ -85,6 +85,7 @@ _run_remote_installer() {
 
   local exit_status=0
   _lock_zshrc
+  trap '_unlock_zshrc; command rm -f -- "$tmp"' EXIT INT TERM
 
   if ! command curl --proto '=https' --tlsv1.2 -fsSL "$url" -o "$tmp"; then
     exit_status=1
@@ -94,6 +95,7 @@ _run_remote_installer() {
 
   _unlock_zshrc
   command rm -f -- "$tmp"
+  trap - EXIT INT TERM
   return $exit_status
 }
 
@@ -164,5 +166,12 @@ kill-port() {
     return 1
   fi
   info "Killing process $pid on port $port"
+  command kill "$pid"
+  local i
+  for i in {1..5}; do
+    command kill -0 "$pid" 2>/dev/null || return 0
+    sleep 0.1
+  done
+  warn "Force-killing process $pid"
   command kill -9 "$pid"
 }
