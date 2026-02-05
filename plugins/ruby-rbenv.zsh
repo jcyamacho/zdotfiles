@@ -1,7 +1,5 @@
 # rbenv (Ruby version manager): https://github.com/rbenv/rbenv
 
-exists brew || return
-
 _update_ruby() {
   info "Activating latest Ruby..."
   local latest_version="$(rbenv install -l | command grep -v - | command tail -1)"
@@ -22,15 +20,6 @@ _update_ruby() {
 if exists rbenv; then
   source-cached-init rbenv init - --no-rehash zsh
 
-  alias uninstall-ruby="uninstall-rbenv"
-  uninstall-rbenv() {
-    info "Uninstalling rbenv..."
-    command brew uninstall rbenv
-    command rm -rf -- "$HOME/.rbenv"
-    clear-cached-init rbenv
-    reload
-  }
-
   uninstall-unused-ruby-versions() {
     local current_version="$(rbenv global)"
     info "Cleaning up unused Ruby versions (keeping $current_version)..."
@@ -44,7 +33,18 @@ if exists rbenv; then
   alias update-ruby="_update_ruby"
 
   updates+=(_update_ruby)
-else
+
+  if exists brew; then
+    alias uninstall-ruby="uninstall-rbenv"
+    uninstall-rbenv() {
+      info "Uninstalling rbenv..."
+      command brew uninstall rbenv
+      command rm -rf -- "$HOME/.rbenv"
+      clear-cached-init rbenv
+      reload
+    }
+  fi
+elif exists brew; then
   alias install-ruby="install-rbenv"
   install-rbenv() {
     info "Installing rbenv..."

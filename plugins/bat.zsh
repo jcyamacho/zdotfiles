@@ -1,7 +1,5 @@
 # bat (cat clone with wings): https://github.com/sharkdp/bat
 
-exists brew || return
-
 if exists bat; then
   # suffix aliases for popular file extensions
   typeset -a _bat_exts=(
@@ -41,12 +39,14 @@ if exists bat; then
   done
   unset _ext _bat_exts
 
-  uninstall-bat() {
-    info "Uninstalling bat..."
-    command brew uninstall bat
-    reload
-  }
-else
+  if exists brew; then
+    uninstall-bat() {
+      info "Uninstalling bat..."
+      command brew uninstall bat
+      reload
+    }
+  fi
+elif exists brew; then
   install-bat() {
     info "Installing bat..."
     command brew install bat

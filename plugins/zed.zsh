@@ -1,7 +1,6 @@
 # zed (modern text editor): https://zed.dev/
 
 if exists zed; then
-  # Use ZED as the default editor if EDITOR is not set
   export EDITOR="${EDITOR:-zed --wait}"
 
   zd() {
@@ -9,7 +8,6 @@ if exists zed; then
     command zed "$dir"
   }
 
-  # Save/Load Zed Settings using GitHub Gist
   if exists gh; then
     (( $+_zed_settings_path )) || typeset -gr _zed_settings_path="$HOME/.config/zed/settings.json"
     (( $+_zed_gist_description )) || typeset -gr _zed_gist_description="zed-settings"
@@ -22,17 +20,15 @@ if exists zed; then
       save-file-to-gist "${_zed_settings_path}" "${_zed_gist_description}"
     }
   fi
-fi
 
-exists brew || return
-
-if exists zed; then
-  uninstall-zed() {
-    info "Uninstalling zed..."
-    command brew uninstall --cask zed
-    reload
-  }
-else
+  if exists brew; then
+    uninstall-zed() {
+      info "Uninstalling zed..."
+      command brew uninstall --cask zed
+      reload
+    }
+  fi
+elif exists brew; then
   install-zed() {
     info "Installing zed..."
     command brew install --cask zed
