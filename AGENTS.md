@@ -3,71 +3,106 @@
 Repo defaults for AI agents editing this zsh dotfiles project.
 Prioritize secure, fast startup and minimal diffs.
 
-## Entry Points
+## Architecture
 
-- `zshrc.sh` -> main entry sourced by `~/.zshrc`
-- `.zsh_plugins.txt` -> source of truth for Antidote plugin list
-- `plugins/` -> local plugins and `install-*`/`uninstall-*`/`update-*` functions
-- `_utils.zsh` -> shared helpers (`exists`, `reload`, cache/output helpers)
+`zshrc.sh` is sourced by `~/.zshrc` and bootstraps in order:
+
+1. Cache dir (`$ZDOTFILES_CACHE_DIR`) and `$CUSTOM_TOOLS_DIR` on `$path`
+2. `_utils.zsh` — shared helpers (see below)
+3. The `updates` array and `update-all` dispatcher
+4. Antidote — reads `.zsh_plugins.txt`, generates/compiles `.zsh_plugins.zsh`, sources it
+
+Antidote sources entries in `.zsh_plugins.txt` in order. Each local plugin
+runs its own guard logic and conditionally defines
+`install-*`/`uninstall-*`/`update-*` functions.
+
+### Key helpers (`_utils.zsh`)
+
+- `exists <cmd>` — cached `$+commands` check (cleared on `reload`)
+- `source-cached-init <cmd> <args...>` — caches tool init output
+  and sources it; regenerates when binary is newer
+- `_run_remote_installer <url> [shell] [--env K=V]... [-- args...]` —
+  secure download-and-run with `~/.zshrc` write-lock
+- `clear-cached-init <cmd>` / `clear-all-cached-init` — invalidate
+  cached init files
+- `info`, `warn`, `error` — colored output helpers
+- `reload` — clear `exists` cache and re-source `zshrc.sh`
 
 ## Core Rules
 
-- Use 2-space indentation, LF endings, UTF-8, and single blank lines.
+- 2-space indentation, LF endings, UTF-8, single blank lines.
 - Start plugin files with `# <tool> (<short description>): https://...`.
 - Quote scalars (`"$var"`); pass arrays as `"${array[@]}"`.
 - Use `[[ ... ]]`, `local`, `${1:?message}`, and `while IFS= read -r line`.
-- Use `builtin print -r --` instead of `echo` and `command`/`builtin`
-  to bypass aliases.
+- Use `builtin print -r --` instead of `echo`; prefix external calls
+  with `command`/`builtin` to bypass aliases.
 - Prefer zsh native expansion over subshells/pipes for simple transforms.
 - Use `command mkdir -p -- "$dir"` and `command rm -f -- "$path"`.
 - Never use `sudo`, interactive installers, or `curl | sh`.
-- Never run `eval` on untrusted input; prefer `source-cached-init` for tool init.
-- Use `mktemp` for temp files; do not log or cache secrets.
+- Never `eval` untrusted input; prefer `source-cached-init` for tool init.
+- Use `mktemp` for temp files; never log or cache secrets.
 - Escape `%` in untrusted prompt text as `%%`.
 
 ## Plugin Patterns
 
-- Default guard pattern: check tool first, then package manager for lifecycle functions.
+### Guards
+
+- Check tool first, then package manager for lifecycle functions.
 - Use early return (`exists <pkg_mgr> || return`) only when the
   entire file depends on that package manager.
-- Keep simple tools in `plugins/<tool>.zsh`; use
-  `plugins/<tool>/<tool>.plugin.zsh` + `README.md` for complex
-  or utility plugins.
+
+### Lifecycle
+
 - Register `_update_<tool>` in `updates`; expose `update-<tool>`
   wrapper that calls updater then `reload`.
-- After install/update of tools using shell init, run `clear-cached-init <tool>`.
+- Brew-managed tools are updated by `update-brew` unless they
+  need extra post-update steps.
+- Self-managed tools (e.g. `rustup`, `bun`, `mise`) need explicit
+  updater functions.
+- Run `clear-cached-init <tool>` after install/update of tools
+  using shell init.
 - Bootstrap only essentials at startup (Antidote, Homebrew, Starship);
   everything else installs via `install-<tool>`.
-- Prefer `path=("$NEW_DIR" "${path[@]}")` with `typeset -gU path` for deduped prepends.
-- Disable tool telemetry when supported.
-
-## Update and Utility Conventions
-
-- Brew-managed tools are updated by `update-brew` unless they
-  require extra post-update steps.
-- Self-managed tools (for example `rustup`, `bun`, `mise`)
-  should register explicit updater functions.
-- Utility-only plugins may omit lifecycle functions but must
-  still follow security/performance rules.
+- Utility-only plugins may omit lifecycle functions.
 - List installable tools in root `README.md`; list utility
   plugins in the Utility Plugins section.
 
+### General
+
+- Prefer `path=("$NEW_DIR" "${path[@]}")` with `typeset -gU path`
+  for deduped prepends.
+- Disable tool telemetry when supported.
+
+### File layout
+
+- **Simple** (`plugins/<tool>.zsh`): single file, brew guard,
+  conditional install/uninstall. See `fzf.zsh`.
+- **Self-managed** (`plugins/<tool>.zsh`): binary in
+  `$CUSTOM_TOOLS_DIR`, uses `source-cached-init`, registers in
+  `updates`. See `zoxide.zsh`.
+- **Complex** (`plugins/<tool>/<tool>.plugin.zsh` + `README.md`):
+  subdirectory for plugins with configs or detailed docs.
+  See `starship/`, `direnv/`, `git-worktree/`.
+
 ## Adding a Plugin (Checklist)
 
-1. Create plugin file (`plugins/<tool>.zsh` or subdirectory layout for complex plugins).
-2. Add plugin to `.zsh_plugins.txt` (use `conditional:"exists <tool>"` where useful).
+1. Create plugin file (simple or subdirectory layout).
+2. Add entry to `.zsh_plugins.txt` (use `conditional:"exists <tool>"` where useful).
 3. Add file header with tool name and URL.
-4. Add guard logic following the guard pattern rules.
+4. Add guard logic.
 5. Add `install-<tool>` and `uninstall-<tool>` when lifecycle management is needed.
-6. Add updater registration when the tool has an independent update path.
-7. Add cache invalidation if the tool emits shell init code.
-8. Update `README.md` with the appropriate tool listing.
+6. Register updater when the tool has an independent update path.
+7. Add `clear-cached-init` call if the tool emits shell init code.
+8. Update `README.md` with the tool listing.
 
-## Validation Before Finish
+## Validation
 
-- `zsh -n <file>` for syntax checks on edited files
-- `zsh -lic exit` for functional startup sanity
-- `zsh-startup-bench` or `zsh-startup-profile` when startup behavior changes
+```sh
+zsh -n <file>              # syntax check edited files
+zsh -lic exit              # full startup sanity
+zsh-startup-bench          # 10-iteration startup benchmark
+zsh-startup-profile        # zprof-enabled timing run
+```
 
 ## References
 
