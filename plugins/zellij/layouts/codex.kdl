@@ -1,0 +1,10 @@
+layout {
+  pane split_direction="horizontal" {
+    pane size="70%" borderless=true {
+      command "codex"
+    }
+    pane {
+      command "zsh"
+    }
+  }
+}
