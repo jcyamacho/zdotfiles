@@ -61,6 +61,9 @@ Order in `.zsh_plugins.txt` matters:
 - Start plugin files with `# <tool> (<short description>): https://...`.
 - Quote scalars (`"$var"`); pass arrays as `"${array[@]}"`.
 - Use `[[ ... ]]`, `local`, `${1:?message}`, and `while IFS= read -r line`.
+- Declare locals as close as possible to first use (prefer inline declaration
+  with assignment). Declare at function top only when reused across most of
+  the function.
 - Use `builtin print -r --` instead of `echo`; prefix external calls
   with `command`/`builtin` to bypass aliases.
 - Prefer zsh native expansion over subshells/pipes for simple transforms.
