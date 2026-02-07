@@ -1,4 +1,4 @@
-# Claude Code CLI: https://www.anthropic.com/claude-code
+# claude (Anthropic coding assistant): https://www.anthropic.com/claude-code
 if exists claude; then
   (( $+_claude_home )) || typeset -gr _claude_home="$HOME/.claude"
 
@@ -26,12 +26,23 @@ if exists claude; then
   }
 
   cc() {
-    # OSC 11: set background to dark gray
-    printf '\033]11;#1e1e1e\033\\'
-    clear
+    builtin print -r -- $'\e]11;#1e1e1e\e\\'
+    command clear
+
+    local divider="----------------------------------------"
+    local branch_name="$(command git branch --show-current 2>/dev/null)"
+    [[ -n "$branch_name" ]] || branch_name="-"
+
+    info "$divider"
+    info "Claude Code Session"
+    builtin print -r -- "repo   : $PWD:t"
+    builtin print -r -- "branch : $branch_name"
+    builtin print -P -- 'time   : %D{%a %b %d, %H:%M}'
+    info "$divider"
+    builtin print -r -- ""
+
     command claude "$@"
-    # OSC 111: reset background to terminal default
-    printf '\033]111\033\\'
+    builtin print -r -- $'\e]111\e\\'
   }
 
   updates+=(_update_claude_code)
