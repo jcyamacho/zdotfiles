@@ -20,19 +20,14 @@ mkcd() {
   builtin cd "$target"
 }
 
-typeset -gA _tool_exists_cache
-
 exists() {
-  # Cache persists until `reload`; manual `brew install` won't be detected immediately.
-  if [[ -z ${_tool_exists_cache[$1]-} ]]; then
-    (( $+commands[$1] ))
-    _tool_exists_cache[$1]=$?
-  fi
-  return $_tool_exists_cache[$1]
+  local cmd=${1:?exists: missing command}
+
+  local cmd_path=${commands[$cmd]-}
+  [[ -n "$cmd_path" && -x "$cmd_path" ]]
 }
 
 reload() {
-  _tool_exists_cache=()
   builtin source "$ZDOTFILES_DIR/zshrc.sh"
 }
 

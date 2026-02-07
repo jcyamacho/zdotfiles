@@ -46,6 +46,9 @@ Order in `.zsh_plugins.txt` matters:
 - `exists <cmd>` — cached `$+commands` check (cleared on `reload`)
 - `source-cached-init <cmd> <args...>` — caches tool init output
   and sources it; regenerates when binary is newer
+  - Use only when output is deterministic/static across sessions.
+  - Do not cache commands that emit per-session values (PID,
+    timestamps, temp paths). Example: do not cache `fnm env --shell zsh`.
 - `_run_remote_installer <url> [shell] [--env K=V]... [-- args...]` —
   secure download-and-run with `~/.zshrc` write-lock
 - `clear-cached-init <cmd>` / `clear-all-cached-init` — invalidate

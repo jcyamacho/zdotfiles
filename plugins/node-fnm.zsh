@@ -16,7 +16,8 @@ _update_node() {
 }
 
 _fnm_env() {
-  source-cached-init fnm env --shell zsh
+  # fnm env output is session-specific (FNM_MULTISHELL_PATH), so do not cache it.
+  builtin source <(command fnm env --shell zsh)
 }
 
 if exists fnm; then
