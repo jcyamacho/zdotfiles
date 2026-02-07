@@ -2,34 +2,31 @@
 
 Python helpers powered by uv, virtualenv convenience, and tool installers.
 
-## Helpers (require `python` on PATH)
+## Helpers (require `python3` on PATH)
 
-| Function           | Alias | Description                                   |
-| ------------------ | ----- | --------------------------------------------- |
-| `py`               |       | Alias for `python3`                           |
-| `pyclean`          |       | Remove common Python cache directories/files |
-| `venv`             |       | Activate `.venv` or `venv` in the cwd         |
-| `pytest`           |       | Activate venv (if present) then run pytest    |
-| `enable-venv-hook` |       | Auto-activate venv on directory change        |
+| Function           | Alias | Description                                  |
+| ------------------ | ----- | -------------------------------------------- |
+| `py`               |       | Alias for `python3`                          |
+| `pyclean`          |       | Remove common Python cache dirs and files    |
+| `venv`             |       | Activate `.venv` or `venv` in the cwd        |
+| `pytest`           |       | Activate venv (if present), then run pytest  |
+| `enable-venv-hook` |       | Auto-activate venv on directory change       |
 
-To enable the directory-change hook, add `enable-venv-hook` to your `~/.zshrc` (opt-in).
+To enable the directory-change hook, add `enable-venv-hook` to your
+`~/.zshrc` (opt-in).
 
 ## Install/update helpers (require `uv` on PATH)
 
-| Function         | Alias              | Description                                          |
-| ---------------- | ------------------ | ---------------------------------------------------- |
-| `install-uv`     | `install-python`   | Install uv, then install latest Python               |
-| `update-uv`      | `update-python`    | Update uv, Python versions, and uv-managed tools     |
-| `uninstall-uv`   | `uninstall-python` | Remove uv binaries and uv-managed Python/tool trees  |
+- `install-uv` (alias: `install-python`) - install uv and Python
+- `update-uv` (alias: `update-python`) - update uv, Python, and uv tools
+- `uninstall-uv` (alias: `uninstall-python`) - remove uv binaries and uv dirs
 
 ## Tool installers (require `uv` on PATH)
 
-| Function                    | Description                      |
-| --------------------------- | -------------------------------- |
-| `install-python-ruff`       | Install Ruff via `uv tool`       |
-| `install-python-basedpyright` | Install Based Pyright via `uv tool` |
-| `install-python-ty`         | Install Ty via `uv tool`         |
-| `install-python-pyrefly`    | Install Pyrefly via `uv tool`    |
+- `install-python-ruff`
+- `install-python-basedpyright`
+- `install-python-ty`
+- `install-python-pyrefly`
 
 ## Usage
 
