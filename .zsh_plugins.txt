@@ -71,7 +71,7 @@ $ZDOTFILES_DIR/plugins/zoxide.zsh
 
 $ZDOTFILES_DIR/plugins/gemini-cli.zsh kind:defer
 
-$ZDOTFILES_DIR/plugins/codex kind:defer
+$ZDOTFILES_DIR/plugins/codex
 
 $ZDOTFILES_DIR/plugins/ghostty
 
@@ -83,7 +83,7 @@ $ZDOTFILES_DIR/plugins/lsd.zsh
 
 $ZDOTFILES_DIR/plugins/yazi kind:defer
 
-$ZDOTFILES_DIR/plugins/opencode.zsh kind:defer
+$ZDOTFILES_DIR/plugins/opencode.zsh
 
 $ZDOTFILES_DIR/plugins/flutter.zsh
 ohmyzsh/ohmyzsh path:plugins/flutter conditional:"exists flutter"

@@ -1,4 +1,4 @@
-# git-utils (git helper functions for pulling repos)
+# git-utils (git helper functions for pulling repos): https://git-scm.com/docs
 
 # Pull a single repo with optional post-pull hook
 git-pull() {
@@ -46,8 +46,6 @@ git-pull-all() {
   info "Pulling all repos in: $base_dir"
   builtin print ""
 
-  local pulled=0
-  local failed=0
   local dir
 
   for dir in "$base_dir"/*(N/); do
@@ -55,16 +53,12 @@ git-pull-all() {
 
     builtin print -P "%F{cyan}->%f ${dir:t}"
 
-    if git-pull "$dir" 2>&1 | command sed 's/^/  /'; then
-      ((pulled++))
-    else
-      ((failed++))
-    fi
+    git-pull "$dir" 2>&1 | command sed 's/^/  /'
 
     builtin print ""
   done
 
-  info "Done: $pulled pulled, $failed failed"
+  info "Done."
 }
 
 alias gpa="git-pull-all"
