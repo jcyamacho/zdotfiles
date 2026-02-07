@@ -10,7 +10,8 @@ Prioritize secure, fast startup and minimal diffs.
 1. Cache dir (`$ZDOTFILES_CACHE_DIR`) and `$CUSTOM_TOOLS_DIR` on `$path`
 2. `_utils.zsh` — shared helpers (see below)
 3. The `updates` array and `update-all` dispatcher
-4. Antidote — reads `.zsh_plugins.txt`, generates/compiles `.zsh_plugins.zsh`, sources it
+4. Antidote — reads `.zsh_plugins.txt`, generates/compiles
+   `.zsh_plugins.zsh`, sources it
 
 Antidote sources entries in `.zsh_plugins.txt` in order. Each local plugin
 runs its own guard logic and conditionally defines
@@ -55,6 +56,8 @@ Order in `.zsh_plugins.txt` matters:
 ## Core Rules
 
 - 2-space indentation, LF endings, UTF-8, single blank lines.
+- Keep implementations minimal: avoid extra logic/state unless it delivers
+  clear, lasting user value.
 - Start plugin files with `# <tool> (<short description>): https://...`.
 - Quote scalars (`"$var"`); pass arrays as `"${array[@]}"`.
 - Use `[[ ... ]]`, `local`, `${1:?message}`, and `while IFS= read -r line`.
