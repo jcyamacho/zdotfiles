@@ -16,6 +16,30 @@ Antidote sources entries in `.zsh_plugins.txt` in order. Each local plugin
 runs its own guard logic and conditionally defines
 `install-*`/`uninstall-*`/`update-*` functions.
 
+### Antidote annotations
+
+Entries in `.zsh_plugins.txt` support these annotations:
+
+- `kind:defer` — defers sourcing until after prompt. Use for plugins
+  that only define functions/aliases. **Do not** defer plugins that
+  modify `$path`, register hooks (`add-zsh-hook`), or call
+  `source-cached-init` (their side effects must happen at load time).
+- `conditional:"exists <cmd>"` — loads only when `<cmd>` is present.
+  Used on OMZ companion plugins.
+- `path:plugins/<name>` — loads a sub-path from a remote repo (used
+  for OMZ plugins).
+
+### Load order rules
+
+Order in `.zsh_plugins.txt` matters:
+
+1. UX plugins first (autosuggestions, syntax highlighting) to avoid
+   visual flash on startup.
+2. Local plugin before its OMZ companion so the companion sees the
+   tool on `$path`.
+3. Dev-tool managers (e.g. mise) last — their activate hooks override
+   other plugins' shims and paths.
+
 ### Key helpers (`_utils.zsh`)
 
 - `exists <cmd>` — cached `$+commands` check (cleared on `reload`)
@@ -50,6 +74,9 @@ runs its own guard logic and conditionally defines
 - Check tool first, then package manager for lifecycle functions.
 - Use early return (`exists <pkg_mgr> || return`) only when the
   entire file depends on that package manager.
+- When a tool registers shell hooks (e.g. via `source-cached-init`),
+  define empty stub functions in the else-branch so other plugins
+  calling those hooks don't error.
 
 ### Lifecycle
 
@@ -66,23 +93,97 @@ runs its own guard logic and conditionally defines
 - Utility-only plugins may omit lifecycle functions.
 - List installable tools in root `README.md`; list utility
   plugins in the Utility Plugins section.
+- Brew-managed plugin skeleton:
+
+```zsh
+exists brew || return
+
+if exists tool; then
+  uninstall-tool() {
+    info "Uninstalling tool..."
+    command brew uninstall tool
+    reload
+  }
+else
+  install-tool() {
+    info "Installing tool..."
+    command brew install tool
+    reload
+  }
+fi
+```
+
+- Brew-optional plugin skeleton (tool works without brew, brew
+  used only for lifecycle):
+
+```zsh
+if exists tool; then
+  # tool config, aliases, functions here
+
+  if exists brew; then
+    uninstall-tool() {
+      info "Uninstalling tool..."
+      command brew uninstall tool
+      reload
+    }
+  fi
+elif exists brew; then
+  install-tool() {
+    info "Installing tool..."
+    command brew install tool
+    reload
+  }
+fi
+```
+
+- Self-managed plugin skeleton:
+
+```zsh
+if exists tool; then
+  source-cached-init tool init zsh   # omit if tool has no shell init
+
+  uninstall-tool() {
+    info "Uninstalling tool..."
+    command rm -f -- "$CUSTOM_TOOLS_DIR/tool"
+    clear-cached-init tool
+    reload
+  }
+
+  _update_tool() {
+    info "Updating tool..."
+    command tool self-update           # use tool's own upgrade command
+    clear-cached-init tool
+  }
+
+  update-tool() { _update_tool; reload }
+  updates+=(_update_tool)
+else
+  install-tool() {
+    info "Installing tool..."
+    _run_remote_installer "https://..." "sh" -- --bin-dir "$CUSTOM_TOOLS_DIR"
+    reload
+  }
+fi
+```
 
 ### General
 
 - Prefer `path=("$NEW_DIR" "${path[@]}")` with `typeset -gU path`
   for deduped prepends.
 - Disable tool telemetry when supported.
+- For constants that must survive `reload`, use the readonly guard
+  pattern: `(( $+_var )) || typeset -gr _var="value"`. The `$+`
+  check prevents reassignment errors on the readonly variable.
 
 ### File layout
 
 - **Simple** (`plugins/<tool>.zsh`): single file, brew guard,
-  conditional install/uninstall. See `fzf.zsh`.
+  conditional install/uninstall.
 - **Self-managed** (`plugins/<tool>.zsh`): binary in
   `$CUSTOM_TOOLS_DIR`, uses `source-cached-init`, registers in
-  `updates`. See `zoxide.zsh`.
+  `updates`.
 - **Complex** (`plugins/<tool>/<tool>.plugin.zsh` + `README.md`):
   subdirectory for plugins with configs or detailed docs.
-  See `starship/`, `direnv/`, `git-worktree/`.
 
 ## Adding a Plugin (Checklist)
 
