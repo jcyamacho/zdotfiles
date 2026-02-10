@@ -50,9 +50,14 @@ git-hook() {
 
   if [[ ! -f "$hook_file" ]]; then
     command mkdir -p -- "$hooks_dir"
-    builtin print -r -- '#!/bin/sh' > "$hook_file"
+    if [[ -f "$hook_file.sample" ]]; then
+      command cp -- "$hook_file.sample" "$hook_file"
+      info "Created $hook_file (from sample)"
+    else
+      builtin print -r -- '#!/bin/sh' > "$hook_file"
+      info "Created $hook_file"
+    fi
     command chmod +x -- "$hook_file"
-    info "Created $hook_file"
   fi
 
   edit "$hook_file"
