@@ -42,7 +42,7 @@ Place a script at `.git/post-pull.sh` in any repo to run it only when a pull bri
 
 ```sh
 # Install dependencies if lockfile changed
-if command git diff --name-only HEAD@{1} HEAD | command grep -q 'package-lock.json'; then
+if git diff --name-only HEAD@{1} HEAD | grep -q 'package-lock.json'; then
   npm install
 fi
 
