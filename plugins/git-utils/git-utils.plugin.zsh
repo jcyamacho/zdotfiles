@@ -1,40 +1,11 @@
 # git-utils (git helper functions for pulling repos): https://git-scm.com/docs
 
-# Pull a single repo with optional post-pull hook
-git-pull() {
-  local dir="${1:-$PWD}"
-
-  if [[ ! -d "$dir/.git" ]]; then
-    error "Not a git repository: $dir"
-    return 1
-  fi
-
-  local before_head after_head
-  before_head="$(command git -C "$dir" rev-parse HEAD 2>/dev/null || :)"
-
-  command git -C "$dir" pull --ff-only || return 1
-
-  after_head="$(command git -C "$dir" rev-parse HEAD 2>/dev/null || :)"
-
-  # Hook: run post-pull script only when new commits land
-  if [[ -n "$after_head" && "$before_head" != "$after_head" ]]; then
-    local hook_script="$dir/.git/post-pull.sh"
-    if [[ -f "$hook_script" ]]; then
-      info "Running post-pull hook..."
-      ( builtin cd "$dir" && source "$hook_script" ) || return 1
-    fi
-  fi
-
-  return 0
-}
-
-# Pull all repos in a directory (or current repo if in one)
 git-pull-all() {
   local base_dir="${1:-$PWD}"
 
   # If current dir is a git repo, just pull it
-  if [[ -d "$base_dir/.git" ]]; then
-    git-pull "$base_dir"
+  if command git -C "$base_dir" rev-parse --git-dir &>/dev/null; then
+    command git -C "$base_dir" pull --ff-only
     return
   fi
 
@@ -49,11 +20,11 @@ git-pull-all() {
   local dir
 
   for dir in "$base_dir"/*(N/); do
-    [[ -d "$dir/.git" ]] || continue
+    command git -C "$dir" rev-parse --git-dir &>/dev/null || continue
 
     builtin print -P "%F{cyan}->%f ${dir:t}"
 
-    git-pull "$dir" 2>&1 | command sed 's/^/  /'
+    command git -C "$dir" pull --ff-only 2>&1 | command sed 's/^/  /'
 
     builtin print ""
   done
@@ -61,4 +32,35 @@ git-pull-all() {
   info "Done."
 }
 
+git-hook() {
+  local hook_name="${1:?Usage: git-hook <hook-name>}"
+
+  command git rev-parse --git-dir &>/dev/null || {
+    error "Not a git repository."
+    return 1
+  }
+
+  # Respect core.hooksPath (set by husky, lefthook, etc.)
+  local hooks_dir="$(command git config core.hooksPath 2>/dev/null)"
+  if [[ -z "$hooks_dir" ]]; then
+    local common_git_dir="$(command git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+    hooks_dir="$common_git_dir/hooks"
+  fi
+  local hook_file="$hooks_dir/$hook_name"
+
+  if [[ ! -f "$hook_file" ]]; then
+    command mkdir -p -- "$hooks_dir"
+    builtin print -r -- '#!/bin/sh' > "$hook_file"
+    command chmod +x -- "$hook_file"
+    info "Created $hook_file"
+  fi
+
+  edit "$hook_file"
+}
+
 alias gpa="git-pull-all"
+alias ghk-pre-commit="git-hook pre-commit"
+alias ghk-commit-msg="git-hook commit-msg"
+alias ghk-post-merge="git-hook post-merge"
+alias ghk-post-checkout="git-hook post-checkout"
+alias ghk-pre-push="git-hook pre-push"

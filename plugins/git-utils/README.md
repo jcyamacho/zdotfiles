@@ -1,57 +1,43 @@
 # git-utils
 
-Git helper functions with hook support.
+Git helper functions.
 
 ## Functions
 
-| Function       | Alias | Description                                              |
-| -------------- | ----- | -------------------------------------------------------- |
-| `git-pull`     |       | Pull a single repo (fast-forward only) with hook support |
-| `git-pull-all` | `gpa` | Pull current repo or all repos in subdirectories         |
+| Function       | Alias               | Description                          |
+| -------------- | ------------------- | ------------------------------------ |
+| `git-pull-all` | `gpa`               | Pull current repo or all repos       |
+| `git-hook`     | `ghk-pre-commit`    | Create or edit a git hook by name    |
+|                | `ghk-commit-msg`    |                                      |
+|                | `ghk-post-merge`    |                                      |
+|                | `ghk-post-checkout` |                                      |
+|                | `ghk-pre-push`      |                                      |
 
 ## Usage
 
 ```zsh
 # Pull current repo
-git-pull
+gpa
 
 # Pull a specific repo
-git-pull ~/code/my-project
+gpa ~/code/my-project
 
 # Pull all repos in current directory
-git-pull-all
-
-# Pull all repos in a specific directory
-git-pull-all ~/code
+gpa ~/code
 ```
 
 ## Why `--ff-only`?
 
-Both functions use `git pull --ff-only` for safety:
+`gpa` uses `git pull --ff-only` for safety:
 
 - **Success** = clean fast-forward, no surprises
 - **Failure** = local commits diverge from remote, needs manual attention
 
-This prevents accidental merge commits when batch-pulling multiple repos.
+This prevents accidental merge commits when batch-pulling multiple
+repos.
 
-## Hook
-
-Place a script at `.git/post-pull.sh` in any repo to run it only when a pull brings new commits.
-
-**Example** (`.git/post-pull.sh`):
-
-```sh
-# Install dependencies if lockfile changed
-if git diff --name-only HEAD@{1} HEAD | grep -q 'package-lock.json'; then
-  npm install
-fi
-
-# Run migrations
-npm run db:migrate
-```
-
-The hook:
-
-- Runs in a subshell (won't affect your current shell)
-- Only runs when a successful pull advances `HEAD`
-- Stays local (inside `.git/`, not committed)
+For post-pull automation (installing deps, running migrations, etc.),
+use Git's native
+[`post-merge`](https://git-scm.com/docs/githooks#_post_merge)
+hook. It fires automatically after any successful `git pull`.
+Use `git-hook post-merge` to create or edit it.
