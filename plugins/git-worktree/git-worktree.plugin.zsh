@@ -1,20 +1,60 @@
 # git-worktree (helpers for managing git worktrees): https://git-scm.com/docs/git-worktree
 
+alias gwt="git-worktree-new"
 alias gwt-new="git-worktree-new"
 alias gwt-delete="git-worktree-delete"
 alias gwt-rm="git-worktree-delete"
 alias gwt-ls="command git worktree list"
 alias gwt-prune="command git worktree prune"
 
+# Detect the default branch name from origin.
+# IMPORTANT: Do NOT change the primary detection strategy (see below).
+_gwt_default_branch() {
+  # Strategy 1: query the remote directly (most reliable).
+  # This returns the actual HEAD branch configured on the remote, regardless
+  # of local state. Requires network access.
+  local default_branch
+  default_branch="$(command git remote show origin 2>/dev/null \
+    | command grep 'HEAD branch' | command awk '{print $NF}')"
+
+  # Strategy 2: read the local cached ref (offline-safe).
+  # Set by `git clone` or `git remote set-head`. Can be stale or missing
+  # if the remote HEAD changed since the last clone/fetch.
+  if [[ -z "$default_branch" ]]; then
+    default_branch="$(command git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)"
+    default_branch="${default_branch#origin/}"
+  fi
+
+  # Strategy 3: hardcoded fallback.
+  builtin print -r -- "${default_branch:-main}"
+}
+
+_gwt_run_setup_hooks() {
+  local common_git_dir
+  common_git_dir="$(command git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || return 0
+  local repo_root="${common_git_dir:h}"
+  local local_setup="$common_git_dir/setup-worktree.sh"
+  local codex_setup="$repo_root/.codex/setup.sh"
+
+  export ROOT_WORKTREE_PATH="$repo_root"
+  if [[ -f "$local_setup" ]]; then
+    info "Running local setup script: $local_setup"
+    source "$local_setup"
+  elif [[ -f "$codex_setup" ]]; then
+    info "Running Codex setup script: $codex_setup"
+    source "$codex_setup"
+  else
+    builtin print ""
+    info "Hook system: No setup script found. You can place a setup script at:"
+    info "  - $local_setup"
+    info "The environment variable \$ROOT_WORKTREE_PATH will be available."
+  fi
+  unset ROOT_WORKTREE_PATH
+}
+
 git-worktree-new() {
   local branch_name="${1:?Usage: gwt-new <branch-name>}"
   local base_ref="${2:-}"
-
-  # Check if branch already exists
-  if command git show-ref --verify --quiet "refs/heads/$branch_name"; then
-    error "Branch '$branch_name' already exists. Use a different name or delete it first."
-    return 1
-  fi
 
   local repo_root
   repo_root="$(command git rev-parse --show-toplevel 2>/dev/null)" || {
@@ -22,52 +62,41 @@ git-worktree-new() {
     return 1
   }
 
-  local actual_repo_name="${repo_root:t}"
+  local worktree_name="${branch_name//\//-}"
+  local worktree_path="${GIT_WORKTREE_BASE:-${repo_root:h}}/${repo_root:t}-${worktree_name}"
 
-  if [[ -z "$base_ref" ]]; then
-    # Get default branch from origin (most reliable)
-    local default_branch
-    default_branch="$(command git remote show origin 2>/dev/null | command grep 'HEAD branch' | command awk '{print $NF}')"
-    : "${default_branch:=main}"
+  if command git show-ref --verify --quiet "refs/heads/$branch_name"; then
+    # Local branch exists -- attach a worktree to it
+    [[ -n "$base_ref" ]] && warn "Ignoring base ref '$base_ref': local branch '$branch_name' already exists."
+    info "Creating worktree at '$worktree_path' for local branch '$branch_name'..."
+    command git worktree add "$worktree_path" "$branch_name" || return 1
 
-    info "Fetching latest '$default_branch' from origin..."
-    command git fetch origin "$default_branch:$default_branch" 2>/dev/null || command git fetch origin "$default_branch"
+  elif command git fetch origin "$branch_name" 2>/dev/null \
+    && command git show-ref --verify --quiet "refs/remotes/origin/$branch_name"; then
+    # Remote branch exists -- worktree will create a local tracking branch
+    [[ -n "$base_ref" ]] && warn "Ignoring base ref '$base_ref': remote branch '$branch_name' already exists."
+    info "Creating worktree at '$worktree_path' for remote branch '$branch_name'..."
+    command git worktree add "$worktree_path" "$branch_name" || return 1
 
-    base_ref="origin/$default_branch"
+  else
+    # New branch -- resolve base_ref from origin's default branch
+    if [[ -z "$base_ref" ]]; then
+      local default_branch="$(_gwt_default_branch)"
+
+      info "Fetching latest '$default_branch' from origin..."
+      command git fetch origin "$default_branch"
+
+      base_ref="origin/$default_branch"
+    fi
+
+    info "Creating worktree at '$worktree_path' with new branch from '$base_ref'..."
+    command git worktree add -b "$branch_name" "$worktree_path" "$base_ref" || return 1
+    command git -C "$worktree_path" branch --unset-upstream 2>/dev/null || :
   fi
 
-  local worktree_name="${branch_name//\//-}"
-  local worktree_path="${GIT_WORKTREE_BASE:-${repo_root:h}}/${actual_repo_name}-${worktree_name}"
-
-  info "Creating worktree at '$worktree_path' branched from '$base_ref'..."
-  command git worktree add -b "$branch_name" "$worktree_path" "$base_ref" || return 1
-
-  # Remove inherited upstream tracking so branch behaves like a regular new branch
-  command git -C "$worktree_path" branch --unset-upstream 2>/dev/null || :
-
-  # Change to the new worktree directory in the current shell
   builtin cd "$worktree_path" || return 1
 
-  # Hook system: run setup script if it exists
-  local common_git_dir="$(command git rev-parse --git-common-dir 2>/dev/null)"
-  local local_setup="$common_git_dir/setup-worktree.sh"
-  local repo_setup="$repo_root/.git-setup-worktree.sh"
-
-  export ROOT_WORKTREE_PATH="$repo_root"
-  if [[ -f "$local_setup" ]]; then
-    info "Running local setup script: $local_setup"
-    source "$local_setup"
-  elif [[ -f "$repo_setup" ]]; then
-    info "Running repo setup script: $repo_setup"
-    source "$repo_setup"
-  else
-    builtin print ""
-    info "Hook system: No setup script found. You can place a setup script at:"
-    info "  - $local_setup (local only)"
-    info "  - $repo_setup (shared in repo)"
-    info "The environment variable \$ROOT_WORKTREE_PATH will be available."
-  fi
-  unset ROOT_WORKTREE_PATH
+  _gwt_run_setup_hooks
 
   builtin print ""
   info "Now in worktree '${PWD:t}'."
@@ -96,8 +125,7 @@ git-worktree-delete() {
     return 1
   fi
 
-  local branch_name
-  branch_name="$(command git -C "$selected_worktree_path" symbolic-ref --quiet --short HEAD 2>/dev/null || :)"
+  local branch_name="$(command git -C "$selected_worktree_path" symbolic-ref --quiet --short HEAD 2>/dev/null || :)"
 
   info "Removing worktree at $selected_worktree_path"
   command git worktree remove "$selected_worktree_path" || return 1
