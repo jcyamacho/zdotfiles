@@ -59,10 +59,53 @@ gwt-prune
 
 Worktrees are named `<repo>-<branch>` (slashes in branch names become dashes).
 
-## Setup Hook
+## Post-Create Sequence
 
-After creating a worktree, `gwt` looks for a setup script to
-bootstrap the environment (install dependencies, copy configs, etc.):
+After `git worktree add` completes (and Git's own `post-checkout`
+hook runs), `gwt` performs these steps in order:
+
+| Step | What                          | Source                              |
+| ---- | ----------------------------- | ----------------------------------- |
+| 1    | Copy `.worktreeinclude` files | `<repo>/.worktreeinclude`           |
+| 2    | Run setup script              | `$GIT_COMMON_DIR/setup-worktree.sh` |
+| 3    | Run setup script (fallback)   | `<repo>/.codex/setup.sh`            |
+
+Steps 2 and 3 are mutually exclusive -- the first script found wins.
+Step 1 always runs (no-op if the file doesn't exist).
+
+### .worktreeinclude
+
+A `.worktreeinclude` file in the project root lists files and
+directories that should be copied from the main worktree into new
+ones. This is useful for gitignored files that aren't checked out
+automatically (`.env`, local configs, etc.).
+
+Existing files in the new worktree are never overwritten -- tracked
+files checked out by Git are always preserved.
+
+**Format:** one pattern per line, zsh glob syntax, `#` for comments.
+
+```gitignore
+# Environment
+.env
+.env.local
+
+# Local editor config
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Dependencies (can be slow for large directories)
+node_modules
+```
+
+> Compatible with [Claude Code Desktop](https://code.claude.com/docs/en/desktop)'s
+> `.worktreeinclude` convention. Negation patterns (`!pattern`) are not
+> supported and will produce a warning.
+
+### Setup scripts
+
+Setup scripts run after `.worktreeinclude` files are copied, so
+they can use those files (e.g., read `.env`).
 
 | Priority | Location                            | Scope              |
 | -------- | ----------------------------------- | ------------------ |
@@ -75,9 +118,6 @@ worktree while the script runs.
 **Example** (`setup-worktree.sh`):
 
 ```sh
-# Copy environment from main worktree
-cp "$ROOT_WORKTREE_PATH/.env" .env
-
 # Install dependencies
 npm install
 

@@ -29,12 +29,57 @@ _gwt_default_branch() {
   builtin print -r -- "${default_branch:-main}"
 }
 
+# Copy gitignored files listed in .worktreeinclude from the main worktree.
+# Git's post-checkout hook handles actions (npm install, etc.) but has no
+# declarative way to copy files. .worktreeinclude fills that gap.
+# Compatible with Claude Code Desktop's convention.
+_gwt_copy_worktreeinclude() {
+  local repo_root="${1:?}"
+  local include_file="$repo_root/.worktreeinclude"
+  [[ -f "$include_file" ]] || return 0
+
+  local -a patterns=()
+  while IFS= read -r line; do
+    line="${line## }"
+    line="${line%% }"
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    if [[ "$line" == \!* ]]; then
+      warn "worktreeinclude: negation patterns not supported, skipping: $line"
+      continue
+    fi
+    patterns+=("$line")
+  done < "$include_file"
+
+  (( ${#patterns} )) || return 0
+
+  local pattern
+  for pattern in "${patterns[@]}"; do
+    local -a matches=("$repo_root"/${~pattern}(N))
+    local match
+    for match in "${matches[@]}"; do
+      local rel="${match#$repo_root/}"
+      local dest="$PWD/$rel"
+      if [[ -d "$match" ]]; then
+        command mkdir -p -- "$dest"
+        command cp -Rn -- "$match/." "$dest/" 2>/dev/null
+        info "worktreeinclude: copied $rel/"
+      elif [[ -f "$match" && ! -e "$dest" ]]; then
+        command mkdir -p -- "${dest:h}"
+        command cp -n -- "$match" "$dest" 2>/dev/null
+        info "worktreeinclude: copied $rel"
+      fi
+    done
+  done
+}
+
 _gwt_run_setup_hooks() {
   local common_git_dir
   common_git_dir="$(command git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || return 0
   local repo_root="${common_git_dir:h}"
   local local_setup="$common_git_dir/setup-worktree.sh"
   local codex_setup="$repo_root/.codex/setup.sh"
+
+  _gwt_copy_worktreeinclude "$repo_root"
 
   export ROOT_WORKTREE_PATH="$repo_root"
   if [[ -f "$local_setup" ]]; then
@@ -45,9 +90,10 @@ _gwt_run_setup_hooks() {
     source "$codex_setup"
   else
     builtin print ""
-    info "Hook system: No setup script found. You can place a setup script at:"
-    info "  - $local_setup"
-    info "The environment variable \$ROOT_WORKTREE_PATH will be available."
+    info "No setup script found. You can:"
+    info "  - Place a setup script at: $local_setup"
+    info "  - Create a .worktreeinclude file to copy gitignored files."
+    info "The environment variable \$ROOT_WORKTREE_PATH will be available in setup scripts."
   fi
   unset ROOT_WORKTREE_PATH
 }
