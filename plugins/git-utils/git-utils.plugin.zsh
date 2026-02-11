@@ -57,7 +57,7 @@ git-hook() {
       builtin print -r -- '#!/bin/sh' > "$hook_file"
       info "Created $hook_file"
     fi
-    command chmod +x -- "$hook_file"
+    command chmod +x "$hook_file"
   fi
 
   edit "$hook_file"
