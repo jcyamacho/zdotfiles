@@ -4,16 +4,24 @@ Python helpers powered by uv, virtualenv convenience, and tool installers.
 
 ## Helpers (require `python3` on PATH)
 
-| Function           | Alias | Description                                  |
-| ------------------ | ----- | -------------------------------------------- |
-| `py`               |       | Alias for `python3`                          |
-| `pyclean`          |       | Remove common Python cache dirs and files    |
-| `venv`             |       | Activate `.venv` or `venv` in the cwd        |
-| `pytest`           |       | Activate venv (if present), then run pytest  |
-| `enable-venv-hook` |       | Auto-activate venv on directory change       |
+| Function           | Description                               |
+| ------------------ | ----------------------------------------- |
+| `py`               | Alias for `python3`                       |
+| `pyclean`          | Remove common Python cache dirs and files |
+| `venv`             | Activate `.venv` or `venv` in the cwd     |
+| `enable-venv-hook` | Auto-activate venv on directory change    |
 
 To enable the directory-change hook, add `enable-venv-hook` to your
 `~/.zshrc` (opt-in).
+
+## Workflow helpers (require `uv` on PATH)
+
+| Function    | Description                                                    |
+| ----------- | -------------------------------------------------------------- |
+| `venv-sync` | Create/sync venv using uv (supports uv.lock and legacy repos)  |
+
+Set `VENV_DIR` to override the default `.venv` directory.
+Set `PYTHON_VERSION` to pin a specific Python version.
 
 ## Install/update helpers (require `uv` on PATH)
 

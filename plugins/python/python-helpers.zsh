@@ -25,18 +25,7 @@ if exists python3; then
     return 0
   }
 
-  pytest() {
-    venv
-    info "Running pytest..."
-    command pytest "$@"
+  enable-venv-hook() {
+    add-zsh-hook chpwd venv
   }
 fi
-
-enable-venv-hook() {
-  _python_hook_venv() {
-    (( $+functions[venv] )) || return 0
-    venv 2>/dev/null
-  }
-
-  add-zsh-hook chpwd _python_hook_venv
-}
