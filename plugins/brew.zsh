@@ -4,7 +4,7 @@ export HOMEBREW_NO_ANALYTICS=1
 
 exists brew || {
   info "Installing brew..."
-  _run_remote_installer "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" "bash" --env "NONINTERACTIVE=1"
+  _run_remote_installer "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" "bash"
   reload
 }
 
