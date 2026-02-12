@@ -29,6 +29,7 @@ if exists go; then
       command brew uninstall go
 
       info "Removing $GOPATH..."
+      command go clean -modcache
       command rm -rf -- "$GOPATH"
 
       reload
