@@ -2,11 +2,6 @@ getantidote/use-omz
 
 $ZDOTFILES_DIR/plugins/starship
 
-# UX plugins - load early to avoid visual flash/input lag
-zsh-users/zsh-autosuggestions
-z-shell/F-Sy-H
-MichaelAquilina/zsh-you-should-use
-
 ohmyzsh/ohmyzsh path:plugins/git
 $ZDOTFILES_DIR/plugins/git-utils
 $ZDOTFILES_DIR/plugins/git-worktree
@@ -97,3 +92,8 @@ $ZDOTFILES_DIR/plugins/atuin.zsh
 
 # mise must be loaded last to override other plugins behaviors
 $ZDOTFILES_DIR/plugins/mise.zsh
+
+# UX plugins
+zsh-users/zsh-autosuggestions
+z-shell/F-Sy-H
+MichaelAquilina/zsh-you-should-use
