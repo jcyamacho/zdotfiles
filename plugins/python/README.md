@@ -48,8 +48,8 @@ venv
 # Auto-activate on directory change
 enable-venv-hook
 
-# Run pytest inside the venv (if present)
-pytest
+# Sync venv from uv.lock or requirements.txt
+venv-sync
 
 # Clean caches from current directory
 pyclean

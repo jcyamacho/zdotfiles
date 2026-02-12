@@ -63,6 +63,42 @@ if exists uv; then
 
   alias uninstall-python="uninstall-uv"
 
+  function venv-sync {
+    local python_flag=()
+    if [[ -n "${PYTHON_VERSION:-}" ]]; then
+      python_flag=(--python "$PYTHON_VERSION")
+    fi
+    local venv_dir=${VENV_DIR:-".venv"}
+
+    (( $+functions[deactivate] )) && deactivate
+
+    # skip non-python projects
+    if [[ ! -f pyproject.toml ]]; then
+      warn "No Python project found."
+      return
+    fi
+
+    # uv project
+    if [[ -f uv.lock ]]; then
+      UV_PROJECT_ENVIRONMENT="$venv_dir" command uv sync "${python_flag[@]}"
+      builtin source "${venv_dir}/bin/activate"
+      return
+    fi
+
+    # legacy repos
+    if [[ ! -d "$venv_dir" ]]; then
+      command uv venv "$venv_dir" "${python_flag[@]}" --seed
+    fi
+
+    builtin source "${venv_dir}/bin/activate"
+
+    if [[ -f requirements-dev.txt ]]; then
+      command uv pip install -r requirements-dev.txt
+    elif [[ -f requirements.txt ]]; then
+      command uv pip install -r requirements.txt
+    fi
+  }
+
   updates+=(_update_uv)
 else
   alias install-python="install-uv"
