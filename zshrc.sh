@@ -10,10 +10,14 @@ export ZDOTFILES_DIR="${ZDOTFILES_DIR:-$HOME/.zdotfiles}"
 # CACHE
 export ZDOTFILES_CACHE_DIR="${ZDOTFILES_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zdotfiles}"
 [[ -d "$ZDOTFILES_CACHE_DIR" ]] || command mkdir -p -- "$ZDOTFILES_CACHE_DIR"
+
+export ZDOTFILES_COMPLETIONS_DIR="${ZDOTFILES_COMPLETIONS_DIR:-$ZDOTFILES_CACHE_DIR/completions}"
+[[ -d "$ZDOTFILES_COMPLETIONS_DIR" ]] || command mkdir -p -- "$ZDOTFILES_COMPLETIONS_DIR"
 # CACHE end
 
 typeset -gU path
 typeset -gU fpath
+fpath=("$ZDOTFILES_COMPLETIONS_DIR" "${fpath[@]}")
 
 # CUSTOM_TOOLS_DIR
 export CUSTOM_TOOLS_DIR="${CUSTOM_TOOLS_DIR:-$HOME/.local/bin}"

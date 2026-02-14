@@ -56,6 +56,30 @@ source-cached-init() {
   builtin source "$cache"
 }
 
+# Caches the output of `cmd args...` as a #compdef completion file on fpath.
+# Regenerates when the tool binary is newer than the cache.
+# Usage: cache-completion <cmd> [args...]
+#   e.g., cache-completion zellij setup --generate-completion zsh
+cache-completion() {
+  local cmd=${1:?cache-completion: missing command}
+  shift
+  local cache="${ZDOTFILES_COMPLETIONS_DIR}/_${cmd}"
+  local cmd_path=${commands[$cmd]:-}
+
+  # Regenerate if missing or tool binary is newer
+  if [[ ! -s "$cache" || ( -n "$cmd_path" && "$cmd_path" -nt "$cache" ) ]]; then
+    local tmp
+    tmp="$(command mktemp "${cache}.XXXXXX")"
+    command "$cmd" "$@" >| "$tmp" || :
+    if [[ -s "$tmp" ]]; then
+      command mv -f -- "$tmp" "$cache"
+    else
+      command rm -f -- "$tmp"
+      return 1
+    fi
+  fi
+}
+
 _run_remote_installer() {
   local url="${1:?_run_remote_installer: missing url}"
   local shell="${2:-sh}"
@@ -92,16 +116,6 @@ _run_remote_installer() {
   command rm -f -- "$tmp"
   trap - EXIT INT TERM
   return $exit_status
-}
-
-clear-cached-init() {
-  local cmd=${1:?clear-cached-init: missing command}
-  local cache="${ZDOTFILES_CACHE_DIR}/${cmd}-init.zsh"
-  command rm -f -- "$cache" "${cache}.zwc" 2>/dev/null
-}
-
-clear-all-cached-init() {
-  command rm -f -- "${ZDOTFILES_CACHE_DIR}/"*-init.zsh(N) "${ZDOTFILES_CACHE_DIR}/"*-init.zsh.zwc(N) 2>/dev/null
 }
 
 is-macos() {
