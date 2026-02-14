@@ -6,14 +6,12 @@ if exists mise; then
   uninstall-mise() {
     info "Uninstalling mise..."
     command mise implode --yes
-    clear-cached-init mise
     reload
   }
 
   _update_mise() {
     info "Updating mise..."
     command mise self-update --yes
-    clear-cached-init mise
   }
 
   update-mise() {

@@ -9,7 +9,6 @@ if exists carapace; then
     uninstall-carapace() {
       info "Uninstalling carapace..."
       command brew uninstall carapace
-      clear-cached-init carapace
       reload
     }
   fi

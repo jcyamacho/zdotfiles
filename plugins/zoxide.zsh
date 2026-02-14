@@ -11,14 +11,12 @@ if exists zoxide; then
   uninstall-zoxide() {
     info "Uninstalling zoxide..."
     command rm -f -- "$CUSTOM_TOOLS_DIR/zoxide"
-    clear-cached-init zoxide
     reload
   }
 
   _update_zoxide() {
     info "Updating zoxide..."
     _install_zoxide
-    clear-cached-init zoxide
   }
 
   alias update-z="update-zoxide"
@@ -33,7 +31,6 @@ else
   install-zoxide() {
     info "Installing zoxide..."
     _install_zoxide
-    clear-cached-init zoxide
     reload
   }
 fi

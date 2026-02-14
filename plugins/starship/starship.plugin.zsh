@@ -12,7 +12,6 @@ update-starship() {
 _update_starship() {
   info "Updating starship..."
   _run_remote_installer "https://starship.rs/install.sh" "sh" -- --yes --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
-  clear-cached-init starship
 }
 
 updates+=(_update_starship)

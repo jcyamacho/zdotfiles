@@ -27,7 +27,6 @@ if exists fnm; then
   uninstall-fnm() {
     command brew uninstall fnm
     command rm -rf -- "$HOME/.local/state/fnm_multishells"
-    clear-cached-init fnm
     reload
   }
 
@@ -43,9 +42,7 @@ if exists fnm; then
 
   update-node() {
     info "Updating Node.js..."
-    if _update_node; then
-      clear-cached-init fnm
-    fi
+    _update_node
   }
 
   updates+=(update-node)

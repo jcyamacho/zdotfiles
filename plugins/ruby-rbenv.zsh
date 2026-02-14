@@ -40,7 +40,6 @@ if exists rbenv; then
       info "Uninstalling rbenv..."
       command brew uninstall rbenv
       command rm -rf -- "$HOME/.rbenv"
-      clear-cached-init rbenv
       reload
     }
   fi
@@ -49,7 +48,6 @@ elif exists brew; then
   install-rbenv() {
     info "Installing rbenv..."
     command brew install rbenv
-    clear-cached-init rbenv
     _update_ruby
     reload
   }

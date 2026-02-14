@@ -17,16 +17,13 @@ if [[ -d "$_atuin_bin_dir" ]]; then
     info "Uninstalling atuin..."
     command rm -rf -- "$_atuin_dir"
     command rm -rf -- "$HOME/.local/share/atuin"
-    clear-cached-init atuin
     reload
   }
 
   _update_atuin() {
     info "Updating atuin..."
     _lock_zshrc
-    if command atuin update; then
-      clear-cached-init atuin
-    fi
+    command atuin update
     _unlock_zshrc
   }
 

@@ -18,14 +18,12 @@ if exists direnv; then
     info "Uninstalling direnv..."
     command rm -f -- "$CUSTOM_TOOLS_DIR/direnv"
     command rm -rf -- "$DIRENV_CONFIG_DIR"
-    clear-cached-init direnv
     reload
   }
 
   _update_direnv() {
     info "Updating direnv..."
     _install_direnv
-    clear-cached-init direnv
   }
 
   update-direnv() {
@@ -42,7 +40,6 @@ else
   install-direnv() {
     info "Installing direnv..."
     _install_direnv
-    clear-cached-init direnv
     reload
   }
 
