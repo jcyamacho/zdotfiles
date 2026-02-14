@@ -1,6 +1,8 @@
 getantidote/use-omz
 
-$ZDOTFILES_DIR/plugins/starship
+romkatv/powerlevel10k conditional:"[[ $ZSH_PROMPT == p10k ]]"
+$ZDOTFILES_DIR/plugins/powerlevel10k conditional:"[[ $ZSH_PROMPT == p10k ]]"
+$ZDOTFILES_DIR/plugins/starship conditional:"[[ $ZSH_PROMPT == starship ]]"
 
 ohmyzsh/ohmyzsh path:plugins/git
 $ZDOTFILES_DIR/plugins/git-utils

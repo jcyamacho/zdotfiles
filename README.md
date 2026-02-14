@@ -1,6 +1,6 @@
 # ZDOTFILES
 
-Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) for plugins and [Starship](https://starship.rs) for the prompt. Everything is driven by a single `zshrc.sh` so you can drop it into any machine quickly.
+Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) for plugins and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) for the prompt. Everything is driven by a single `zshrc.sh` so you can drop it into any machine quickly.
 
 ## Install
 
@@ -20,14 +20,36 @@ Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) 
 
 - Keep the repo elsewhere by setting `ZDOTFILES_DIR` before sourcing.
 - Change the editor used by helper commands by exporting `EDITOR`.
-- Adjust where tools like Starship install by overriding `CUSTOM_TOOLS_DIR`.
+- Adjust where self-managed tools install by overriding `CUSTOM_TOOLS_DIR`.
+- Switch prompt theme with `ZSH_PROMPT` (see below).
 - Set `GIT_WORKTREE_BASE` to change where `gwt-new` creates worktrees (see [git-worktree](plugins/git-worktree/README.md)).
+
+### Prompt theme (`ZSH_PROMPT`)
+
+Set `ZSH_PROMPT` **before** sourcing `zshrc.sh` to choose the prompt:
+
+| Value      | Theme                                                               |
+| ---------- | ------------------------------------------------------------------- |
+| `p10k`     | [Powerlevel10k](https://github.com/romkatv/powerlevel10k) (default) |
+| `starship` | [Starship](https://starship.rs)                                     |
+
+```sh
+# In ~/.zshrc, before the source line:
+export ZSH_PROMPT=starship
+source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
+```
+
+Powerlevel10k uses instant prompt for near-zero first-prompt lag and
+async git status for fast command lag. Starship is cross-shell but
+slower due to fork+exec on every prompt. See
+[powerlevel10k](plugins/powerlevel10k/README.md) and
+[starship](plugins/starship/README.md) for per-theme details.
 
 ## Plugins
 
 Antidote reads `.zsh_plugins.txt` and builds a static `.zsh_plugins.zsh`. The default setup enables:
 
-- **Always-on shell UX**: Starship prompt, `zsh-autosuggestions`, syntax highlighting (`F-Sy-H`), and “you-should-use”.
+- **Always-on shell UX**: prompt theme (see above), `zsh-autosuggestions`, syntax highlighting (`F-Sy-H`), and “you-should-use”.
 - **Oh My Zsh helpers + curated plugins**: pulls in OMZ core helpers plus plugins like `git` and `brew`.
 - **Local plugin helpers**: small `plugins/*` scripts that add `install-*`, `update-*`, `uninstall-*`, and `*-config` helpers.
 
