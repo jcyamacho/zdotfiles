@@ -10,8 +10,7 @@ _zellij_copy_layouts() {
 }
 
 if exists zellij; then
-  # Completions must be deferred - they call _arguments which only works in completion context
-  zsh-defer source-cached-init zellij setup --generate-completion zsh
+  cache-completion zellij setup --generate-completion zsh
 
   alias zj="zellij"
 
@@ -43,7 +42,6 @@ if exists zellij; then
       info "Uninstalling zellij..."
       command brew uninstall zellij
       command rm -rf -- "$ZELLIJ_CONFIG_DIR"
-      clear-cached-init zellij
       reload
     }
   fi

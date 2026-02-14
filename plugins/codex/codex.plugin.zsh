@@ -4,7 +4,7 @@ export CODEX_PROMPTS_DIR="$CODEX_HOME/prompts"
 export CODEX_SECURE_MODE=1
 
 if exists codex; then
-  source-cached-init codex completion zsh
+  cache-completion codex completion zsh
 
   cdx() {
     command codex --search --sandbox workspace-write --ask-for-approval on-request "$@"
