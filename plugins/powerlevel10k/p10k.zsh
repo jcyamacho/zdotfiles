@@ -280,7 +280,7 @@
   typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=off
 
   # ======================== Hot reload ===================================
-
-  (( ${#p10k_config_opts} )) && setopt ${p10k_config_opts[@]}
-  'builtin' 'unset' 'p10k_config_opts'
 }
+
+(( ${#p10k_config_opts} )) && setopt ${p10k_config_opts[@]}
+'builtin' 'unset' 'p10k_config_opts'
