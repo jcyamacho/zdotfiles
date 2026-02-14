@@ -23,8 +23,11 @@ runs its own guard logic and conditionally defines
 
 Entries in `.zsh_plugins.txt` support these annotations:
 
-- `conditional:"exists <cmd>"` — loads only when `<cmd>` is present.
-  Used on OMZ companion plugins.
+- `conditional:"<expr>"` — wraps the entry in `if <expr>; then ... fi`
+  in the generated `.zsh_plugins.zsh`. The expression is pasted
+  verbatim as the `if` condition. Any valid shell expression works:
+  - `conditional:"exists <cmd>"` — loads only when `<cmd>` is present.
+  - `conditional:"[[ $VAR == value ]]"` — loads based on a variable.
 - `path:plugins/<name>` — loads a sub-path from a remote repo (used
   for OMZ plugins).
 
