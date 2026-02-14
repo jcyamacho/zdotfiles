@@ -19,7 +19,7 @@ $ZDOTFILES_DIR/plugins/bat.zsh
 $ZDOTFILES_DIR/plugins/bun.zsh
 ohmyzsh/ohmyzsh path:plugins/bun conditional:"exists bun"
 
-$ZDOTFILES_DIR/plugins/cloudflare.zsh kind:defer
+$ZDOTFILES_DIR/plugins/cloudflare.zsh
 
 $ZDOTFILES_DIR/plugins/code.zsh
 
@@ -35,9 +35,9 @@ $ZDOTFILES_DIR/plugins/direnv
 $ZDOTFILES_DIR/plugins/docker.zsh
 ohmyzsh/ohmyzsh path:plugins/docker conditional:"exists docker"
 
-$ZDOTFILES_DIR/plugins/fabric.zsh kind:defer
+$ZDOTFILES_DIR/plugins/fabric.zsh
 
-$ZDOTFILES_DIR/plugins/fonts.zsh kind:defer
+$ZDOTFILES_DIR/plugins/fonts.zsh
 
 $ZDOTFILES_DIR/plugins/golang
 ohmyzsh/ohmyzsh path:plugins/golang conditional:"exists go"
@@ -64,7 +64,7 @@ $ZDOTFILES_DIR/plugins/zig.zsh
 
 $ZDOTFILES_DIR/plugins/zoxide.zsh
 
-$ZDOTFILES_DIR/plugins/gemini-cli.zsh kind:defer
+$ZDOTFILES_DIR/plugins/gemini-cli.zsh
 
 $ZDOTFILES_DIR/plugins/codex
 
@@ -72,11 +72,11 @@ $ZDOTFILES_DIR/plugins/ghostty
 
 $ZDOTFILES_DIR/plugins/wezterm
 
-$ZDOTFILES_DIR/plugins/claude-code.zsh kind:defer
+$ZDOTFILES_DIR/plugins/claude-code.zsh
 
 $ZDOTFILES_DIR/plugins/lsd.zsh
 
-$ZDOTFILES_DIR/plugins/yazi kind:defer
+$ZDOTFILES_DIR/plugins/yazi
 
 $ZDOTFILES_DIR/plugins/opencode.zsh
 
