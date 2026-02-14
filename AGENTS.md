@@ -7,7 +7,9 @@ Prioritize secure, fast startup and minimal diffs.
 
 `zshrc.sh` is sourced by `~/.zshrc` and bootstraps in order:
 
-1. Cache dir (`$ZDOTFILES_CACHE_DIR`) and `$CUSTOM_TOOLS_DIR` on `$path`
+1. Cache dir (`$ZDOTFILES_CACHE_DIR`), completions dir
+   (`$ZDOTFILES_COMPLETIONS_DIR` on `$fpath`), and `$CUSTOM_TOOLS_DIR`
+   on `$path`
 2. `_utils.zsh` — shared helpers (see below)
 3. The `updates` array and `update-all` dispatcher
 4. Antidote — reads `.zsh_plugins.txt`, generates/compiles
@@ -21,10 +23,6 @@ runs its own guard logic and conditionally defines
 
 Entries in `.zsh_plugins.txt` support these annotations:
 
-- `kind:defer` — defers sourcing until after prompt. Use for plugins
-  that only define functions/aliases. **Do not** defer plugins that
-  modify `$path`, register hooks (`add-zsh-hook`), or call
-  `source-cached-init` (their side effects must happen at load time).
 - `conditional:"exists <cmd>"` — loads only when `<cmd>` is present.
   Used on OMZ companion plugins.
 - `path:plugins/<name>` — loads a sub-path from a remote repo (used
@@ -49,10 +47,15 @@ Order in `.zsh_plugins.txt` matters:
   - Use only when output is deterministic/static across sessions.
   - Do not cache commands that emit per-session values (PID,
     timestamps, temp paths). Example: do not cache `fnm env --shell zsh`.
+  - Do not use for `#compdef` completion scripts; use
+    `cache-completion` instead.
+- `cache-completion <cmd> <args...>` — caches `#compdef` completion
+  output to `$ZDOTFILES_CACHE_DIR/completions/_<cmd>` and adds it to
+  `fpath`; regenerates when binary is newer. Use instead of
+  `source-cached-init` when the tool outputs a `#compdef` file
+  (completion functions that use `_arguments`).
 - `_run_remote_installer <url> [shell] [--env K=V]... [-- args...]` —
   secure download-and-run with `~/.zshrc` write-lock
-- `clear-cached-init <cmd>` / `clear-all-cached-init` — invalidate
-  cached init files
 - `info`, `warn`, `error` — colored output helpers
 - `reload` — clear `exists` cache and re-source `zshrc.sh`
 
@@ -71,6 +74,9 @@ Order in `.zsh_plugins.txt` matters:
   with `command`/`builtin` to bypass aliases.
 - Prefer zsh native expansion over subshells/pipes for simple transforms.
 - Use `command mkdir -p -- "$dir"` and `command rm -f -- "$path"`.
+- Never use `kind:defer` in `.zsh_plugins.txt`. Deferred plugins
+  block input after the prompt appears, making the shell feel frozen
+  (see <https://github.com/romkatv/zsh-defer/issues/13>).
 - Never use `sudo`, interactive installers, or `curl | sh`.
 - Never `eval` untrusted input; prefer `source-cached-init` for tool init.
 - Use `mktemp` for temp files; never log or cache secrets.
@@ -95,8 +101,6 @@ Order in `.zsh_plugins.txt` matters:
   need extra post-update steps.
 - Self-managed tools (e.g. `rustup`, `bun`, `mise`) need explicit
   updater functions.
-- Run `clear-cached-init <tool>` after install/update of tools
-  using shell init.
 - Bootstrap only essentials at startup (Antidote, Homebrew, Starship);
   everything else installs via `install-<tool>`.
 - Utility-only plugins may omit lifecycle functions.
@@ -154,14 +158,12 @@ if exists tool; then
   uninstall-tool() {
     info "Uninstalling tool..."
     command rm -f -- "$CUSTOM_TOOLS_DIR/tool"
-    clear-cached-init tool
     reload
   }
 
   _update_tool() {
     info "Updating tool..."
     command tool self-update           # use tool's own upgrade command
-    clear-cached-init tool
   }
 
   update-tool() { _update_tool; reload }
@@ -202,8 +204,7 @@ fi
 4. Add guard logic.
 5. Add `install-<tool>` and `uninstall-<tool>` when lifecycle management is needed.
 6. Register updater when the tool has an independent update path.
-7. Add `clear-cached-init` call if the tool emits shell init code.
-8. Update `README.md` with the tool listing.
+7. Update `README.md` with the tool listing.
 
 ## Validation
 

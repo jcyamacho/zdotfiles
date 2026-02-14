@@ -108,7 +108,6 @@ Sync files and directories to/from private GitHub Gists. See [github-cli](plugin
 - `update-zdotfiles` – pull the latest repo changes and reload.
 - `update-antidote` – update Antidote and reload.
 - `update-all` – run all registered updaters and reload.
-- `clear-all-cached-init` – remove all cached tool init files (regenerate on next reload).
 
 ### The `updates` Array
 
@@ -118,7 +117,6 @@ Sync files and directories to/from private GitHub Gists. See [github-cli](plugin
 _update_mytool() {
   info "Updating mytool..."
   # update logic here
-  clear-cached-init mytool  # if using cached init
 }
 
 updates+=(_update_mytool)
