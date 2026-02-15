@@ -45,6 +45,16 @@ slower due to fork+exec on every prompt. See
 [powerlevel10k](plugins/powerlevel10k/README.md) and
 [starship](plugins/starship/README.md) for per-theme details.
 
+### Disable alias suggestions (`ZSH_DISABLE_YOU_SHOULD_USE`)
+
+By default, [zsh-you-should-use](https://github.com/MichaelAquilina/zsh-you-should-use) reminds you when you type a command that has an alias. To disable these suggestions:
+
+```sh
+# In ~/.zshrc, before the source line:
+export ZSH_DISABLE_YOU_SHOULD_USE=1
+source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
+```
+
 ## Plugins
 
 Antidote reads `.zsh_plugins.txt` and builds a static `.zsh_plugins.zsh`. The default setup enables:
