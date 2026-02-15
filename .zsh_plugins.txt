@@ -100,4 +100,4 @@ $ZDOTFILES_DIR/plugins/mise.zsh
 # UX plugins
 zsh-users/zsh-autosuggestions
 z-shell/F-Sy-H
-MichaelAquilina/zsh-you-should-use
+MichaelAquilina/zsh-you-should-use conditional:"[[ -z $DISABLE_YOU_SHOULD_USE ]]"
