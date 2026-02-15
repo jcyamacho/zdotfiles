@@ -273,7 +273,7 @@
 
   # ======================== Instant prompt mode ==========================
 
-  typeset -g POWERLEVEL9K_INSTANT_PROMPT=verbose
+  typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
   # ======================= Transient prompt ==============================
 
