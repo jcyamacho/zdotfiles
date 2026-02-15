@@ -1,8 +1,6 @@
 # git-worktree (helpers for managing git worktrees): https://git-scm.com/docs/git-worktree
 
 alias gwt="git-worktree-new"
-alias gwt-new="git-worktree-new"
-alias gwt-delete="git-worktree-delete"
 alias gwt-rm="git-worktree-delete"
 alias gwt-ls="command git worktree list"
 alias gwt-prune="command git worktree prune"
@@ -99,7 +97,7 @@ _gwt_run_setup_hooks() {
 }
 
 git-worktree-new() {
-  local branch_name="${1:?Usage: gwt-new <branch-name>}"
+  local branch_name="${1:?Usage: gwt <branch-name>}"
   local base_ref="${2:-}"
 
   local repo_root

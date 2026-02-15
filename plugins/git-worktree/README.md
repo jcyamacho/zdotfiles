@@ -7,7 +7,6 @@ Helpers for managing [Git worktrees](https://git-scm.com/docs/git-worktree) — 
 | Function              | Alias       | Description                              |
 | --------------------- | ----------- | ---------------------------------------- |
 | `git-worktree-new`    | `gwt`       | Create a worktree and cd into it         |
-|                       | `gwt-new`   |                                          |
 | `git-worktree-delete` | `gwt-rm`    | Select and remove a worktree (via fzf)   |
 |                       | `gwt-ls`    | List active worktrees                    |
 |                       | `gwt-prune` | Prune stale worktree metadata            |
