@@ -127,6 +127,7 @@ Shell helpers from `_utils.zsh`:
 - `home` – cd to `$HOME`
 - `zsh-config` – edit `~/.zshrc` and reload
 - `kill-port <port>` – kill the process listening on a given port
+- `zdotfiles-cache-clean` – remove all zdotfiles caches and reload
 - `cls` – alias for `clear`
 - `rmf` – alias for `rm -rf`
 - `cd..` – alias for `cd ..`

@@ -31,6 +31,18 @@ reload() {
   builtin source "$ZDOTFILES_DIR/zshrc.sh"
 }
 
+zdotfiles-cache-clean() {
+  warn "This will delete all zdotfiles caches (init, completions, etc.)"
+  builtin print -n "Continue? [y/N] "
+  local response
+  builtin read -r response
+  [[ $response == [yY] ]] || { info "Aborted"; return 0; }
+
+  command rm -rf -- "$ZDOTFILES_CACHE_DIR"
+  info "Cache cleared"
+  reload
+}
+
 # Caches the output of `cmd args...` (e.g., `starship init zsh`) and sources it.
 # Regenerates when the tool binary is newer than the cache.
 source-cached-init() {
