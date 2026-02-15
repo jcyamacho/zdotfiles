@@ -20,6 +20,19 @@ typeset -g POWERLEVEL9K_AZURE_VISUAL_IDENTIFIER_EXPANSION=
 
 # Helpers -----------------------------------------------------------
 
+# Force a full prompt redraw from inside a ZLE widget.
+# Call after builtin cd or any state change that prompt segments depend on.
+# Pattern from romkatv/zsh4humans (z4h-redraw-prompt).
+p10k-zle-reset-prompt() {
+  [[ -n $WIDGET ]] || return 0
+  local fn
+  for fn in chpwd $chpwd_functions precmd $precmd_functions; do
+    (( $+functions[$fn] )) && "$fn" &>/dev/null
+  done
+  zle .reset-prompt
+  zle -R
+}
+
 p10k-preset-default() {
   command cp -- "$ZDOTFILES_DIR/plugins/powerlevel10k/p10k.zsh" "$_p10k_config_file"
   builtin source "$_p10k_config_file"
