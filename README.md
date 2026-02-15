@@ -45,13 +45,13 @@ slower due to fork+exec on every prompt. See
 [powerlevel10k](plugins/powerlevel10k/README.md) and
 [starship](plugins/starship/README.md) for per-theme details.
 
-### Disable alias suggestions (`DISABLE_YOU_SHOULD_USE`)
+### Disable alias suggestions (`ZSH_DISABLE_YOU_SHOULD_USE`)
 
 By default, [zsh-you-should-use](https://github.com/MichaelAquilina/zsh-you-should-use) reminds you when you type a command that has an alias. To disable these suggestions:
 
 ```sh
 # In ~/.zshrc, before the source line:
-export DISABLE_YOU_SHOULD_USE=1
+export ZSH_DISABLE_YOU_SHOULD_USE=1
 source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
 ```
 
