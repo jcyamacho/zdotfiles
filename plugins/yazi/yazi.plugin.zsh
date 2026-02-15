@@ -25,10 +25,15 @@ if exists yazi; then
     command rm -f -- "$tmp"
   }
 
-  # ZLE widget for Ctrl+O keybinding
+  # ZLE widget for Ctrl+o keybinding
   _yazi_widget() {
     y
-    zle reset-prompt
+    # p10k caches prompt segments; plain reset-prompt won't update them
+    if (( $+functions[p10k-zle-reset-prompt] )); then
+      p10k-zle-reset-prompt
+    else
+      zle reset-prompt
+    fi
   }
   zle -N _yazi_widget
   bindkey '^o' _yazi_widget
