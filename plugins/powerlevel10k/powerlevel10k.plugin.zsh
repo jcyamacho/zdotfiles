@@ -7,7 +7,7 @@ if [[ ! -f "$_p10k_config_file" ]]; then
   command cp -- "$ZDOTFILES_DIR/plugins/powerlevel10k/p10k.zsh" "$_p10k_config_file"
 fi
 
-# Source the user config (p10k expects this).
+# Source the user config.
 [[ -f "$_p10k_config_file" ]] && builtin source "$_p10k_config_file"
 
 # Disable cloud-provider segments
@@ -18,7 +18,7 @@ typeset -g POWERLEVEL9K_AWS_VISUAL_IDENTIFIER_EXPANSION=
 typeset -g POWERLEVEL9K_AZURE_CONTENT_EXPANSION=
 typeset -g POWERLEVEL9K_AZURE_VISUAL_IDENTIFIER_EXPANSION=
 
-# Helpers -----------------------------------------------------------
+# HELPERS
 
 # Force a full prompt redraw from inside a ZLE widget.
 # Call after builtin cd or any state change that prompt segments depend on.
@@ -45,8 +45,9 @@ p10k-config() {
   p10k reload
 }
 
-# Completions -------------------------------------------------------
+# HELPERS end
 
+# COMPLETIONS
 _p10k() {
   local -a subcmds=(
     'configure:run interactive configuration wizard'
@@ -59,3 +60,4 @@ _p10k() {
   _describe 'command' subcmds
 }
 compdef _p10k p10k
+# COMPLETIONS end
