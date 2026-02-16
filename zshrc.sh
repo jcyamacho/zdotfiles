@@ -7,8 +7,8 @@ zstyle ':omz:update' mode disabled
 
 export ZDOTFILES_DIR="${ZDOTFILES_DIR:-$HOME/.zdotfiles}"
 
-# ZSH_PROMPT: "p10k" (default) or "starship"
-export ZSH_PROMPT="${ZSH_PROMPT:-p10k}"
+# ZSH_PROMPT: "starship" (default) or "p10k"
+export ZSH_PROMPT="${ZSH_PROMPT:-starship}"
 
 # CACHE
 export ZDOTFILES_CACHE_DIR="${ZDOTFILES_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zdotfiles}"
