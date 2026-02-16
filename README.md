@@ -87,6 +87,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-cursor` – [Cursor](https://www.cursor.com/)
 - `install-deno` – [Deno](https://deno.land/) runtime
 - `install-docker` – [Docker](https://www.docker.com/) CLI
+- `install-dotenvx` – [dotenvx](https://github.com/dotenvx/dotenvx) a secure dotenv
 - `install-fabric` – [Fabric](https://github.com/danielmiessler/fabric)
 - `install-flutter` – [Flutter](https://flutter.dev/) SDK
 - `install-fnm` (or `install-node`) – [fnm](https://github.com/Schniz/fnm) + LTS activation

@@ -34,6 +34,8 @@ ohmyzsh/ohmyzsh path:plugins/deno conditional:"exists deno"
 
 $ZDOTFILES_DIR/plugins/direnv
 
+$ZDOTFILES_DIR/plugins/dotenvx.zsh
+
 $ZDOTFILES_DIR/plugins/docker.zsh
 ohmyzsh/ohmyzsh path:plugins/docker conditional:"exists docker"
 
