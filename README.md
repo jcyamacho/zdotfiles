@@ -88,6 +88,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-claude-code` – [Claude Code](https://www.anthropic.com/claude-code) CLI
 - `install-code` – [VS Code](https://code.visualstudio.com/)
 - `install-codex` – [OpenAI Codex CLI](https://developers.openai.com/codex/cli)
+- `install-cmux` – [cmux](https://www.cmux.dev/) native macOS terminal for AI agents
 - `install-cursor` – [Cursor](https://www.cursor.com/)
 - `install-deno` – [Deno](https://deno.land/) runtime
 - `install-docker` – [Docker](https://www.docker.com/) CLI
@@ -104,7 +105,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
 - `install-mise` – [mise](https://mise.jdx.dev/)
 - `install-ollama` – [Ollama](https://ollama.com/)
-- [openspec](plugins/openspec/README.md) – `openspec`, `osp`, `ospl`, `osps`, `ospv`, and init helpers for common AI tools
+- `install-openspec` – [OpenSpec](https://openspec.dev/) workflow CLI ([openspec](plugins/openspec/README.md))
 - `install-opencode` – [OpenCode](https://opencode.ai/)
 - `install-rbenv` (or `install-ruby`) – [rbenv](https://github.com/rbenv/rbenv)
 - `install-rust` – [rustup](https://rustup.rs/)
