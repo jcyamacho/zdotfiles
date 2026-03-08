@@ -1,6 +1,10 @@
 # ZDOTFILES
 
-Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) for plugins and [Powerlevel10k](https://github.com/romkatv/powerlevel10k) for the prompt. Everything is driven by a single `zshrc.sh` so you can drop it into any machine quickly.
+Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) for plugins and [Starship](https://starship.rs) as the default prompt, with [Powerlevel10k](https://github.com/romkatv/powerlevel10k) as an option. Everything is driven by a single `zshrc.sh` so you can drop it into any machine quickly.
+
+<p align="center">
+  <img src="docs/avatar.png" alt="ZDOTFILES avatar" width="220">
+</p>
 
 ## Install
 
@@ -100,6 +104,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
 - `install-mise` – [mise](https://mise.jdx.dev/)
 - `install-ollama` – [Ollama](https://ollama.com/)
+- [openspec](plugins/openspec/README.md) – `openspec`, `osp`, `ospl`, `osps`, `ospv`, and init helpers for common AI tools
 - `install-opencode` – [OpenCode](https://opencode.ai/)
 - `install-rbenv` (or `install-ruby`) – [rbenv](https://github.com/rbenv/rbenv)
 - `install-rust` – [rustup](https://rustup.rs/)
