@@ -52,6 +52,8 @@ $ZDOTFILES_DIR/plugins/node-fnm.zsh
 
 $ZDOTFILES_DIR/plugins/ollama.zsh
 
+$ZDOTFILES_DIR/plugins/openspec
+
 $ZDOTFILES_DIR/plugins/python
 ohmyzsh/ohmyzsh path:plugins/uv conditional:"exists uv"
 
