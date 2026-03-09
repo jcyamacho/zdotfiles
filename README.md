@@ -3,7 +3,7 @@
 Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) for plugins and [Starship](https://starship.rs) as the default prompt, with [Powerlevel10k](https://github.com/romkatv/powerlevel10k) as an option. Everything is driven by a single `zshrc.sh` so you can drop it into any machine quickly.
 
 <p align="center">
-  <img src="docs/avatar.png" alt="ZDOTFILES avatar" width="220">
+  <img src="docs/avatar.webp" alt="ZDOTFILES avatar" width="220">
 </p>
 
 ## Install
@@ -110,6 +110,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-rbenv` (or `install-ruby`) – [rbenv](https://github.com/rbenv/rbenv)
 - `install-rust` – [rustup](https://rustup.rs/)
 - `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling ([python](plugins/python/README.md))
+- `install-worktrunk` – [Worktrunk](https://worktrunk.dev) git worktree management
 - `install-yazi` – [yazi](https://yazi-rs.github.io/) terminal file manager
 - `install-zed` – [Zed](https://zed.dev/)
 - `install-zsh-bench` – [zsh-bench](https://github.com/romkatv/zsh-bench) benchmark for interactive zsh
