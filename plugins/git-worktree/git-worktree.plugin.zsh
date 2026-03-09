@@ -1,6 +1,14 @@
 # git-worktree (helpers for managing git worktrees): https://git-scm.com/docs/git-worktree
 
-alias gwt="git-worktree-new"
+unalias gwt 2>/dev/null
+function gwt {
+  if (( $# )); then
+    git-worktree-new "$@"
+  else
+    git-worktree-switch
+  fi
+}
+
 alias gwt-rm="git-worktree-delete"
 alias gwt-ls="command git worktree list"
 alias gwt-prune="command git worktree prune"
@@ -146,16 +154,23 @@ git-worktree-new() {
   info "Now in worktree '${PWD:t}'."
 }
 
-git-worktree-delete() {
-  exists fzf || { error "fzf is required for git-worktree-delete"; return 1; }
+_gwt_select() {
+  local header="${1:?Usage: _gwt_select <header>}"
+  exists fzf || { error "fzf is required"; return 1; }
 
-  local selected_worktree_path
-  selected_worktree_path="$(
+  local selected
+  selected="$(
     command git worktree list --porcelain \
       | command awk '$1 == "worktree" { print substr($0, 10) }' \
-      | fzf --header "Select worktree to DELETE" --height 40%
+      | fzf --header "$header" --height 40%
   )"
-  [[ -z "$selected_worktree_path" ]] && return
+
+  [[ -n "$selected" ]] && builtin print -r -- "$selected"
+}
+
+git-worktree-delete() {
+  local selected_worktree_path
+  selected_worktree_path="$(_gwt_select "Select worktree to DELETE")" || return
 
   # Don't allow deleting the current or main worktree easily
   local main_path="$(command git rev-parse --show-toplevel 2>/dev/null)"
@@ -183,4 +198,19 @@ git-worktree-delete() {
       command git branch -D "$branch_name"
     fi
   fi
+}
+
+git-worktree-switch() {
+  local selected_worktree_path
+  selected_worktree_path="$(_gwt_select "Select worktree to switch to")" || return
+
+  if [[ "$selected_worktree_path" == "$PWD" ]]; then
+    info "Already in the selected worktree."
+    return
+  fi
+
+  builtin cd "$selected_worktree_path" || return 1
+
+  builtin print ""
+  info "Switched to worktree '${PWD:t}'."
 }

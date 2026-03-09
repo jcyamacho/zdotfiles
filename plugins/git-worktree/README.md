@@ -4,12 +4,13 @@ Helpers for managing [Git worktrees](https://git-scm.com/docs/git-worktree) — 
 
 ## Functions / Aliases
 
-| Function              | Alias       | Description                              |
-| --------------------- | ----------- | ---------------------------------------- |
-| `git-worktree-new`    | `gwt`       | Create a worktree and cd into it         |
-| `git-worktree-delete` | `gwt-rm`    | Select and remove a worktree (via fzf)   |
-|                       | `gwt-ls`    | List active worktrees                    |
-|                       | `gwt-prune` | Prune stale worktree metadata            |
+| Command / Alias       | Description                          |
+| --------------------- | ------------------------------------ |
+| `gwt <branch> [ref]`  | Create a worktree and cd into it     |
+| `gwt`                 | Switch to a worktree (via fzf)       |
+| `gwt-rm`              | Select and remove a worktree (fzf)   |
+| `gwt-ls`              | List active worktrees                |
+| `gwt-prune`           | Prune stale worktree metadata        |
 
 ## Usage
 
@@ -25,6 +26,9 @@ gwt feature/someone-elses-pr
 
 # Existing local branch
 gwt feature/my-wip-branch
+
+# Switch to a worktree (interactive fzf selection)
+gwt
 
 # List all worktrees
 gwt-ls
@@ -126,4 +130,4 @@ command -v direnv &>/dev/null && direnv allow
 
 ## Requirements
 
-- `gwt-rm` requires [fzf](https://github.com/junegunn/fzf) for interactive selection
+- `gwt` (no args) and `gwt-rm` require [fzf](https://github.com/junegunn/fzf) for interactive selection
