@@ -29,16 +29,9 @@ if exists claude; then
     builtin print -r -- $'\e]11;#1e1e1e\e\\'
     command clear
 
-    local divider="----------------------------------------"
-    local branch_name="$(command git branch --show-current 2>/dev/null)"
-    [[ -n "$branch_name" ]] || branch_name="-"
-
-    info "$divider"
-    info "Claude Code Session"
-    builtin print -r -- "repo   : $PWD:t"
-    builtin print -r -- "branch : $branch_name"
-    builtin print -P -- 'time   : %D{%a %b %d, %H:%M}'
-    info "$divider"
+    local branch="$(command git branch --show-current 2>/dev/null)"
+    local c=$'\e[36m' d=$'\e[2m' r=$'\e[0m'
+    builtin print -r -- "${c}[Claude Code]${r} 📁 ${PWD:t} ${d}|${r} 🌿 ${branch:--}"
     builtin print -r -- ""
 
     command claude "$@"
