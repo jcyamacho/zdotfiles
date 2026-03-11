@@ -26,7 +26,7 @@ if exists zellij; then
       session_name="${session_name[1,prefix_len]}-$session_hash"
     fi
 
-    command zellij attach "$session_name" 2>/dev/null || command zellij -s "$session_name"
+    command zellij attach -c "$session_name"
   }
 
   zellij-config() {
