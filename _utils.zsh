@@ -14,6 +14,64 @@ error() {
   builtin print -r -- "${fg_bold[red]}$*$_reset_color"
 }
 
+_confirm_discard_input() {
+  local discard
+  while builtin read -t 0 -k 1 discard 2>/dev/null; do
+    :
+  done
+}
+
+_confirm_read_line() {
+  local char
+  REPLY=""
+
+  while true; do
+    builtin read -k 1 char 2>/dev/null || return 1
+    [[ "$char" == $'\n' ]] && return 0
+    REPLY+="$char"
+  done
+}
+
+confirm() {
+  local prompt="${1:?confirm: missing prompt}"
+  local default_answer="${2:-yes}"
+  local suffix
+
+  case "$default_answer" in
+    yes) suffix="[Y/n]" ;;
+    no) suffix="[y/N]" ;;
+    *)
+      error "confirm: invalid default '$default_answer'"
+      return 1
+      ;;
+  esac
+
+  local answer
+  while true; do
+    # Drop type-ahead buffered before this prompt so answers can't spill across confirms.
+    _confirm_discard_input
+
+    builtin print -n -r -- "${fg_bold[yellow]}$prompt $suffix$_reset_color "
+    _confirm_read_line || {
+      builtin print ""
+      error "confirm: no terminal available"
+      return 1
+    }
+
+    answer="${REPLY:l}"
+    case "$answer" in
+      y|yes) return 0 ;;
+      n|no) return 1 ;;
+      "")
+        [[ "$default_answer" == "yes" ]]
+        return
+        ;;
+    esac
+
+    warn "Please answer yes or no."
+  done
+}
+
 mkcd() {
   local target=${1:?mkcd: missing directory name}
   command mkdir -p -- "$target"
@@ -33,10 +91,7 @@ reload() {
 
 zdotfiles-cache-clean() {
   warn "This will delete all zdotfiles caches (init, completions, etc.)"
-  builtin print -n "Continue? [y/N] "
-  local response
-  builtin read -r response
-  [[ $response == [yY] ]] || { info "Aborted"; return 0; }
+  confirm "Continue?" no || { info "Aborted"; return 0; }
 
   command rm -rf -- "$ZDOTFILES_CACHE_DIR"
   info "Cache cleared"

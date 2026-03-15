@@ -47,10 +47,7 @@ if [[ -d "$_opencode_bin_dir" ]]; then
 
   opencode-clear-sessions() {
     warn "This will delete ALL opencode sessions and project data"
-    builtin print -n "Continue? [y/N] "
-    local response
-    builtin read -r response
-    [[ $response == [yY] ]] || { info "Aborted"; return 0; }
+    confirm "Continue?" no || { info "Aborted"; return 0; }
 
     command rm -rf -- "$_opencode_data_dir/storage"
     info "All sessions cleared"

@@ -60,6 +60,9 @@ Order in `.zsh_plugins.txt` matters:
 - `_run_remote_installer <url> [shell] [--env K=V]... [-- args...]` —
   secure download-and-run with `~/.zshrc` write-lock
 - `info`, `warn`, `error` — colored output helpers
+- `confirm <prompt> [yes|no]` — terminal-only yes/no prompt that accepts
+  `y`/`yes`, `n`/`no`, or bare `Enter` for the default, and re-prompts on
+  invalid input
 - `reload` — clear `exists` cache and re-source `zshrc.sh`
 
 ## Core Rules
@@ -77,6 +80,8 @@ Order in `.zsh_plugins.txt` matters:
   with `command`/`builtin` to bypass aliases.
 - Prefer zsh native expansion over subshells/pipes for simple transforms.
 - Use `command mkdir -p -- "$dir"` and `command rm -f -- "$path"`.
+- Use `_utils.zsh`'s `confirm` helper for destructive yes/no prompts
+  instead of hand-rolled `read` logic.
 - Never use `kind:defer` in `.zsh_plugins.txt`. Deferred plugins
   block input after the prompt appears, making the shell feel frozen
   (see <https://github.com/romkatv/zsh-defer/issues/13>).
