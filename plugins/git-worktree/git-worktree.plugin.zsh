@@ -168,6 +168,14 @@ _gwt_select() {
   [[ -n "$selected" ]] && builtin print -r -- "$selected"
 }
 
+_gwt_force_remove_error() {
+  local output="${1:-}"
+
+  [[ "$output" == *"contains modified or untracked files"* \
+    || "$output" == *"cannot be moved or removed"* \
+    || "$output" == *"use --force"* ]]
+}
+
 git-worktree-delete() {
   local selected_worktree_path
   selected_worktree_path="$(_gwt_select "Select worktree to DELETE")" || return
@@ -187,14 +195,25 @@ git-worktree-delete() {
   local branch_name="$(command git -C "$selected_worktree_path" symbolic-ref --quiet --short HEAD 2>/dev/null || :)"
 
   info "Removing worktree at $selected_worktree_path"
-  command git worktree remove "$selected_worktree_path" || return 1
+  local remove_output
+  remove_output="$(command git worktree remove "$selected_worktree_path" 2>&1)"
+  local remove_status=$?
+  if (( remove_status != 0 )); then
+    if _gwt_force_remove_error "$remove_output"; then
+      [[ -n "$remove_output" ]] && warn "$remove_output"
+      confirm "Force remove dirty worktree '$selected_worktree_path'?" no || {
+        info "Skipped worktree removal."
+        return 1
+      }
+      command git worktree remove --force "$selected_worktree_path" || return 1
+    else
+      [[ -n "$remove_output" ]] && builtin print -u2 -r -- "$remove_output"
+      return "$remove_status"
+    fi
+  fi
 
   if [[ -n "$branch_name" ]]; then
-    warn "Delete associated branch '$branch_name'? (Y/n)"
-    local choice
-    builtin read -k 1 "choice? "
-    builtin print ""
-    if [[ "$choice" != [nN] ]]; then
+    if confirm "Delete associated branch '$branch_name'?"; then
       command git branch -D "$branch_name"
     fi
   fi

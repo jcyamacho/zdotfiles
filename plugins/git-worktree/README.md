@@ -1,6 +1,8 @@
 # git-worktree
 
-Helpers for managing [Git worktrees](https://git-scm.com/docs/git-worktree) — separate working directories for different branches.
+Helpers for managing
+[Git worktrees](https://git-scm.com/docs/git-worktree) -- separate
+working directories for different branches.
 
 ## Functions / Aliases
 
@@ -40,6 +42,9 @@ gwt-rm
 gwt-prune
 ```
 
+If the selected worktree has local changes, `gwt-rm` warns first and
+asks for confirmation before retrying with `git worktree remove --force`.
+
 ### Branch detection
 
 `gwt` detects the branch type automatically:
@@ -54,11 +59,10 @@ gwt-prune
 
 `gwt` places worktrees under `GIT_WORKTREE_BASE`:
 
-| Setting                                      | Result                              |
-| -------------------------------------------- | ----------------------------------- |
-| Default (unset)                              | `..` (next to the repo directory)   |
-| `export GIT_WORKTREE_BASE="$HOME/worktrees"` | Centralized location                |
-| `export GIT_WORKTREE_BASE=".worktrees"`      | Inside repo (relative paths work)   |
+- Default (unset): `..` (next to the repo directory)
+- `export GIT_WORKTREE_BASE="$HOME/worktrees"`: centralized location
+- `export GIT_WORKTREE_BASE=".worktrees"`: inside repo (relative paths
+  work)
 
 Worktrees are named `<repo>-<branch>` (slashes in branch names become dashes).
 
@@ -130,4 +134,5 @@ command -v direnv &>/dev/null && direnv allow
 
 ## Requirements
 
-- `gwt` (no args) and `gwt-rm` require [fzf](https://github.com/junegunn/fzf) for interactive selection
+- `gwt` (no args) and `gwt-rm` require
+  [fzf](https://github.com/junegunn/fzf) for interactive selection
