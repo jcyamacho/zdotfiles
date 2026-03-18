@@ -102,6 +102,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-gh` – [GitHub CLI](https://github.com/cli/cli)
 - `install-go` – [Go](https://golang.org/) + [golangci-lint](https://golangci-lint.run/)
 - `install-jq` – [jq](https://jqlang.org/)
+- `install-just` – [just](https://just.systems/) command runner
 - `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
 - `install-mise` – [mise](https://mise.jdx.dev/)
 - `install-ollama` – [Ollama](https://ollama.com/)

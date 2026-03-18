@@ -49,6 +49,8 @@ ohmyzsh/ohmyzsh path:plugins/golang conditional:"exists go"
 
 $ZDOTFILES_DIR/plugins/jq.zsh
 
+$ZDOTFILES_DIR/plugins/just.zsh
+
 $ZDOTFILES_DIR/plugins/node-fnm.zsh
 
 $ZDOTFILES_DIR/plugins/ollama.zsh
