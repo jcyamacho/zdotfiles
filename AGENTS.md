@@ -112,6 +112,10 @@ Order in `.zsh_plugins.txt` matters:
 - Bootstrap only essentials at startup (Antidote, Homebrew, Starship);
   everything else installs via `install-<tool>`.
 - Utility-only plugins may omit lifecycle functions.
+- Prefer brew-managed when the formula has no heavy dependencies
+  (check `brew info`). Fall back to self-managed (script install
+  to `$CUSTOM_TOOLS_DIR`) when brew would pull extra runtimes
+  (e.g. node, python).
 - List installable tools in root `README.md`; list utility
   plugins in the Utility Plugins section.
 - Brew-managed plugin skeleton:

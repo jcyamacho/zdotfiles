@@ -37,6 +37,8 @@ $ZDOTFILES_DIR/plugins/direnv
 
 $ZDOTFILES_DIR/plugins/dotenvx.zsh
 
+$ZDOTFILES_DIR/plugins/varlock.zsh
+
 $ZDOTFILES_DIR/plugins/docker.zsh
 ohmyzsh/ohmyzsh path:plugins/docker conditional:"exists docker"
 
