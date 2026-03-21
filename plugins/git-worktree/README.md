@@ -64,7 +64,7 @@ asks for confirmation before retrying with `git worktree remove --force`.
 - `export GIT_WORKTREE_BASE=".worktrees"`: inside repo (relative paths
   work)
 
-Worktrees are named `<repo>-<branch>` (slashes in branch names become dashes).
+Worktrees are named `<repo>.<branch>` (slashes in branch names become dashes).
 
 ## Post-Create Sequence
 

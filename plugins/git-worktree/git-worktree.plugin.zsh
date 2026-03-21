@@ -115,7 +115,7 @@ git-worktree-new() {
   }
 
   local worktree_name="${branch_name//\//-}"
-  local worktree_path="${GIT_WORKTREE_BASE:-${repo_root:h}}/${repo_root:t}-${worktree_name}"
+  local worktree_path="${GIT_WORKTREE_BASE:-${repo_root:h}}/${repo_root:t}.${worktree_name}"
 
   if command git show-ref --verify --quiet "refs/heads/$branch_name"; then
     # Local branch exists -- attach a worktree to it
