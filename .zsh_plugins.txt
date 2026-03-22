@@ -11,7 +11,7 @@ $ZDOTFILES_DIR/plugins/git-worktree
 ohmyzsh/ohmyzsh path:plugins/brew
 $ZDOTFILES_DIR/plugins/brew.zsh
 
-$ZDOTFILES_DIR/plugins/worktrunk.zsh
+$ZDOTFILES_DIR/plugins/worktrunk
 
 $ZDOTFILES_DIR/plugins/carapace.zsh
 

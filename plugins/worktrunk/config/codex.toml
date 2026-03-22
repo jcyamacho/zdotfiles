@@ -1,0 +1,66 @@
+[commit.generation]
+command = "codex exec -m gpt-5.4-mini -c model_reasoning_effort='low' -c system_prompt='' --sandbox=read-only --json - | jq -sr '[.[] | select(.item.type? == \"agent_message\")] | last.item.text'"
+template = """
+Write a commit message for the staged changes below.
+
+<format>
+- Use Conventional Commits 1.0.0: <type>(<scope>): <summary>
+- Allowed types: feat, fix, refactor, docs, chore, test, ci, build
+- Subject line under 50 chars (excluding type and scope)
+- For material changes, add a blank line then a body explaining what and why
+- Output only the commit message, no quotes or code blocks
+</format>
+
+<style>
+- Imperative mood: "add feature" not "added feature"
+- Summary in lowercase
+- Describe the change, not the intent or benefit
+</style>
+
+<diffstat>
+{{ git_diff_stat }}
+</diffstat>
+
+<diff>
+{{ git_diff }}
+</diff>
+
+<context>
+Branch: {{ branch }}
+{% if recent_commits %}<recent_commits>
+{% for commit in recent_commits %}- {{ commit }}
+{% endfor %}</recent_commits>{% endif %}
+</context>
+"""
+squash-template = """
+Combine these commits into a single commit message.
+
+<format>
+- Use Conventional Commits 1.0.0: <type>(<scope>): <summary>
+- Allowed types: feat, fix, refactor, docs, chore, test, ci, build
+- Subject line under 50 chars (excluding type and scope)
+- For material changes, add a blank line then a body explaining what and why
+- Output only the commit message, no quotes or code blocks
+</format>
+
+<style>
+- Imperative mood: "add feature" not "added feature"
+- Summary in lowercase
+- Describe the overall change, not individual commits
+</style>
+
+<commits branch="{{ branch }}" target="{{ target_branch }}">
+{% for commit in commits %}- {{ commit }}
+{% endfor %}</commits>
+
+<diffstat>
+{{ git_diff_stat }}
+</diffstat>
+
+<diff>
+{{ git_diff }}
+</diff>
+"""
+
+[list]
+summary = true
