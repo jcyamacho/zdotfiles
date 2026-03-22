@@ -76,6 +76,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 ### Recommended (not installed by default)
 
 - `install-fzf` – [fzf](https://junegunn.github.io/fzf/) fuzzy finder (enables `fzf-tab` if present)
+- `install-television` – [Television](https://alexpasmantier.github.io/television/) fuzzy finder with shell integration when Atuin is absent
 - `install-zoxide` (or `install-z`) – [zoxide](https://github.com/ajeetdsouza/zoxide) smarter `cd`
 - `install-atuin` – [Atuin](https://atuin.sh/) synced, searchable history
 - `install-carapace` – [Carapace](https://carapace.sh/) completions
