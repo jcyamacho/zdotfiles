@@ -104,9 +104,9 @@ Aloxaf/fzf-tab conditional:"exists fzf"
 
 $ZDOTFILES_DIR/plugins/zellij
 
-$ZDOTFILES_DIR/plugins/atuin.zsh
-# television must load after atuin so its guard can detect atuin
+# television must load before atuin so atuin overrides Ctrl+R
 $ZDOTFILES_DIR/plugins/television.zsh
+$ZDOTFILES_DIR/plugins/atuin.zsh
 
 # mise must be loaded last to override other plugins behaviors
 $ZDOTFILES_DIR/plugins/mise.zsh
