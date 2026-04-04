@@ -105,6 +105,9 @@ Order in `.zsh_plugins.txt` matters:
 
 - Register `_update_<tool>` in `updates`; expose `update-<tool>`
   wrapper that calls updater then `reload`.
+- When the update never needs `reload` — even standalone — (e.g.,
+  pulling models, themes, or data), skip the split: define a single
+  public function and register it directly in `updates`.
 - Brew-managed tools are updated by `update-brew` unless they
   need extra post-update steps.
 - Self-managed tools (e.g. `rustup`, `bun`, `mise`) need explicit

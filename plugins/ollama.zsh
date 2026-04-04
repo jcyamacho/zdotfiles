@@ -1,7 +1,7 @@
 # ollama (Local tool for running LLMs): https://ollama.com/
 
 if exists ollama; then
-  _update_ollama_models() {
+  update-ollama-models() {
     info "Updating ollama models..."
     local -a lines=("${(@f)$(command ollama list)}")
     local line package
@@ -13,24 +13,20 @@ if exists ollama; then
     done
   }
 
-  update-ollama-models() {
-    _update_ollama_models
+  updates+=(update-ollama-models)
+
+  uninstall-ollama() {
+    info "Uninstalling ollama..."
+    command pkill -x Ollama 2>/dev/null || true
+    command rm -rf -- /Applications/Ollama.app
+    command rm -f -- /usr/local/bin/ollama
+    command rm -rf -- "$HOME/.ollama"
+    reload
   }
-
-  updates+=(_update_ollama_models)
-
-  if exists brew; then
-    uninstall-ollama() {
-      info "Uninstalling ollama..."
-      command brew uninstall ollama
-      reload
-    }
-  fi
-elif exists brew; then
+else
   install-ollama() {
     info "Installing ollama..."
-    command brew install ollama
-    builtin rehash
+    _run_remote_installer "https://ollama.com/install.sh"
     reload
   }
 fi
