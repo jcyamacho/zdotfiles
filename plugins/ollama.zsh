@@ -18,9 +18,9 @@ if exists ollama; then
   uninstall-ollama() {
     info "Uninstalling ollama..."
     command pkill -x Ollama 2>/dev/null || true
-    command rm -rf -- /Applications/Ollama.app
-    command rm -f -- /usr/local/bin/ollama
     command rm -rf -- "$HOME/.ollama"
+    command rm -rf -- /Applications/Ollama.app
+    command sudo rm -f -- /usr/local/bin/ollama
     reload
   }
 else
