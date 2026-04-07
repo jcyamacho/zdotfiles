@@ -110,5 +110,7 @@ updates+=(_antidote_update)
 # ANTIDOTE end
 
 # STARTUP_PROFILING_RESULTS
-[[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]] && zprof
+if [[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]]; then
+  zprof
+fi
 # STARTUP_PROFILING_RESULTS end
