@@ -40,7 +40,6 @@ shell-integration-features = no-cursor
 # Clipboard UX & safety
 clipboard-paste-protection = true
 clipboard-trim-trailing-spaces = true
-right-click-action = copy-or-paste
 link-previews = osc8
 
 # macOS window chrome
