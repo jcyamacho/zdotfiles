@@ -20,11 +20,14 @@ OpenAI Codex CLI for AI-assisted coding.
 | `uninstall-codex` | Remove Codex and its configuration |
 | `update-codex` | Update Codex (npm install only) |
 | `codex-config` | Open the Codex home directory in your editor |
-| `cdx` | Run Codex with sensible defaults |
+| `cdx` | Interactive Codex launcher with defaults and terminal polish |
 | `codex-clear-archived-sessions` | Remove archived Codex session directories |
 
 ## Notes
 
 - Prefers Homebrew install over npm
 - `cdx` enables web search, workspace-write sandbox, and approval on-request
+- `cdx` is a human-facing launcher: it clears the screen, sets a darker
+  terminal background, and restores terminal state on exit
+- Use raw `codex` directly for scripting, piping, or other non-interactive workflows
 - Uses cached init for shell completions

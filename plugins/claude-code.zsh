@@ -26,16 +26,23 @@ if exists claude; then
   }
 
   cc() {
-    builtin print -r -- $'\e]11;#1e1e1e\e\\'
-    command clear
+    # Human launcher with opinionated terminal UX; use `claude` directly for scripting.
+    local exit_code=0
+    {
+      builtin printf '%s' $'\e]11;#1e1e1e\a'
+      command clear
 
-    local branch="$(command git branch --show-current 2>/dev/null)"
-    local c=$'\e[36m' d=$'\e[2m' r=$'\e[0m'
-    builtin print -r -- "${c}[Claude Code]${r} 📁 ${PWD:t} ${d}|${r} 🌿 ${branch:--}"
-    builtin print -r -- ""
+      local branch="$(command git branch --show-current 2>/dev/null)"
+      local c=$'\e[36m' d=$'\e[2m' r=$'\e[0m'
+      builtin print -r -- "${c}[Claude Code]${r} 📁 ${PWD:t} ${d}|${r} 🌿 ${branch:--}"
+      builtin print -r -- ""
 
-    command claude "$@"
-    builtin print -r -- $'\e]111\e\\'
+      command claude "$@"
+      exit_code=$?
+    } always {
+      builtin printf '%s' $'\e]111\a'
+    }
+    return $exit_code
   }
 
   updates+=(_update_claude_code)

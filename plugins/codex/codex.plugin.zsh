@@ -7,7 +7,17 @@ if exists codex; then
   cache-completion codex completion zsh
 
   cdx() {
-    command codex --search --sandbox workspace-write --ask-for-approval on-request "$@"
+    # Human launcher with opinionated terminal UX; use `codex` directly for scripting.
+    local exit_code=0
+    {
+      builtin printf '%s' $'\e]11;#1e1e1e\a'
+      command clear
+      command codex --search --sandbox workspace-write --ask-for-approval on-request "$@"
+      exit_code=$?
+    } always {
+      builtin printf '%s' $'\e]111\a'
+    }
+    return $exit_code
   }
 
   codex-config() {
