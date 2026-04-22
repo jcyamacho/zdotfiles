@@ -120,6 +120,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-zellij` – [Zellij](https://zellij.dev/) terminal workspace ([zellij](plugins/zellij/README.md))
 - `install-zig` – [Zig](https://ziglang.org/)
 - `install-antigravity` – [Antigravity](https://antigravity.google/)
+- `install-agent-browser` – [agent-browser](https://agent-browser.dev/) browser automation CLI
 - `install-fonts` – [Homebrew](https://brew.sh/) font casks
 
 ## Utility Plugins

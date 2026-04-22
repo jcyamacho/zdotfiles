@@ -78,6 +78,8 @@ $ZDOTFILES_DIR/plugins/zoxide.zsh
 
 $ZDOTFILES_DIR/plugins/gemini-cli.zsh
 
+$ZDOTFILES_DIR/plugins/agent-browser.zsh
+
 $ZDOTFILES_DIR/plugins/codex
 
 $ZDOTFILES_DIR/plugins/cmux.zsh
