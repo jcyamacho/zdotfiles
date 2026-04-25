@@ -1,7 +1,5 @@
 # fnm (Fast Node Manager): https://github.com/Schniz/fnm
 
-exists brew || return
-
 (( $+_fnm_multishell_root )) || typeset -gr _fnm_multishell_root="${XDG_STATE_HOME:-$HOME/.local/state}/fnm_multishells"
 
 _update_node() {
@@ -42,12 +40,14 @@ _fnm_env() {
 if exists fnm; then
   _fnm_env
 
-  alias uninstall-node="uninstall-fnm"
-  uninstall-fnm() {
-    command brew uninstall fnm
-    command rm -rf -- "$HOME/.local/state/fnm_multishells"
-    reload
-  }
+  if exists brew; then
+    alias uninstall-node="uninstall-fnm"
+    uninstall-fnm() {
+      command brew uninstall fnm
+      command rm -rf -- "$HOME/.local/state/fnm_multishells"
+      reload
+    }
+  fi
 
   uninstall-unused-node-versions() {
     local current_version="$(fnm current)"
@@ -66,7 +66,7 @@ if exists fnm; then
   }
 
   updates+=(update-node)
-else
+elif exists brew; then
   alias install-node="install-fnm"
   install-fnm() {
     info "Installing fnm..."

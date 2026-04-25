@@ -35,12 +35,14 @@ Entries in `.zsh_plugins.txt` support these annotations:
 
 Order in `.zsh_plugins.txt` matters:
 
-1. UX plugins first (autosuggestions, syntax highlighting) to avoid
-   visual flash on startup.
+1. Tool, completion, history, and keybinding plugins load before UX
+   plugins so later ZLE hooks wrap the final widget state.
 2. Local plugin before its OMZ companion so the companion sees the
    tool on `$path`.
-3. Dev-tool managers (e.g. mise) last — their activate hooks override
-   other plugins' shims and paths.
+3. Dev-tool managers (e.g. mise) load after tool plugins — their
+   activate hooks override other plugins' shims and paths.
+4. UX plugins (autosuggestions, syntax highlighting, you-should-use)
+   load last.
 
 ### Key helpers (`_utils.zsh`)
 

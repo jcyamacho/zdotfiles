@@ -110,14 +110,18 @@ source-cached-init() {
   if [[ ! -s "$cache" || ( -n "$cmd_path" && "$cmd_path" -nt "$cache" ) ]]; then
     local tmp
     tmp="$(command mktemp "${cache}.XXXXXX")"
-    command "$cmd" "$@" >| "$tmp" || :
-    if [[ -s "$tmp" ]]; then
-      command mv -f -- "$tmp" "$cache"
-      builtin zcompile "$cache" 2>/dev/null || :
-    else
+    command "$cmd" "$@" >| "$tmp"
+    local exit_status=$?
+    if (( exit_status != 0 )); then
+      command rm -f -- "$tmp"
+      return $exit_status
+    elif [[ ! -s "$tmp" ]]; then
       command rm -f -- "$tmp"
       return 1
     fi
+
+    command mv -f -- "$tmp" "$cache"
+    builtin zcompile "$cache" 2>/dev/null || :
   fi
 
   builtin source "$cache"
@@ -137,13 +141,17 @@ cache-completion() {
   if [[ ! -s "$cache" || ( -n "$cmd_path" && "$cmd_path" -nt "$cache" ) ]]; then
     local tmp
     tmp="$(command mktemp "${cache}.XXXXXX")"
-    command "$cmd" "$@" >| "$tmp" || :
-    if [[ -s "$tmp" ]]; then
-      command mv -f -- "$tmp" "$cache"
-    else
+    command "$cmd" "$@" >| "$tmp"
+    local exit_status=$?
+    if (( exit_status != 0 )); then
+      command rm -f -- "$tmp"
+      return $exit_status
+    elif [[ ! -s "$tmp" ]]; then
       command rm -f -- "$tmp"
       return 1
     fi
+
+    command mv -f -- "$tmp" "$cache"
   fi
 }
 
@@ -173,9 +181,10 @@ _run_remote_installer() {
   _lock_zshrc
   trap '_unlock_zshrc; command rm -f -- "$tmp"' EXIT INT TERM
 
-  if ! command curl --proto '=https' --tlsv1.2 -fsSL "$url" -o "$tmp"; then
-    exit_status=1
-  elif ! command env "${envs[@]}" "$shell" "$tmp" "$@"; then
+  command curl --proto '=https' --tlsv1.2 -fsSL "$url" -o "$tmp"
+  exit_status=$?
+  if (( exit_status == 0 )); then
+    command env "${envs[@]}" "$shell" "$tmp" "$@"
     exit_status=$?
   fi
 

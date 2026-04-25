@@ -16,11 +16,14 @@ if exists ollama; then
   updates+=(update-ollama-models)
 
   uninstall-ollama() {
+    warn "This will remove Ollama, local models, and app data."
+    confirm "Continue?" no || { info "Aborted"; return 0; }
+
     info "Uninstalling ollama..."
-    command pkill -x Ollama 2>/dev/null || true
+    command pkill -x Ollama 2>/dev/null || :
     command rm -rf -- "$HOME/.ollama"
     command rm -rf -- /Applications/Ollama.app
-    command sudo rm -f -- /usr/local/bin/ollama
+    command rm -f -- /usr/local/bin/ollama 2>/dev/null || warn "Could not remove /usr/local/bin/ollama"
     reload
   }
 else

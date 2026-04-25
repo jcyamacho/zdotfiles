@@ -110,10 +110,10 @@ $ZDOTFILES_DIR/plugins/zellij
 $ZDOTFILES_DIR/plugins/television.zsh
 $ZDOTFILES_DIR/plugins/atuin.zsh
 
-# mise must be loaded last to override other plugins behaviors
+# mise must load after tool plugins so its shims and paths win.
 $ZDOTFILES_DIR/plugins/mise.zsh
 
-# UX plugins
+# UX plugins must load after tool/keybinding plugins so ZLE hooks wrap the final widget state.
 zsh-users/zsh-autosuggestions
 z-shell/F-Sy-H
 MichaelAquilina/zsh-you-should-use conditional:"[[ -z $ZSH_DISABLE_YOU_SHOULD_USE ]]"
