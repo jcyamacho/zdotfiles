@@ -12,7 +12,7 @@ if exists lsd; then
   }
 
   lsd-config() {
-    edit "$_lsd_config_file"
+    edit-open "$_lsd_config_file"
   }
 
   if exists brew; then

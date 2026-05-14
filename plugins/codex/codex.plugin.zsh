@@ -21,7 +21,7 @@ if exists codex; then
   }
 
   codex-config() {
-    edit "$CODEX_HOME"
+    edit-open "$CODEX_HOME"
   }
 
   codex-clear-archived-sessions() {

@@ -64,5 +64,5 @@ update-fabric() {
 updates+=(_update_fabric)
 
 fabric-config() {
-  edit "$_fabric_config_dir"
+  edit-open "$_fabric_config_dir"
 }

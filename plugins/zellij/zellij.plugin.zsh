@@ -30,7 +30,7 @@ if exists zellij; then
   }
 
   zellij-config() {
-    edit "$ZELLIJ_CONFIG_DIR"
+    edit-open "$ZELLIJ_CONFIG_DIR"
   }
 
   zellij-copy-layouts() {

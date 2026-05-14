@@ -38,7 +38,7 @@ if exists ghostty; then
   alias ghostty-restore-config="_ghostty_restore_config"
 
   ghostty-config() {
-    edit "$GHOSTTY_CONFIG_FILE"
+    edit-open "$GHOSTTY_CONFIG_FILE"
   }
 
   ghostty-update-themes() {

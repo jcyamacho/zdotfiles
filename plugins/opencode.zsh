@@ -19,7 +19,7 @@ if [[ -d "$_opencode_bin_dir" ]]; then
     [[ -d "$_opencode_config_dir" ]] || command mkdir -p -- "$_opencode_config_dir"
     [[ -f "$_opencode_settings_file" ]] || builtin print -r -- '{ "$schema": "https://opencode.ai/config.json" }' >| "$_opencode_settings_file"
 
-    edit "$_opencode_config_dir"
+    edit-open "$_opencode_config_dir"
   }
 
   uninstall-opencode() {

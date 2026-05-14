@@ -41,7 +41,7 @@ if exists yazi; then
   alias yazi-restore-config="_yazi_restore_config"
 
   yazi-config() {
-    edit "$YAZI_CONFIG_HOME"
+    edit-open "$YAZI_CONFIG_HOME"
   }
 
   if exists brew; then

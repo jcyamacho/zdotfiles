@@ -234,6 +234,17 @@ edit() {
   "${editor_cmd[@]}" "$@"
 }
 
+edit-open() {
+  local -a editor_cmd
+  if [[ -n $EDITOR ]]; then
+    editor_cmd=("${(z)EDITOR}")
+    editor_cmd=("${(@)editor_cmd:#--wait}")
+  else
+    editor_cmd=(vim)
+  fi
+  "${editor_cmd[@]}" "$@"
+}
+
 zsh-config() {
   local exit_status=0
 

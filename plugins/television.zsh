@@ -7,7 +7,7 @@ if exists tv; then
 
   tv-config() {
     command mkdir -p -- "${_tv_config_file:h}"
-    edit "$_tv_config_file"
+    edit-open "$_tv_config_file"
   }
 
   if exists brew; then

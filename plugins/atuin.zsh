@@ -10,7 +10,7 @@ if [[ -d "$_atuin_bin_dir" ]]; then
   source-cached-init atuin init zsh --disable-up-arrow
 
   atuin-config() {
-    edit "$HOME/.config/atuin/config.toml"
+    edit-open "$HOME/.config/atuin/config.toml"
   }
 
   uninstall-atuin() {

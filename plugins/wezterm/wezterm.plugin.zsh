@@ -13,7 +13,7 @@ if exists wezterm; then
   alias wezterm-restore-config="_wezterm_restore_config"
 
   wezterm-config() {
-    edit "$WEZTERM_CONFIG_FILE"
+    edit-open "$WEZTERM_CONFIG_FILE"
   }
 
   if exists brew; then

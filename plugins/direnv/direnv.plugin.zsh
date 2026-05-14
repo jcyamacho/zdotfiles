@@ -32,7 +32,7 @@ if exists direnv; then
   }
 
   direnv-config() {
-    edit "$DIRENV_CONFIG_FILE"
+    edit-open "$DIRENV_CONFIG_FILE"
   }
 
   updates+=(_update_direnv)

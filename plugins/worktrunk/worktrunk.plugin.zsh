@@ -27,7 +27,7 @@ if exists wt; then
 
   wt-config() {
     command mkdir -p -- "${_worktrunk_config_file:h}"
-    edit "$_worktrunk_config_file"
+    edit-open "$_worktrunk_config_file"
   }
 
   wt-commit-claude() { _wt_set_provider claude; }

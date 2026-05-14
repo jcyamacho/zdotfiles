@@ -12,7 +12,7 @@ if exists claude; then
   }
 
   claude-config() {
-    edit "$_claude_home"
+    edit-open "$_claude_home"
   }
 
   _update_claude_code() {
@@ -27,22 +27,7 @@ if exists claude; then
 
   cc() {
     # Human launcher with opinionated terminal UX; use `claude` directly for scripting.
-    local exit_code=0
-    {
-      builtin printf '%s' $'\e]11;#1e1e1e\a'
-      command clear
-
-      local branch="$(command git branch --show-current 2>/dev/null)"
-      local c=$'\e[36m' d=$'\e[2m' r=$'\e[0m'
-      builtin print -r -- "${c}[Claude Code]${r} 📁 ${PWD:t} ${d}|${r} 🌿 ${branch:--}"
-      builtin print -r -- ""
-
-      command claude "$@"
-      exit_code=$?
-    } always {
-      builtin printf '%s' $'\e]111\a'
-    }
-    return $exit_code
+    CLAUDE_CODE_NO_FLICKER=1 command claude "$@"
   }
 
   updates+=(_update_claude_code)
