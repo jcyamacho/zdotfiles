@@ -235,9 +235,16 @@ edit() {
 }
 
 zsh-config() {
+  local exit_status=0
+
   _unlock_zshrc
-  edit "$_zshrc_file"
-  reload
+  {
+    edit "$_zshrc_file" && builtin source "$_zshrc_file"
+    exit_status=$?
+  } always {
+    _lock_zshrc
+  }
+  return $exit_status
 }
 
 zsh-startup-profile() {
