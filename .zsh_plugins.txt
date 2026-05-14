@@ -111,7 +111,11 @@ $ZDOTFILES_DIR/plugins/television.zsh
 $ZDOTFILES_DIR/plugins/atuin.zsh
 
 # mise must load after tool plugins so its shims and paths win.
+# Its cached activation exports a full PATH snapshot, so plugins that source
+# their own env files must load after mise or their bin dirs can disappear.
 $ZDOTFILES_DIR/plugins/mise.zsh
+
+$ZDOTFILES_DIR/plugins/viteplus.zsh
 
 # UX plugins must load after tool/keybinding plugins so ZLE hooks wrap the final widget state.
 zsh-users/zsh-autosuggestions

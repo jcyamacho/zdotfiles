@@ -89,6 +89,14 @@ reload() {
   builtin source "$ZDOTFILES_DIR/zshrc.sh"
 }
 
+zsh-plugins-regenerate() {
+  local zsh_plugins="${ZDOTFILES_DIR}/.zsh_plugins"
+  local static_file="${zsh_plugins}.zsh"
+
+  command rm -f -- "$static_file" "${static_file}.zwc"
+  reload
+}
+
 zdotfiles-cache-clean() {
   warn "This will delete all zdotfiles caches (init, completions, etc.)"
   confirm "Continue?" no || { info "Aborted"; return 0; }

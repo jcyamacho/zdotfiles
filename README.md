@@ -113,6 +113,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-rbenv` (or `install-ruby`) – [rbenv](https://github.com/rbenv/rbenv)
 - `install-rust` – [rustup](https://rustup.rs/)
 - `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling ([python](plugins/python/README.md))
+- `install-viteplus` – [Vite+](https://viteplus.dev/) unified web toolchain
 - `install-worktrunk` – [Worktrunk](https://worktrunk.dev) git worktree management
 - `install-yazi` – [yazi](https://yazi-rs.github.io/) terminal file manager
 - `install-zed` – [Zed](https://zed.dev/)
