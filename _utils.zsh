@@ -270,19 +270,38 @@ zsh-startup-bench() {
 
 kill-port() {
   local port=${1:?kill-port: missing port number}
-  local pid
-  pid="$(command lsof -ti :"$port" 2>/dev/null)"
-  if [[ -z $pid ]]; then
+  local pid_output
+  pid_output="$(command lsof -tiTCP:"$port" -sTCP:LISTEN 2>/dev/null)"
+  if [[ -z $pid_output ]]; then
     warn "No process found on port $port"
     return 1
   fi
-  info "Killing process $pid on port $port"
-  command kill "$pid"
+
+  local -aU pids
+  pids=("${(@f)pid_output}")
+
+  local pid
+  for pid in "${pids[@]}"; do
+    info "Killing process $pid on port $port"
+    command kill "$pid" 2>/dev/null || warn "Process $pid was already gone"
+  done
+
+  local -a remaining
+  remaining=("${pids[@]}")
+
   local i
   for i in {1..5}; do
-    command kill -0 "$pid" 2>/dev/null || return 0
+    local -a still_running=()
+    for pid in "${remaining[@]}"; do
+      command kill -0 "$pid" 2>/dev/null && still_running+=("$pid")
+    done
+    (( $#still_running == 0 )) && return 0
+    remaining=("${still_running[@]}")
     sleep 0.1
   done
-  warn "Force-killing process $pid"
-  command kill -9 "$pid"
+
+  for pid in "${remaining[@]}"; do
+    warn "Force-killing process $pid"
+    command kill -9 "$pid" 2>/dev/null
+  done
 }
