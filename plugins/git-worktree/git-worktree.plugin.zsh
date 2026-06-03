@@ -12,6 +12,7 @@ function gwt {
 alias gwt-rm="git-worktree-delete"
 alias gwt-ls="command git worktree list"
 alias gwt-prune="command git worktree prune"
+alias gwt-setup="git-worktree-setup-script"
 
 # Detect the default branch name from origin.
 # IMPORTANT: Do NOT change the primary detection strategy (see below).
@@ -232,4 +233,24 @@ git-worktree-switch() {
 
   builtin print ""
   info "Switched to worktree '${PWD:t}'."
+}
+
+git-worktree-setup-script() {
+  command git rev-parse --git-dir &>/dev/null || {
+    error "Not a git repository."
+    return 1
+  }
+
+  local common_git_dir
+  common_git_dir="$(command git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+  local setup_file="$common_git_dir/setup-worktree.sh"
+
+  if [[ ! -f "$setup_file" ]]; then
+    local template="$ZDOTFILES_DIR/plugins/git-worktree/templates/setup-worktree.sh"
+    command cp -- "$template" "$setup_file"
+    command chmod +x "$setup_file"
+    info "Created $setup_file (from template)"
+  fi
+
+  edit-open "$setup_file"
 }
