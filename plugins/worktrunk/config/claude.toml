@@ -1,5 +1,5 @@
 [commit.generation]
-command = "CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p --no-session-persistence --model=haiku --tools='' --disable-slash-commands --setting-sources='' --system-prompt=''"
+command = "MAX_THINKING_TOKENS=0 claude -p --no-session-persistence --model=haiku --tools='' --disable-slash-commands --setting-sources='' --system-prompt=''"
 template = """
 Write a commit message for the staged changes below.
 
@@ -27,9 +27,13 @@ Write a commit message for the staged changes below.
 
 <context>
 Branch: {{ branch }}
-{% if recent_commits %}<recent_commits>
-{% for commit in recent_commits %}- {{ commit }}
-{% endfor %}</recent_commits>{% endif %}
+{% if recent_commits %}
+  <recent_commits>
+    {% for commit in recent_commits %}
+    - {{ commit }}
+    {% endfor %}
+  </recent_commits>
+{% endif %}
 </context>
 """
 squash-template = """
@@ -50,8 +54,10 @@ Combine these commits into a single commit message.
 </style>
 
 <commits branch="{{ branch }}" target="{{ target_branch }}">
-{% for commit in commits %}- {{ commit }}
-{% endfor %}</commits>
+{% for commit in commit_details %}
+- {{ commit }}
+{% endfor %}
+</commits>
 
 <diffstat>
 {{ git_diff_stat }}
