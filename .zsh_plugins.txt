@@ -54,6 +54,9 @@ $ZDOTFILES_DIR/plugins/jq.zsh
 
 $ZDOTFILES_DIR/plugins/just.zsh
 
+# Vite+ can manage Node.js, so load it before fnm to let fnm take precedence.
+$ZDOTFILES_DIR/plugins/viteplus.zsh
+
 $ZDOTFILES_DIR/plugins/node-fnm.zsh
 
 $ZDOTFILES_DIR/plugins/ollama.zsh
@@ -77,6 +80,8 @@ $ZDOTFILES_DIR/plugins/zig.zsh
 $ZDOTFILES_DIR/plugins/zoxide.zsh
 
 $ZDOTFILES_DIR/plugins/gemini-cli.zsh
+
+$ZDOTFILES_DIR/plugins/pi.zsh
 
 $ZDOTFILES_DIR/plugins/agent-browser.zsh
 
@@ -115,7 +120,6 @@ $ZDOTFILES_DIR/plugins/atuin.zsh
 # their own env files must load after mise or their bin dirs can disappear.
 $ZDOTFILES_DIR/plugins/mise.zsh
 
-$ZDOTFILES_DIR/plugins/viteplus.zsh
 
 # UX plugins must load after tool/keybinding plugins so ZLE hooks wrap the final widget state.
 zsh-users/zsh-autosuggestions
