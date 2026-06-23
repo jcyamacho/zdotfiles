@@ -84,6 +84,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 
 ### Optional
 
+- `install-aspire` - [Aspire](https://aspire.dev/) CLI for distributed apps
 - `install-bat` – [bat](https://github.com/sharkdp/bat) `cat` clone
 - `install-bun` – [Bun](https://bun.sh/) runtime
 - `install-claude-code` – [Claude Code](https://www.anthropic.com/claude-code) CLI
