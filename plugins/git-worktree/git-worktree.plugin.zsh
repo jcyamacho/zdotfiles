@@ -214,7 +214,7 @@ git-worktree-delete() {
   fi
 
   if [[ -n "$branch_name" ]]; then
-    if confirm "Delete associated branch '$branch_name'?"; then
+    if confirm "Delete associated branch '$branch_name'?" no; then
       command git branch -D "$branch_name"
     fi
   fi

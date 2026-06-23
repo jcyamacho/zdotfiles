@@ -105,7 +105,7 @@ else
 
   install-uv() {
     info "Installing uv..."
-    _run_remote_installer "https://astral.sh/uv/install.sh"
+    _run_remote_installer "https://astral.sh/uv/install.sh" "sh" --env "INSTALLER_NO_MODIFY_PATH=1"
 
     local uv_cmd="${commands[uv]-}"
     if [[ -z "$uv_cmd" ]]; then

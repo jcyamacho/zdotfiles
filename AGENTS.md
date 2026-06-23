@@ -83,7 +83,8 @@ Order in `.zsh_plugins.txt` matters:
 - Prefer zsh native expansion over subshells/pipes for simple transforms.
 - Use `command mkdir -p -- "$dir"` and `command rm -f -- "$path"`.
 - Use `_utils.zsh`'s `confirm` helper for destructive yes/no prompts
-  instead of hand-rolled `read` logic.
+  instead of hand-rolled `read` logic. Abort on decline with the
+  canonical pattern `confirm "..." no || { info "Aborted"; return 0; }`.
 - Never use `kind:defer` in `.zsh_plugins.txt`. Deferred plugins
   block input after the prompt appears, making the shell feel frozen
   (see <https://github.com/romkatv/zsh-defer/issues/13>).
@@ -107,16 +108,18 @@ Order in `.zsh_plugins.txt` matters:
 
 - Register `_update_<tool>` in `updates`; expose `update-<tool>`
   wrapper that calls updater then `reload`.
-- When the update never needs `reload` — even standalone — (e.g.,
+- If the update never needs `reload` under any circumstance (e.g.,
   pulling models, themes, or data), skip the split: define a single
-  public function and register it directly in `updates`.
+  public function and register it directly in `updates`. Otherwise use
+  the `_update_<tool>` plus `update-<tool>` split.
 - Brew-managed tools are updated by `update-brew` unless they
   need extra post-update steps.
 - Self-managed tools (e.g. `rustup`, `bun`, `mise`) need explicit
   updater functions.
 - Bootstrap only essentials at startup (Antidote, Homebrew, Starship);
   everything else installs via `install-<tool>`.
-- Utility-only plugins may omit lifecycle functions.
+- Utility-only plugins (only aliases or helper functions, no managed
+  binary) may omit lifecycle functions.
 - Prefer brew-managed when the formula has no heavy dependencies
   (check `brew info`). Fall back to self-managed (script install
   to `$CUSTOM_TOOLS_DIR`) when brew would pull extra runtimes
@@ -217,7 +220,8 @@ fi
 ## Adding a Plugin (Checklist)
 
 1. Create plugin file (simple or subdirectory layout).
-2. Add entry to `.zsh_plugins.txt` (use `conditional:"exists <tool>"` where useful).
+2. Add entry to `.zsh_plugins.txt` at the position dictated by the Load
+   order rules (use `conditional:"exists <tool>"` where useful).
 3. Add file header with tool name and URL.
 4. Add guard logic.
 5. Add `install-<tool>` and `uninstall-<tool>` when lifecycle management is needed.

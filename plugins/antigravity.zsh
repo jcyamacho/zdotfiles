@@ -1,16 +1,11 @@
 # Antigravity (AI Editor): https://antigravity.google/
-(( $+_antigravity_bin )) || typeset -gr _antigravity_bin="$HOME/.antigravity/antigravity/bin/antigravity"
+(( $+_antigravity_bin )) || typeset -gr _antigravity_bin="/Applications/Antigravity.app/Contents/MacOS/Antigravity"
 
 if [[ -f "$_antigravity_bin" ]]; then
-  ag() {
-    local dir="${1:-$PWD}"
-    "$_antigravity_bin" -- "$dir"
-  }
-
   if exists brew; then
     uninstall-antigravity() {
       info "Uninstalling antigravity..."
-      command brew uninstall antigravity
+      command brew uninstall --cask antigravity
       reload
     }
   fi
