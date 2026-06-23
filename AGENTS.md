@@ -196,8 +196,9 @@ fi
 
 ### General
 
-- Prefer `path=("$NEW_DIR" "${path[@]}")` with `typeset -gU path`
-  for deduped prepends.
+- Prepend to `PATH` with `path=("$NEW_DIR" "${path[@]}")`. `path` is
+  already declared `typeset -gU` in `zshrc.sh`, so do not redeclare it
+  per plugin; the global `-U` keeps prepends deduped across reloads.
 - Disable tool telemetry when supported.
 - For constants that must survive `reload`, use the readonly guard
   pattern: `(( $+_var )) || typeset -gr _var="value"`. The `$+`

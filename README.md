@@ -94,6 +94,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-cursor` – [Cursor](https://www.cursor.com/)
 - `install-deno` – [Deno](https://deno.land/) runtime
 - `install-docker` – [Docker](https://www.docker.com/) CLI
+- `install-dotnet` - [.NET SDK](https://dotnet.microsoft.com/) developer platform ([dotnet](plugins/dotnet/README.md))
 - `install-dotenvx` – [dotenvx](https://github.com/dotenvx/dotenvx) a secure dotenv
 - `install-varlock` – [varlock](https://varlock.dev/) AI-safe .env files
 - `install-fabric` – [Fabric](https://github.com/danielmiessler/fabric)

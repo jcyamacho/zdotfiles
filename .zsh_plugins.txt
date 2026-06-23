@@ -87,6 +87,8 @@ $ZDOTFILES_DIR/plugins/agent-browser.zsh
 
 $ZDOTFILES_DIR/plugins/aspire.zsh
 
+$ZDOTFILES_DIR/plugins/dotnet
+
 $ZDOTFILES_DIR/plugins/codex
 
 $ZDOTFILES_DIR/plugins/cmux.zsh
