@@ -20,6 +20,8 @@ ohmyzsh/ohmyzsh path:plugins/gh conditional:"exists gh"
 
 $ZDOTFILES_DIR/plugins/bat.zsh
 
+$ZDOTFILES_DIR/plugins/btop.zsh
+
 $ZDOTFILES_DIR/plugins/bun.zsh
 ohmyzsh/ohmyzsh path:plugins/bun conditional:"exists bun"
 
