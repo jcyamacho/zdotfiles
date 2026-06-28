@@ -24,6 +24,7 @@ if exists wt; then
   alias wtm="wt merge"
   alias wts="wt switch"
   alias wtcm="wt step commit"
+  alias wtcms="wt step commit --stage=none"
 
   wt-config() {
     command mkdir -p -- "${_worktrunk_config_file:h}"

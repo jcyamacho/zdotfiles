@@ -6,12 +6,13 @@ Git worktree management.
 
 ## Aliases
 
-| Alias  | Command          |
-| ------ | ---------------- |
-| `wtl`  | `wt list`        |
-| `wtm`  | `wt merge`       |
-| `wts`  | `wt switch`      |
-| `wtcm` | `wt step commit` |
+| Alias   | Command                       |
+| ------- | ----------------------------- |
+| `wtl`   | `wt list`                     |
+| `wtm`   | `wt merge`                    |
+| `wts`   | `wt switch`                   |
+| `wtcm`  | `wt step commit`              |
+| `wtcms` | `wt step commit --stage=none` |
 
 ## Functions
 
