@@ -49,9 +49,6 @@ $ZDOTFILES_DIR/plugins/fabric.zsh
 
 $ZDOTFILES_DIR/plugins/fonts.zsh
 
-$ZDOTFILES_DIR/plugins/golang
-ohmyzsh/ohmyzsh path:plugins/golang conditional:"exists go"
-
 $ZDOTFILES_DIR/plugins/jq.zsh
 
 $ZDOTFILES_DIR/plugins/just.zsh
@@ -126,6 +123,8 @@ $ZDOTFILES_DIR/plugins/atuin.zsh
 # their own env files must load after mise or their bin dirs can disappear.
 $ZDOTFILES_DIR/plugins/mise.zsh
 
+$ZDOTFILES_DIR/plugins/golang
+ohmyzsh/ohmyzsh path:plugins/golang conditional:"exists go"
 
 # UX plugins must load after tool/keybinding plugins so ZLE hooks wrap the final widget state.
 zsh-users/zsh-autosuggestions

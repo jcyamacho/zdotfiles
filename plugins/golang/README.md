@@ -10,6 +10,7 @@ Go programming language plugin with golangci-lint.
 | Variable | Value       |
 | -------- | ----------- |
 | `GOPATH` | `~/.go`     |
+| `PATH`   | `$GOPATH/bin` is prepended |
 
 ## Functions
 

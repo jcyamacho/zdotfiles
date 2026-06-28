@@ -4,6 +4,7 @@
 if exists go; then
   # change the default GOPATH from $HOME/go to $HOME/.go
   export GOPATH="$HOME/.go"
+  path=("$GOPATH/bin" "${path[@]}")
 
   alias gmt="go mod tidy"
 
