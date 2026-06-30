@@ -109,6 +109,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-jq` – [jq](https://jqlang.org/)
 - `install-just` – [just](https://just.systems/) command runner
 - `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
+- `install-memo` - [memo](https://github.com/jcyamacho/memo) durable memory CLI; includes Claude and Codex `memo context` hook helpers
 - `install-mise` – [mise](https://mise.jdx.dev/)
 - `install-ollama` – [Ollama](https://ollama.com/)
 - `install-openspec` – [OpenSpec](https://openspec.dev/) workflow CLI ([openspec](plugins/openspec/README.md))

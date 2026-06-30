@@ -53,6 +53,8 @@ $ZDOTFILES_DIR/plugins/jq.zsh
 
 $ZDOTFILES_DIR/plugins/just.zsh
 
+$ZDOTFILES_DIR/plugins/memo.zsh
+
 # Vite+ can manage Node.js, so load it before fnm to let fnm take precedence.
 $ZDOTFILES_DIR/plugins/viteplus.zsh
 
