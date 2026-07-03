@@ -94,6 +94,8 @@ $ZDOTFILES_DIR/plugins/codex
 
 $ZDOTFILES_DIR/plugins/cmux.zsh
 
+$ZDOTFILES_DIR/plugins/herdr.zsh
+
 $ZDOTFILES_DIR/plugins/ghostty
 
 $ZDOTFILES_DIR/plugins/wezterm

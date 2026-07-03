@@ -106,6 +106,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-wezterm` – [WezTerm](https://wezterm.org/) terminal + config restore
 - `install-gh` – [GitHub CLI](https://github.com/cli/cli)
 - `install-go` – [Go](https://golang.org/) + [golangci-lint](https://golangci-lint.run/)
+- `install-herdr` - [Herdr](https://herdr.dev/) agent multiplexer that lives in your terminal
 - `install-jq` – [jq](https://jqlang.org/)
 - `install-just` – [just](https://just.systems/) command runner
 - `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
