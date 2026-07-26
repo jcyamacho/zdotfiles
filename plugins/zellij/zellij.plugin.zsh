@@ -1,6 +1,6 @@
 # zellij (terminal workspace): https://zellij.dev/
 
-export ZELLIJ_CONFIG_DIR="$HOME/.config/zellij"
+export ZELLIJ_CONFIG_DIR="${ZELLIJ_CONFIG_DIR:-$HOME/.config/zellij}"
 
 _zellij_copy_layouts() {
   local layouts_dir="$ZELLIJ_CONFIG_DIR/layouts"
