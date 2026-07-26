@@ -23,6 +23,8 @@ $ZDOTFILES_DIR/plugins/btop.zsh
 $ZDOTFILES_DIR/plugins/bun.zsh
 ohmyzsh/ohmyzsh path:plugins/bun conditional:"exists bun"
 
+$ZDOTFILES_DIR/plugins/nub.zsh
+
 $ZDOTFILES_DIR/plugins/cloudflare.zsh
 
 $ZDOTFILES_DIR/plugins/code.zsh

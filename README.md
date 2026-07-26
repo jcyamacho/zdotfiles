@@ -94,6 +94,7 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
 - `install-memo` - [memo](https://github.com/jcyamacho/memo) durable memory CLI; includes Claude and Codex `memo context` hook helpers
 - `install-mise` – [mise](https://mise.jdx.dev/)
+- `install-nub` - [Nub](https://nubjs.com/) all-in-one toolkit for Node.js
 - `install-ollama` – [Ollama](https://ollama.com/)
 - `install-openspec` – [OpenSpec](https://openspec.dev/) workflow CLI ([openspec](plugins/openspec/README.md))
 - `install-opencode` – [OpenCode](https://opencode.ai/)
