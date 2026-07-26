@@ -1,23 +1,22 @@
 # OpenCode (AI coding agent built for the terminal): https://opencode.ai/
-(( $+_opencode_dir )) || typeset -gr _opencode_dir="$HOME/.opencode"
-(( $+_opencode_bin_dir )) || typeset -gr _opencode_bin_dir="$_opencode_dir/bin"
+typeset -g +r _opencode_dir="$HOME/.opencode"
 
-if [[ -d "$_opencode_bin_dir" ]]; then
-  path=("$_opencode_bin_dir" "${path[@]}")
+if [[ -d "$_opencode_dir/bin" ]]; then
+  path=("$_opencode_dir/bin" "${path[@]}")
 
   exists opencode || return
 
   cache-completion opencode completion
 
-  (( $+_opencode_config_dir )) || typeset -gr _opencode_config_dir="$HOME/.config/opencode"
-  (( $+_opencode_settings_file )) || typeset -gr _opencode_settings_file="$_opencode_config_dir/opencode.json"
-  (( $+_opencode_data_dir )) || typeset -gr _opencode_data_dir="$HOME/.local/share/opencode"
+  typeset -g +r _opencode_config_dir="$HOME/.config/opencode"
+  typeset -g +r _opencode_data_dir="$HOME/.local/share/opencode"
 
   alias oc="opencode"
 
   opencode-config() {
     [[ -d "$_opencode_config_dir" ]] || command mkdir -p -- "$_opencode_config_dir"
-    [[ -f "$_opencode_settings_file" ]] || builtin print -r -- '{ "$schema": "https://opencode.ai/config.json" }' >| "$_opencode_settings_file"
+    [[ -f "$_opencode_config_dir/opencode.json" ]] \
+      || builtin print -r -- '{ "$schema": "https://opencode.ai/config.json" }' >| "$_opencode_config_dir/opencode.json"
 
     edit-open "$_opencode_config_dir"
   }
@@ -54,11 +53,11 @@ if [[ -d "$_opencode_bin_dir" ]]; then
   }
 
   opencode-config-load-from-gist() {
-    load-file-from-gist "${_opencode_settings_file}" "opencode-settings"
+    load-file-from-gist "$_opencode_config_dir/opencode.json" "opencode-settings"
   }
 
   opencode-config-save-to-gist() {
-    save-file-to-gist "${_opencode_settings_file}" "opencode-settings"
+    save-file-to-gist "$_opencode_config_dir/opencode.json" "opencode-settings"
   }
 
 else

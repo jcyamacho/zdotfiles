@@ -1,9 +1,8 @@
 # Vite+ (unified web toolchain): https://viteplus.dev/
-(( $+_viteplus_dir )) || typeset -gr _viteplus_dir="$HOME/.vite-plus"
-(( $+_viteplus_env_file )) || typeset -gr _viteplus_env_file="$_viteplus_dir/env"
+typeset -g +r _viteplus_dir="$HOME/.vite-plus"
 
-if [[ -f "$_viteplus_env_file" ]]; then
-  builtin source "$_viteplus_env_file"
+if [[ -f "$_viteplus_dir/env" ]]; then
+  builtin source "$_viteplus_dir/env"
   exists vp || return
 
   uninstall-viteplus() {

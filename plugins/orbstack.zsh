@@ -1,9 +1,7 @@
 # OrbStack (Docker Desktop alternative): https://orbstack.dev/
-(( $+_orbstack_xbin_dir )) || typeset -gr _orbstack_xbin_dir="/Applications/OrbStack.app/Contents/MacOS/xbin"
-
 if exists orb; then
-  if [[ -d "$_orbstack_xbin_dir" ]]; then
-    path=("$_orbstack_xbin_dir" "${path[@]}")
+  if [[ -d "/Applications/OrbStack.app/Contents/MacOS/xbin" ]]; then
+    path=("/Applications/OrbStack.app/Contents/MacOS/xbin" "${path[@]}")
   fi
 
   if exists brew; then

@@ -1,9 +1,8 @@
 # bun (JavaScript runtime): https://bun.sh/
-(( $+_bun_dir )) || typeset -gr _bun_dir="$HOME/.bun"
-(( $+_bun_bin_dir )) || typeset -gr _bun_bin_dir="$_bun_dir/bin"
+typeset -g +r _bun_dir="$HOME/.bun"
 
-if [[ -d "$_bun_bin_dir" ]]; then
-  path=("$_bun_bin_dir" "${path[@]}")
+if [[ -d "$_bun_dir/bin" ]]; then
+  path=("$_bun_dir/bin" "${path[@]}")
 
   exists bun || return
 

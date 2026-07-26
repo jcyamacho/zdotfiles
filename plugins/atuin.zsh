@@ -1,9 +1,8 @@
 # atuin (command-line history): https://atuin.sh/
-(( $+_atuin_dir )) || typeset -gr _atuin_dir="$HOME/.atuin"
-(( $+_atuin_bin_dir )) || typeset -gr _atuin_bin_dir="$_atuin_dir/bin"
+typeset -g +r _atuin_dir="$HOME/.atuin"
 
-if [[ -d "$_atuin_bin_dir" ]]; then
-  path=("$_atuin_bin_dir" "${path[@]}")
+if [[ -d "$_atuin_dir/bin" ]]; then
+  path=("$_atuin_dir/bin" "${path[@]}")
 
   exists atuin || return
 

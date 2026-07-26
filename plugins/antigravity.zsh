@@ -1,7 +1,5 @@
 # Antigravity (AI Editor): https://antigravity.google/
-(( $+_antigravity_bin )) || typeset -gr _antigravity_bin="/Applications/Antigravity.app/Contents/MacOS/Antigravity"
-
-if [[ -f "$_antigravity_bin" ]]; then
+if [[ -f "/Applications/Antigravity.app/Contents/MacOS/Antigravity" ]]; then
   if exists brew; then
     uninstall-antigravity() {
       info "Uninstalling antigravity..."

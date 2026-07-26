@@ -1,6 +1,6 @@
 autoload -Uz colors 2>/dev/null && colors
 
-[[ -n ${_reset_color-} ]] || typeset -gr _reset_color=${reset_color:-$'\e[0m'}
+typeset -g +r _reset_color=${reset_color:-$'\e[0m'}
 
 info() {
   builtin print -r -- "${fg_bold[cyan]}$*$_reset_color"
@@ -142,7 +142,7 @@ source-cached-init() {
 cache-completion() {
   local cmd=${1:?cache-completion: missing command}
   shift
-  local cache="${ZDOTFILES_COMPLETIONS_DIR}/_${cmd}"
+  local cache="${_zdotfiles_completions_dir}/_${cmd}"
   local cmd_path=${commands[$cmd]:-}
 
   # Regenerate if missing or tool binary is newer
@@ -214,7 +214,7 @@ home() {
   builtin cd "$HOME"
 }
 
-[[ -n ${_zshrc_file-} ]] || typeset -gr _zshrc_file="$HOME/.zshrc"
+typeset -g +r _zshrc_file="$HOME/.zshrc"
 
 _lock_zshrc() {
   command chmod -w "$_zshrc_file"

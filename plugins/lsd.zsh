@@ -1,6 +1,5 @@
 # lsd (ls alternative): https://github.com/lsd-rs/lsd
-(( $+_lsd_config_dir )) || typeset -gr _lsd_config_dir="$HOME/.config/lsd"
-(( $+_lsd_config_file )) || typeset -gr _lsd_config_file="$_lsd_config_dir/config.yaml"
+typeset -g +r _lsd_config_dir="$HOME/.config/lsd"
 
 if exists lsd; then
   ll() {
@@ -12,7 +11,7 @@ if exists lsd; then
   }
 
   lsd-config() {
-    edit-open "$_lsd_config_file"
+    edit-open "$_lsd_config_dir/config.yaml"
   }
 
   if exists brew; then
@@ -29,7 +28,7 @@ elif exists brew; then
     info "Downloading color theme..."
     command curl -fsSL https://raw.githubusercontent.com/catppuccin/lsd/refs/heads/main/themes/catppuccin-mocha/colors.yaml -o "$_lsd_config_dir/colors.yaml"
     info "Writing config file..."
-    builtin print -r -- $'color:\n  theme: custom\n' >| "$_lsd_config_file"
+    builtin print -r -- $'color:\n  theme: custom\n' >| "$_lsd_config_dir/config.yaml"
   }
 
   install-lsd() {

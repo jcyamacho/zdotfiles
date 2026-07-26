@@ -1,9 +1,8 @@
 # deno (JavaScript runtime): https://deno.land/
-(( $+_deno_dir )) || typeset -gr _deno_dir="$HOME/.deno"
-(( $+_deno_bin_dir )) || typeset -gr _deno_bin_dir="$_deno_dir/bin"
+typeset -g +r _deno_dir="$HOME/.deno"
 
-if [[ -d "$_deno_bin_dir" ]]; then
-  path=("$_deno_bin_dir" "${path[@]}")
+if [[ -d "$_deno_dir/bin" ]]; then
+  path=("$_deno_dir/bin" "${path[@]}")
 
   exists deno || return
 

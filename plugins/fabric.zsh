@@ -10,14 +10,13 @@ exists fabric || {
   return
 }
 
-(( $+_fabric_config_dir )) || typeset -gr _fabric_config_dir="$HOME/.config/fabric"
-(( $+_fabric_patterns_dir )) || typeset -gr _fabric_patterns_dir="$_fabric_config_dir/patterns"
+typeset -g +r _fabric_config_dir="$HOME/.config/fabric"
 
 _fabric_load_patterns() {
-  [[ -d "$_fabric_patterns_dir" ]] || return
+  [[ -d "$_fabric_config_dir/patterns" ]] || return
   local pattern_file
   local pattern_name
-  for pattern_file in "$_fabric_patterns_dir"/*(N-.); do
+  for pattern_file in "$_fabric_config_dir/patterns"/*(N-.); do
     pattern_name="${pattern_file:t}"
     unalias "$pattern_name" || :
     alias "$pattern_name"="fabric --pattern ${(q)pattern_name} --stream"

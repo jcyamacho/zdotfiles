@@ -70,7 +70,8 @@ typeset zsh_plugins="${ZDOTFILES_DIR}/.zsh_plugins"
 # Generate a new static file whenever .zsh_plugins.txt is updated.
 if [[ ! "${zsh_plugins}.zsh" -nt "${zsh_plugins}.txt" ]]; then
   info "Generating static plugins file..."
-  antidote bundle < "${zsh_plugins}.txt" >| "${zsh_plugins}.zsh"
+  ZDOTFILES_DIR="$ZDOTFILES_DIR" antidote bundle \
+    < "${zsh_plugins}.txt" >| "${zsh_plugins}.zsh"
 fi
 
 # Compile the static plugins file for faster sourcing.
