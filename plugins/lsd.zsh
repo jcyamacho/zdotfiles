@@ -1,5 +1,5 @@
 # lsd (ls alternative): https://github.com/lsd-rs/lsd
-typeset -g +r _lsd_config_dir="$HOME/.config/lsd"
+typeset -g _lsd_config_dir="$HOME/.config/lsd"
 
 if exists lsd; then
   ll() {

@@ -1,6 +1,6 @@
 autoload -Uz colors 2>/dev/null && colors
 
-typeset -g +r _reset_color=${reset_color:-$'\e[0m'}
+typeset -g _reset_color=${reset_color:-$'\e[0m'}
 
 info() {
   builtin print -r -- "${fg_bold[cyan]}$*$_reset_color"
@@ -214,7 +214,7 @@ home() {
   builtin cd "$HOME"
 }
 
-typeset -g +r _zshrc_file="$HOME/.zshrc"
+typeset -g _zshrc_file="$HOME/.zshrc"
 
 _lock_zshrc() {
   command chmod -w "$_zshrc_file"

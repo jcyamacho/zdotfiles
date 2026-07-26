@@ -1,5 +1,5 @@
 # rust (programming language): https://www.rust-lang.org/
-typeset -g +r _cargo_dir="$HOME/.cargo"
+typeset -g _cargo_dir="$HOME/.cargo"
 
 if [[ -f "$_cargo_dir/env" ]]; then
   builtin source "$_cargo_dir/env"

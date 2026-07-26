@@ -1,7 +1,7 @@
 # worktrunk (git worktree management): https://worktrunk.dev
 
-typeset -g +r _worktrunk_config_file="$HOME/.config/worktrunk/config.toml"
-typeset -g +r _worktrunk_providers_dir="$ZDOTFILES_DIR/plugins/worktrunk/config"
+typeset -g _worktrunk_config_file="$HOME/.config/worktrunk/config.toml"
+typeset -g _worktrunk_providers_dir="$ZDOTFILES_DIR/plugins/worktrunk/config"
 
 _wt_set_provider() {
   local provider="${1:?provider name required}"

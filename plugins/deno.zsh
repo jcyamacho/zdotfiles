@@ -1,5 +1,5 @@
 # deno (JavaScript runtime): https://deno.land/
-typeset -g +r _deno_dir="$HOME/.deno"
+typeset -g _deno_dir="$HOME/.deno"
 
 if [[ -d "$_deno_dir/bin" ]]; then
   path=("$_deno_dir/bin" "${path[@]}")

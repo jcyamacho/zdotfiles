@@ -9,8 +9,8 @@ if exists zed; then
   }
 
   if exists gh; then
-    typeset -g +r _zed_settings_path="$HOME/.config/zed/settings.json"
-    typeset -g +r _zed_gist_description="zed-settings"
+    typeset -g _zed_settings_path="$HOME/.config/zed/settings.json"
+    typeset -g _zed_gist_description="zed-settings"
 
     zed-settings-load-from-gist() {
       load-file-from-gist "${_zed_settings_path}" "${_zed_gist_description}"

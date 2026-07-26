@@ -1,6 +1,6 @@
 # claude (Anthropic coding assistant): https://www.anthropic.com/claude-code
 if exists claude; then
-  typeset -g +r _claude_home="$HOME/.claude"
+  typeset -g _claude_home="$HOME/.claude"
 
   uninstall-claude-code() {
     info "Uninstalling claude..."

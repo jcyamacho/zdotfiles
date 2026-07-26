@@ -1,5 +1,5 @@
 # atuin (command-line history): https://atuin.sh/
-typeset -g +r _atuin_dir="$HOME/.atuin"
+typeset -g _atuin_dir="$HOME/.atuin"
 
 if [[ -d "$_atuin_dir/bin" ]]; then
   path=("$_atuin_dir/bin" "${path[@]}")

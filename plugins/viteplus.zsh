@@ -1,5 +1,5 @@
 # Vite+ (unified web toolchain): https://viteplus.dev/
-typeset -g +r _viteplus_dir="$HOME/.vite-plus"
+typeset -g _viteplus_dir="$HOME/.vite-plus"
 
 if [[ -f "$_viteplus_dir/env" ]]; then
   builtin source "$_viteplus_dir/env"

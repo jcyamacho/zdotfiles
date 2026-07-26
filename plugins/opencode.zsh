@@ -1,5 +1,5 @@
 # OpenCode (AI coding agent built for the terminal): https://opencode.ai/
-typeset -g +r _opencode_dir="$HOME/.opencode"
+typeset -g _opencode_dir="$HOME/.opencode"
 
 if [[ -d "$_opencode_dir/bin" ]]; then
   path=("$_opencode_dir/bin" "${path[@]}")
@@ -8,8 +8,8 @@ if [[ -d "$_opencode_dir/bin" ]]; then
 
   cache-completion opencode completion
 
-  typeset -g +r _opencode_config_dir="$HOME/.config/opencode"
-  typeset -g +r _opencode_data_dir="$HOME/.local/share/opencode"
+  typeset -g _opencode_config_dir="$HOME/.config/opencode"
+  typeset -g _opencode_data_dir="$HOME/.local/share/opencode"
 
   alias oc="opencode"
 

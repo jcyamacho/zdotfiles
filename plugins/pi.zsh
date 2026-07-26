@@ -1,5 +1,5 @@
 # Pi (minimal terminal coding harness): https://pi.dev/
-typeset -g +r _pi_package="@earendil-works/pi-coding-agent"
+typeset -g _pi_package="@earendil-works/pi-coding-agent"
 
 export PI_TELEMETRY=0
 

@@ -10,7 +10,7 @@ exists fabric || {
   return
 }
 
-typeset -g +r _fabric_config_dir="$HOME/.config/fabric"
+typeset -g _fabric_config_dir="$HOME/.config/fabric"
 
 _fabric_load_patterns() {
   [[ -d "$_fabric_config_dir/patterns" ]] || return

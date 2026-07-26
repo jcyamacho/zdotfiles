@@ -1,5 +1,5 @@
 # openspec (OpenSpec CLI): https://openspec.dev/
-typeset -g +r _openspec_package="@fission-ai/openspec"
+typeset -g _openspec_package="@fission-ai/openspec"
 
 if exists openspec; then
   cache-completion openspec completion generate zsh

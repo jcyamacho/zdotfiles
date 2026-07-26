@@ -1,6 +1,6 @@
 # fnm (Fast Node Manager): https://github.com/Schniz/fnm
 
-typeset -g +r _fnm_multishell_root="${XDG_STATE_HOME:-$HOME/.local/state}/fnm_multishells"
+typeset -g _fnm_multishell_root="${XDG_STATE_HOME:-$HOME/.local/state}/fnm_multishells"
 
 _update_node() {
   info "Activating latest LTS node..."

@@ -1,5 +1,5 @@
 # bun (JavaScript runtime): https://bun.sh/
-typeset -g +r _bun_dir="$HOME/.bun"
+typeset -g _bun_dir="$HOME/.bun"
 
 if [[ -d "$_bun_dir/bin" ]]; then
   path=("$_bun_dir/bin" "${path[@]}")
