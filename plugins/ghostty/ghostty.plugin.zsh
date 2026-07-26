@@ -1,7 +1,5 @@
 # ghostty (terminal emulator): https://ghostty.org/
-export GHOSTTY_CONFIG_DIR="$HOME/.config/ghostty"
-export GHOSTTY_THEMES_DIR="$GHOSTTY_CONFIG_DIR/themes"
-export GHOSTTY_CONFIG_FILE="$GHOSTTY_CONFIG_DIR/config"
+typeset -g _ghostty_config_dir="$HOME/.config/ghostty"
 
 _ghostty_update_themes() {
   local themes_url="https://raw.githubusercontent.com/catppuccin/ghostty/refs/heads/main/themes"
@@ -13,12 +11,12 @@ _ghostty_update_themes() {
     catppuccin-frappe
   )
 
-  command mkdir -p -- "$GHOSTTY_THEMES_DIR"
+  command mkdir -p -- "$_ghostty_config_dir/themes"
 
   local theme
   for theme in "${themes[@]}"; do
     builtin print -r -- "Downloading ${theme}..."
-    command curl -fsSL "${themes_url}/${theme}.conf" -o "$GHOSTTY_THEMES_DIR/${theme}.conf"
+    command curl -fsSL "${themes_url}/${theme}.conf" -o "$_ghostty_config_dir/themes/${theme}.conf"
   done
 }
 
@@ -31,15 +29,15 @@ _ghostty_restore_config() {
   _ghostty_update_themes
 
   builtin print -r -- "Copying default config..."
-  command mkdir -p -- "$GHOSTTY_CONFIG_DIR"
-  command cp -- "$ZDOTFILES_DIR/plugins/ghostty/config" "$GHOSTTY_CONFIG_FILE"
+  command mkdir -p -- "$_ghostty_config_dir"
+  command cp -- "$ZDOTFILES_DIR/plugins/ghostty/config" "$_ghostty_config_dir/config"
 }
 
 if exists ghostty; then
   alias ghostty-restore-config="_ghostty_restore_config"
 
   ghostty-config() {
-    edit-open "$GHOSTTY_CONFIG_FILE"
+    edit-open "$_ghostty_config_dir/config"
   }
 
   ghostty-update-themes() {
@@ -54,7 +52,7 @@ if exists ghostty; then
     uninstall-ghostty() {
       info "Uninstalling ghostty..."
       command brew uninstall --cask ghostty
-      command rm -rf -- "$GHOSTTY_CONFIG_DIR"
+      command rm -rf -- "$_ghostty_config_dir"
       reload
     }
   fi
