@@ -1,6 +1,6 @@
 # ZDOTFILES
 
-Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) for plugins and [Starship](https://starship.rs) as the default prompt, with [Powerlevel10k](https://github.com/romkatv/powerlevel10k) as an option. Everything is driven by a single `zshrc.sh` so you can drop it into any machine quickly.
+Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) for plugins and [Starship](https://starship.rs) as the prompt. Everything is driven by a single `zshrc.sh` so you can drop it into any machine quickly.
 
 <p align="center">
   <img src="docs/avatar.webp" alt="ZDOTFILES avatar" width="220">
@@ -25,29 +25,7 @@ Compact Zsh setup that wires in [Antidote](https://github.com/mattmc3/antidote) 
 - Keep the repo elsewhere by setting `ZDOTFILES_DIR` before sourcing.
 - Change the editor used by helper commands by exporting `EDITOR`.
 - Adjust where self-managed tools install by overriding `CUSTOM_TOOLS_DIR`.
-- Switch prompt theme with `ZSH_PROMPT` (see below).
 - Set `GIT_WORKTREE_BASE` to change where `gwt-new` creates worktrees (see [git-worktree](plugins/git-worktree/README.md)).
-
-### Prompt theme (`ZSH_PROMPT`)
-
-Set `ZSH_PROMPT` **before** sourcing `zshrc.sh` to choose the prompt:
-
-| Value      | Theme                                                          |
-| ---------- | -------------------------------------------------------------- |
-| `starship` | [Starship](https://starship.rs) (default)                      |
-| `p10k`     | [Powerlevel10k](https://github.com/romkatv/powerlevel10k)      |
-
-```sh
-# In ~/.zshrc, before the source line:
-export ZSH_PROMPT=p10k
-source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
-```
-
-Starship is cross-shell but slower due to fork+exec on every prompt.
-Powerlevel10k uses instant prompt for near-zero first-prompt lag and
-async git status for fast command lag. See
-[powerlevel10k](plugins/powerlevel10k/README.md) and
-[starship](plugins/starship/README.md) for per-theme details.
 
 ### Disable alias suggestions (`ZSH_DISABLE_YOU_SHOULD_USE`)
 
