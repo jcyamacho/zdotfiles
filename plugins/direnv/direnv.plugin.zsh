@@ -1,13 +1,12 @@
 # direnv (per-directory env vars via .envrc): https://direnv.net/
-export DIRENV_CONFIG_DIR="$HOME/.config/direnv"
-export DIRENV_CONFIG_FILE="$DIRENV_CONFIG_DIR/direnv.toml"
+typeset -g _direnv_config_dir="$HOME/.config/direnv"
 
 _install_direnv() {
   _run_remote_installer "https://direnv.net/install.sh" "bash" --env "bin_path=$CUSTOM_TOOLS_DIR" > /dev/null
 
-  [[ -f "$DIRENV_CONFIG_FILE" ]] || {
-    command mkdir -p -- "$DIRENV_CONFIG_DIR"
-    command cp -- "$ZDOTFILES_DIR/plugins/direnv/direnv.toml" "$DIRENV_CONFIG_FILE"
+  [[ -f "$_direnv_config_dir/direnv.toml" ]] || {
+    command mkdir -p -- "$_direnv_config_dir"
+    command cp -- "$ZDOTFILES_DIR/plugins/direnv/direnv.toml" "$_direnv_config_dir/direnv.toml"
   }
 }
 
@@ -17,7 +16,7 @@ if exists direnv; then
   uninstall-direnv() {
     info "Uninstalling direnv..."
     command rm -f -- "$CUSTOM_TOOLS_DIR/direnv"
-    command rm -rf -- "$DIRENV_CONFIG_DIR"
+    command rm -rf -- "$_direnv_config_dir"
     reload
   }
 
@@ -32,7 +31,7 @@ if exists direnv; then
   }
 
   direnv-config() {
-    edit-open "$DIRENV_CONFIG_FILE"
+    edit-open "$_direnv_config_dir/direnv.toml"
   }
 
   updates+=(_update_direnv)

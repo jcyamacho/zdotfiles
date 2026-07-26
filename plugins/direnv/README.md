@@ -4,12 +4,12 @@ Per-directory environment variables via `.envrc` files.
 
 - <https://direnv.net/>
 
-## Environment Variables
+## Configuration Paths
 
-| Variable            | Value                          |
-| ------------------- | ------------------------------ |
-| `DIRENV_CONFIG_DIR`  | `~/.config/direnv`             |
-| `DIRENV_CONFIG_FILE` | `~/.config/direnv/direnv.toml` |
+| Purpose | Path |
+| --- | --- |
+| Configuration directory | `~/.config/direnv` |
+| Configuration file | `~/.config/direnv/direnv.toml` |
 
 ## Functions
 
