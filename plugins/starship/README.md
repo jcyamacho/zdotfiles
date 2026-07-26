@@ -6,20 +6,20 @@ Cross-shell prompt customization.
 
 ## Environment Variables
 
-| Variable              | Value                       |
-| --------------------- | --------------------------- |
-| `STARSHIP_CONFIG_FILE` | `~/.config/starship.toml`   |
+| Variable | Default |
+| --- | --- |
+| `STARSHIP_CONFIG` | `~/.config/starship.toml` |
 
 ## Functions
 
-| Function                     | Description                                  |
-| ---------------------------- | -------------------------------------------- |
-| `update-starship`            | Update Starship to the latest version        |
-| `starship-config`            | Edit the Starship config file and reload     |
-| `starship-preset-custom`     | Apply the custom preset from this repo       |
-| `starship-preset-nerd-fonts` | Apply the nerd-font-symbols preset           |
-| `starship-preset-no-nerd-font` | Apply the no-nerd-font preset              |
-| `starship-preset-plain-text` | Apply the plain-text-symbols preset          |
+| Function                       | Description                              |
+| ------------------------------ | ---------------------------------------- |
+| `update-starship`              | Update Starship to the latest version    |
+| `starship-config`              | Edit the config file and reload          |
+| `starship-preset-custom`       | Apply the custom preset from this repo   |
+| `starship-preset-nerd-fonts`   | Apply the nerd-font-symbols preset       |
+| `starship-preset-no-nerd-font` | Apply the no-nerd-font preset            |
+| `starship-preset-plain-text`   | Apply the plain-text-symbols preset      |
 
 ## Notes
 
