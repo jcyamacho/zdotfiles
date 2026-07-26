@@ -1,11 +1,10 @@
 # wezterm (terminal emulator): https://wezterm.org/
 
-export WEZTERM_CONFIG_DIR="$HOME/.config/wezterm"
-export WEZTERM_CONFIG_FILE="$WEZTERM_CONFIG_DIR/wezterm.lua"
+export WEZTERM_CONFIG_FILE="${WEZTERM_CONFIG_FILE:-$HOME/.config/wezterm/wezterm.lua}"
 
 _wezterm_restore_config() {
   builtin print -r -- "Copying default config..."
-  command mkdir -p -- "$WEZTERM_CONFIG_DIR"
+  command mkdir -p -- "${WEZTERM_CONFIG_FILE:h}"
   command cp -- "$ZDOTFILES_DIR/plugins/wezterm/wezterm.lua" "$WEZTERM_CONFIG_FILE"
 }
 
@@ -20,7 +19,7 @@ if exists wezterm; then
     uninstall-wezterm() {
       info "Uninstalling wezterm..."
       command brew uninstall --cask wezterm
-      command rm -rf -- "$WEZTERM_CONFIG_DIR"
+      command rm -rf -- "$HOME/.config/wezterm"
       reload
     }
   fi
