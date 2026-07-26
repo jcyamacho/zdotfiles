@@ -1,7 +1,5 @@
 # Codex CLI: https://developers.openai.com/codex/cli
-export CODEX_HOME="$HOME/.codex"
-export CODEX_PROMPTS_DIR="$CODEX_HOME/prompts"
-export CODEX_SECURE_MODE=1
+export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 
 if exists codex; then
   cache-completion codex completion zsh

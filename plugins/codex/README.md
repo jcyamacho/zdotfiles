@@ -6,11 +6,9 @@ OpenAI Codex CLI for AI-assisted coding.
 
 ## Environment Variables
 
-| Variable            | Value               |
-| ------------------- | ------------------- |
-| `CODEX_HOME`        | `~/.codex`          |
-| `CODEX_PROMPTS_DIR` | `~/.codex/prompts`  |
-| `CODEX_SECURE_MODE` | `1`                 |
+| Variable | Default |
+| --- | --- |
+| `CODEX_HOME` | `~/.codex` |
 
 ## Functions
 
