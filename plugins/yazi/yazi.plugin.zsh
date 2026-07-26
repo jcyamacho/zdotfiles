@@ -1,6 +1,6 @@
 # yazi (terminal file manager): https://yazi-rs.github.io
 
-export YAZI_CONFIG_HOME="$HOME/.config/yazi"
+export YAZI_CONFIG_HOME="${YAZI_CONFIG_HOME:-$HOME/.config/yazi}"
 
 _yazi_restore_config() {
   info "Installing catppuccin-mocha flavor..."
@@ -28,12 +28,7 @@ if exists yazi; then
   # ZLE widget for Ctrl+o keybinding
   _yazi_widget() {
     y
-    # p10k caches prompt segments; plain reset-prompt won't update them
-    if (( $+functions[p10k-zle-reset-prompt] )); then
-      p10k-zle-reset-prompt
-    else
-      zle reset-prompt
-    fi
+    zle reset-prompt
   }
   zle -N _yazi_widget
   bindkey '^o' _yazi_widget
