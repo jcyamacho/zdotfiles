@@ -113,7 +113,7 @@ if exists memo; then
 elif exists brew; then
   install-memo() {
     info "Installing memo..."
-    command brew install jcyamacho/tap/memo
+    command brew install --no-ask jcyamacho/tap/memo
     reload
   }
 fi

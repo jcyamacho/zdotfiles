@@ -26,7 +26,7 @@ if exists wezterm; then
 elif exists brew; then
   install-wezterm() {
     info "Installing wezterm..."
-    command brew install --cask wezterm
+    command brew install --no-ask --cask wezterm
     _wezterm_restore_config
     reload
   }

@@ -48,7 +48,7 @@ if exists zellij; then
 elif exists brew; then
   install-zellij() {
     info "Installing zellij..."
-    command brew install zellij
+    command brew install --no-ask zellij
     _zellij_copy_layouts
     reload
   }

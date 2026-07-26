@@ -31,7 +31,7 @@ if exists zed; then
 elif exists brew; then
   install-zed() {
     info "Installing zed..."
-    command brew install --cask zed
+    command brew install --no-ask --cask zed
     reload
   }
 fi

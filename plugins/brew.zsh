@@ -12,7 +12,7 @@ _update_brew() {
   info "Updating brew..."
   command brew update
   info "Upgrading brew packages..."
-  command brew upgrade --greedy --yes
+  command brew upgrade --no-ask --greedy
   info "Cleaning up brew..."
   command brew cleanup --prune=all
 }

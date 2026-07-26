@@ -69,7 +69,7 @@ if exists gh; then
 else
   install-gh() {
     info "Installing gh-cli..."
-    command brew install gh
+    command brew install --no-ask gh
     reload
   }
 fi

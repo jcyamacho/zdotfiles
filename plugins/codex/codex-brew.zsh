@@ -10,7 +10,7 @@ if exists codex; then
 else
   install-codex() {
     info "Installing codex..."
-    command brew install codex
+    command brew install --no-ask codex
     command mkdir -p -- "$CODEX_HOME/prompts"
     reload
   }

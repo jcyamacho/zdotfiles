@@ -25,7 +25,7 @@ if exists flutter; then
 else
   install-flutter() {
     info "Installing flutter..."
-    command brew install --cask flutter
+    command brew install --no-ask --cask flutter
     command flutter --disable-analytics
     command dart --disable-analytics
     reload

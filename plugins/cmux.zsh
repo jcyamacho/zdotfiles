@@ -41,7 +41,7 @@ elif exists brew; then
   install-cmux() {
     info "Installing cmux..."
     command brew tap manaflow-ai/cmux
-    command brew install --cask cmux
+    command brew install --no-ask --cask cmux
     _cmux_setup_cli || warn "cmux CLI setup skipped: app bundle not found"
     reload
   }

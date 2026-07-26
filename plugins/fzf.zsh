@@ -11,7 +11,7 @@ if exists fzf; then
 else
   install-fzf() {
     info "Installing fzf..."
-    command brew install fzf
+    command brew install --no-ask fzf
     reload
   }
 fi

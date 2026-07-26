@@ -11,7 +11,7 @@ if exists varlock; then
 else
   install-varlock() {
     info "Installing varlock..."
-    command brew install dmno-dev/tap/varlock
+    command brew install --no-ask dmno-dev/tap/varlock
     reload
   }
 fi

@@ -47,7 +47,7 @@ elif exists brew; then
   alias install-ruby="install-rbenv"
   install-rbenv() {
     info "Installing rbenv..."
-    command brew install rbenv
+    command brew install --no-ask rbenv
     _update_ruby
     reload
   }

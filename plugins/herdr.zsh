@@ -20,7 +20,7 @@ if exists herdr; then
 else
   install-herdr() {
     info "Installing Herdr..."
-    command brew install herdr
+    command brew install --no-ask herdr
     reload
   }
 fi

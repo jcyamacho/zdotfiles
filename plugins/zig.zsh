@@ -11,7 +11,7 @@ if exists zig; then
 else
   install-zig() {
     info "Installing zig..."
-    command brew install zig
+    command brew install --no-ask zig
     reload
   }
 fi

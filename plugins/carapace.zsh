@@ -15,7 +15,7 @@ if exists carapace; then
 elif exists brew; then
   install-carapace() {
     info "Installing carapace..."
-    command brew install carapace
+    command brew install --no-ask carapace
     reload
   }
 else

@@ -28,7 +28,7 @@ if exists orb; then
 elif exists brew; then
   install-orbstack() {
     info "Installing orbstack..."
-    command brew install --cask orbstack
+    command brew install --no-ask --cask orbstack
     reload
   }
 fi

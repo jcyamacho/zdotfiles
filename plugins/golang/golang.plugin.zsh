@@ -39,10 +39,10 @@ if exists go; then
 elif exists brew; then
   install-go() {
     info "Installing go..."
-    command brew install go
+    command brew install --no-ask go
 
     info "Installing golangci-lint..."
-    command brew install golangci-lint
+    command brew install --no-ask golangci-lint
 
     command go telemetry off 2>/dev/null
 

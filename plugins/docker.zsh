@@ -15,7 +15,7 @@ if exists docker; then
 elif exists brew; then
   install-docker() {
     info "Installing docker..."
-    command brew install docker
+    command brew install --no-ask docker
     reload
   }
 fi

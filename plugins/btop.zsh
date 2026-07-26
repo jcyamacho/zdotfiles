@@ -13,7 +13,7 @@ if exists btop; then
 else
   install-btop() {
     info "Installing btop..."
-    command brew install btop
+    command brew install --no-ask btop
     reload
   }
 fi

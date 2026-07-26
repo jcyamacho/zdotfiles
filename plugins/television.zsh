@@ -18,7 +18,7 @@ if exists tv; then
 elif exists brew; then
   install-television() {
     info "Installing television..."
-    command brew install television
+    command brew install --no-ask television
     reload
   }
 fi

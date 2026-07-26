@@ -44,7 +44,7 @@ if exists wt; then
 elif exists brew; then
   install-worktrunk() {
     info "Installing worktrunk..."
-    command brew install worktrunk
+    command brew install --no-ask worktrunk
 
     if exists claude; then
       _wt_set_provider claude

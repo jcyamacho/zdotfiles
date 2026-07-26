@@ -50,7 +50,7 @@ if exists yazi; then
 elif exists brew; then
   install-yazi() {
     info "Installing yazi..."
-    command brew install yazi
+    command brew install --no-ask yazi
     _yazi_restore_config
     reload
   }

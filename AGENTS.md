@@ -122,6 +122,9 @@ guard and lifecycle structure.
   the `_update_<tool>` plus `update-<tool>` split.
 - Brew-managed tools are updated by `update-brew` unless they
   need extra post-update steps.
+- Pass `--no-ask` to scripted `brew install` and `brew upgrade` calls.
+  Do not export `HOMEBREW_NO_ASK`; manual commands keep Homebrew's
+  confirmation behavior.
 - Self-managed tools (e.g. `rustup`, `bun`, `mise`) need explicit
   updater functions.
 - Bootstrap only essentials at startup (Antidote, Homebrew, Starship);
@@ -156,7 +159,7 @@ if exists tool; then
 else
   install-tool() {
     info "Installing tool..."
-    command brew install tool
+    command brew install --no-ask tool
     reload
   }
 fi
@@ -181,7 +184,7 @@ if exists tool; then
 elif exists brew; then
   install-tool() {
     info "Installing tool..."
-    command brew install tool
+    command brew install --no-ask tool
     reload
   }
 fi

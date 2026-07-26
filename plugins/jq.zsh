@@ -11,7 +11,7 @@ if exists jq; then
 else
   install-jq() {
     info "Installing jq..."
-    command brew install jq
+    command brew install --no-ask jq
     reload
   }
 fi

@@ -70,7 +70,7 @@ elif exists brew; then
   alias install-node="install-fnm"
   install-fnm() {
     info "Installing fnm..."
-    command brew install fnm
+    command brew install --no-ask fnm
     _fnm_env
     _update_node
     reload

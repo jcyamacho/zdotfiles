@@ -16,7 +16,7 @@ if exists code; then
 elif exists brew; then
   install-code() {
     info "Installing visual studio code..."
-    command brew install --cask visual-studio-code
+    command brew install --no-ask --cask visual-studio-code
     reload
   }
 fi

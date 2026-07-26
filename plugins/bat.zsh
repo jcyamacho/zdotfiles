@@ -49,7 +49,7 @@ if exists bat; then
 elif exists brew; then
   install-bat() {
     info "Installing bat..."
-    command brew install bat
+    command brew install --no-ask bat
     reload
   }
 fi

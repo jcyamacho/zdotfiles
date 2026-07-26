@@ -33,7 +33,7 @@ elif exists brew; then
 
   install-lsd() {
     info "Installing lsd..."
-    command brew install lsd
+    command brew install --no-ask lsd
     _lsd_restore_config
     reload
   }

@@ -16,7 +16,7 @@ if exists cursor; then
 elif exists brew; then
   install-cursor() {
     info "Installing cursor..."
-    command brew install --cask cursor
+    command brew install --no-ask --cask cursor
     reload
   }
 fi
