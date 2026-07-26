@@ -103,3 +103,32 @@ if [[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]]; then
   zprof
 fi
 # STARTUP_PROFILING_RESULTS end
+
+# RECOMMENDED_TOOLS
+# Keep this list in sync with the Recommended section in README.md.
+install-recommended() {
+  local -a installers=()
+  exists fzf || installers+=(install-fzf)
+  exists zoxide || installers+=(install-zoxide)
+  exists atuin || installers+=(install-atuin)
+  exists carapace || installers+=(install-carapace)
+
+  if (( $#installers == 0 )); then
+    info "All recommended tools are already installed"
+    return 0
+  fi
+
+  local result=0
+  local installer
+  for installer in "${installers[@]}"; do
+    if (( ! $+functions[$installer] )); then
+      error "Installer unavailable: $installer"
+      result=1
+      continue
+    fi
+
+    "$installer" || result=1
+  done
+  return $result
+}
+# RECOMMENDED_TOOLS end

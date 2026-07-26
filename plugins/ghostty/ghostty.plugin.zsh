@@ -59,6 +59,7 @@ if exists ghostty; then
 elif exists brew; then
   install-ghostty() {
     info "Installing ghostty..."
+    command brew install --no-ask --cask font-monaspace
     command brew install --no-ask --cask ghostty
     _ghostty_restore_config
     reload

@@ -56,12 +56,12 @@ These are the `install-*` helpers (run the command to install; integrations load
 
 ### Recommended (not installed by default)
 
+Run `install-recommended` to install every missing tool in this group.
+
 - `install-fzf` – [fzf](https://junegunn.github.io/fzf/) fuzzy finder (enables `fzf-tab` if present)
-- `install-television` – [Television](https://alexpasmantier.github.io/television/) fuzzy finder with shell integration when Atuin is absent
 - `install-zoxide` (or `install-z`) – [zoxide](https://github.com/ajeetdsouza/zoxide) smarter `cd`
 - `install-atuin` – [Atuin](https://atuin.sh/) synced, searchable history
 - `install-carapace` – [Carapace](https://carapace.sh/) completions
-- `install-direnv` – [direnv](https://direnv.net/) + hook
 
 ### Optional
 
@@ -75,6 +75,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-cmux` – [cmux](https://www.cmux.dev/) native macOS terminal for AI agents
 - `install-cursor` – [Cursor](https://www.cursor.com/)
 - `install-deno` – [Deno](https://deno.land/) runtime
+- `install-direnv` – [direnv](https://direnv.net/) + hook
 - `install-docker` – [Docker](https://www.docker.com/) CLI
 - `install-dotnet` - [.NET SDK](https://dotnet.microsoft.com/) developer platform ([dotnet](plugins/dotnet/README.md))
 - `install-dotenvx` – [dotenvx](https://github.com/dotenvx/dotenvx) a secure dotenv
@@ -98,6 +99,7 @@ These are the `install-*` helpers (run the command to install; integrations load
 - `install-opencode` – [OpenCode](https://opencode.ai/)
 - `install-orbstack` - [OrbStack](https://orbstack.dev/) Docker Desktop alternative
 - `install-pi` - [Pi](https://pi.dev/) minimal terminal coding harness
+- `install-television` – [Television](https://alexpasmantier.github.io/television/) fuzzy finder with shell integration when Atuin is absent
 - `install-rbenv` (or `install-ruby`) – [rbenv](https://github.com/rbenv/rbenv)
 - `install-rust` – [rustup](https://rustup.rs/)
 - `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling ([python](plugins/python/README.md))

@@ -16,7 +16,7 @@ GPU-accelerated terminal emulator.
 
 | Function                 | Description                                    |
 | ------------------------ | ---------------------------------------------- |
-| `install-ghostty`        | Install Ghostty via Homebrew cask              |
+| `install-ghostty`        | Install Ghostty and Monaspace via Homebrew     |
 | `uninstall-ghostty`      | Remove Ghostty and its configuration           |
 | `ghostty-update-themes`  | Download latest Catppuccin themes              |
 | `ghostty-restore-config` | Reset config to default and update themes      |
