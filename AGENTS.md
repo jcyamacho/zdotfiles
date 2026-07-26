@@ -7,8 +7,8 @@ Prioritize secure, fast startup and minimal diffs.
 
 `zshrc.sh` is sourced by `~/.zshrc` and bootstraps in order:
 
-1. Cache dir (`$ZDOTFILES_CACHE_DIR`), completions dir
-   (`$ZDOTFILES_COMPLETIONS_DIR` on `$fpath`), and `$CUSTOM_TOOLS_DIR`
+1. Cache dir (`$ZDOTFILES_CACHE_DIR`), private completions dir on
+   `$fpath`, and `$CUSTOM_TOOLS_DIR`
    on `$path`
 2. `_utils.zsh` — shared helpers (see below)
 3. The `updates` array and `update-all` dispatcher
@@ -46,26 +46,26 @@ Order in `.zsh_plugins.txt` matters:
 
 ### Key helpers (`_utils.zsh`)
 
-- `exists <cmd>` — cached `$+commands` check (cleared on `reload`)
-- `source-cached-init <cmd> <args...>` — caches tool init output
+- `exists <cmd>` - checks the current `$commands` entry for an executable
+- `source-cached-init <cmd> <args...>` - caches tool init output
   and sources it; regenerates when binary is newer
   - Use only when output is deterministic/static across sessions.
   - Do not cache commands that emit per-session values (PID,
     timestamps, temp paths). Example: do not cache `fnm env --shell zsh`.
   - Do not use for `#compdef` completion scripts; use
     `cache-completion` instead.
-- `cache-completion <cmd> <args...>` — caches `#compdef` completion
+- `cache-completion <cmd> <args...>` - caches `#compdef` completion
   output to `$ZDOTFILES_CACHE_DIR/completions/_<cmd>` and adds it to
   `fpath`; regenerates when binary is newer. Use instead of
   `source-cached-init` when the tool outputs a `#compdef` file
   (completion functions that use `_arguments`).
-- `_run_remote_installer <url> [shell] [--env K=V]... [-- args...]` —
+- `_run_remote_installer <url> [shell] [--env K=V]... [-- args...]` -
   secure download-and-run with `~/.zshrc` write-lock
-- `info`, `warn`, `error` — colored output helpers
-- `confirm <prompt> [yes|no]` — terminal-only yes/no prompt that accepts
+- `info`, `warn`, `error` - colored output helpers
+- `confirm <prompt> [yes|no]` - terminal-only yes/no prompt that accepts
   `y`/`yes`, `n`/`no`, or bare `Enter` for the default, and re-prompts on
   invalid input
-- `reload` — clear `exists` cache and re-source `zshrc.sh`
+- `reload` - re-sources `zshrc.sh`
 
 ## Core Rules
 
@@ -75,9 +75,8 @@ Order in `.zsh_plugins.txt` matters:
 - Start plugin files with `# <tool> (<short description>): https://...`.
 - Quote scalars (`"$var"`); pass arrays as `"${array[@]}"`.
 - Use `[[ ... ]]`, `local`, `${1:?message}`, and `while IFS= read -r line`.
-- Declare locals as close as possible to first use (prefer inline declaration
-  with assignment). Declare at function top only when reused across most of
-  the function.
+- Give variables the smallest useful scope. Separate declaration from assignment
+  when the command's exit status matters.
 - Use `builtin print -r --` instead of `echo`; prefix external calls
   with `command`/`builtin` to bypass aliases.
 - Prefer zsh native expansion over subshells/pipes for simple transforms.
@@ -104,6 +103,15 @@ Order in `.zsh_plugins.txt` matters:
   define empty stub functions in the else-branch so other plugins
   calling those hooks don't error.
 
+Choose the ownership model first. The templates below define the canonical
+guard and lifecycle structure.
+
+| Pattern | Ownership |
+| --- | --- |
+| Brew-managed | The entire plugin depends on Homebrew |
+| Brew-optional | The tool works independently; Homebrew owns lifecycle |
+| Self-managed | The installer owns the binary and updater |
+
 ### Lifecycle
 
 - Register `_update_<tool>` in `updates`; expose `update-<tool>`
@@ -126,7 +134,15 @@ Order in `.zsh_plugins.txt` matters:
   (e.g. node, python).
 - List installable tools in root `README.md`; list utility
   plugins in the Utility Plugins section.
-- Brew-managed plugin skeleton:
+
+### Canonical templates
+
+Use these templates for branch structure and lifecycle ownership. Replace
+placeholders and add only the configuration required by the tool.
+
+#### Brew-managed
+
+Use when the entire plugin depends on Homebrew.
 
 ```zsh
 exists brew || return
@@ -146,12 +162,14 @@ else
 fi
 ```
 
-- Brew-optional plugin skeleton (tool works without brew, brew
-  used only for lifecycle):
+#### Brew-optional
+
+Use when the tool works independently and Homebrew owns only installation and
+removal.
 
 ```zsh
 if exists tool; then
-  # tool config, aliases, functions here
+  # Tool configuration, aliases, and functions.
 
   if exists brew; then
     uninstall-tool() {
@@ -169,11 +187,14 @@ elif exists brew; then
 fi
 ```
 
-- Self-managed plugin skeleton:
+#### Self-managed
+
+Use when the tool's installer owns the binary and the tool has an independent
+update path. Remove `source-cached-init` when the tool has no shell init.
 
 ```zsh
 if exists tool; then
-  source-cached-init tool init zsh   # omit if tool has no shell init
+  source-cached-init tool init zsh
 
   uninstall-tool() {
     info "Uninstalling tool..."
@@ -183,10 +204,14 @@ if exists tool; then
 
   _update_tool() {
     info "Updating tool..."
-    command tool self-update           # use tool's own upgrade command
+    command tool self-update
   }
 
-  update-tool() { _update_tool; reload }
+  update-tool() {
+    _update_tool
+    reload
+  }
+
   updates+=(_update_tool)
 else
   install-tool() {
@@ -203,9 +228,16 @@ fi
   already declared `typeset -gU` in `zshrc.sh`, so do not redeclare it
   per plugin; the global `-U` keeps prepends deduped across reloads.
 - Disable tool telemetry when supported.
-- For constants that must survive `reload`, use the readonly guard
-  pattern: `(( $+_var )) || typeset -gr _var="value"`. The `$+`
-  check prevents reassignment errors on the readonly variable.
+- Use `local` for function state.
+- Use `typeset -g _name="value"` only when plugin functions need private
+  state after the file is sourced. Reassigning it on `reload` is intentional.
+- Use a normal global assignment for user configuration that the shell consumes.
+- Use `export` only for environment variables consumed by external processes.
+- Before removing or renaming an exported variable, verify the tool's current
+  contract in its official documentation or source and inspect why the variable
+  was introduced. Absence of local references is not evidence that child
+  processes ignore it.
+- Derive secondary paths from their owned base path at the point of use.
 
 ### File layout
 
@@ -219,14 +251,11 @@ fi
 
 ## Adding a Plugin (Checklist)
 
-1. Create plugin file (simple or subdirectory layout).
-2. Add entry to `.zsh_plugins.txt` at the position dictated by the Load
-   order rules (use `conditional:"exists <tool>"` where useful).
-3. Add file header with tool name and URL.
-4. Add guard logic.
-5. Add `install-<tool>` and `uninstall-<tool>` when lifecycle management is needed.
-6. Register updater when the tool has an independent update path.
-7. Update `README.md` with the tool listing.
+1. Choose the matching plugin pattern and file layout.
+2. Add the entry at the correct position in `.zsh_plugins.txt`.
+3. Add the standard header, guards, and required lifecycle functions.
+4. Register an updater only when the tool has an independent update path.
+5. Update the relevant tool or utility listing in `README.md`.
 
 ## Validation
 
