@@ -1,6 +1,6 @@
-#!/bin/sh
-# Setup script for new git worktrees.
-# Runs automatically after `gwt <branch>` creates a worktree.
+# Setup script for new git worktrees. Sourced, not executed, by `gwt <branch>`
+# after it creates one: zsh syntax is available, and any state it changes
+# persists in the shell you land in.
 #
 # Available environment variables:
 #   $ROOT_WORKTREE_PATH — absolute path to the main (bare/root) worktree

@@ -1,17 +1,30 @@
 # git-worktree (helpers for managing git worktrees): https://git-scm.com/docs/git-worktree
 
-function gwt {
-  if (( $# )); then
-    git-worktree-new "$@"
-  else
-    git-worktree-switch
-  fi
-}
-
-alias gwt-rm="git-worktree-delete"
 alias gwt-ls="command git worktree list"
 alias gwt-prune="command git worktree prune"
-alias gwt-setup="git-worktree-setup-script"
+
+# Worktrees are identified by the basename of their directory, which is what the
+# completions offer and what gwts/gwt-rm resolve back to a path. A worktree in
+# detached HEAD has no branch, so the directory name is the only always-present
+# handle.
+_gwt_worktree_paths() {
+  GIT_OPTIONAL_LOCKS=0 command git worktree list --porcelain 2>/dev/null \
+    | command awk '$1 == "worktree" { print substr($0, 10) }'
+}
+
+_gwt_path_for() {
+  local name="${1:?_gwt_path_for: missing worktree name}"
+
+  local worktree
+  for worktree in "${(@f)$(_gwt_worktree_paths)}"; do
+    if [[ "${worktree:t}" == "$name" ]]; then
+      builtin print -r -- "$worktree"
+      return 0
+    fi
+  done
+
+  return 1
+}
 
 # gwt takes a branch name, plus an optional base ref that only applies when the
 # branch does not exist yet. Branches that already have a worktree are dropped
@@ -42,6 +55,48 @@ _gwt() {
 
 compdef _gwt gwt
 
+# Offer "<directory name>:<branch>" so the menu shows which branch each worktree
+# holds while completing the directory name.
+_gwt_worktree_descriptions() {
+  GIT_OPTIONAL_LOCKS=0 command git worktree list --porcelain 2>/dev/null \
+    | command awk '
+        $1 == "worktree" { n = split(substr($0, 10), parts, "/"); name = parts[n] }
+        $1 == "branch"   { sub(/^refs\/heads\//, "", $2); print name ":" $2 }
+        $1 == "detached" { print name ":detached HEAD" }
+      '
+}
+
+# Both completions drop what the command would reject anyway: switching to the
+# current worktree is a no-op, and removing the current or main one errors out.
+_gwt_complete_worktrees() {
+  local -a worktrees=("${(@f)$(_gwt_worktree_descriptions)}")
+  local name
+  for name in "$@"; do
+    worktrees=("${(@)worktrees:#${name}:*}")
+  done
+  (( $#worktrees )) || return 1
+
+  _describe -t worktrees worktree worktrees
+}
+
+_gwts() {
+  local current
+  current="$(GIT_OPTIONAL_LOCKS=0 command git rev-parse --show-toplevel 2>/dev/null)" || return 1
+
+  _gwt_complete_worktrees "${current:t}"
+}
+
+_gwt-rm() {
+  local current main
+  current="$(GIT_OPTIONAL_LOCKS=0 command git rev-parse --show-toplevel 2>/dev/null)" || return 1
+  main="$(_gwt_worktree_paths | command head -1)"
+
+  _gwt_complete_worktrees "${current:t}" "${main:t}"
+}
+
+compdef _gwts gwts
+compdef _gwt-rm gwt-rm
+
 # Detect the default branch name from origin.
 # IMPORTANT: Do NOT change the primary detection strategy (see below).
 _gwt_default_branch() {
@@ -64,76 +119,28 @@ _gwt_default_branch() {
   builtin print -r -- "${default_branch:-main}"
 }
 
-# Copy gitignored files listed in .worktreeinclude from the main worktree.
-# Git's post-checkout hook handles actions (npm install, etc.) but has no
-# declarative way to copy files. .worktreeinclude fills that gap.
-# Compatible with Claude Code Desktop's convention.
-_gwt_copy_worktreeinclude() {
-  local repo_root="${1:?}"
-  local include_file="$repo_root/.worktreeinclude"
-  [[ -f "$include_file" ]] || return 0
-
-  local -a patterns=()
-  while IFS= read -r line; do
-    line="${line## }"
-    line="${line%% }"
-    [[ -z "$line" || "$line" == \#* ]] && continue
-    if [[ "$line" == \!* ]]; then
-      warn "worktreeinclude: negation patterns not supported, skipping: $line"
-      continue
-    fi
-    patterns+=("$line")
-  done < "$include_file"
-
-  (( ${#patterns} )) || return 0
-
-  local pattern
-  for pattern in "${patterns[@]}"; do
-    local -a matches=("$repo_root"/${~pattern}(N))
-    local match
-    for match in "${matches[@]}"; do
-      local rel="${match#$repo_root/}"
-      local dest="$PWD/$rel"
-      if [[ -d "$match" ]]; then
-        command mkdir -p -- "$dest"
-        command cp -Rn -- "$match/." "$dest/" 2>/dev/null
-        info "worktreeinclude: copied $rel/"
-      elif [[ -f "$match" && ! -e "$dest" ]]; then
-        command mkdir -p -- "${dest:h}"
-        command cp -n -- "$match" "$dest" 2>/dev/null
-        info "worktreeinclude: copied $rel"
-      fi
-    done
-  done
-}
-
 _gwt_run_setup_hooks() {
   local common_git_dir
   common_git_dir="$(command git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || return 0
-  local repo_root="${common_git_dir:h}"
-  local local_setup="$common_git_dir/setup-worktree.sh"
-  local codex_setup="$repo_root/.codex/setup.sh"
+  local setup_script="$common_git_dir/setup-worktree.zsh"
 
-  _gwt_copy_worktreeinclude "$repo_root"
-
-  export ROOT_WORKTREE_PATH="$repo_root"
-  if [[ -f "$local_setup" ]]; then
-    info "Running local setup script: $local_setup"
-    source "$local_setup"
-  elif [[ -f "$codex_setup" ]]; then
-    info "Running Codex setup script: $codex_setup"
-    source "$codex_setup"
-  else
+  if [[ ! -f "$setup_script" ]]; then
     builtin print ""
-    info "No setup script found. You can:"
-    info "  - Place a setup script at: $local_setup"
-    info "  - Create a .worktreeinclude file to copy gitignored files."
-    info "The environment variable \$ROOT_WORKTREE_PATH will be available in setup scripts."
+    info "No setup script found. Run gwt-setup to create one at:"
+    info "  $setup_script"
+    return 0
   fi
+
+  info "Running setup script: $setup_script"
+
+  # Sourced rather than executed so the script can affect the new shell state,
+  # and $ROOT_WORKTREE_PATH lets it reach back into the main worktree.
+  export ROOT_WORKTREE_PATH="${common_git_dir:h}"
+  source "$setup_script"
   unset ROOT_WORKTREE_PATH
 }
 
-git-worktree-new() {
+gwt() {
   local branch_name="${1:?Usage: gwt <branch-name>}"
   local base_ref="${2:-}"
 
@@ -183,20 +190,6 @@ git-worktree-new() {
   info "Now in worktree '${PWD:t}'."
 }
 
-_gwt_select() {
-  local header="${1:?Usage: _gwt_select <header>}"
-  exists fzf || { error "fzf is required"; return 1; }
-
-  local selected
-  selected="$(
-    command git worktree list --porcelain \
-      | command awk '$1 == "worktree" { print substr($0, 10) }' \
-      | fzf --header "$header" --height 40%
-  )"
-
-  [[ -n "$selected" ]] && builtin print -r -- "$selected"
-}
-
 _gwt_force_remove_error() {
   local output="${1:-}"
 
@@ -205,18 +198,30 @@ _gwt_force_remove_error() {
     || "$output" == *"use --force"* ]]
 }
 
-git-worktree-delete() {
-  local selected_worktree_path
-  selected_worktree_path="$(_gwt_select "Select worktree to DELETE")" || return
+gwt-rm() {
+  local name="${1:?Usage: gwt-rm <worktree>}"
 
-  # Don't allow deleting the current or main worktree easily
-  local main_path="$(command git rev-parse --show-toplevel 2>/dev/null)"
-  if [[ "$selected_worktree_path" == "$main_path" ]]; then
+  local selected_worktree_path
+  selected_worktree_path="$(_gwt_path_for "$name")" || {
+    error "No worktree named '$name'."
+    return 1
+  }
+
+  # `git worktree list` always reports the main worktree first. --show-toplevel
+  # cannot be used here: it reports whichever worktree we are standing in, so it
+  # left the real main worktree unprotected from any other worktree.
+  local main_worktree
+  main_worktree="$(_gwt_worktree_paths | command head -1)"
+  if [[ "$selected_worktree_path" == "$main_worktree" ]]; then
     error "Cannot delete the main worktree."
     return 1
   fi
 
-  if [[ "$selected_worktree_path" == "$PWD" ]]; then
+  # Compared against the worktree root rather than $PWD so that standing in a
+  # subdirectory of the target still counts as being inside it.
+  local current_worktree
+  current_worktree="$(GIT_OPTIONAL_LOCKS=0 command git rev-parse --show-toplevel 2>/dev/null)"
+  if [[ "$selected_worktree_path" == "$current_worktree" ]]; then
     error "Cannot delete the current worktree. Move out first."
     return 1
   fi
@@ -248,22 +253,27 @@ git-worktree-delete() {
   fi
 }
 
-git-worktree-switch() {
-  local selected_worktree_path
-  selected_worktree_path="$(_gwt_select "Select worktree to switch to")" || return
+gwts() {
+  local name="${1:?Usage: gwts <worktree>}"
 
-  if [[ "$selected_worktree_path" == "$PWD" ]]; then
-    info "Already in the selected worktree."
+  local target
+  target="$(_gwt_path_for "$name")" || {
+    error "No worktree named '$name'."
+    return 1
+  }
+
+  if [[ "$target" == "$PWD" ]]; then
+    info "Already in worktree '$name'."
     return
   fi
 
-  builtin cd "$selected_worktree_path" || return 1
+  builtin cd "$target" || return 1
 
   builtin print ""
   info "Switched to worktree '${PWD:t}'."
 }
 
-git-worktree-setup-script() {
+gwt-setup() {
   command git rev-parse --git-dir &>/dev/null || {
     error "Not a git repository."
     return 1
@@ -271,12 +281,11 @@ git-worktree-setup-script() {
 
   local common_git_dir
   common_git_dir="$(command git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
-  local setup_file="$common_git_dir/setup-worktree.sh"
+  local setup_file="$common_git_dir/setup-worktree.zsh"
 
   if [[ ! -f "$setup_file" ]]; then
-    local template="$ZDOTFILES_DIR/plugins/git-worktree/templates/setup-worktree.sh"
+    local template="$ZDOTFILES_DIR/plugins/git-worktree/templates/setup-worktree.zsh"
     command cp -- "$template" "$setup_file"
-    command chmod +x "$setup_file"
     info "Created $setup_file (from template)"
   fi
 

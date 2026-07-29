@@ -9,24 +9,39 @@ working directories for different branches.
 | Command / Alias       | Description                          |
 | --------------------- | ------------------------------------ |
 | `gwt <branch> [ref]`  | Create a worktree and cd into it     |
-| `gwt`                 | Switch to a worktree (via fzf)       |
-| `gwt-rm`              | Select and remove a worktree (fzf)   |
+| `gwts <worktree>`     | Switch to a worktree                 |
+| `gwt-rm <worktree>`   | Remove a worktree                    |
 | `gwt-ls`              | List active worktrees                |
 | `gwt-prune`           | Prune stale worktree metadata        |
 
 ## Completion
+
+Every command that takes an argument completes it, and each one omits
+the candidates it would reject anyway.
 
 `gwt` completes branch names, merging local branches with the ones on
 `origin`:
 
 - **First argument**: branches that do not have a worktree yet. Ones
   that already have one are skipped because `git worktree add` refuses
-  them, and switching to them is what bare `gwt` is for.
+  them. Typing a brand new branch name still works; the menu is only a
+  shortcut for branches that already exist.
 - **Second argument**: every branch, since the base ref only applies
   when the branch does not exist yet.
 
-Typing a brand new branch name still works; the menu is only a
-shortcut for the cases where the branch already exists.
+`gwts` and `gwt-rm` complete worktrees by the name of their directory,
+showing the branch each one holds as the description. A worktree in
+detached HEAD has no branch, so the directory name is the only handle
+that always exists.
+
+- `gwts` omits the current worktree, since switching to it does
+  nothing.
+- `gwt-rm` omits the current and the main worktree, since both are
+  refused.
+
+With `fzf-tab` installed the completion menu is itself a fuzzy picker,
+so this replaces the interactive selector these commands used to have
+while also working without `fzf` at all.
 
 ## Usage
 
@@ -43,14 +58,14 @@ gwt feature/someone-elses-pr
 # Existing local branch
 gwt feature/my-wip-branch
 
-# Switch to a worktree (interactive fzf selection)
-gwt
+# Switch to a worktree
+gwts myrepo.feature-my-feature
 
 # List all worktrees
 gwt-ls
 
-# Delete a worktree (interactive fzf selection)
-gwt-rm
+# Delete a worktree
+gwt-rm myrepo.feature-my-feature
 
 # Clean up stale worktree references
 gwt-prune
@@ -80,65 +95,27 @@ asks for confirmation before retrying with `git worktree remove --force`.
 
 Worktrees are named `<repo>.<branch>` (slashes in branch names become dashes).
 
-## Post-Create Sequence
+## Setup script
 
-After `git worktree add` completes (and Git's own `post-checkout`
-hook runs), `gwt` performs these steps in order:
+After `git worktree add` completes (and Git's own `post-checkout` hook
+runs), `gwt` sources one setup script if it exists:
 
-| Step | What                          | Source                              |
-| ---- | ----------------------------- | ----------------------------------- |
-| 1    | Copy `.worktreeinclude` files | `<repo>/.worktreeinclude`           |
-| 2    | Run setup script              | `$GIT_COMMON_DIR/setup-worktree.sh` |
-| 3    | Run setup script (fallback)   | `<repo>/.codex/setup.sh`            |
-
-Steps 2 and 3 are mutually exclusive -- the first script found wins.
-Step 1 always runs (no-op if the file doesn't exist).
-
-### .worktreeinclude
-
-A `.worktreeinclude` file in the project root lists files and
-directories that should be copied from the main worktree into new
-ones. This is useful for gitignored files that aren't checked out
-automatically (`.env`, local configs, etc.).
-
-Existing files in the new worktree are never overwritten -- tracked
-files checked out by Git are always preserved.
-
-**Format:** one pattern per line, zsh glob syntax, `#` for comments.
-
-```gitignore
-# Environment
-.env
-.env.local
-
-# Local editor config
-.claude/settings.local.json
-CLAUDE.local.md
-
-# Dependencies (can be slow for large directories)
-node_modules
+```
+$GIT_COMMON_DIR/setup-worktree.zsh
 ```
 
-> Compatible with [Claude Code Desktop](https://code.claude.com/docs/en/desktop)'s
-> `.worktreeinclude` convention. Negation patterns (`!pattern`) are not
-> supported and will produce a warning.
+That path lives inside `.git`, so the script is local to the clone and
+never committed. Run `gwt-setup` to create it from a template and open
+it in `$EDITOR`.
 
-### Setup scripts
+It is sourced rather than executed, so it can change the state of the
+shell you land in. `$ROOT_WORKTREE_PATH` points to the main worktree
+while it runs, which is how a script reaches back for gitignored files
+such as `.env`.
 
-Setup scripts run after `.worktreeinclude` files are copied, so
-they can use those files (e.g., read `.env`).
+**Example** (`setup-worktree.zsh`):
 
-| Priority | Location                            | Scope              |
-| -------- | ----------------------------------- | ------------------ |
-| 1        | `$GIT_COMMON_DIR/setup-worktree.sh` | Local only         |
-| 2        | `<repo>/.codex/setup.sh`            | Shared (committed) |
-
-The environment variable `$ROOT_WORKTREE_PATH` points to the main
-worktree while the script runs.
-
-**Example** (`setup-worktree.sh`):
-
-```sh
+```zsh
 # Install dependencies
 npm install
 
@@ -148,5 +125,6 @@ command -v direnv &>/dev/null && direnv allow
 
 ## Requirements
 
-- `gwt` (no args) and `gwt-rm` require
-  [fzf](https://github.com/junegunn/fzf) for interactive selection
+- No hard requirements. [fzf](https://github.com/junegunn/fzf) with
+  `fzf-tab` turns the completion menus into fuzzy pickers, but plain zsh
+  completion works without it.
