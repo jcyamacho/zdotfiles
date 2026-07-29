@@ -13,6 +13,35 @@ alias gwt-ls="command git worktree list"
 alias gwt-prune="command git worktree prune"
 alias gwt-setup="git-worktree-setup-script"
 
+# gwt takes a branch name, plus an optional base ref that only applies when the
+# branch does not exist yet. Branches that already have a worktree are dropped
+# from the first argument because `git worktree add` refuses them.
+_gwt() {
+  local refs
+  refs="$(GIT_OPTIONAL_LOCKS=0 command git for-each-ref \
+    --format='%(refname:short)' --exclude=refs/remotes/origin/HEAD \
+    refs/heads refs/remotes/origin 2>/dev/null)"
+  [[ -n "$refs" ]] || return 1
+
+  local -aU branches=("${(@f)refs}")
+  branches=("${(@)branches#origin/}")
+
+  local expl
+  if (( CURRENT > 2 )); then
+    _wanted refs expl 'base ref' compadd -a branches
+    return
+  fi
+
+  local -a attached
+  attached=("${(@f)$(GIT_OPTIONAL_LOCKS=0 command git worktree list --porcelain 2>/dev/null \
+    | command awk '$1 == "branch" { sub(/^refs\/heads\//, "", $2); print $2 }')}")
+  branches=("${(@)branches:|attached}")
+
+  _wanted branches expl branch compadd -a branches
+}
+
+compdef _gwt gwt
+
 # Detect the default branch name from origin.
 # IMPORTANT: Do NOT change the primary detection strategy (see below).
 _gwt_default_branch() {

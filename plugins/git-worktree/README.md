@@ -14,6 +14,20 @@ working directories for different branches.
 | `gwt-ls`              | List active worktrees                |
 | `gwt-prune`           | Prune stale worktree metadata        |
 
+## Completion
+
+`gwt` completes branch names, merging local branches with the ones on
+`origin`:
+
+- **First argument**: branches that do not have a worktree yet. Ones
+  that already have one are skipped because `git worktree add` refuses
+  them, and switching to them is what bare `gwt` is for.
+- **Second argument**: every branch, since the base ref only applies
+  when the branch does not exist yet.
+
+Typing a brand new branch name still works; the menu is only a
+shortcut for the cases where the branch already exists.
+
 ## Usage
 
 ```zsh
