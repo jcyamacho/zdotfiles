@@ -133,6 +133,7 @@ install-recommended() {
   exists zoxide || installers+=(install-zoxide)
   exists atuin || installers+=(install-atuin)
   exists carapace || installers+=(install-carapace)
+  exists jq || installers+=(install-jq)
   exists yazi || installers+=(install-yazi)
 
   if (( $#installers == 0 )); then

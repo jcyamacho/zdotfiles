@@ -73,6 +73,7 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-zoxide` (or `install-z`) – [zoxide](https://github.com/ajeetdsouza/zoxide) smarter `cd`
 - `install-atuin` – [Atuin](https://atuin.sh/) synced, searchable history
 - `install-carapace` – [Carapace](https://carapace.sh/) completions
+- `install-jq` – [jq](https://jqlang.org/)
 - `install-yazi` – [yazi](https://yazi-rs.github.io/) terminal file manager (`Ctrl+o`, and `y` to cd on exit)
 
 ### Optional
@@ -101,7 +102,6 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-gh` – [GitHub CLI](https://github.com/cli/cli)
 - `install-go` – [Go](https://golang.org/) + [golangci-lint](https://golangci-lint.run/)
 - `install-herdr` - [Herdr](https://herdr.dev/) agent multiplexer that lives in your terminal
-- `install-jq` – [jq](https://jqlang.org/)
 - `install-just` – [just](https://just.systems/) command runner
 - `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
 - `install-memo` - [memo](https://github.com/jcyamacho/memo) durable memory CLI; includes Claude and Codex `memo context` hook helpers
