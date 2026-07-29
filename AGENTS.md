@@ -12,8 +12,16 @@ Prioritize secure, fast startup and minimal diffs.
    on `$path`
 2. `_utils.zsh` — shared helpers (see below)
 3. The `updates` array and `update-all` dispatcher
-4. Antidote — reads `.zsh_plugins.txt`, generates/compiles
+4. `_brew.zsh` — Homebrew discovery, `$HOMEBREW_PREFIX`, its
+   `site-functions` on `$fpath`, bootstrap install, and updater
+5. `compinit` (see Completions below)
+6. Antidote — reads `.zsh_plugins.txt`, generates/compiles
    `.zsh_plugins.zsh`, sources it
+
+Root-level `_<name>.zsh` files are sourced directly by `zshrc.sh`, not
+loaded as plugins. Use one when the code is not optional or has to run
+before Antidote (e.g. it must reach `$fpath` before `compinit`). Anything
+that can be conditional on a binary belongs in `plugins/` instead.
 
 Antidote sources entries in `.zsh_plugins.txt` in order. Each local plugin
 runs its own guard logic and conditionally defines
@@ -28,8 +36,7 @@ Entries in `.zsh_plugins.txt` support these annotations:
   verbatim as the `if` condition. Any valid shell expression works:
   - `conditional:"exists <cmd>"` — loads only when `<cmd>` is present.
   - `conditional:"[[ $VAR == value ]]"` — loads based on a variable.
-- `path:plugins/<name>` — loads a sub-path from a remote repo (used
-  for OMZ plugins).
+- `path:plugins/<name>` — loads a sub-path from a remote repo.
 
 ### Load order rules
 
@@ -37,12 +44,26 @@ Order in `.zsh_plugins.txt` matters:
 
 1. Tool, completion, history, and keybinding plugins load before UX
    plugins so later ZLE hooks wrap the final widget state.
-2. Local plugin before its OMZ companion so the companion sees the
-   tool on `$path`.
-3. Dev-tool managers (e.g. mise) load after tool plugins — their
+2. Dev-tool managers (e.g. mise) load after tool plugins — their
    activate hooks override other plugins' shims and paths.
-4. UX plugins (autosuggestions, syntax highlighting, you-should-use)
+3. UX plugins (autosuggestions, syntax highlighting, you-should-use)
    load last.
+
+### Completions
+
+`zshrc.sh` owns `compinit` and runs it before Antidote sources the
+plugins. Consequences to respect:
+
+- Anything that must be on `$fpath` for `compinit` to see it belongs in
+  a root-level `_<name>.zsh`, not in a plugin. A plugin's `fpath`
+  addition is too late.
+- `compdef` is available inside plugins, so tools with a dynamic
+  completion function can register directly.
+- Never call `compinit -C`. The `$fpath` rescan by directory mtime is
+  what picks up completions written by `cache-completion` during plugin
+  load, on the next shell.
+- A completion generated for the first time appears one shell later.
+  This self-heals because `install-<tool>` ends in `reload`.
 
 ### Key helpers (`_utils.zsh`)
 

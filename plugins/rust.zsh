@@ -4,6 +4,8 @@ typeset -g _cargo_dir="$HOME/.cargo"
 if [[ -f "$_cargo_dir/env" ]]; then
   builtin source "$_cargo_dir/env"
 
+  cache-completion rustup completions zsh
+
   uninstall-rust() {
     info "Uninstalling rust..."
     command rustup self uninstall -y

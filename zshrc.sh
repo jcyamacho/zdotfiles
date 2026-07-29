@@ -2,9 +2,6 @@
 [[ -n ${ZDOTFILES_PROFILE_STARTUP:-} ]] && zmodload zsh/zprof
 # STARTUP_PROFILING end
 
-# DISABLE_OMZ_UPDATE_CHECK
-zstyle ':omz:update' mode disabled
-
 ZDOTFILES_DIR="${ZDOTFILES_DIR:-$HOME/.zdotfiles}"
 
 # CACHE
@@ -54,6 +51,26 @@ update-all() {
   reload
 }
 # UPDATES end
+
+# BREW
+builtin source "$ZDOTFILES_DIR/_brew.zsh"
+# BREW end
+
+# COMPLETIONS
+# compinit runs before antidote sources the plugins: plugins call compdef, and
+# fzf-tab has to load after completion is initialized.
+autoload -Uz compinit
+
+typeset -g _zdotfiles_zcompdump="$ZDOTFILES_CACHE_DIR/zcompdump-$ZSH_VERSION"
+
+# Deliberately no -C: compinit rescans $fpath by directory mtime, which is what
+# picks up the completions cache-completion writes while plugins load.
+compinit -i -d "$_zdotfiles_zcompdump"
+
+if [[ ! -s "${_zdotfiles_zcompdump}.zwc" || "$_zdotfiles_zcompdump" -nt "${_zdotfiles_zcompdump}.zwc" ]]; then
+  builtin zcompile "$_zdotfiles_zcompdump" 2>/dev/null || :
+fi
+# COMPLETIONS end
 
 # ANTIDOTE
 ANTIDOTE_DIR="${ANTIDOTE_DIR:-$HOME/.antidote}"

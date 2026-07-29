@@ -6,6 +6,8 @@ if [[ -d "$_deno_dir/bin" ]]; then
 
   exists deno || return
 
+  cache-completion deno completions zsh
+
   uninstall-deno() {
     info "Uninstalling deno..."
     command rm -rf -- "$_deno_dir"

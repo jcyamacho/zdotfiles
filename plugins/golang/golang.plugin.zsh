@@ -6,7 +6,12 @@ if exists go; then
   export GOPATH="$HOME/.go"
   path=("$GOPATH/bin" "${path[@]}")
 
-  alias gmt="go mod tidy"
+  alias gob="command go build"
+  alias gog="command go get"
+  alias gom="command go mod"
+  alias gor="command go run"
+  alias gow="command go work"
+  alias gmt="command go mod tidy"
 
   gmi() {
     local namespace

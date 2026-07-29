@@ -1,6 +1,5 @@
 # git-worktree (helpers for managing git worktrees): https://git-scm.com/docs/git-worktree
 
-unalias gwt 2>/dev/null
 function gwt {
   if (( $# )); then
     git-worktree-new "$@"

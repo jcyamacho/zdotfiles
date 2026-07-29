@@ -45,7 +45,6 @@ source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
 Antidote reads `.zsh_plugins.txt` and builds a static `.zsh_plugins.zsh`. The default setup enables:
 
 - **Always-on shell UX**: prompt theme (see above), `zsh-autosuggestions`, syntax highlighting (`F-Sy-H`), and “you-should-use”.
-- **Oh My Zsh helpers + curated plugins**: pulls in OMZ core helpers plus plugins like `git` and `brew`.
 - **Local plugin helpers**: small `plugins/*` scripts that add `install-*`, `update-*`, `uninstall-*`, and `*-config` helpers.
 
 Many integrations are **conditional** (they only activate when the underlying binary exists) to keep startup fast and avoid errors.
@@ -119,7 +118,7 @@ Run `install-recommended` to install every missing tool in this group.
 
 Additional helper functions (no external tool required):
 
-- [git-utils](plugins/git-utils/README.md) – `git-pull`, `git-pull-all` with hook support
+- [git](plugins/git/README.md) – `g`, `gaa`, `gf`, `gcb`, `gcmsg`, `gc!`, `ggl`, `ggp` shorthands plus `git-pull-all` and `git-hook`
 - [git-worktree](plugins/git-worktree/README.md) – `gwt-*` helpers for managing Git worktrees
 
 ## Utility Functions

@@ -1,6 +1,10 @@
 # python uv lifecycle (install/update/uninstall): https://docs.astral.sh/uv/
 
 if exists uv; then
+  # uvx ships with uv and takes its own completion flag spelling.
+  cache-completion uv generate-shell-completion zsh
+  cache-completion uvx --generate-shell-completion zsh
+
   _get_latest_python_version() {
     command uv python list "$@" \
       | command awk '{print $1}' \

@@ -1,4 +1,4 @@
-# git-utils (git helper functions for pulling repos): https://git-scm.com/docs
+# git utils (bulk pull and hook scaffolding): https://git-scm.com/docs
 
 git-pull-all() {
   local base_dir="${1:-$PWD}"

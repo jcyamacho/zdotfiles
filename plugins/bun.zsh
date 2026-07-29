@@ -6,6 +6,8 @@ if [[ -d "$_bun_dir/bin" ]]; then
 
   exists bun || return
 
+  cache-completion bun completions
+
   uninstall-bun() {
     info "Uninstalling bun..."
     command rm -rf -- "$_bun_dir"

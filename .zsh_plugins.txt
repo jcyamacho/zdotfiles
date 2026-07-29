@@ -1,27 +1,19 @@
-getantidote/use-omz
-
 $ZDOTFILES_DIR/plugins/starship
 
-ohmyzsh/ohmyzsh path:plugins/git
-$ZDOTFILES_DIR/plugins/git-utils
+$ZDOTFILES_DIR/plugins/git
 $ZDOTFILES_DIR/plugins/git-worktree
-
-ohmyzsh/ohmyzsh path:plugins/brew
-$ZDOTFILES_DIR/plugins/brew.zsh
 
 $ZDOTFILES_DIR/plugins/worktrunk
 
 $ZDOTFILES_DIR/plugins/carapace.zsh
 
 $ZDOTFILES_DIR/plugins/github-cli
-ohmyzsh/ohmyzsh path:plugins/gh conditional:"exists gh"
 
 $ZDOTFILES_DIR/plugins/bat.zsh
 
 $ZDOTFILES_DIR/plugins/btop.zsh
 
 $ZDOTFILES_DIR/plugins/bun.zsh
-ohmyzsh/ohmyzsh path:plugins/bun conditional:"exists bun"
 
 $ZDOTFILES_DIR/plugins/nub.zsh
 
@@ -34,7 +26,6 @@ $ZDOTFILES_DIR/plugins/cursor.zsh
 $ZDOTFILES_DIR/plugins/antigravity.zsh
 
 $ZDOTFILES_DIR/plugins/deno.zsh
-ohmyzsh/ohmyzsh path:plugins/deno conditional:"exists deno"
 
 $ZDOTFILES_DIR/plugins/direnv
 
@@ -43,7 +34,6 @@ $ZDOTFILES_DIR/plugins/dotenvx.zsh
 $ZDOTFILES_DIR/plugins/varlock.zsh
 
 $ZDOTFILES_DIR/plugins/docker.zsh
-ohmyzsh/ohmyzsh path:plugins/docker conditional:"exists docker"
 
 $ZDOTFILES_DIR/plugins/fabric.zsh
 
@@ -65,14 +55,10 @@ $ZDOTFILES_DIR/plugins/ollama.zsh
 $ZDOTFILES_DIR/plugins/openspec
 
 $ZDOTFILES_DIR/plugins/python
-ohmyzsh/ohmyzsh path:plugins/uv conditional:"exists uv"
 
 $ZDOTFILES_DIR/plugins/rust.zsh
-ohmyzsh/ohmyzsh path:plugins/rust conditional:"exists cargo"
 
 $ZDOTFILES_DIR/plugins/ruby-rbenv.zsh
-ohmyzsh/ohmyzsh path:plugins/rbenv conditional:"exists rbenv"
-ohmyzsh/ohmyzsh path:plugins/ruby conditional:"exists ruby"
 
 $ZDOTFILES_DIR/plugins/zed.zsh
 
@@ -109,7 +95,6 @@ $ZDOTFILES_DIR/plugins/yazi
 $ZDOTFILES_DIR/plugins/opencode.zsh
 
 $ZDOTFILES_DIR/plugins/flutter.zsh
-ohmyzsh/ohmyzsh path:plugins/flutter conditional:"exists flutter"
 
 $ZDOTFILES_DIR/plugins/zsh-bench.zsh
 
@@ -130,7 +115,6 @@ $ZDOTFILES_DIR/plugins/mise.zsh
 $ZDOTFILES_DIR/plugins/orbstack.zsh
 
 $ZDOTFILES_DIR/plugins/golang
-ohmyzsh/ohmyzsh path:plugins/golang conditional:"exists go"
 
 # UX plugins must load after tool/keybinding plugins so ZLE hooks wrap the final widget state.
 zsh-users/zsh-autosuggestions

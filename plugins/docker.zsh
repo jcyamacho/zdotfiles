@@ -1,6 +1,8 @@
 # docker (containerization platform): https://www.docker.com/
 
 if exists docker; then
+  cache-completion docker completion zsh
+
   docker-run-it() {
     command docker run -it "$(command docker build -q .)"
   }
