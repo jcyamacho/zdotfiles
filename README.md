@@ -100,7 +100,7 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-opencode` – [OpenCode](https://opencode.ai/)
 - `install-orbstack` - [OrbStack](https://orbstack.dev/) Docker Desktop alternative
 - `install-pi` - [Pi](https://pi.dev/) minimal terminal coding harness
-- `install-television` – [Television](https://alexpasmantier.github.io/television/) fuzzy finder with shell integration when Atuin is absent
+- `install-television` – [Television](https://alexpasmantier.github.io/television/) fuzzy finder; binds `Ctrl+T` to channel-aware completion (`Ctrl+R` goes to Atuin when present). Also installs `fd` and `bat`, which its channels shell out to
 - `install-rbenv` (or `install-ruby`) – [rbenv](https://github.com/rbenv/rbenv)
 - `install-rust` – [rustup](https://rustup.rs/)
 - `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling ([python](plugins/python/README.md))

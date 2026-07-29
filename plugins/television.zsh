@@ -19,6 +19,13 @@ elif exists brew; then
   install-television() {
     info "Installing television..."
     command brew install --no-ask television
+
+    # tv's built-in channels shell out to these: `fd` feeds dirs and files, and
+    # `bat` renders their previews. Without fd the channels return nothing, so
+    # the Ctrl+T binding this plugin installs would be dead.
+    info "Installing fd and bat (television channel dependencies)..."
+    command brew install --no-ask fd bat
+
     reload
   }
 fi
