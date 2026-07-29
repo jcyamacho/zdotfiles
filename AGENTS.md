@@ -14,8 +14,9 @@ Prioritize secure, fast startup and minimal diffs.
 3. The `updates` array and `update-all` dispatcher
 4. `_brew.zsh` — Homebrew discovery, `$HOMEBREW_PREFIX`, its
    `site-functions` on `$fpath`, bootstrap install, and updater
-5. `compinit` (see Completions below)
-6. Antidote — reads `.zsh_plugins.txt`, generates/compiles
+5. `_starship.zsh` — required prompt bootstrap, configuration, and updater
+6. `compinit` (see Completions below)
+7. Antidote — reads `.zsh_plugins.txt`, generates/compiles
    `.zsh_plugins.zsh`, sources it
 
 Root-level `_<name>.zsh` files are sourced directly by `zshrc.sh`, not

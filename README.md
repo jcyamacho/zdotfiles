@@ -30,6 +30,18 @@ Compact Zsh setup that wires in
 - Adjust where self-managed tools install by overriding `CUSTOM_TOOLS_DIR`.
 - Set `GIT_WORKTREE_BASE` to change where `gwt-new` creates worktrees (see [git-worktree](plugins/git-worktree/README.md)).
 
+### Starship
+
+Starship is the required prompt and installs automatically on first load. Set
+`STARSHIP_CONFIG` before sourcing `zshrc.sh` to override the default
+`~/.config/starship.toml`.
+
+- `update-starship` updates Starship and reloads the shell.
+- `starship-config` edits the active configuration and reloads the shell.
+- `starship-preset-custom` applies the custom [`starship.toml`](starship.toml).
+- `starship-preset-nerd-fonts`, `starship-preset-no-nerd-font`, and
+  `starship-preset-plain-text` apply built-in Starship presets.
+
 ### Disable alias suggestions (`ZSH_DISABLE_YOU_SHOULD_USE`)
 
 By default, [zsh-you-should-use](https://github.com/MichaelAquilina/zsh-you-should-use) reminds you when you type a command that has an alias. To disable these suggestions:

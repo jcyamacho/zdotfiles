@@ -30,7 +30,7 @@ alias starship-preset-no-nerd-font='starship preset no-nerd-font > "$STARSHIP_CO
 alias starship-preset-plain-text='starship preset plain-text-symbols > "$STARSHIP_CONFIG"'
 
 starship-preset-custom() {
-  command cp -- "$ZDOTFILES_DIR/plugins/starship/starship.toml" "$STARSHIP_CONFIG"
+  command cp -- "$ZDOTFILES_DIR/starship.toml" "$STARSHIP_CONFIG"
 }
 
 starship-config() {

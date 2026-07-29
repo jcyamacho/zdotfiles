@@ -1,5 +1,3 @@
-$ZDOTFILES_DIR/plugins/starship
-
 $ZDOTFILES_DIR/plugins/git
 $ZDOTFILES_DIR/plugins/git-worktree
 

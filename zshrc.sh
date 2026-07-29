@@ -56,6 +56,10 @@ update-all() {
 builtin source "$ZDOTFILES_DIR/_brew.zsh"
 # BREW end
 
+# STARSHIP
+builtin source "$ZDOTFILES_DIR/_starship.zsh"
+# STARSHIP end
+
 # COMPLETIONS
 # compinit runs before antidote sources the plugins: plugins call compdef, and
 # fzf-tab has to load after completion is initialized.
