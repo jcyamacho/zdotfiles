@@ -61,6 +61,7 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-zoxide` (or `install-z`) – [zoxide](https://github.com/ajeetdsouza/zoxide) smarter `cd`
 - `install-atuin` – [Atuin](https://atuin.sh/) synced, searchable history
 - `install-carapace` – [Carapace](https://carapace.sh/) completions
+- `install-yazi` – [yazi](https://yazi-rs.github.io/) terminal file manager (`Ctrl+o`, and `y` to cd on exit)
 
 ### Optional
 
@@ -105,7 +106,6 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling ([python](plugins/python/README.md))
 - `install-viteplus` – [Vite+](https://viteplus.dev/) unified web toolchain
 - `install-worktrunk` – [Worktrunk](https://worktrunk.dev) git worktree management
-- `install-yazi` – [yazi](https://yazi-rs.github.io/) terminal file manager
 - `install-zed` – [Zed](https://zed.dev/)
 - `install-zsh-bench` – [zsh-bench](https://github.com/romkatv/zsh-bench) benchmark for interactive zsh
 - `install-zellij` – [Zellij](https://zellij.dev/) terminal workspace ([zellij](plugins/zellij/README.md))

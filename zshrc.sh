@@ -129,6 +129,7 @@ install-recommended() {
   exists zoxide || installers+=(install-zoxide)
   exists atuin || installers+=(install-atuin)
   exists carapace || installers+=(install-carapace)
+  exists yazi || installers+=(install-yazi)
 
   if (( $#installers == 0 )); then
     info "All recommended tools are already installed"
