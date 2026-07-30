@@ -1,5 +1,7 @@
 # python uv lifecycle (install/update/uninstall): https://docs.astral.sh/uv/
 
+exists brew || return
+
 if exists uv; then
   # uvx ships with uv and takes its own completion flag spelling.
   cache-completion uv generate-shell-completion zsh
@@ -14,7 +16,7 @@ if exists uv; then
   }
 
   _update_uv_python() {
-    command uv python upgrade --preview
+    command uv python upgrade --preview || return
 
     local latest="$(_get_latest_python_version --only-downloads)"
     if [[ -z "$latest" ]]; then
@@ -29,17 +31,17 @@ if exists uv; then
     fi
   }
 
-  _update_uv() {
-    info "Updating uv..."
-    command uv self update
+  _update_uv_resources() {
     info "Updating python..."
-    _update_uv_python
+    _update_uv_python || return
     info "Updating tools..."
     command uv tool upgrade --all
   }
 
   update-uv() {
-    _update_uv
+    info "Updating uv..."
+    command brew upgrade --no-ask uv || return
+    _update_uv_resources || return
     reload
   }
 
@@ -50,17 +52,17 @@ if exists uv; then
     command uv cache clean
 
     local uv_python_dir="$(command uv python dir)"
+    local uv_tool_dir="$(command uv tool dir)"
+
+    command brew uninstall uv || return
+
     if [[ -n "$uv_python_dir" && "$uv_python_dir" == "$HOME"/* ]]; then
       command rm -rf -- "$uv_python_dir"
     fi
 
-    local uv_tool_dir="$(command uv tool dir)"
     if [[ -n "$uv_tool_dir" && "$uv_tool_dir" == "$HOME"/* ]]; then
       command rm -rf -- "$uv_tool_dir"
     fi
-
-    [[ -n ${commands[uv]-} ]] && command rm -f -- "${commands[uv]}"
-    [[ -n ${commands[uvx]-} ]] && command rm -f -- "${commands[uvx]}"
 
     reload
   }
@@ -74,27 +76,27 @@ if exists uv; then
     fi
     local venv_dir=${VENV_DIR:-".venv"}
 
-    (( $+functions[deactivate] )) && deactivate
-
     # skip non-python projects
     if [[ ! -f pyproject.toml ]]; then
       warn "No Python project found."
       return
     fi
 
+    (( $+functions[deactivate] )) && deactivate
+
     # uv project
     if [[ -f uv.lock ]]; then
-      UV_PROJECT_ENVIRONMENT="$venv_dir" command uv sync "${python_flag[@]}"
-      builtin source "${venv_dir}/bin/activate"
+      UV_PROJECT_ENVIRONMENT="$venv_dir" command uv sync "${python_flag[@]}" || return
+      builtin source "${venv_dir}/bin/activate" || return
       return
     fi
 
     # legacy repos
     if [[ ! -d "$venv_dir" ]]; then
-      command uv venv "$venv_dir" "${python_flag[@]}" --seed
+      command uv venv "$venv_dir" "${python_flag[@]}" --seed || return
     fi
 
-    builtin source "${venv_dir}/bin/activate"
+    builtin source "${venv_dir}/bin/activate" || return
 
     if [[ -f requirements-dev.txt ]]; then
       command uv pip install -r requirements-dev.txt
@@ -103,26 +105,17 @@ if exists uv; then
     fi
   }
 
-  updates+=(_update_uv)
+  updates+=(_update_uv_resources)
 else
   alias install-python="install-uv"
 
   install-uv() {
     info "Installing uv..."
-    _run_remote_installer "https://astral.sh/uv/install.sh" "sh" --env "INSTALLER_NO_MODIFY_PATH=1"
+    command brew install --no-ask uv || return
+    builtin rehash
 
-    local uv_cmd="${commands[uv]-}"
-    if [[ -z "$uv_cmd" ]]; then
-      builtin rehash
-      uv_cmd="${commands[uv]-}"
-    fi
-
-    if [[ -n "$uv_cmd" ]]; then
-      info "Installing python..."
-      command "$uv_cmd" python install --default --preview
-    else
-      warn "uv installed but not found in current shell; run reload, then 'uv python install --default --preview'"
-    fi
+    info "Installing python..."
+    command uv python install --default --preview || return
 
     reload
   }

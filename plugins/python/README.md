@@ -23,11 +23,14 @@ To enable the directory-change hook, add `enable-venv-hook` to your
 Set `VENV_DIR` to override the default `.venv` directory.
 Set `PYTHON_VERSION` to pin a specific Python version.
 
-## Install/update helpers (require `uv` on PATH)
+## uv lifecycle (requires Homebrew)
 
 - `install-uv` (alias: `install-python`) - install uv and Python
 - `update-uv` (alias: `update-python`) - update uv, Python, and uv tools
 - `uninstall-uv` (alias: `uninstall-python`) - remove uv binaries and uv dirs
+
+Homebrew owns the uv binary. uv continues to manage installed Python versions
+and tools.
 
 ## Tool installers (require `uv` on PATH)
 
