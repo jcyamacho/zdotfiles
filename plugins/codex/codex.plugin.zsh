@@ -41,9 +41,20 @@ if exists codex; then
   }
 fi
 
-# prioritize brew install
 if exists brew; then
-  builtin source "$ZDOTFILES_DIR/plugins/codex/codex-brew.zsh"
-elif exists npm; then
-  builtin source "$ZDOTFILES_DIR/plugins/codex/codex-npm.zsh"
+  if exists codex; then
+    uninstall-codex() {
+      info "Uninstalling codex..."
+      command brew uninstall --cask codex || return
+      command rm -rf -- "$CODEX_HOME"
+      reload
+    }
+  else
+    install-codex() {
+      info "Installing codex..."
+      command brew install --no-ask --cask codex || return
+      command mkdir -p -- "$CODEX_HOME/prompts"
+      reload
+    }
+  fi
 fi
