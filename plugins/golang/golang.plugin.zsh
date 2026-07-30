@@ -32,10 +32,9 @@ if exists go; then
       command brew uninstall golangci-lint
 
       info "Uninstalling go..."
-      command brew uninstall go
+      command brew uninstall go || return
 
       info "Removing $GOPATH..."
-      command go clean -modcache
       command rm -rf -- "$GOPATH"
 
       reload
@@ -44,7 +43,7 @@ if exists go; then
 elif exists brew; then
   install-go() {
     info "Installing go..."
-    command brew install --no-ask go
+    command brew install --no-ask go || return
 
     info "Installing golangci-lint..."
     command brew install --no-ask golangci-lint

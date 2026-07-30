@@ -5,13 +5,13 @@ exists brew || return
 if exists jq; then
   uninstall-jq() {
     info "Uninstalling jq..."
-    command brew uninstall jq
+    command brew uninstall jq || return
     reload
   }
 else
   install-jq() {
     info "Installing jq..."
-    command brew install --no-ask jq
+    command brew install --no-ask jq || return
     reload
   }
 fi

@@ -5,13 +5,13 @@ exists brew || return
 if exists fzf; then
   uninstall-fzf() {
     info "Uninstalling fzf..."
-    command brew uninstall fzf
+    command brew uninstall fzf || return
     reload
   }
 else
   install-fzf() {
     info "Installing fzf..."
-    command brew install --no-ask fzf
+    command brew install --no-ask fzf || return
     reload
   }
 fi

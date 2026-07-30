@@ -10,7 +10,7 @@ if exists zoxide; then
   alias uninstall-z="uninstall-zoxide"
   uninstall-zoxide() {
     info "Uninstalling zoxide..."
-    command rm -f -- "$CUSTOM_TOOLS_DIR/zoxide"
+    command rm -f -- "$CUSTOM_TOOLS_DIR/zoxide" || return
     reload
   }
 
@@ -21,7 +21,7 @@ if exists zoxide; then
 
   alias update-z="update-zoxide"
   update-zoxide() {
-    _update_zoxide
+    _update_zoxide || return
     reload
   }
 
@@ -30,7 +30,7 @@ else
   alias install-z="install-zoxide"
   install-zoxide() {
     info "Installing zoxide..."
-    _install_zoxide
+    _install_zoxide || return
     reload
   }
 fi

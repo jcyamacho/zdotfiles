@@ -8,7 +8,7 @@ if [[ -f "$_cargo_dir/env" ]]; then
 
   uninstall-rust() {
     info "Uninstalling rust..."
-    command rustup self uninstall -y
+    command rustup self uninstall -y || return
     info "Removing $_cargo_dir..."
     command rm -rf -- "$_cargo_dir"
     reload
@@ -20,7 +20,7 @@ if [[ -f "$_cargo_dir/env" ]]; then
   }
 
   update-rust() {
-    _update_rust
+    _update_rust || return
     reload
   }
 
@@ -28,7 +28,7 @@ if [[ -f "$_cargo_dir/env" ]]; then
 else
   install-rust() {
     info "Installing rust..."
-    _run_remote_installer "https://sh.rustup.rs" "sh" -- -y
+    _run_remote_installer "https://sh.rustup.rs" "sh" -- -y || return
     reload
   }
 fi

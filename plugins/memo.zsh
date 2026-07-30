@@ -106,14 +106,14 @@ if exists memo; then
   if exists brew; then
     uninstall-memo() {
       info "Uninstalling memo..."
-      command brew uninstall jcyamacho/tap/memo
+      command brew uninstall jcyamacho/tap/memo || return
       reload
     }
   fi
 elif exists brew; then
   install-memo() {
     info "Installing memo..."
-    command brew install --no-ask jcyamacho/tap/memo
+    command brew install --no-ask jcyamacho/tap/memo || return
     reload
   }
 fi

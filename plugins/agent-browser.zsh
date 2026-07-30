@@ -7,7 +7,7 @@ if exists agent-browser; then
   }
 
   update-agent-browser() {
-    _update_agent_browser
+    _update_agent_browser || return
     reload
   }
 
@@ -17,7 +17,7 @@ if exists agent-browser; then
     uninstall-agent-browser() {
       info "Uninstalling agent-browser..."
 
-      command npm uninstall -g agent-browser > /dev/null
+      command npm uninstall -g agent-browser > /dev/null || return
       command rm -rf -- "$HOME/.agent-browser"
       reload
     }
@@ -26,8 +26,8 @@ elif exists npm; then
   install-agent-browser() {
     info "Installing agent-browser..."
 
-    command npm install -g agent-browser > /dev/null
-    command agent-browser install
+    command npm install -g agent-browser > /dev/null || return
+    command agent-browser install || return
     reload
   }
 fi

@@ -14,7 +14,7 @@ if exists pi; then
   }
 
   update-pi() {
-    _update_pi
+    _update_pi || return
     reload
   }
 
@@ -23,14 +23,14 @@ if exists pi; then
   if exists npm; then
     uninstall-pi() {
       info "Uninstalling pi..."
-      command npm uninstall -g "$_pi_package" > /dev/null
+      command npm uninstall -g "$_pi_package" > /dev/null || return
       reload
     }
   fi
 elif exists npm; then
   install-pi() {
     info "Installing pi..."
-    command npm install -g --ignore-scripts "$_pi_package" > /dev/null
+    command npm install -g --ignore-scripts "$_pi_package" > /dev/null || return
     reload
   }
 fi

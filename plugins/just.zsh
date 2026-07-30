@@ -9,7 +9,7 @@ if exists just; then
 
   uninstall-just() {
     info "Uninstalling just..."
-    command rm -f -- "$CUSTOM_TOOLS_DIR/just"
+    command rm -f -- "$CUSTOM_TOOLS_DIR/just" || return
     reload
   }
 
@@ -19,7 +19,7 @@ if exists just; then
   }
 
   update-just() {
-    _update_just
+    _update_just || return
     reload
   }
 
@@ -27,7 +27,7 @@ if exists just; then
 else
   install-just() {
     info "Installing just..."
-    _just_install
+    _just_install || return
     reload
   }
 fi

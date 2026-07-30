@@ -31,21 +31,21 @@ if exists brew; then
   path=("${path[@]}" "$HOMEBREW_PREFIX/sbin")
 else
   info "Installing brew..."
-  _run_remote_installer "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" "bash"
+  _run_remote_installer "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" "bash" || return
   reload
 fi
 
 _update_brew() {
   info "Updating brew..."
-  command brew update
+  command brew update || return
   info "Upgrading brew packages..."
-  command brew upgrade --no-ask --greedy
+  command brew upgrade --no-ask --greedy || return
   info "Cleaning up brew..."
   command brew cleanup --prune=all
 }
 
 update-brew() {
-  _update_brew
+  _update_brew || return
   reload
 }
 

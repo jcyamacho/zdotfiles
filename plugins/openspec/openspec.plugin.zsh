@@ -29,13 +29,13 @@ if exists openspec; then
     }
 
     update-openspec() {
-      _update_openspec
+      _update_openspec || return
       reload
     }
 
     uninstall-openspec() {
       info "Uninstalling openspec..."
-      command npm uninstall -g "$_openspec_package" > /dev/null
+      command npm uninstall -g "$_openspec_package" > /dev/null || return
       reload
     }
 
@@ -44,7 +44,7 @@ if exists openspec; then
 elif exists npm; then
   install-openspec() {
     info "Installing openspec..."
-    command npm install -g "$_openspec_package@latest" > /dev/null
+    command npm install -g "$_openspec_package@latest" > /dev/null || return
     reload
   }
 fi

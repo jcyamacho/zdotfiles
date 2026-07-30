@@ -5,7 +5,7 @@ unset ZSH_THEME
 export STARSHIP_CONFIG="${STARSHIP_CONFIG:-$HOME/.config/starship.toml}"
 
 update-starship() {
-  _update_starship
+  _update_starship || return
   reload
 }
 
@@ -17,7 +17,7 @@ _update_starship() {
 updates+=(_update_starship)
 
 exists starship || {
-  _update_starship
+  _update_starship || return
   reload
 }
 
@@ -34,6 +34,6 @@ starship-preset-custom() {
 }
 
 starship-config() {
-  edit "$STARSHIP_CONFIG"
+  edit "$STARSHIP_CONFIG" || return
   reload
 }

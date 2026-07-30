@@ -2,7 +2,7 @@
 typeset -g _direnv_config_dir="$HOME/.config/direnv"
 
 _install_direnv() {
-  _run_remote_installer "https://direnv.net/install.sh" "bash" --env "bin_path=$CUSTOM_TOOLS_DIR" > /dev/null
+  _run_remote_installer "https://direnv.net/install.sh" "bash" --env "bin_path=$CUSTOM_TOOLS_DIR" > /dev/null || return
 
   [[ -f "$_direnv_config_dir/direnv.toml" ]] || {
     command mkdir -p -- "$_direnv_config_dir"
@@ -15,7 +15,7 @@ if exists direnv; then
 
   uninstall-direnv() {
     info "Uninstalling direnv..."
-    command rm -f -- "$CUSTOM_TOOLS_DIR/direnv"
+    command rm -f -- "$CUSTOM_TOOLS_DIR/direnv" || return
     command rm -rf -- "$_direnv_config_dir"
     reload
   }
@@ -26,7 +26,7 @@ if exists direnv; then
   }
 
   update-direnv() {
-    _update_direnv
+    _update_direnv || return
     reload
   }
 
@@ -38,7 +38,7 @@ if exists direnv; then
 else
   install-direnv() {
     info "Installing direnv..."
-    _install_direnv
+    _install_direnv || return
     reload
   }
 

@@ -10,14 +10,14 @@ if exists docker; then
   if exists brew; then
     uninstall-docker() {
       info "Uninstalling docker..."
-      command brew uninstall docker
+      command brew uninstall docker || return
       reload
     }
   fi
 elif exists brew; then
   install-docker() {
     info "Installing docker..."
-    command brew install --no-ask docker
+    command brew install --no-ask docker || return
     reload
   }
 fi

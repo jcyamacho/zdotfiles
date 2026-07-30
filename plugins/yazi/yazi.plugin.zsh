@@ -42,7 +42,7 @@ if exists yazi; then
   if exists brew; then
     uninstall-yazi() {
       info "Uninstalling yazi..."
-      command brew uninstall yazi
+      command brew uninstall yazi || return
       command rm -rf -- "$YAZI_CONFIG_HOME"
       reload
     }
@@ -50,7 +50,7 @@ if exists yazi; then
 elif exists brew; then
   install-yazi() {
     info "Installing yazi..."
-    command brew install --no-ask yazi
+    command brew install --no-ask yazi || return
     _yazi_restore_config
     reload
   }

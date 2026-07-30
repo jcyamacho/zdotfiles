@@ -9,14 +9,14 @@ if exists cursor; then
   if exists brew; then
     uninstall-cursor() {
       info "Uninstalling cursor..."
-      command brew uninstall --cask cursor
+      command brew uninstall --cask cursor || return
       reload
     }
   fi
 elif exists brew; then
   install-cursor() {
     info "Installing cursor..."
-    command brew install --no-ask --cask cursor
+    command brew install --no-ask --cask cursor || return
     reload
   }
 fi

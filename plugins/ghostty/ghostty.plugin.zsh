@@ -51,7 +51,7 @@ if exists ghostty; then
   if exists brew; then
     uninstall-ghostty() {
       info "Uninstalling ghostty..."
-      command brew uninstall --cask ghostty
+      command brew uninstall --cask ghostty || return
       command rm -rf -- "$_ghostty_config_dir"
       reload
     }
@@ -59,8 +59,8 @@ if exists ghostty; then
 elif exists brew; then
   install-ghostty() {
     info "Installing ghostty..."
-    command brew install --no-ask --cask font-monaspace
-    command brew install --no-ask --cask ghostty
+    command brew install --no-ask --cask font-monaspace || return
+    command brew install --no-ask --cask ghostty || return
     _ghostty_restore_config
     reload
   }

@@ -4,7 +4,7 @@ if exists claude; then
 
   uninstall-claude-code() {
     info "Uninstalling claude..."
-    command rm -f -- "${commands[claude]}"
+    command rm -f -- "${commands[claude]}" || return
     command rm -rf -- "$HOME/.local/share/claude"
     command rm -rf -- "$HOME/.claude-worktrees"
     command rm -rf -- "$_claude_home"
@@ -21,7 +21,7 @@ if exists claude; then
   }
 
   update-claude-code() {
-    _update_claude_code
+    _update_claude_code || return
     reload
   }
 
@@ -34,7 +34,7 @@ if exists claude; then
 else
   install-claude-code() {
     info "Installing claude code..."
-    _run_remote_installer "https://claude.ai/install.sh" "bash"
+    _run_remote_installer "https://claude.ai/install.sh" "bash" || return
     info "Intelligent automation and multi-agent orchestration for Claude Code: https://github.com/wshobson/agents"
     reload
   }

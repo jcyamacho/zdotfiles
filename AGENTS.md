@@ -83,6 +83,8 @@ plugins. Consequences to respect:
   (completion functions that use `_arguments`).
 - `_run_remote_installer <url> [shell] [--env K=V]... [-- args...]` -
   secure download-and-run with `~/.zshrc` write-lock
+- `_run_with_zshrc_locked <cmd> [args...]` - runs an updater while blocking
+  `~/.zshrc` writes and restores permissions even when the command fails
 - `info`, `warn`, `error` - colored output helpers
 - `confirm <prompt> [yes|no]` - terminal-only yes/no prompt that accepts
   `y`/`yes`, `n`/`no`, or bare `Enter` for the default, and re-prompts on
@@ -138,6 +140,11 @@ guard and lifecycle structure.
 
 - Register `_update_<tool>` in `updates`; expose `update-<tool>`
   wrapper that calls updater then `reload`.
+- Preserve failures from the primary lifecycle operation before `reload`, and
+  from a step when later steps depend on it: use `command ... || return`, and
+  have public update wrappers call `_update_<tool> || return`.
+- Keep secondary cleanup and optional configuration best-effort unless their
+  success is part of the command's core contract.
 - If the update never needs `reload` under any circumstance (e.g.,
   pulling models, themes, or data), skip the split: define a single
   public function and register it directly in `updates`. Otherwise use
@@ -175,13 +182,13 @@ exists brew || return
 if exists tool; then
   uninstall-tool() {
     info "Uninstalling tool..."
-    command brew uninstall tool
+    command brew uninstall tool || return
     reload
   }
 else
   install-tool() {
     info "Installing tool..."
-    command brew install --no-ask tool
+    command brew install --no-ask tool || return
     reload
   }
 fi
@@ -199,14 +206,14 @@ if exists tool; then
   if exists brew; then
     uninstall-tool() {
       info "Uninstalling tool..."
-      command brew uninstall tool
+      command brew uninstall tool || return
       reload
     }
   fi
 elif exists brew; then
   install-tool() {
     info "Installing tool..."
-    command brew install --no-ask tool
+    command brew install --no-ask tool || return
     reload
   }
 fi
@@ -223,7 +230,7 @@ if exists tool; then
 
   uninstall-tool() {
     info "Uninstalling tool..."
-    command rm -f -- "$CUSTOM_TOOLS_DIR/tool"
+    command rm -f -- "$CUSTOM_TOOLS_DIR/tool" || return
     reload
   }
 
@@ -233,7 +240,7 @@ if exists tool; then
   }
 
   update-tool() {
-    _update_tool
+    _update_tool || return
     reload
   }
 
@@ -241,7 +248,8 @@ if exists tool; then
 else
   install-tool() {
     info "Installing tool..."
-    _run_remote_installer "https://..." "sh" -- --bin-dir "$CUSTOM_TOOLS_DIR"
+    _run_remote_installer "https://..." "sh" \
+      -- --bin-dir "$CUSTOM_TOOLS_DIR" || return
     reload
   }
 fi

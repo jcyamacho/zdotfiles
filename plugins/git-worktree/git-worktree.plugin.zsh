@@ -135,9 +135,8 @@ _gwt_run_setup_hooks() {
 
   # Sourced rather than executed so the script can affect the new shell state,
   # and $ROOT_WORKTREE_PATH lets it reach back into the main worktree.
-  export ROOT_WORKTREE_PATH="${common_git_dir:h}"
-  source "$setup_script"
-  unset ROOT_WORKTREE_PATH
+  local -x ROOT_WORKTREE_PATH="${common_git_dir:h}"
+  builtin source "$setup_script"
 }
 
 gwt() {
@@ -172,7 +171,7 @@ gwt() {
       local default_branch="$(_gwt_default_branch)"
 
       info "Fetching latest '$default_branch' from origin..."
-      command git fetch origin "$default_branch"
+      command git fetch origin "$default_branch" || return
 
       base_ref="origin/$default_branch"
     fi
@@ -184,7 +183,7 @@ gwt() {
 
   builtin cd "$worktree_path" || return 1
 
-  _gwt_run_setup_hooks
+  _gwt_run_setup_hooks || return
 
   builtin print ""
   info "Now in worktree '${PWD:t}'."

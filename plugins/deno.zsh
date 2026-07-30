@@ -10,7 +10,7 @@ if [[ -d "$_deno_dir/bin" ]]; then
 
   uninstall-deno() {
     info "Uninstalling deno..."
-    command rm -rf -- "$_deno_dir"
+    command rm -rf -- "$_deno_dir" || return
     reload
   }
 
@@ -20,7 +20,7 @@ if [[ -d "$_deno_dir/bin" ]]; then
   }
 
   update-deno() {
-    _update_deno
+    _update_deno || return
     reload
   }
 
@@ -28,7 +28,7 @@ if [[ -d "$_deno_dir/bin" ]]; then
 else
   install-deno() {
     info "Installing deno..."
-    _run_remote_installer "https://deno.land/install.sh" "sh" --env "DENO_INSTALL=$_deno_dir" -- --no-modify-path -y
+    _run_remote_installer "https://deno.land/install.sh" "sh" --env "DENO_INSTALL=$_deno_dir" -- --no-modify-path -y || return
     reload
   }
 fi

@@ -7,7 +7,10 @@ if exists gh; then
     local jq_description="${gist_description//\\/\\\\}"
     jq_description=${jq_description//\"/\\\"}
 
-    local -a ids=("${(@f)$(command gh api /gists --paginate --jq ".[] | select((.description==\"${jq_description}\") and (.public==false)) | .id")}")
+    local output
+    output="$(command gh api /gists --paginate --jq ".[] | select((.description==\"${jq_description}\") and (.public==false)) | .id")" || return
+
+    local -a ids=("${(@f)output}")
     builtin print -r -- "${ids[1]}"
   }
 
@@ -20,7 +23,8 @@ if exists gh; then
       return 1
     fi
 
-    local gist_id="$(_find_gist_id "${file_description}")"
+    local gist_id
+    gist_id="$(_find_gist_id "$file_description")" || return
     if [[ -n $gist_id ]]; then
       info "Updating gist: ${gist_id} (${file_description})"
       command gh gist edit "${gist_id}" "${file_path}" --desc "${file_description}"
@@ -39,15 +43,40 @@ if exists gh; then
       return 1
     fi
 
-    local gist_filename="${file_path:t}"
-    local gist_id="$(_find_gist_id "${file_description}")"
-    if [[ -n $gist_id ]]; then
-      info "Loading \"${file_description}\" from gist: ${gist_id}"
-      command gh gist view "${gist_id}" --filename "${gist_filename}" --raw > "${file_path}"
-    else
+    local gist_id
+    gist_id="$(_find_gist_id "$file_description")" || return
+    if [[ -z $gist_id ]]; then
       error "Gist \"${file_description}\" not found"
       return 1
     fi
+
+    if [[ -L "$file_path" && ! -e "$file_path" ]]; then
+      error "Cannot load gist into dangling symlink: $file_path"
+      return 1
+    fi
+
+    local gist_filename="${file_path:t}"
+    local target_path="${file_path:A}"
+    local target_dir="${target_path:h}"
+    command mkdir -p -- "$target_dir" || return
+
+    local tmp
+    tmp="$(command mktemp "${target_path}.XXXXXX")" || return
+
+    {
+      if [[ -e "$target_path" ]]; then
+        command cp -p -- "$target_path" "$tmp" || return
+      else
+        command chmod '=rw' "$tmp" || return
+      fi
+
+      info "Loading \"${file_description}\" from gist: ${gist_id}"
+      command gh gist view "$gist_id" --filename "$gist_filename" --raw >| "$tmp" || return
+
+      command mv -f -- "$tmp" "$target_path"
+    } always {
+      command rm -f -- "$tmp"
+    }
   }
 
 else
@@ -65,13 +94,13 @@ exists brew || return
 if exists gh; then
   uninstall-gh() {
     info "Uninstalling gh-cli..."
-    command brew uninstall gh
+    command brew uninstall gh || return
     reload
   }
 else
   install-gh() {
     info "Installing gh-cli..."
-    command brew install --no-ask gh
+    command brew install --no-ask gh || return
     reload
   }
 fi

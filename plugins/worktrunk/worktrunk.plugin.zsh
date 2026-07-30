@@ -37,14 +37,14 @@ if exists wt; then
   if exists brew; then
     uninstall-worktrunk() {
       info "Uninstalling worktrunk..."
-      command brew uninstall worktrunk
+      command brew uninstall worktrunk || return
       reload
     }
   fi
 elif exists brew; then
   install-worktrunk() {
     info "Installing worktrunk..."
-    command brew install --no-ask worktrunk
+    command brew install --no-ask worktrunk || return
 
     if exists claude; then
       _wt_set_provider claude

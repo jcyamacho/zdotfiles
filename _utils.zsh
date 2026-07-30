@@ -93,7 +93,7 @@ zsh-plugins-regenerate() {
   local zsh_plugins="${ZDOTFILES_DIR}/.zsh_plugins"
   local static_file="${zsh_plugins}.zsh"
 
-  command rm -f -- "$static_file" "${static_file}.zwc"
+  command rm -f -- "$static_file" "${static_file}.zwc" || return
   reload
 }
 
@@ -101,7 +101,7 @@ zdotfiles-cache-clean() {
   warn "This will delete all zdotfiles caches (init, completions, etc.)"
   confirm "Continue?" no || { info "Aborted"; return 0; }
 
-  command rm -rf -- "$ZDOTFILES_CACHE_DIR"
+  command rm -rf -- "$ZDOTFILES_CACHE_DIR" || return
   info "Cache cleared"
   reload
 }
@@ -164,6 +164,8 @@ cache-completion() {
 }
 
 _run_remote_installer() {
+  setopt localoptions localtraps
+
   local url="${1:?_run_remote_installer: missing url}"
   local shell="${2:-sh}"
   if (( $# >= 2 )); then
@@ -186,7 +188,10 @@ _run_remote_installer() {
   tmp="$(command mktemp "${TMPDIR:-$ZDOTFILES_CACHE_DIR}/zdotfiles-installer.XXXXXX")" || return 1
 
   local exit_status=0
-  _lock_zshrc
+  _lock_zshrc || {
+    command rm -f -- "$tmp"
+    return 1
+  }
   trap '_unlock_zshrc; command rm -f -- "$tmp"' EXIT INT TERM
 
   command curl --proto '=https' --tlsv1.2 -fsSL "$url" -o "$tmp"
@@ -222,6 +227,18 @@ _lock_zshrc() {
 
 _unlock_zshrc() {
   command chmod +w "$_zshrc_file"
+}
+
+_run_with_zshrc_locked() {
+  local exit_status
+  _lock_zshrc || return
+  {
+    command "$@"
+    exit_status=$?
+  } always {
+    _unlock_zshrc
+  }
+  return $exit_status
 }
 
 edit() {

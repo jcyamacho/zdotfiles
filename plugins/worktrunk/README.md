@@ -32,7 +32,7 @@ are stored in `config/` and applied with `wt-commit-<provider>`.
 Available providers:
 
 - `claude` -- uses Claude Code with haiku model
-- `codex` -- uses Codex with gpt-5.4-mini model
+- `codex` -- uses Codex with gpt-5.6-luna model
 
 On install, the plugin auto-configures the first available provider
 (claude, then codex).

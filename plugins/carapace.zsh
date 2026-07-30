@@ -8,14 +8,14 @@ if exists carapace; then
   if exists brew; then
     uninstall-carapace() {
       info "Uninstalling carapace..."
-      command brew uninstall carapace
+      command brew uninstall carapace || return
       reload
     }
   fi
 elif exists brew; then
   install-carapace() {
     info "Installing carapace..."
-    command brew install --no-ask carapace
+    command brew install --no-ask carapace || return
     reload
   }
 else

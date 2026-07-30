@@ -9,14 +9,14 @@ if exists code; then
   if exists brew; then
     uninstall-code() {
       info "Uninstalling visual studio code..."
-      command brew uninstall --cask visual-studio-code
+      command brew uninstall --cask visual-studio-code || return
       reload
     }
   fi
 elif exists brew; then
   install-code() {
     info "Installing visual studio code..."
-    command brew install --no-ask --cask visual-studio-code
+    command brew install --no-ask --cask visual-studio-code || return
     reload
   }
 fi

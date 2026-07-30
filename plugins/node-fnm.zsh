@@ -4,11 +4,11 @@ typeset -g _fnm_multishell_root="${XDG_STATE_HOME:-$HOME/.local/state}/fnm_multi
 
 _update_node() {
   info "Activating latest LTS node..."
-  fnm install --lts
-  fnm use --install-if-missing lts-latest
+  fnm install --lts || return
+  fnm use --install-if-missing lts-latest || return
 
   local current_version="$(fnm current)"
-  fnm default "$current_version"
+  fnm default "$current_version" || return
   info "Current Node.js version: $current_version"
 
   info "Updating npm..."
@@ -33,6 +33,7 @@ _fnm_env() {
   # This shell relies on `fnm env` both for fnm's own variables and for the
   # active global Node.js version on PATH.
   _fnm_prune_multishell_paths
+
   # fnm env output is session-specific (FNM_MULTISHELL_PATH), so do not cache it.
   builtin source <(command fnm env --shell zsh)
 }
@@ -43,7 +44,7 @@ if exists fnm; then
   if exists brew; then
     alias uninstall-node="uninstall-fnm"
     uninstall-fnm() {
-      command brew uninstall fnm
+      command brew uninstall fnm || return
       command rm -rf -- "$HOME/.local/state/fnm_multishells"
       reload
     }
@@ -70,9 +71,9 @@ elif exists brew; then
   alias install-node="install-fnm"
   install-fnm() {
     info "Installing fnm..."
-    command brew install --no-ask fnm
+    command brew install --no-ask fnm || return
     _fnm_env
-    _update_node
+    _update_node || return
     reload
   }
 fi

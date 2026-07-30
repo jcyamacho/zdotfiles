@@ -6,6 +6,9 @@ if exists orb; then
 
   if exists brew; then
     uninstall-orbstack() {
+      warn "This will remove OrbStack and prune all unused Docker data, including volumes."
+      confirm "Continue?" no || { info "Aborted"; return 0; }
+
       if exists docker; then
         local docker_context
         docker_context="$(command docker context show 2>/dev/null)"
@@ -21,14 +24,14 @@ if exists orb; then
       fi
 
       info "Uninstalling orbstack..."
-      command brew uninstall --zap --cask orbstack
+      command brew uninstall --zap --cask orbstack || return
       reload
     }
   fi
 elif exists brew; then
   install-orbstack() {
     info "Installing orbstack..."
-    command brew install --no-ask --cask orbstack
+    command brew install --no-ask --cask orbstack || return
     reload
   }
 fi

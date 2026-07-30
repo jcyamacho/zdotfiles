@@ -7,13 +7,13 @@ if exists btop; then
 
   uninstall-btop() {
     info "Uninstalling btop..."
-    command brew uninstall btop
+    command brew uninstall btop || return
     reload
   }
 else
   install-btop() {
     info "Installing btop..."
-    command brew install --no-ask btop
+    command brew install --no-ask btop || return
     reload
   }
 fi

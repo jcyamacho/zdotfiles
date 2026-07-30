@@ -7,20 +7,18 @@ if [[ -f "$_viteplus_dir/env" ]]; then
 
   uninstall-viteplus() {
     info "Uninstalling Vite+..."
-    command env VP_HOME="$_viteplus_dir" vp implode --yes
+    command env VP_HOME="$_viteplus_dir" vp implode --yes || return
     command rm -rf -- "$_viteplus_dir"
     reload
   }
 
   _update_viteplus() {
     info "Updating Vite+..."
-    _lock_zshrc
-    command env VP_HOME="$_viteplus_dir" VP_NODE_MANAGER=no vp upgrade
-    _unlock_zshrc
+    _run_with_zshrc_locked env VP_HOME="$_viteplus_dir" VP_NODE_MANAGER=no vp upgrade
   }
 
   update-viteplus() {
-    _update_viteplus
+    _update_viteplus || return
     reload
   }
 
@@ -28,7 +26,7 @@ if [[ -f "$_viteplus_dir/env" ]]; then
 else
   install-viteplus() {
     info "Installing Vite+..."
-    _run_remote_installer "https://vite.plus" "bash" --env "VP_HOME=$_viteplus_dir" --env "VP_NODE_MANAGER=no"
+    _run_remote_installer "https://vite.plus" "bash" --env "VP_HOME=$_viteplus_dir" --env "VP_NODE_MANAGER=no" || return
     reload
   }
 fi

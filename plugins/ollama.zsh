@@ -22,14 +22,14 @@ if exists ollama; then
     info "Uninstalling ollama..."
     command pkill -x Ollama 2>/dev/null || :
     command rm -rf -- "$HOME/.ollama"
-    command rm -rf -- /Applications/Ollama.app
+    command rm -rf -- /Applications/Ollama.app || return
     command rm -f -- /usr/local/bin/ollama 2>/dev/null || warn "Could not remove /usr/local/bin/ollama"
     reload
   }
 else
   install-ollama() {
     info "Installing ollama..."
-    _run_remote_installer "https://ollama.com/install.sh"
+    _run_remote_installer "https://ollama.com/install.sh" || return
     reload
   }
 fi

@@ -5,7 +5,7 @@ if exists mise; then
 
   uninstall-mise() {
     info "Uninstalling mise..."
-    command mise implode --yes
+    command mise implode --yes || return
     reload
   }
 
@@ -15,7 +15,7 @@ if exists mise; then
   }
 
   update-mise() {
-    _update_mise
+    _update_mise || return
     reload
   }
 
@@ -23,7 +23,7 @@ if exists mise; then
 else
   install-mise() {
     info "Installing mise..."
-    _run_remote_installer "https://mise.run" "sh" --env "MISE_INSTALL_PATH=$CUSTOM_TOOLS_DIR/mise"
+    _run_remote_installer "https://mise.run" "sh" --env "MISE_INSTALL_PATH=$CUSTOM_TOOLS_DIR/mise" || return
     reload
   }
 

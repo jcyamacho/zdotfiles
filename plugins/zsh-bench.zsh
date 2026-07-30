@@ -5,7 +5,7 @@ typeset -g _zsh_bench_dir="$ZDOTFILES_CACHE_DIR/zsh-bench"
 if exists zsh-bench; then
   uninstall-zsh-bench() {
     info "Uninstalling zsh-bench..."
-    command rm -f -- "$CUSTOM_TOOLS_DIR/zsh-bench"
+    command rm -f -- "$CUSTOM_TOOLS_DIR/zsh-bench" || return
     command rm -rf -- "$_zsh_bench_dir"
     reload
   }
@@ -16,7 +16,7 @@ if exists zsh-bench; then
   }
 
   update-zsh-bench() {
-    _update_zsh_bench
+    _update_zsh_bench || return
     reload
   }
 
@@ -24,8 +24,8 @@ if exists zsh-bench; then
 else
   install-zsh-bench() {
     info "Installing zsh-bench..."
-    command git clone --quiet --depth=1 https://github.com/romkatv/zsh-bench.git "$_zsh_bench_dir" \
-      && command ln -sf -- "$_zsh_bench_dir/zsh-bench" "$CUSTOM_TOOLS_DIR/zsh-bench"
+    command git clone --quiet --depth=1 https://github.com/romkatv/zsh-bench.git "$_zsh_bench_dir" || return
+    command ln -sf -- "$_zsh_bench_dir/zsh-bench" "$CUSTOM_TOOLS_DIR/zsh-bench" || return
     reload
   }
 fi

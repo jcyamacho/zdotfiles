@@ -10,19 +10,17 @@ if [[ -d "$_bun_dir/bin" ]]; then
 
   uninstall-bun() {
     info "Uninstalling bun..."
-    command rm -rf -- "$_bun_dir"
+    command rm -rf -- "$_bun_dir" || return
     reload
   }
 
   _update_bun() {
     info "Updating bun..."
-    _lock_zshrc
-    command bun upgrade
-    _unlock_zshrc
+    _run_with_zshrc_locked bun upgrade
   }
 
   update-bun() {
-    _update_bun
+    _update_bun || return
     reload
   }
 
@@ -30,7 +28,7 @@ if [[ -d "$_bun_dir/bin" ]]; then
 else
   install-bun() {
     info "Installing bun..."
-    _run_remote_installer "https://bun.sh/install" "sh" --env "BUN_INSTALL=$_bun_dir"
+    _run_remote_installer "https://bun.sh/install" "sh" --env "BUN_INSTALL=$_bun_dir" || return
     reload
   }
 fi

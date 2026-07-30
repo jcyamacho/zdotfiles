@@ -7,7 +7,7 @@ if exists flutter; then
   }
 
   update-flutter() {
-    _update_flutter
+    _update_flutter || return
     reload
   }
 
@@ -19,13 +19,13 @@ exists brew || return
 if exists flutter; then
   uninstall-flutter() {
     info "Uninstalling flutter..."
-    command brew uninstall --cask flutter
+    command brew uninstall --cask flutter || return
     reload
   }
 else
   install-flutter() {
     info "Installing flutter..."
-    command brew install --no-ask --cask flutter
+    command brew install --no-ask --cask flutter || return
     command flutter --disable-analytics
     command dart --disable-analytics
     reload

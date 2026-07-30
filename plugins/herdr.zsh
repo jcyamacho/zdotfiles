@@ -14,13 +14,13 @@ if exists herdr; then
 
   uninstall-herdr() {
     info "Uninstalling Herdr..."
-    command brew uninstall herdr
+    command brew uninstall herdr || return
     reload
   }
 else
   install-herdr() {
     info "Installing Herdr..."
-    command brew install --no-ask herdr
+    command brew install --no-ask herdr || return
     reload
   }
 fi

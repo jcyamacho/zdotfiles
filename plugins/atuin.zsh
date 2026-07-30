@@ -14,20 +14,18 @@ if [[ -d "$_atuin_dir/bin" ]]; then
 
   uninstall-atuin() {
     info "Uninstalling atuin..."
-    command rm -rf -- "$_atuin_dir"
+    command rm -rf -- "$_atuin_dir" || return
     command rm -rf -- "$HOME/.local/share/atuin"
     reload
   }
 
   _update_atuin() {
     info "Updating atuin..."
-    _lock_zshrc
-    command atuin update
-    _unlock_zshrc
+    _run_with_zshrc_locked atuin update
   }
 
   update-atuin() {
-    _update_atuin
+    _update_atuin || return
     reload
   }
 
@@ -35,7 +33,7 @@ if [[ -d "$_atuin_dir/bin" ]]; then
 else
   install-atuin() {
     info "Installing atuin..."
-    _run_remote_installer "https://setup.atuin.sh"
+    _run_remote_installer "https://setup.atuin.sh" || return
     reload
   }
 fi

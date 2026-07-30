@@ -100,7 +100,7 @@ Worktrees are named `<repo>.<branch>` (slashes in branch names become dashes).
 After `git worktree add` completes (and Git's own `post-checkout` hook
 runs), `gwt` sources one setup script if it exists:
 
-```
+```text
 $GIT_COMMON_DIR/setup-worktree.zsh
 ```
 
@@ -120,8 +120,13 @@ such as `.env`.
 npm install
 
 # Allow direnv
-command -v direnv &>/dev/null && direnv allow
+if command -v direnv &>/dev/null; then
+  command direnv allow
+fi
 ```
+
+`gwt` propagates the script's final status. Use `if` blocks for optional
+commands so a missing tool does not look like a setup failure.
 
 ## Requirements
 

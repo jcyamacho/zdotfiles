@@ -23,7 +23,7 @@ if [[ -d "$_opencode_dir/bin" ]]; then
 
   uninstall-opencode() {
     info "Uninstalling opencode..."
-    command rm -rf -- "$_opencode_dir"
+    command rm -rf -- "$_opencode_dir" || return
     command rm -rf -- "$_opencode_config_dir"
     command rm -rf -- "$HOME/.cache/opencode"
     command rm -rf -- "$_opencode_data_dir"
@@ -32,13 +32,11 @@ if [[ -d "$_opencode_dir/bin" ]]; then
 
   _update_opencode() {
     info "Updating opencode..."
-    _lock_zshrc
-    command opencode upgrade
-    _unlock_zshrc
+    _run_with_zshrc_locked opencode upgrade
   }
 
   update-opencode() {
-    _update_opencode
+    _update_opencode || return
     reload
   }
 
@@ -63,7 +61,7 @@ if [[ -d "$_opencode_dir/bin" ]]; then
 else
   install-opencode() {
     info "Installing opencode..."
-    _run_remote_installer "https://opencode.ai/install"
+    _run_remote_installer "https://opencode.ai/install" || return
     reload
   }
 fi

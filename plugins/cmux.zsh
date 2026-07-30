@@ -32,7 +32,7 @@ if exists cmux; then
   if exists brew; then
     uninstall-cmux() {
       info "Uninstalling cmux..."
-      command brew uninstall --cask cmux
+      command brew uninstall --cask cmux || return
       command rm -f -- "$CUSTOM_TOOLS_DIR/cmux"
       reload
     }
@@ -40,8 +40,8 @@ if exists cmux; then
 elif exists brew; then
   install-cmux() {
     info "Installing cmux..."
-    command brew tap manaflow-ai/cmux
-    command brew install --no-ask --cask cmux
+    command brew tap manaflow-ai/cmux || return
+    command brew install --no-ask --cask cmux || return
     _cmux_setup_cli || warn "cmux CLI setup skipped: app bundle not found"
     reload
   }

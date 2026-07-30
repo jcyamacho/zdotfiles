@@ -35,20 +35,22 @@ _update_zdotfiles() {
 }
 
 update-zdotfiles() {
-  _update_zdotfiles
+  _update_zdotfiles || return
   reload
 }
 
 updates+=(_update_zdotfiles)
 
 update-all() {
+  local result=0
   local update
   for update in "${updates[@]}"; do
-    "$update"
+    "$update" || result=1
     builtin print
   done
 
-  reload
+  reload || return
+  return $result
 }
 # UPDATES end
 
@@ -112,7 +114,7 @@ _antidote_update() {
 }
 
 update-antidote() {
-  _antidote_update
+  _antidote_update || return
   reload
 }
 

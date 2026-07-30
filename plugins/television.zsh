@@ -11,14 +11,14 @@ if exists tv; then
   if exists brew; then
     uninstall-television() {
       info "Uninstalling television..."
-      command brew uninstall television
+      command brew uninstall television || return
       reload
     }
   fi
 elif exists brew; then
   install-television() {
     info "Installing television..."
-    command brew install --no-ask television
+    command brew install --no-ask television || return
 
     # tv's built-in channels shell out to these: `fd` feeds dirs and files, and
     # `bat` renders their previews. Without fd the channels return nothing, so
