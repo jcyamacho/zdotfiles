@@ -2,17 +2,7 @@
 
 # GIT_OPTIONAL_LOCKS=0 keeps this read-only query from taking the index lock.
 _git_current_branch() {
-  local ref
-  ref="$(GIT_OPTIONAL_LOCKS=0 command git symbolic-ref --quiet HEAD 2>/dev/null)"
-  local exit_status=$?
-
-  if (( exit_status != 0 )); then
-    # 128 means we are not inside a repository, so there is no branch to report.
-    (( exit_status == 128 )) && return 1
-    ref="$(GIT_OPTIONAL_LOCKS=0 command git rev-parse --short HEAD 2>/dev/null)" || return 1
-  fi
-
-  builtin print -r -- "${ref#refs/heads/}"
+  GIT_OPTIONAL_LOCKS=0 command git symbolic-ref --quiet --short HEAD 2>/dev/null
 }
 
 ggl() {

@@ -1,6 +1,8 @@
 # git utils (bulk pull and hook scaffolding): https://git-scm.com/docs
 
 git-pull-all() {
+  setopt localoptions pipefail
+
   local base_dir="${1:-$PWD}"
 
   # If current dir is a git repo, just pull it
@@ -17,6 +19,7 @@ git-pull-all() {
   info "Pulling all repos in: $base_dir"
   builtin print ""
 
+  local result=0
   local dir
 
   for dir in "$base_dir"/*(N/); do
@@ -24,12 +27,18 @@ git-pull-all() {
 
     builtin print -P "%F{cyan}->%f ${dir:t}"
 
-    command git -C "$dir" pull --ff-only 2>&1 | command sed 's/^/  /'
+    command git -C "$dir" pull --ff-only 2>&1 | command sed 's/^/  /' || result=1
 
     builtin print ""
   done
 
-  info "Done."
+  if (( result == 0 )); then
+    info "Done."
+  else
+    warn "Completed with errors."
+  fi
+
+  return $result
 }
 
 git-hook() {
