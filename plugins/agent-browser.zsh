@@ -26,8 +26,9 @@ elif exists npm; then
   install-agent-browser() {
     info "Installing agent-browser..."
 
-    command npm install -g agent-browser > /dev/null || return
-    command agent-browser install || return
+    command npm install -g --ignore-scripts agent-browser > /dev/null || return
+    command agent-browser install ||
+      warn "Chrome download failed; agent-browser will use an installed browser"
     reload
   }
 fi
