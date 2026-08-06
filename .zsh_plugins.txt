@@ -66,6 +66,8 @@ $ZDOTFILES_DIR/plugins/zoxide.zsh
 
 $ZDOTFILES_DIR/plugins/gemini-cli.zsh
 
+$ZDOTFILES_DIR/plugins/copilot-cli.zsh
+
 $ZDOTFILES_DIR/plugins/pi.zsh
 
 $ZDOTFILES_DIR/plugins/agent-browser.zsh

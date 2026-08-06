@@ -86,6 +86,7 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-code` – [VS Code](https://code.visualstudio.com/)
 - `install-codex` – [OpenAI Codex CLI](https://developers.openai.com/codex/cli)
 - `install-cmux` – [cmux](https://www.cmux.dev/) native macOS terminal for AI agents
+- `install-copilot` – [GitHub Copilot CLI](https://github.com/features/copilot/cli/)
 - `install-cursor` – [Cursor](https://www.cursor.com/)
 - `install-deno` – [Deno](https://deno.land/) runtime
 - `install-direnv` – [direnv](https://direnv.net/) + hook
