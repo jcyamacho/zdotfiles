@@ -3,6 +3,8 @@ export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 
 if exists codex; then
   cache-completion codex completion zsh
+  autoload -Uz _codex
+  compdef _codex codex cdx
 
   cdx() {
     # Human launcher with opinionated terminal UX; use `codex` directly for scripting.
@@ -10,7 +12,7 @@ if exists codex; then
     {
       builtin printf '%s' $'\e]11;#1e1e1e\a'
       command clear
-      command codex --search --sandbox workspace-write --ask-for-approval on-request "$@"
+      command codex "$@"
       exit_code=$?
     } always {
       builtin printf '%s' $'\e]111\a'
