@@ -17,14 +17,14 @@ OpenAI Codex CLI for AI-assisted coding.
 | `install-codex` | Install Codex with Homebrew |
 | `uninstall-codex` | Remove Codex and its configuration |
 | `codex-config` | Open the Codex home directory in your editor |
-| `cdx` | Interactive Codex launcher with terminal polish |
+| `cdx` | Interactive Codex launcher that clears the screen |
 | `codex-clear-archived-sessions` | Remove archived Codex session directories |
 
 ## Notes
 
 - Uses Homebrew for installation, removal, and updates through `update-brew`
 - `cdx` forwards arguments to Codex and respects the user's Codex configuration
-- `cdx` is a human-facing launcher: it clears the screen, sets a darker
-  terminal background, and restores terminal state on exit
+- `cdx` is a human-facing launcher that clears the screen without changing
+  the terminal's colors
 - Use raw `codex` directly for scripting, piping, or other non-interactive workflows
 - Caches generated shell completions

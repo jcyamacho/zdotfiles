@@ -7,17 +7,9 @@ if exists codex; then
   compdef _codex codex cdx
 
   cdx() {
-    # Human launcher with opinionated terminal UX; use `codex` directly for scripting.
-    local exit_code=0
-    {
-      builtin printf '%s' $'\e]11;#1e1e1e\a'
-      command clear
-      command codex "$@"
-      exit_code=$?
-    } always {
-      builtin printf '%s' $'\e]111\a'
-    }
-    return $exit_code
+    # Human launcher that clears the screen; use `codex` directly for scripting.
+    command clear
+    command codex "$@"
   }
 
   codex-config() {
