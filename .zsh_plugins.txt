@@ -116,7 +116,8 @@ $ZDOTFILES_DIR/plugins/orbstack.zsh
 
 $ZDOTFILES_DIR/plugins/golang
 
-# UX plugins must load after tool/keybinding plugins so ZLE hooks wrap the final widget state.
-zsh-users/zsh-autosuggestions
+# UX plugins must load after tool/keybinding plugins.
+# zsh-autosuggestions must load after F-Sy-H so F-Sy-H does not wrap its internal widgets.
 z-shell/F-Sy-H
+zsh-users/zsh-autosuggestions
 MichaelAquilina/zsh-you-should-use conditional:"[[ -z $ZSH_DISABLE_YOU_SHOULD_USE ]]"
