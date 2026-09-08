@@ -11,9 +11,9 @@ update-ruby() {
   fi
 
   info "Installing Ruby $latest_version..."
-  rbenv install -s "$latest_version"
+  rbenv install -s "$latest_version" || return
 
-  rbenv global "$latest_version"
+  rbenv global "$latest_version" || return
   info "Current Ruby version: $latest_version"
 }
 

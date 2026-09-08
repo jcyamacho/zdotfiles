@@ -27,7 +27,7 @@ builtin source "$ZDOTFILES_DIR/_utils.zsh"
 # UTILS end
 
 # UPDATES
-typeset -gUa updates
+typeset -gUa updates=()
 
 _update_zdotfiles() {
   info "Updating zdotfiles..."
@@ -93,8 +93,18 @@ typeset zsh_plugins="${ZDOTFILES_DIR}/.zsh_plugins"
 # Generate a new static file whenever .zsh_plugins.txt is updated.
 if [[ ! "${zsh_plugins}.zsh" -nt "${zsh_plugins}.txt" ]]; then
   info "Generating static plugins file..."
-  ZDOTFILES_DIR="$ZDOTFILES_DIR" antidote bundle \
-    < "${zsh_plugins}.txt" >| "${zsh_plugins}.zsh"
+  typeset _zsh_plugins_tmp
+  _zsh_plugins_tmp="$(command mktemp "${zsh_plugins}.zsh.XXXXXX")" || return
+
+  {
+    if ZDOTFILES_DIR="$ZDOTFILES_DIR" antidote bundle \
+      < "${zsh_plugins}.txt" >| "$_zsh_plugins_tmp"; then
+      command mv -f -- "$_zsh_plugins_tmp" "${zsh_plugins}.zsh"
+    fi
+  } always {
+    command rm -f -- "$_zsh_plugins_tmp"
+    unset _zsh_plugins_tmp
+  }
 fi
 
 # Compile the static plugins file for faster sourcing.

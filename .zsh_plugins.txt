@@ -108,11 +108,9 @@ $ZDOTFILES_DIR/plugins/television.zsh
 $ZDOTFILES_DIR/plugins/atuin.zsh
 
 # mise must load after tool plugins so its shims and paths win.
-# Its cached activation exports a full PATH snapshot, so plugins that source
-# their own env files must load after mise or their bin dirs can disappear.
 $ZDOTFILES_DIR/plugins/mise.zsh
 
-# Java preserves the selected JAVA_HOME and adds its bin after the PATH snapshot.
+# Java preserves the selected JAVA_HOME and adds its bin to PATH.
 $ZDOTFILES_DIR/plugins/java.zsh
 
 $ZDOTFILES_DIR/plugins/orbstack.zsh
