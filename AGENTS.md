@@ -262,6 +262,8 @@ fi
   per plugin; the global `-U` keeps prepends deduped across reloads.
 - Disable tool telemetry when supported.
 - Use `local` for function state.
+- For temporary variables used only while sourcing the file, use
+  `typeset _name="value"` and `unset _name` after their last use.
 - Use `typeset -g _name="value"` only when plugin functions need private
   state after the file is sourced. Reassigning it on `reload` is intentional.
 - Use a normal global assignment for user configuration that the shell consumes.
