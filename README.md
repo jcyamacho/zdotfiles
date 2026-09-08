@@ -103,6 +103,9 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-gh` – [GitHub CLI](https://github.com/cli/cli)
 - `install-go` – [Go](https://golang.org/) + [golangci-lint](https://golangci-lint.run/)
 - `install-herdr` - [Herdr](https://herdr.dev/) agent multiplexer that lives in your terminal
+- `install-java` - [Amazon Corretto 25 LTS](https://aws.amazon.com/corretto/) JDK via Homebrew (macOS).
+  Sets `JAVA_HOME` and PATH, preserving an existing valid `JAVA_HOME`.
+  Use `uninstall-java` to remove it; `update-brew` handles patch updates.
 - `install-just` – [just](https://just.systems/) command runner
 - `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
 - `install-memo` - [memo](https://github.com/jcyamacho/memo) durable memory CLI; includes Claude and Codex `memo context` hook helpers
