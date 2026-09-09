@@ -88,6 +88,9 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-cmux` – [cmux](https://www.cmux.dev/) native macOS terminal for AI agents
 - `install-copilot` – [GitHub Copilot CLI](https://github.com/features/copilot/cli/)
 - `install-cursor` – [Cursor](https://www.cursor.com/)
+- `install-cursor-cli` - [Cursor CLI](https://cursor.com/docs/cli/installation) terminal agent via the native installer (`~/.local/bin`).
+  Use `update-cursor-cli` to update it, or `uninstall-cursor-cli` to remove it.
+  Its updater also runs through `update-all`.
 - `install-deno` – [Deno](https://deno.land/) runtime
 - `install-direnv` – [direnv](https://direnv.net/) + hook
 - `install-docker` – [Docker](https://www.docker.com/) CLI
