@@ -1,5 +1,6 @@
 $ZDOTFILES_DIR/plugins/git
 $ZDOTFILES_DIR/plugins/git-worktree
+$ZDOTFILES_DIR/plugins/dotenv.zsh
 
 $ZDOTFILES_DIR/plugins/worktrunk
 

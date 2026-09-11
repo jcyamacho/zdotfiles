@@ -139,6 +139,23 @@ Additional helper functions (no external tool required):
 
 - [git](plugins/git/README.md) – `g`, `gaa`, `gf`, `gcb`, `gcmsg`, `gc!`, `ggl`, `ggp` shorthands plus `git-pull-all` and `git-hook`
 - [git-worktree](plugins/git-worktree/README.md) – `gwt-*` helpers for managing Git worktrees
+- [dotenv](plugins/dotenv.zsh) – `dotenv [-e environment] [--] command [args...]`
+  runs an executable with variables from `.env`, `.env.local`, and, with `-e`,
+  `.env.{environment}` and `.env.{environment}.local`, in that order. Only the
+  current directory is searched; missing files are skipped. Later values override
+  earlier ones and inherited environment variables without changing your shell.
+
+  Files accept `KEY=value`, optional `export`, blank lines, comments, and LF or
+  CRLF endings. Keys use letters, digits, and underscores and cannot start with a
+  digit. Surrounding whitespace is ignored; outer single or double quotes are
+  removed. Inline comments require whitespace before `#`; a `#` inside quotes or
+  attached to a value is literal. Values are literal: variables, command
+  substitutions, backticks, and escapes are never expanded. Multiline values and
+  concatenated quoted fragments are unsupported. Invalid or unreadable files
+  abort execution with a location-only diagnostic, without printing values.
+  Loaded variables can still affect the executable's behavior.
+
+  Examples: `dotenv -- bun run dev` or `dotenv -e production -- bun run start`.
 
 ## Utility Functions
 
