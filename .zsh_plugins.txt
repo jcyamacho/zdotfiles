@@ -108,15 +108,15 @@ $ZDOTFILES_DIR/plugins/zellij
 $ZDOTFILES_DIR/plugins/television.zsh
 $ZDOTFILES_DIR/plugins/atuin.zsh
 
-# mise must load after tool plugins so its shims and paths win.
-$ZDOTFILES_DIR/plugins/mise.zsh
-
 # Java preserves the selected JAVA_HOME and adds its bin to PATH.
-$ZDOTFILES_DIR/plugins/java.zsh
+$ZDOTFILES_DIR/plugins/java
 
 $ZDOTFILES_DIR/plugins/orbstack.zsh
 
 $ZDOTFILES_DIR/plugins/golang
+
+# mise must load after tool plugins so its shims and paths win.
+$ZDOTFILES_DIR/plugins/mise.zsh
 
 # UX plugins must load after tool/keybinding plugins.
 # zsh-autosuggestions must load after F-Sy-H so F-Sy-H does not wrap its internal widgets.

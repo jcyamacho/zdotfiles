@@ -105,13 +105,21 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-wezterm` – [WezTerm](https://wezterm.org/) terminal + config restore
 - `install-gh` – [GitHub CLI](https://github.com/cli/cli)
 - `install-go` – [Go](https://golang.org/) + [golangci-lint](https://golangci-lint.run/)
+- `install-gradle` - [Gradle](https://gradle.org/) official binary distribution,
+  using the existing JDK ([java tooling](plugins/java/README.md)).
 - `install-herdr` - [Herdr](https://herdr.dev/) agent multiplexer that lives in your terminal
-- `install-java` - [Amazon Corretto 25 LTS](https://aws.amazon.com/corretto/) JDK via Homebrew (macOS).
-  Sets `JAVA_HOME` and PATH, preserving an existing valid `JAVA_HOME`.
-  Use `uninstall-java` to remove it; `update-brew` handles patch updates.
+- `install-java-25` and `install-java-21` -
+  [Amazon Corretto](https://aws.amazon.com/corretto/) LTS JDKs via Homebrew
+  (macOS). When `JAVA_HOME` is unset, selects the first
+  installed JDK in descending order: 25, then 21.
+  Use `uninstall-java-25` or `uninstall-java-21` to remove each version;
+  `update-brew` handles patch updates.
+  Maven and Gradle have separate installers ([java tooling](plugins/java/README.md)).
 - `install-just` – [just](https://just.systems/) command runner
 - `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
 - `install-memo` - [memo](https://github.com/jcyamacho/memo) durable memory CLI; includes Claude and Codex `memo context` hook helpers
+- `install-maven` - [Maven](https://maven.apache.org/) official binary distribution,
+  using the existing JDK ([java tooling](plugins/java/README.md)).
 - `install-mise` – [mise](https://mise.jdx.dev/)
 - `install-nub` - [Nub](https://nubjs.com/) all-in-one toolkit for Node.js
 - `install-ollama` – [Ollama](https://ollama.com/)
