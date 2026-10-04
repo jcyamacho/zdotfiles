@@ -85,6 +85,26 @@ exists() {
   [[ -n "$cmd_path" && -x "$cmd_path" ]]
 }
 
+run-quiet() {
+  local executable="${1:?run-quiet: missing command}"
+  shift
+
+  local output_file result=0
+  output_file="$(command mktemp)" || return
+
+  # Keep shell-function environment changes in the calling shell.
+  {
+    "$executable" "$@" > "$output_file" 2>&1 || result=$?
+    if (( result != 0 )); then
+      command cat -- "$output_file" >&2
+    fi
+  } always {
+    command rm -f -- "$output_file"
+  }
+
+  return "$result"
+}
+
 reload() {
   builtin source "$ZDOTFILES_DIR/zshrc.sh"
 }

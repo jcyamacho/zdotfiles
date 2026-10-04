@@ -99,7 +99,6 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-varlock` – [varlock](https://varlock.dev/) AI-safe .env files
 - `install-fabric` – [Fabric](https://github.com/danielmiessler/fabric)
 - `install-flutter` – [Flutter](https://flutter.dev/) SDK
-- `install-fnm` (or `install-node`) – [fnm](https://github.com/Schniz/fnm) + LTS activation
 - `install-gemini` – [Gemini CLI](https://github.com/google/gemini-cli)
 - `install-ghostty` – [Ghostty](https://ghostty.org/) terminal + config restore
 - `install-wezterm` – [WezTerm](https://wezterm.org/) terminal + config restore
@@ -131,7 +130,16 @@ Run `install-recommended` to install every missing tool in this group.
 - `install-rbenv` (or `install-ruby`) – [rbenv](https://github.com/rbenv/rbenv)
 - `install-rust` – [rustup](https://rustup.rs/)
 - `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling ([python](plugins/python/README.md))
-- `install-viteplus` – [Vite+](https://viteplus.dev/) unified web toolchain
+- `install-viteplus` (or `install-node`) - [Vite+](https://viteplus.dev/) web toolchain
+  and Node.js version manager. `install-node` also works when Vite+ is already installed.
+  `update-node` installs the latest Node.js LTS, sets it as the global default,
+  activates it in the current shell, and updates npm and pnpm through Vite+.
+  pnpm uses Vite+ instead of Corepack, with a global default and project-specific versions.
+  It also runs through `update-all`. Bun remains independently managed.
+  `uninstall-unused-node-versions` cleans Vite+ Node.js installations, preserving
+  the current and default versions. When switching from fnm, open a new terminal
+  and run `update-node` once to enable Vite+ management; existing fnm installations
+  are not deleted.
 - `install-worktrunk` – [Worktrunk](https://worktrunk.dev) git worktree management
 - `install-zed` – [Zed](https://zed.dev/)
 - `install-zsh-bench` – [zsh-bench](https://github.com/romkatv/zsh-bench) benchmark for interactive zsh
