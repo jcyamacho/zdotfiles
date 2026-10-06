@@ -31,7 +31,7 @@ Edit it with `zsh-config`.
 - Keep the repo elsewhere by setting `ZDOTFILES_DIR` before sourcing.
 - Change the editor used by helper commands by exporting `EDITOR`.
 - Adjust where self-managed tools install by overriding `CUSTOM_TOOLS_DIR`.
-- Set `GIT_WORKTREE_BASE` to change where `gwt-new` creates worktrees (see [git-worktree](plugins/git-worktree/README.md)).
+- Set `GIT_WORKTREE_BASE` to change where `gwt` creates worktrees (see [git-worktree](plugins/git-worktree/README.md)).
 
 ### Starship
 

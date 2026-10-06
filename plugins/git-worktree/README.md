@@ -13,6 +13,7 @@ working directories for different branches.
 | `gwt-rm <worktree>`   | Remove a worktree                    |
 | `gwt-ls`              | List active worktrees                |
 | `gwt-prune`           | Prune stale worktree metadata        |
+| `gwt-setup`           | Create or edit the setup script      |
 
 ## Completion
 

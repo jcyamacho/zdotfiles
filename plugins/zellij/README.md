@@ -8,8 +8,8 @@ Terminal workspace manager: <https://zellij.dev/>
 install-zellij
 ```
 
-Requires [Homebrew](https://brew.sh/).
-Utilities work regardless of installation method.
+Requires [Homebrew](https://brew.sh/). `uninstall-zellij` removes zellij and
+`ZELLIJ_CONFIG_DIR`. Utilities work regardless of installation method.
 
 ## Functions
 

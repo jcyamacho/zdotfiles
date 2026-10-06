@@ -2,8 +2,14 @@
 
 update-ruby() {
   info "Activating latest Ruby..."
-  local latest_version="$(rbenv install -l | command grep -v - | command tail -1)"
-  local actual_version="$(rbenv global)"
+
+  local latest_version actual_version
+  latest_version="$(rbenv install -l | command grep -v - | command tail -1)"
+  if [[ -z "$latest_version" ]]; then
+    error "Could not determine the latest Ruby version"
+    return 1
+  fi
+  actual_version="$(rbenv global)" || return
 
   if [[ $actual_version == "$latest_version" ]]; then
     info "Ruby $latest_version is already active."
@@ -21,7 +27,8 @@ if exists rbenv; then
   source-cached-init rbenv init - --no-rehash zsh
 
   uninstall-unused-ruby-versions() {
-    local current_version="$(rbenv global)"
+    local current_version
+    current_version="$(rbenv global)" || return
     info "Cleaning up unused Ruby versions (keeping $current_version)..."
 
     rbenv versions --bare | command grep -v "^$current_version$" | command grep -v "^system$" | while IFS= read -r version; do

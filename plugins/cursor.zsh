@@ -20,8 +20,9 @@ else
   }
 fi
 
-# The native CLI installer always uses ~/.local/bin.
-path=("$HOME/.local/bin" "${path[@]}")
+# The native CLI installer always uses ~/.local/bin. Appended so that, when it
+# is already on $path as $CUSTOM_TOOLS_DIR, it keeps its position.
+path+=("$HOME/.local/bin")
 
 if exists cursor-agent; then
   uninstall-cursor-cli() {

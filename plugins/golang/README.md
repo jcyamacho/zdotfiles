@@ -22,8 +22,13 @@ Go programming language plugin with golangci-lint.
 
 ## Aliases
 
-| Alias | Command      |
-| ----- | ------------ |
+| Alias | Command       |
+| ----- | ------------- |
+| `gob` | `go build`    |
+| `gog` | `go get`      |
+| `gom` | `go mod`      |
+| `gor` | `go run`      |
+| `gow` | `go work`     |
 | `gmt` | `go mod tidy` |
 
 ## Notes
