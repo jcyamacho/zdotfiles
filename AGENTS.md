@@ -10,7 +10,8 @@ Prioritize secure, fast startup and minimal diffs.
 1. Cache dir (`$ZDOTFILES_CACHE_DIR`), private completions dir on
    `$fpath`, and `$CUSTOM_TOOLS_DIR`
    on `$path`
-2. `_utils.zsh` — shared helpers (see below)
+2. `_utils.zsh` — shared helpers (see below), then the `~/.zshrc` write-lock
+   so external installers cannot append to it
 3. The `updates` array and `update-all` dispatcher
 4. `_brew.zsh` — Homebrew discovery, `$HOMEBREW_PREFIX`, its
    `site-functions` on `$fpath`, bootstrap install, and updater
@@ -83,8 +84,8 @@ plugins. Consequences to respect:
   (completion functions that use `_arguments`).
 - `_run_remote_installer <url> [shell] [--env K=V]... [-- args...]` -
   secure download-and-run with `~/.zshrc` write-lock
-- `_run_with_zshrc_locked <cmd> [args...]` - runs an updater while blocking
-  `~/.zshrc` writes and restores permissions even when the command fails
+- `_run_with_zshrc_locked <cmd> [args...]` - locks `~/.zshrc` before running
+  an updater known to write it; the file stays locked afterwards
 - `info`, `warn`, `error` - colored output helpers
 - `confirm <prompt> [yes|no]` - terminal-only yes/no prompt that accepts
   `y`/`yes`, `n`/`no`, or bare `Enter` for the default, and re-prompts on

@@ -184,8 +184,6 @@ cache-completion() {
 }
 
 _run_remote_installer() {
-  setopt localoptions localtraps
-
   local url="${1:?_run_remote_installer: missing url}"
   local shell="${2:-sh}"
   if (( $# >= 2 )); then
@@ -207,24 +205,12 @@ _run_remote_installer() {
   local tmp
   tmp="$(command mktemp "${TMPDIR:-$ZDOTFILES_CACHE_DIR}/zdotfiles-installer.XXXXXX")" || return 1
 
-  local exit_status=0
-  _lock_zshrc || {
+  {
+    command curl --proto '=https' --tlsv1.2 -fsSL "$url" -o "$tmp" || return
+    _run_with_zshrc_locked env "${envs[@]}" "$shell" "$tmp" "$@"
+  } always {
     command rm -f -- "$tmp"
-    return 1
   }
-  trap '_unlock_zshrc; command rm -f -- "$tmp"' EXIT INT TERM
-
-  command curl --proto '=https' --tlsv1.2 -fsSL "$url" -o "$tmp"
-  exit_status=$?
-  if (( exit_status == 0 )); then
-    command env "${envs[@]}" "$shell" "$tmp" "$@"
-    exit_status=$?
-  fi
-
-  _unlock_zshrc
-  command rm -f -- "$tmp"
-  trap - EXIT INT TERM
-  return $exit_status
 }
 
 is-macos() {
@@ -250,15 +236,8 @@ _unlock_zshrc() {
 }
 
 _run_with_zshrc_locked() {
-  local exit_status
   _lock_zshrc || return
-  {
-    command "$@"
-    exit_status=$?
-  } always {
-    _unlock_zshrc
-  }
-  return $exit_status
+  command "$@"
 }
 
 edit() {

@@ -23,6 +23,9 @@ Compact Zsh setup that wires in
    source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
    ```
 
+Once loaded, `~/.zshrc` stays read-only so installers cannot append to it.
+Edit it with `zsh-config`.
+
 ## Customizing
 
 - Keep the repo elsewhere by setting `ZDOTFILES_DIR` before sourcing.
