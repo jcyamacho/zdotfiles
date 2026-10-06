@@ -116,7 +116,8 @@ $ZDOTFILES_DIR/plugins/golang
 $ZDOTFILES_DIR/plugins/mise.zsh
 
 # UX plugins must load after tool/keybinding plugins.
-# zsh-autosuggestions must load after F-Sy-H so F-Sy-H does not wrap its internal widgets.
-z-shell/F-Sy-H
+# zsh-autosuggestions must load after fast-syntax-highlighting so the highlighter
+# does not wrap autosuggestions' internal widgets.
+zdharma-continuum/fast-syntax-highlighting
 zsh-users/zsh-autosuggestions
 MichaelAquilina/zsh-you-should-use conditional:"[[ -z $ZSH_DISABLE_YOU_SHOULD_USE ]]"

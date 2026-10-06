@@ -69,7 +69,9 @@ plugins. Consequences to respect:
 
 ### Key helpers (`_utils.zsh`)
 
-- `exists <cmd>` - checks the current `$commands` entry for an executable
+- `exists <cmd>` - checks `$path` for an executable (ignores aliases and
+  functions). Prefer it over `$commands[cmd]`, which rehashes `$path` after
+  every path change
 - `source-cached-init <cmd> <args...>` - caches tool init output
   and sources it; regenerates when the binary or the calling plugin file
   is newer, so argument changes apply on the next load

@@ -78,11 +78,10 @@ mkcd() {
   builtin cd "$target"
 }
 
+# whence -p searches $path directly; a $commands miss rehashes every $path
+# directory after each path change, which made startup noticeably slower.
 exists() {
-  local cmd=${1:?exists: missing command}
-
-  local cmd_path=${commands[$cmd]-}
-  [[ -n "$cmd_path" && -x "$cmd_path" ]]
+  whence -p -- "${1:?exists: missing command}" > /dev/null
 }
 
 run-quiet() {
@@ -133,7 +132,13 @@ _cache_command_output() {
   local cache="$1" caller="$2" cmd="$3"
   shift 3
 
-  [[ -s "$cache" && ! "${commands[$cmd]:-}" -nt "$cache" && ! "$caller" -nt "$cache" ]] && return 0
+  # Resolved by hand for the same reason exists avoids $commands.
+  local dir cmd_path
+  for dir in $path; do
+    [[ -f "$dir/$cmd" && -x "$dir/$cmd" ]] && { cmd_path="$dir/$cmd"; break }
+  done
+
+  [[ -s "$cache" && ! "$cmd_path" -nt "$cache" && ! "$caller" -nt "$cache" ]] && return 0
 
   local tmp
   tmp="$(command mktemp "${cache}.XXXXXX")" || return

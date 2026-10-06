@@ -59,7 +59,7 @@ source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
 
 Antidote reads `.zsh_plugins.txt` and builds a static `.zsh_plugins.zsh`. The default setup enables:
 
-- **Always-on shell UX**: prompt theme (see above), `zsh-autosuggestions`, syntax highlighting (`F-Sy-H`), and “you-should-use”.
+- **Always-on shell UX**: prompt theme (see above), `zsh-autosuggestions`, syntax highlighting (`fast-syntax-highlighting`), and “you-should-use”.
 - **Local plugin helpers**: small `plugins/*` scripts that add `install-*`, `update-*`, `uninstall-*`, and `*-config` helpers.
 
 Many integrations are **conditional** (they only activate when the underlying binary exists) to keep startup fast and avoid errors.
