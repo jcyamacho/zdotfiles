@@ -71,7 +71,8 @@ plugins. Consequences to respect:
 
 - `exists <cmd>` - checks the current `$commands` entry for an executable
 - `source-cached-init <cmd> <args...>` - caches tool init output
-  and sources it; regenerates when binary is newer
+  and sources it; regenerates when the binary or the calling plugin file
+  is newer, so argument changes apply on the next load
   - Use only when output is deterministic/static across sessions.
   - Do not cache commands that emit per-session values (PID,
     timestamps, temp paths). Example: do not cache `fnm env --shell zsh`.
@@ -79,7 +80,7 @@ plugins. Consequences to respect:
     `cache-completion` instead.
 - `cache-completion <cmd> <args...>` - caches `#compdef` completion
   output to `$ZDOTFILES_CACHE_DIR/completions/_<cmd>` and adds it to
-  `fpath`; regenerates when binary is newer. Use instead of
+  `fpath`; regenerates like `source-cached-init`. Use instead of
   `source-cached-init` when the tool outputs a `#compdef` file
   (completion functions that use `_arguments`).
 - `_run_remote_installer <url> [shell] [--env K=V]... [-- args...]` -

@@ -126,61 +126,42 @@ zdotfiles-cache-clean() {
   reload
 }
 
+# Writes the output of `cmd args...` to cache when the cache is missing or older
+# than the tool binary or the plugin file that requested it, so editing a
+# plugin's arguments takes effect on the next load.
+_cache_command_output() {
+  local cache="$1" caller="$2" cmd="$3"
+  shift 3
+
+  [[ -s "$cache" && ! "${commands[$cmd]:-}" -nt "$cache" && ! "$caller" -nt "$cache" ]] && return 0
+
+  local tmp
+  tmp="$(command mktemp "${cache}.XXXXXX")" || return
+  {
+    command "$cmd" "$@" >| "$tmp" || return
+    [[ -s "$tmp" ]] || return 1
+    command mv -f -- "$tmp" "$cache"
+  } always {
+    command rm -f -- "$tmp"
+  }
+}
+
 # Caches the output of `cmd args...` (e.g., `starship init zsh`) and sources it.
-# Regenerates when the tool binary is newer than the cache.
 source-cached-init() {
   local cmd=${1:?source-cached-init: missing command}
-  shift
   local cache="${ZDOTFILES_CACHE_DIR}/${cmd}-init.zsh"
-  local cmd_path=${commands[$cmd]:-}
 
-  # Regenerate if missing or tool binary is newer
-  if [[ ! -s "$cache" || ( -n "$cmd_path" && "$cmd_path" -nt "$cache" ) ]]; then
-    local tmp
-    tmp="$(command mktemp "${cache}.XXXXXX")"
-    command "$cmd" "$@" >| "$tmp"
-    local exit_status=$?
-    if (( exit_status != 0 )); then
-      command rm -f -- "$tmp"
-      return $exit_status
-    elif [[ ! -s "$tmp" ]]; then
-      command rm -f -- "$tmp"
-      return 1
-    fi
-
-    command mv -f -- "$tmp" "$cache"
-    builtin zcompile "$cache" 2>/dev/null || :
-  fi
-
+  _cache_command_output "$cache" "${funcfiletrace[1]%:*}" "$@" || return
+  [[ "${cache}.zwc" -nt "$cache" ]] || builtin zcompile "$cache" 2>/dev/null
   builtin source "$cache"
 }
 
 # Caches the output of `cmd args...` as a #compdef completion file on fpath.
-# Regenerates when the tool binary is newer than the cache.
 # Usage: cache-completion <cmd> [args...]
 #   e.g., cache-completion zellij setup --generate-completion zsh
 cache-completion() {
   local cmd=${1:?cache-completion: missing command}
-  shift
-  local cache="${_zdotfiles_completions_dir}/_${cmd}"
-  local cmd_path=${commands[$cmd]:-}
-
-  # Regenerate if missing or tool binary is newer
-  if [[ ! -s "$cache" || ( -n "$cmd_path" && "$cmd_path" -nt "$cache" ) ]]; then
-    local tmp
-    tmp="$(command mktemp "${cache}.XXXXXX")"
-    command "$cmd" "$@" >| "$tmp"
-    local exit_status=$?
-    if (( exit_status != 0 )); then
-      command rm -f -- "$tmp"
-      return $exit_status
-    elif [[ ! -s "$tmp" ]]; then
-      command rm -f -- "$tmp"
-      return 1
-    fi
-
-    command mv -f -- "$tmp" "$cache"
-  fi
+  _cache_command_output "${_zdotfiles_completions_dir}/_${cmd}" "${funcfiletrace[1]%:*}" "$@"
 }
 
 _run_remote_installer() {
