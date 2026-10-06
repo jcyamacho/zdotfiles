@@ -49,12 +49,10 @@ git-hook() {
     return 1
   }
 
-  # Respect core.hooksPath (set by husky, lefthook, etc.)
-  local hooks_dir="$(command git config core.hooksPath 2>/dev/null)"
-  if [[ -z "$hooks_dir" ]]; then
-    local common_git_dir="$(command git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
-    hooks_dir="$common_git_dir/hooks"
-  fi
+  # --git-path resolves core.hooksPath (husky, lefthook, etc.) against the
+  # repository root and falls back to the common hooks dir in linked worktrees.
+  local hooks_dir
+  hooks_dir="$(command git rev-parse --path-format=absolute --git-path hooks)" || return
   local hook_file="$hooks_dir/$hook_name"
 
   if [[ ! -f "$hook_file" ]]; then

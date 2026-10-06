@@ -16,9 +16,8 @@ _fabric_load_patterns() {
   [[ -d "$_fabric_config_dir/patterns" ]] || return
   local pattern_file
   local pattern_name
-  for pattern_file in "$_fabric_config_dir/patterns"/*(N-.); do
+  for pattern_file in "$_fabric_config_dir/patterns"/*(N-/); do
     pattern_name="${pattern_file:t}"
-    unalias "$pattern_name" || :
     alias "$pattern_name"="fabric --pattern ${(q)pattern_name} --stream"
   done
 }

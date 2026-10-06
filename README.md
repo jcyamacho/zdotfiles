@@ -116,7 +116,7 @@ Run `install-recommended` to install every missing tool in this group.
   Maven and Gradle have separate installers ([java tooling](plugins/java/README.md)).
 - `install-just` – [just](https://just.systems/) command runner
 - `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
-- `install-memo` - [memo](https://github.com/jcyamacho/memo) durable memory CLI; includes Claude and Codex `memo context` hook helpers
+- `install-memo` - [memo](https://github.com/jcyamacho/memo) durable memory CLI; configure agent hooks with `memo hook claude` or `memo hook codex`
 - `install-maven` - [Maven](https://maven.apache.org/) official binary distribution,
   using the existing JDK ([java tooling](plugins/java/README.md)).
 - `install-mise` – [mise](https://mise.jdx.dev/)

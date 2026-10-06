@@ -1,6 +1,6 @@
 # zsh-bench (benchmark for interactive zsh): https://github.com/romkatv/zsh-bench
 
-typeset -g _zsh_bench_dir="$ZDOTFILES_CACHE_DIR/zsh-bench"
+typeset -g _zsh_bench_dir="${XDG_DATA_HOME:-$HOME/.local/share}/zsh-bench"
 
 if exists zsh-bench; then
   uninstall-zsh-bench() {
