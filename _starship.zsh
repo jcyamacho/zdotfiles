@@ -3,6 +3,7 @@
 unset ZSH_THEME
 
 export STARSHIP_CONFIG="${STARSHIP_CONFIG:-$HOME/.config/starship.toml}"
+export STARSHIP_LOG="${STARSHIP_LOG:-error}"
 
 update-starship() {
   _update_starship || return
