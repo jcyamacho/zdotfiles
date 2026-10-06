@@ -5,21 +5,15 @@ if exists carapace; then
   export CARAPACE_BRIDGES="zsh"
   source-cached-init carapace _carapace zsh
 
-  if exists brew; then
-    uninstall-carapace() {
-      info "Uninstalling carapace..."
-      command brew uninstall carapace || return
-      reload
-    }
-  fi
-elif exists brew; then
-  install-carapace() {
-    info "Installing carapace..."
-    command brew install --no-ask carapace || return
+  uninstall-carapace() {
+    info "Uninstalling carapace..."
+    command brew uninstall carapace || return
     reload
   }
 else
   install-carapace() {
-    info "Install docs: https://carapace-sh.github.io/carapace-bin/install.html"
+    info "Installing carapace..."
+    command brew install --no-ask carapace || return
+    reload
   }
 fi

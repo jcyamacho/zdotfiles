@@ -29,15 +29,13 @@ if exists cmux; then
     command cmux ping
   }
 
-  if exists brew; then
-    uninstall-cmux() {
-      info "Uninstalling cmux..."
-      command brew uninstall --cask cmux || return
-      command rm -f -- "$CUSTOM_TOOLS_DIR/cmux"
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-cmux() {
+    info "Uninstalling cmux..."
+    command brew uninstall --cask cmux || return
+    command rm -f -- "$CUSTOM_TOOLS_DIR/cmux"
+    reload
+  }
+else
   install-cmux() {
     info "Installing cmux..."
     command brew tap manaflow-ai/cmux || return

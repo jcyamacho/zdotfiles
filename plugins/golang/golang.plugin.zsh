@@ -26,21 +26,19 @@ if exists go; then
     [[ -f main.go ]] || command cp -- "$ZDOTFILES_DIR/plugins/golang/main.go" .
   }
 
-  if exists brew; then
-    uninstall-go() {
-      info "Uninstalling golangci-lint..."
-      command brew uninstall golangci-lint
+  uninstall-go() {
+    info "Uninstalling golangci-lint..."
+    command brew uninstall golangci-lint
 
-      info "Uninstalling go..."
-      command brew uninstall go || return
+    info "Uninstalling go..."
+    command brew uninstall go || return
 
-      info "Removing $GOPATH..."
-      command rm -rf -- "$GOPATH"
+    info "Removing $GOPATH..."
+    command rm -rf -- "$GOPATH"
 
-      reload
-    }
-  fi
-elif exists brew; then
+    reload
+  }
+else
   install-go() {
     info "Installing go..."
     command brew install --no-ask go || return

@@ -33,22 +33,18 @@ if exists codex; then
     command rm -rf -- "${archived_sessions[@]}" || :
     info "Removed ${#archived_sessions[@]} archived session(s) from $archive_dir"
   }
-fi
 
-if exists brew; then
-  if exists codex; then
-    uninstall-codex() {
-      info "Uninstalling codex..."
-      command brew uninstall --cask codex || return
-      command rm -rf -- "$CODEX_HOME"
-      reload
-    }
-  else
-    install-codex() {
-      info "Installing codex..."
-      command brew install --no-ask --cask codex || return
-      command mkdir -p -- "$CODEX_HOME/prompts"
-      reload
-    }
-  fi
+  uninstall-codex() {
+    info "Uninstalling codex..."
+    command brew uninstall --cask codex || return
+    command rm -rf -- "$CODEX_HOME"
+    reload
+  }
+else
+  install-codex() {
+    info "Installing codex..."
+    command brew install --no-ask --cask codex || return
+    command mkdir -p -- "$CODEX_HOME/prompts"
+    reload
+  }
 fi

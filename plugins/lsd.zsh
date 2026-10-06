@@ -14,15 +14,13 @@ if exists lsd; then
     edit-open "$_lsd_config_dir/config.yaml"
   }
 
-  if exists brew; then
-    uninstall-lsd() {
-      info "Uninstalling lsd..."
-      command brew uninstall lsd || return
-      command rm -rf -- "$_lsd_config_dir"
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-lsd() {
+    info "Uninstalling lsd..."
+    command brew uninstall lsd || return
+    command rm -rf -- "$_lsd_config_dir"
+    reload
+  }
+else
   _lsd_restore_config() {
     command mkdir -p -- "$_lsd_config_dir"
     info "Downloading color theme..."

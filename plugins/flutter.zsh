@@ -12,11 +12,7 @@ if exists flutter; then
   }
 
   updates+=(_update_flutter)
-fi
 
-exists brew || return
-
-if exists flutter; then
   uninstall-flutter() {
     info "Uninstalling flutter..."
     command brew uninstall --cask flutter || return

@@ -39,15 +39,13 @@ if exists yazi; then
     edit-open "$YAZI_CONFIG_HOME"
   }
 
-  if exists brew; then
-    uninstall-yazi() {
-      info "Uninstalling yazi..."
-      command brew uninstall yazi || return
-      command rm -rf -- "$YAZI_CONFIG_HOME"
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-yazi() {
+    info "Uninstalling yazi..."
+    command brew uninstall yazi || return
+    command rm -rf -- "$YAZI_CONFIG_HOME"
+    reload
+  }
+else
   install-yazi() {
     info "Installing yazi..."
     command brew install --no-ask yazi || return

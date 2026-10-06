@@ -121,9 +121,11 @@ plugins. Consequences to respect:
 
 ### Guards
 
-- Check tool first, then package manager for lifecycle functions.
-- Use early return (`exists <pkg_mgr> || return`) only when the
-  entire file depends on that package manager.
+- Homebrew is a required bootstrap dependency: never guard on
+  `exists brew`. Guard only on the tool itself.
+- Guard on optional package managers (e.g. `npm`) for lifecycle
+  functions. Use early return (`exists npm || return`) only when the
+  entire file depends on it.
 - When a tool registers shell hooks (e.g. via `source-cached-init`),
   define empty stub functions in the else-branch so other plugins
   calling those hooks don't error.
@@ -133,8 +135,7 @@ guard and lifecycle structure.
 
 | Pattern | Ownership |
 | --- | --- |
-| Brew-managed | The entire plugin depends on Homebrew |
-| Brew-optional | The tool works independently; Homebrew owns lifecycle |
+| Brew-managed | Homebrew owns install, removal, and updates |
 | Self-managed | The installer owns the binary and updater |
 
 ### Lifecycle
@@ -175,43 +176,19 @@ placeholders and add only the configuration required by the tool.
 
 #### Brew-managed
 
-Use when the entire plugin depends on Homebrew.
+Use when a Homebrew formula or cask provides the tool. `update-brew` keeps it
+current.
 
 ```zsh
-exists brew || return
-
 if exists tool; then
+  # Tool configuration, aliases, and functions.
+
   uninstall-tool() {
     info "Uninstalling tool..."
     command brew uninstall tool || return
     reload
   }
 else
-  install-tool() {
-    info "Installing tool..."
-    command brew install --no-ask tool || return
-    reload
-  }
-fi
-```
-
-#### Brew-optional
-
-Use when the tool works independently and Homebrew owns only installation and
-removal.
-
-```zsh
-if exists tool; then
-  # Tool configuration, aliases, and functions.
-
-  if exists brew; then
-    uninstall-tool() {
-      info "Uninstalling tool..."
-      command brew uninstall tool || return
-      reload
-    }
-  fi
-elif exists brew; then
   install-tool() {
     info "Installing tool..."
     command brew install --no-ask tool || return
@@ -277,8 +254,8 @@ fi
 
 ### File layout
 
-- **Simple** (`plugins/<tool>.zsh`): single file, brew guard,
-  conditional install/uninstall.
+- **Simple** (`plugins/<tool>.zsh`): single file, conditional
+  brew install/uninstall.
 - **Self-managed** (`plugins/<tool>.zsh`): binary in
   `$CUSTOM_TOOLS_DIR`, uses `source-cached-init`, registers in
   `updates`.

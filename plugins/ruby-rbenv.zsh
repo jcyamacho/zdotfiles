@@ -32,16 +32,14 @@ if exists rbenv; then
 
   updates+=(update-ruby)
 
-  if exists brew; then
-    alias uninstall-ruby="uninstall-rbenv"
-    uninstall-rbenv() {
-      info "Uninstalling rbenv..."
-      command brew uninstall rbenv || return
-      command rm -rf -- "$HOME/.rbenv"
-      reload
-    }
-  fi
-elif exists brew; then
+  alias uninstall-ruby="uninstall-rbenv"
+  uninstall-rbenv() {
+    info "Uninstalling rbenv..."
+    command brew uninstall rbenv || return
+    command rm -rf -- "$HOME/.rbenv"
+    reload
+  }
+else
   alias install-ruby="install-rbenv"
   install-rbenv() {
     info "Installing rbenv..."

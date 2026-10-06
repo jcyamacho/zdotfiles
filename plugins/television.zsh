@@ -8,14 +8,12 @@ if exists tv; then
     edit-open "$HOME/.config/television/config.toml"
   }
 
-  if exists brew; then
-    uninstall-television() {
-      info "Uninstalling television..."
-      command brew uninstall television || return
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-television() {
+    info "Uninstalling television..."
+    command brew uninstall television || return
+    reload
+  }
+else
   install-television() {
     info "Installing television..."
     command brew install --no-ask television || return

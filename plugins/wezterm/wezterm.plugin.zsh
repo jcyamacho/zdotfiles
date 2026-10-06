@@ -15,15 +15,13 @@ if exists wezterm; then
     edit-open "$WEZTERM_CONFIG_FILE"
   }
 
-  if exists brew; then
-    uninstall-wezterm() {
-      info "Uninstalling wezterm..."
-      command brew uninstall --cask wezterm || return
-      command rm -rf -- "$HOME/.config/wezterm"
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-wezterm() {
+    info "Uninstalling wezterm..."
+    command brew uninstall --cask wezterm || return
+    command rm -rf -- "$HOME/.config/wezterm"
+    reload
+  }
+else
   install-wezterm() {
     info "Installing wezterm..."
     command brew install --no-ask --cask wezterm || return

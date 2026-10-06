@@ -1,7 +1,5 @@
 # Nub (all-in-one Node.js toolkit): https://nubjs.com/
 
-exists brew || return
-
 if exists nub; then
   uninstall-nub() {
     info "Uninstalling Nub..."

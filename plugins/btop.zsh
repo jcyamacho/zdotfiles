@@ -1,7 +1,5 @@
 # btop (resource monitor): https://github.com/aristocratos/btop
 
-exists brew || return
-
 if exists btop; then
   alias bt="btop"
 

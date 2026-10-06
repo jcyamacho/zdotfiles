@@ -37,15 +37,13 @@ if exists zellij; then
     _zellij_copy_layouts
   }
 
-  if exists brew; then
-    uninstall-zellij() {
-      info "Uninstalling zellij..."
-      command brew uninstall zellij || return
-      command rm -rf -- "$ZELLIJ_CONFIG_DIR"
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-zellij() {
+    info "Uninstalling zellij..."
+    command brew uninstall zellij || return
+    command rm -rf -- "$ZELLIJ_CONFIG_DIR"
+    reload
+  }
+else
   install-zellij() {
     info "Installing zellij..."
     command brew install --no-ask zellij || return

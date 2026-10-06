@@ -5,11 +5,7 @@ if exists copilot; then
   copilot-config() {
     edit-open "$_copilot_home"
   }
-fi
 
-exists brew || return
-
-if exists copilot; then
   uninstall-copilot() {
     info "Uninstalling copilot..."
     command brew uninstall --cask copilot-cli || return

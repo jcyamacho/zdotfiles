@@ -34,14 +34,12 @@ if exists wt; then
   wt-commit-claude() { _wt_set_provider claude; }
   wt-commit-codex() { _wt_set_provider codex; }
 
-  if exists brew; then
-    uninstall-worktrunk() {
-      info "Uninstalling worktrunk..."
-      command brew uninstall worktrunk || return
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-worktrunk() {
+    info "Uninstalling worktrunk..."
+    command brew uninstall worktrunk || return
+    reload
+  }
+else
   install-worktrunk() {
     info "Installing worktrunk..."
     command brew install --no-ask worktrunk || return

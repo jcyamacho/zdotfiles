@@ -7,14 +7,12 @@ if exists docker; then
     command docker run -it "$(command docker build -q .)"
   }
 
-  if exists brew; then
-    uninstall-docker() {
-      info "Uninstalling docker..."
-      command brew uninstall docker || return
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-docker() {
+    info "Uninstalling docker..."
+    command brew uninstall docker || return
+    reload
+  }
+else
   install-docker() {
     info "Installing docker..."
     command brew install --no-ask docker || return

@@ -1,7 +1,5 @@
 # Herdr (agent multiplexer that lives in your terminal): https://herdr.dev/
 
-exists brew || return
-
 if exists herdr; then
   alias hdr="herdr"
 

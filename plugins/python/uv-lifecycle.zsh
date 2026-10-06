@@ -1,7 +1,5 @@
 # python uv lifecycle (install/update/uninstall): https://docs.astral.sh/uv/
 
-exists brew || return
-
 if exists uv; then
   # uvx ships with uv and takes its own completion flag spelling.
   cache-completion uv generate-shell-completion zsh

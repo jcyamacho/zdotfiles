@@ -1,7 +1,5 @@
 # fzf (command-line fuzzy finder): https://junegunn.github.io/fzf/
 
-exists brew || return
-
 if exists fzf; then
   uninstall-fzf() {
     info "Uninstalling fzf..."

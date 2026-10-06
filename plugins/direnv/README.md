@@ -17,11 +17,10 @@ Per-directory environment variables via `.envrc` files.
 | ------------------ | ---------------------------------------- |
 | `install-direnv`   | Install direnv and copy default config   |
 | `uninstall-direnv` | Remove direnv and its configuration      |
-| `update-direnv`    | Update direnv to the latest version      |
 | `direnv-config`    | Edit the direnv configuration file       |
 
 ## Notes
 
-- Installs to `$CUSTOM_TOOLS_DIR` (typically `~/.local/bin`)
+- Installs with Homebrew; `update-brew` keeps it current
 - Uses cached init for faster startup
 - Default config is copied from `plugins/direnv/direnv.toml`

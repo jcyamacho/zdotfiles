@@ -21,14 +21,12 @@ if exists zed; then
     }
   fi
 
-  if exists brew; then
-    uninstall-zed() {
-      info "Uninstalling zed..."
-      command brew uninstall --cask zed || return
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-zed() {
+    info "Uninstalling zed..."
+    command brew uninstall --cask zed || return
+    reload
+  }
+else
   install-zed() {
     info "Installing zed..."
     command brew install --no-ask --cask zed || return

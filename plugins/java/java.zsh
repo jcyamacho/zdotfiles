@@ -12,14 +12,12 @@ for _java_version in "${_java_versions[@]}"; do
       JAVA_HOME="$_java_home"
     fi
 
-    if exists brew; then
-      functions[uninstall-java-$_java_version]="
-        info \"Uninstalling Amazon Corretto $_java_version...\"
-        command brew uninstall --cask corretto@$_java_version || return
-        reload
-      "
-    fi
-  elif exists brew; then
+    functions[uninstall-java-$_java_version]="
+      info \"Uninstalling Amazon Corretto $_java_version...\"
+      command brew uninstall --cask corretto@$_java_version || return
+      reload
+    "
+  else
     functions[install-java-$_java_version]="
       info \"Installing Amazon Corretto $_java_version...\"
       command brew install --no-ask --cask corretto@$_java_version || return

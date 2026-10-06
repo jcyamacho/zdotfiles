@@ -79,6 +79,11 @@ if exists gh; then
     }
   }
 
+  uninstall-gh() {
+    info "Uninstalling gh-cli..."
+    command brew uninstall gh || return
+    reload
+  }
 else
   _require-gh() {
     error "GitHub CLI is required. Run install-gh."
@@ -87,17 +92,7 @@ else
 
   save-file-to-gist() { _require-gh; }
   load-file-from-gist() { _require-gh; }
-fi
 
-exists brew || return
-
-if exists gh; then
-  uninstall-gh() {
-    info "Uninstalling gh-cli..."
-    command brew uninstall gh || return
-    reload
-  }
-else
   install-gh() {
     info "Installing gh-cli..."
     command brew install --no-ask gh || return

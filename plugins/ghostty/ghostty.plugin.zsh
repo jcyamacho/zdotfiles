@@ -48,15 +48,13 @@ if exists ghostty; then
   # No _update_ pattern needed: theme updates don't affect shell state, no reload required
   updates+=(ghostty-update-themes)
 
-  if exists brew; then
-    uninstall-ghostty() {
-      info "Uninstalling ghostty..."
-      command brew uninstall --cask ghostty || return
-      command rm -rf -- "$_ghostty_config_dir"
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-ghostty() {
+    info "Uninstalling ghostty..."
+    command brew uninstall --cask ghostty || return
+    command rm -rf -- "$_ghostty_config_dir"
+    reload
+  }
+else
   install-ghostty() {
     info "Installing ghostty..."
     command brew install --no-ask --cask font-monaspace || return

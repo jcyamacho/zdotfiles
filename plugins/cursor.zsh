@@ -7,14 +7,12 @@ if exists cursor; then
     command cursor --classic "$dir"
   }
 
-  if exists brew; then
-    uninstall-cursor() {
-      info "Uninstalling cursor..."
-      command brew uninstall --cask cursor || return
-      reload
-    }
-  fi
-elif exists brew; then
+  uninstall-cursor() {
+    info "Uninstalling cursor..."
+    command brew uninstall --cask cursor || return
+    reload
+  }
+else
   install-cursor() {
     info "Installing cursor..."
     command brew install --no-ask --cask cursor || return

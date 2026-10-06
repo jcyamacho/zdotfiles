@@ -1,7 +1,5 @@
 # jq (command-line JSON processor): https://jqlang.org/
 
-exists brew || return
-
 if exists jq; then
   uninstall-jq() {
     info "Uninstalling jq..."

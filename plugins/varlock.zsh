@@ -1,7 +1,5 @@
 # varlock (AI-safe .env files): https://varlock.dev/
 
-exists brew || return
-
 if exists varlock; then
   uninstall-varlock() {
     info "Uninstalling varlock..."

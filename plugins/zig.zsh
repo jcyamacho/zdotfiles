@@ -1,7 +1,5 @@
 # zig (programming language): https://ziglang.org/
 
-exists brew || return
-
 if exists zig; then
   uninstall-zig() {
     info "Uninstalling zig..."
