@@ -10,7 +10,12 @@ if exists atuin; then
   uninstall-atuin() {
     info "Uninstalling atuin..."
     command brew uninstall atuin || return
-    command rm -rf -- "$HOME/.local/share/atuin"
+
+    local history_dir="$HOME/.local/share/atuin"
+    if confirm "Delete atuin history in $history_dir?" no; then
+      command rm -rf -- "$history_dir"
+    fi
+
     reload
   }
 else

@@ -24,9 +24,12 @@ if [[ -d "$_opencode_dir/bin" ]]; then
   uninstall-opencode() {
     info "Uninstalling opencode..."
     command rm -rf -- "$_opencode_dir" || return
-    command rm -rf -- "$_opencode_config_dir"
     command rm -rf -- "$HOME/.cache/opencode"
-    command rm -rf -- "$_opencode_data_dir"
+
+    if confirm "Delete opencode config and sessions in $_opencode_config_dir and $_opencode_data_dir?" no; then
+      command rm -rf -- "$_opencode_config_dir" "$_opencode_data_dir"
+    fi
+
     reload
   }
 

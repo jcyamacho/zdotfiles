@@ -37,7 +37,11 @@ if exists codex; then
   uninstall-codex() {
     info "Uninstalling codex..."
     command brew uninstall --cask codex || return
-    command rm -rf -- "$CODEX_HOME"
+
+    if confirm "Delete Codex data in $CODEX_HOME?" no; then
+      command rm -rf -- "$CODEX_HOME"
+    fi
+
     reload
   }
 else

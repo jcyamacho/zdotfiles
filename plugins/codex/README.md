@@ -15,7 +15,7 @@ OpenAI Codex CLI for AI-assisted coding.
 | Function | Description |
 | --- | --- |
 | `install-codex` | Install Codex with Homebrew |
-| `uninstall-codex` | Remove Codex and its configuration |
+| `uninstall-codex` | Remove Codex; asks before deleting `CODEX_HOME` |
 | `codex-config` | Open the Codex home directory in your editor |
 | `cdx` | Interactive Codex launcher that clears the screen |
 | `codex-clear-archived-sessions` | Remove archived Codex session directories |

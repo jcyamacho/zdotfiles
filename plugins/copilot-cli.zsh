@@ -9,7 +9,11 @@ if exists copilot; then
   uninstall-copilot() {
     info "Uninstalling copilot..."
     command brew uninstall --cask copilot-cli || return
-    command rm -rf -- "$_copilot_home"
+
+    if confirm "Delete Copilot CLI data in $_copilot_home?" no; then
+      command rm -rf -- "$_copilot_home"
+    fi
+
     reload
   }
 else

@@ -107,8 +107,9 @@ plugins. Consequences to respect:
 - Prefer zsh native expansion over subshells/pipes for simple transforms.
 - Use `command mkdir -p -- "$dir"` and `command rm -f -- "$path"`.
 - Use `_utils.zsh`'s `confirm` helper for destructive yes/no prompts
-  instead of hand-rolled `read` logic. Abort on decline with the
-  canonical pattern `confirm "..." no || { info "Aborted"; return 0; }`.
+  instead of hand-rolled `read` logic. When the prompt guards the whole
+  command, abort on decline with the canonical pattern
+  `confirm "..." no || { info "Aborted"; return 0; }`.
 - Never use `kind:defer` in `.zsh_plugins.txt`. Deferred plugins
   block input after the prompt appears, making the shell feel frozen
   (see <https://github.com/romkatv/zsh-defer/issues/13>).
@@ -147,6 +148,10 @@ guard and lifecycle structure.
   have public update wrappers call `_update_<tool> || return`.
 - Keep secondary cleanup and optional configuration best-effort unless their
   success is part of the command's core contract.
+- Uninstallers always remove the tool and its caches, but delete
+  non-reproducible user data (history, sessions, credentials, API keys) only
+  inside `if confirm "Delete ... in <path>?" no; then ... fi`, so declining
+  keeps the data.
 - If the update never needs `reload` under any circumstance (e.g.,
   pulling models, themes, or data), skip the split: define a single
   public function and register it directly in `updates`. Otherwise use

@@ -6,8 +6,12 @@ if exists claude; then
     info "Uninstalling claude..."
     command rm -f -- "${commands[claude]}" || return
     command rm -rf -- "$HOME/.local/share/claude"
-    command rm -rf -- "$HOME/.claude-worktrees"
-    command rm -rf -- "$_claude_home"
+
+    local worktrees_dir="$HOME/.claude-worktrees"
+    if confirm "Delete Claude Code data in $_claude_home and $worktrees_dir?" no; then
+      command rm -rf -- "$_claude_home" "$worktrees_dir"
+    fi
+
     reload
   }
 

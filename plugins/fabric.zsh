@@ -44,7 +44,11 @@ yt() {
 uninstall-fabric() {
   info "Uninstalling fabric..."
   command rm -f -- "${commands[fabric]}" || return
-  command rm -rf -- "$_fabric_config_dir"
+
+  if confirm "Delete fabric config, API keys, and patterns in $_fabric_config_dir?" no; then
+    command rm -rf -- "$_fabric_config_dir"
+  fi
+
   reload
 }
 
