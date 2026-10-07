@@ -44,10 +44,12 @@ else
     info "Installing worktrunk..."
     command brew install --no-ask worktrunk || return
 
-    if exists claude; then
-      _wt_set_provider claude
-    elif exists codex; then
-      _wt_set_provider codex
+    if [[ ! -f "$_worktrunk_config_file" ]]; then
+      if exists claude; then
+        _wt_set_provider claude
+      elif exists codex; then
+        _wt_set_provider codex
+      fi
     fi
 
     reload

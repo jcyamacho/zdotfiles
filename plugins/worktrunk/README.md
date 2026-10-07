@@ -9,7 +9,7 @@ shell integration, short aliases, and LLM commit message configs for
 
 | Command | Description |
 | --- | --- |
-| `install-worktrunk` | Install Worktrunk with Homebrew and apply a commit provider if Claude Code or Codex is installed |
+| `install-worktrunk` | Install Worktrunk with Homebrew and, if you have no config yet, apply a commit provider when Claude Code or Codex is installed |
 | `uninstall-worktrunk` | Uninstall Worktrunk with Homebrew, keeping the config file |
 | `wt-config` | Open the Worktrunk config file in `$EDITOR`, creating its directory if needed |
 | `wt-commit-claude` | Replace the Worktrunk config file with the Claude provider config |
@@ -70,6 +70,6 @@ which turns on LLM branch summaries in `wt list --full`.
 settings in it are lost. To keep extra settings across switches, add them to
 both provider files.
 
-`install-worktrunk` applies the Claude provider when `claude` is on the path,
-otherwise the Codex provider when `codex` is. It overwrites any existing config
-file the same way. When neither command is found, it leaves the config alone.
+When no config file exists, `install-worktrunk` applies the Claude provider if
+`claude` is on the path, otherwise the Codex provider if `codex` is. An
+existing config file is left alone, so a reinstall keeps your settings.
