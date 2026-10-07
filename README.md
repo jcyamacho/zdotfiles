@@ -23,9 +23,6 @@ Compact Zsh setup that wires in
    source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
    ```
 
-Once loaded, `~/.zshrc` stays read-only so installers cannot append to it.
-Edit it with `zsh-config`.
-
 ## Customizing
 
 - Keep the repo elsewhere by setting `ZDOTFILES_DIR` before sourcing.
@@ -197,6 +194,7 @@ Sync files and directories to/from private GitHub Gists. See [github-cli](plugin
 ## Updating
 
 - `reload` – reload the configuration.
+- `reload-full` – reload `~/.zshrc`, including your own settings in it.
 - `update-zdotfiles` – pull the latest repo changes and reload.
 - `update-antidote` – update Antidote and reload.
 - `update-all` – run all registered updaters and reload.

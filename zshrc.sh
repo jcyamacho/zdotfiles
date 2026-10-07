@@ -26,11 +26,6 @@ path=("$CUSTOM_TOOLS_DIR" "${path[@]}")
 builtin source "$ZDOTFILES_DIR/_utils.zsh"
 # UTILS end
 
-# ZSHRC_LOCK
-# Installers append to ~/.zshrc on their own; keep it read-only outside zsh-config.
-[[ -w "$_zshrc_file" ]] && _lock_zshrc
-# ZSHRC_LOCK end
-
 # UPDATES
 typeset -gUa updates=()
 

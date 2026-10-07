@@ -108,6 +108,10 @@ reload() {
   builtin source "$ZDOTFILES_DIR/zshrc.sh"
 }
 
+reload-full() {
+  builtin source "$_zshrc_file"
+}
+
 zsh-plugins-regenerate() {
   local zsh_plugins="${ZDOTFILES_DIR}/.zsh_plugins"
   local static_file="${zsh_plugins}.zsh"
@@ -223,7 +227,11 @@ _unlock_zshrc() {
 
 _run_with_zshrc_locked() {
   _lock_zshrc || return
-  command "$@"
+  {
+    command "$@"
+  } always {
+    _unlock_zshrc
+  }
 }
 
 edit() {
@@ -248,16 +256,9 @@ edit-open() {
 }
 
 zsh-config() {
-  local exit_status=0
-
+  # Unlock first in case a killed updater left the file read-only.
   _unlock_zshrc
-  {
-    edit "$_zshrc_file" && builtin source "$_zshrc_file"
-    exit_status=$?
-  } always {
-    _lock_zshrc
-  }
-  return $exit_status
+  edit "$_zshrc_file" && reload-full
 }
 
 zsh-startup-profile() {
