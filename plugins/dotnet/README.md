@@ -14,7 +14,6 @@ dependency checker.
 | --- | --- |
 | `install-dotnet` | Install the `dotnet-sdk` cask and reload the shell |
 | `uninstall-dotnet` | Uninstall the `dotnet-sdk` cask and reload the shell |
-| `update-dotnet` | Upgrade the `dotnet-sdk` cask and reload the shell |
 | `install-dotnet-ef` | Install the EF Core CLI (package `dotnet-ef`) as a global tool |
 | `install-dotnet-outdated` | Install dotnet-outdated (package `dotnet-outdated-tool`) as a global tool |
 | `update-dotnet-tools` | Update every installed global tool with `dotnet tool update --all -g` |
@@ -23,8 +22,9 @@ dependency checker.
 commands only when it is. A tool installer is also not defined when its
 command, `dotnet-ef` or `dotnet-outdated`, is already on `PATH`.
 
-`update-all` upgrades the SDK together with the other Homebrew packages, then
-runs `update-dotnet-tools`.
+`update-brew` upgrades the SDK together with the other Homebrew packages.
+`update-all` runs that, then `update-dotnet-tools`. The tool installers reload
+the shell after a successful install.
 
 ## Environment Variables
 

@@ -20,12 +20,6 @@ if exists dotnet; then
     command brew uninstall --cask dotnet-sdk || return
     reload
   }
-
-  update-dotnet() {
-    info "Updating dotnet SDK..."
-    command brew upgrade --no-ask --cask dotnet-sdk || return
-    reload
-  }
 else
   install-dotnet() {
     info "Installing dotnet..."

@@ -2,12 +2,14 @@
 
 exists dotnet-ef || install-dotnet-ef() {
   info "Installing dotnet-ef..."
-  command dotnet tool update -g dotnet-ef
+  command dotnet tool update -g dotnet-ef || return
+  reload
 }
 
 exists dotnet-outdated || install-dotnet-outdated() {
   info "Installing dotnet-outdated..."
-  command dotnet tool update -g dotnet-outdated-tool
+  command dotnet tool update -g dotnet-outdated-tool || return
+  reload
 }
 
 update-dotnet-tools() {
