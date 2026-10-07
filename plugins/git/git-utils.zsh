@@ -25,7 +25,7 @@ git-pull-all() {
   for dir in "$base_dir"/*(N/); do
     command git -C "$dir" rev-parse --git-dir &>/dev/null || continue
 
-    builtin print -P "%F{cyan}->%f ${dir:t}"
+    builtin print -P "%F{cyan}->%f ${${dir:t}//\%/%%}"
 
     command git -C "$dir" pull --ff-only 2>&1 | command sed 's/^/  /' || result=1
 
