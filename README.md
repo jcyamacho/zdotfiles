@@ -1,9 +1,8 @@
 # ZDOTFILES
 
-Compact Zsh setup that wires in
-[Antidote](https://github.com/mattmc3/antidote) for plugins and
-[Starship](https://starship.rs) as the prompt. Everything is driven by a single
-`zshrc.sh` so you can drop it into any machine quickly.
+A compact zsh setup for macOS. [Antidote](https://github.com/mattmc3/antidote)
+manages the plugins, [Starship](https://starship.rs) draws the prompt, and a
+single `zshrc.sh` drives everything.
 
 <p align="center">
   <img src="docs/avatar.webp" alt="ZDOTFILES avatar" width="220">
@@ -11,7 +10,7 @@ Compact Zsh setup that wires in
 
 ## Install
 
-1. Clone the repo (defaults to `~/.zdotfiles`):
+1. Clone the repo:
 
    ```sh
    git clone git@github.com:jcyamacho/zdotfiles.git "$HOME/.zdotfiles"
@@ -23,200 +22,248 @@ Compact Zsh setup that wires in
    source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
    ```
 
+On first load, zdotfiles installs Homebrew and Starship if they are missing.
+Every other tool is opt-in through an `install-*` command (see
+[Installable Tools](#installable-tools)).
+
+Remote installers, and updaters known to edit `~/.zshrc`, run while the file is
+temporarily read-only. This keeps them from appending their own init lines;
+zdotfiles loads each tool itself.
+
 ## Customizing
 
-- Keep the repo elsewhere by setting `ZDOTFILES_DIR` before sourcing.
-- Change the editor used by helper commands by exporting `EDITOR`.
-- Adjust where self-managed tools install by overriding `CUSTOM_TOOLS_DIR`.
-- Set `GIT_WORKTREE_BASE` to change where `gwt` creates worktrees (see [git-worktree](plugins/git-worktree/README.md)).
+Set these variables in `~/.zshrc`, before the `source` line:
 
-### Starship
+| Variable | Default | Controls |
+| --- | --- | --- |
+| `ZDOTFILES_DIR` | `~/.zdotfiles` | Repository location |
+| `ZDOTFILES_CACHE_DIR` | `${XDG_CACHE_HOME:-~/.cache}/zdotfiles` | Cached tool init scripts and completions |
+| `CUSTOM_TOOLS_DIR` | `~/.local/bin` | Install location of self-managed tools |
+| `EDITOR` | `zed --wait` with Zed installed, otherwise `vim` | Editor for `edit`, `zsh-config`, and the `*-config` helpers |
+| `GIT_WORKTREE_BASE` | Parent directory of the repository | Where `gwt` creates worktrees ([git-worktree](plugins/git-worktree/README.md)) |
+| `STARSHIP_CONFIG` | `~/.config/starship.toml` | Starship configuration file |
+| `ZSH_DISABLE_YOU_SHOULD_USE` | Unset | Any value turns off alias reminders |
 
-Starship is the required prompt and installs automatically on first load. Set
-`STARSHIP_CONFIG` before sourcing `zshrc.sh` to override the default
-`~/.config/starship.toml`.
-
-- `update-starship` updates Starship and reloads the shell.
-- `starship-config` edits the active configuration and reloads the shell.
-- `starship-preset-custom` applies the custom [`starship.toml`](starship.toml).
-- `starship-preset-nerd-fonts`, `starship-preset-no-nerd-font`, and
-  `starship-preset-plain-text` apply built-in Starship presets.
-
-### Disable alias suggestions (`ZSH_DISABLE_YOU_SHOULD_USE`)
-
-By default, [zsh-you-should-use](https://github.com/MichaelAquilina/zsh-you-should-use) reminds you when you type a command that has an alias. To disable these suggestions:
+For example, to turn off the
+[zsh-you-should-use](https://github.com/MichaelAquilina/zsh-you-should-use)
+reminders that appear when you type a command that has an alias:
 
 ```sh
-# In ~/.zshrc, before the source line:
+# ~/.zshrc
 export ZSH_DISABLE_YOU_SHOULD_USE=1
 source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
 ```
 
+### Starship
+
+- `update-starship`: update Starship and reload the shell.
+- `starship-config`: edit the active configuration and reload the shell.
+- `starship-preset-custom`: apply this repo's [`starship.toml`](starship.toml).
+- `starship-preset-nerd-fonts`, `starship-preset-no-nerd-font`, and
+  `starship-preset-plain-text`: apply a built-in Starship preset.
+
 ## Plugins
 
-Antidote reads `.zsh_plugins.txt` and builds a static `.zsh_plugins.zsh`. The default setup enables:
+Antidote reads `.zsh_plugins.txt` and builds a static `.zsh_plugins.zsh`. The
+setup always loads `zsh-autosuggestions`, `fast-syntax-highlighting`, and
+`zsh-you-should-use`, plus `fzf-tab` when fzf is installed.
 
-- **Always-on shell UX**: prompt theme (see above), `zsh-autosuggestions`, syntax highlighting (`fast-syntax-highlighting`), and “you-should-use”.
-- **Local plugin helpers**: small `plugins/*` scripts that add `install-*`, `update-*`, `uninstall-*`, and `*-config` helpers.
-
-Many integrations are **conditional** (they only activate when the underlying binary exists) to keep startup fast and avoid errors.
+The local plugins in `plugins/` add `install-*`, `update-*`, `uninstall-*`, and
+`*-config` helpers. Each integration activates only when its tool is
+installed, which keeps startup fast and free of errors.
 
 ## Installable Tools
 
-These are the `install-*` helpers (run the command to install; integrations load on `reload`/next shell start). Tools are grouped by how useful they are for the default shell experience.
+Each `install-*` command installs a tool. Its integration loads on `reload` or
+in the next shell.
 
-### Recommended (not installed by default)
+### Recommended
 
-Run `install-recommended` to install every missing tool in this group.
+These tools are not installed by default. Run `install-recommended` to install
+every missing one.
 
-- `install-fzf` – [fzf](https://junegunn.github.io/fzf/) fuzzy finder (enables `fzf-tab` if present)
-- `install-zoxide` (or `install-z`) – [zoxide](https://github.com/ajeetdsouza/zoxide) smarter `cd`
-- `install-atuin` – [Atuin](https://atuin.sh/) synced, searchable history
-- `install-carapace` – [Carapace](https://carapace.sh/) completions
-- `install-jq` – [jq](https://jqlang.org/)
-- `install-yazi` – [yazi](https://yazi-rs.github.io/) terminal file manager (`Ctrl+o`, and `y` to cd on exit)
+- `install-atuin`: [Atuin](https://atuin.sh/) synced, searchable history
+- `install-carapace`: [Carapace](https://carapace.sh/) multi-shell completions
+- `install-fzf`: [fzf](https://junegunn.github.io/fzf/) fuzzy finder, which
+  also enables `fzf-tab`
+- `install-jq`: [jq](https://jqlang.org/) command-line JSON processor
+- `install-yazi`: [yazi](https://yazi-rs.github.io/) terminal file manager;
+  `y` or `Ctrl+o` opens it and changes to its directory on exit
+  ([yazi plugin](plugins/yazi/README.md))
+- `install-zoxide` (or `install-z`): [zoxide](https://github.com/ajeetdsouza/zoxide)
+  smarter `cd`
 
 ### Optional
 
-- `install-aspire` - [Aspire](https://aspire.dev/) CLI for distributed apps
-- `install-bash` - [Bash](https://www.gnu.org/software/bash/) current release from Homebrew (macOS ships 3.2)
-- `install-bat` – [bat](https://github.com/sharkdp/bat) `cat` clone
-- `install-btop` - [btop](https://github.com/aristocratos/btop) resource monitor
-- `install-bun` – [Bun](https://bun.sh/) runtime
-- `install-claude-code` – [Claude Code](https://www.anthropic.com/claude-code) CLI
-- `install-code` – [VS Code](https://code.visualstudio.com/)
-- `install-codex` – [OpenAI Codex CLI](https://developers.openai.com/codex/cli)
-- `install-cmux` – [cmux](https://www.cmux.dev/) native macOS terminal for AI agents
-- `install-copilot` – [GitHub Copilot CLI](https://github.com/features/copilot/cli/)
-- `install-cursor` – [Cursor](https://www.cursor.com/)
-- `install-cursor-cli` - [Cursor CLI](https://cursor.com/docs/cli/installation) terminal agent via the native installer (`~/.local/bin`).
-  Use `update-cursor-cli` to update it, or `uninstall-cursor-cli` to remove it.
-  Its updater also runs through `update-all`.
-- `install-deno` – [Deno](https://deno.land/) runtime
-- `install-direnv` – [direnv](https://direnv.net/) + hook
-- `install-docker` – [Docker](https://www.docker.com/) CLI
-- `install-dotnet` - [.NET SDK](https://dotnet.microsoft.com/) developer platform ([dotnet](plugins/dotnet/README.md))
-- `install-dotenvx` – [dotenvx](https://github.com/dotenvx/dotenvx) a secure dotenv
-- `install-varlock` – [varlock](https://varlock.dev/) AI-safe .env files
-- `install-fabric` – [Fabric](https://github.com/danielmiessler/fabric)
-- `install-flutter` – [Flutter](https://flutter.dev/) SDK
-- `install-gemini` – [Gemini CLI](https://github.com/google/gemini-cli)
-- `install-ghostty` – [Ghostty](https://ghostty.org/) terminal + config restore
-- `install-wezterm` – [WezTerm](https://wezterm.org/) terminal + config restore
-- `install-gh` – [GitHub CLI](https://github.com/cli/cli)
-- `install-go` – [Go](https://golang.org/) + [golangci-lint](https://golangci-lint.run/)
-- `install-gradle` - [Gradle](https://gradle.org/) official binary distribution,
-  using the existing JDK ([java tooling](plugins/java/README.md)).
-- `install-herdr` - [Herdr](https://herdr.dev/) agent multiplexer that lives in your terminal
-- `install-java-25` and `install-java-21` -
-  [Amazon Corretto](https://aws.amazon.com/corretto/) LTS JDKs via Homebrew
-  (macOS). When `JAVA_HOME` is unset, selects the first
-  installed JDK in descending order: 25, then 21.
-  Use `uninstall-java-25` or `uninstall-java-21` to remove each version;
-  `update-brew` handles patch updates.
-  Maven and Gradle have separate installers ([java tooling](plugins/java/README.md)).
-- `install-just` – [just](https://just.systems/) command runner
-- `install-lsd` – [lsd](https://github.com/lsd-rs/lsd) + config/theme
-- `install-memo` - [memo](https://github.com/jcyamacho/memo) durable memory CLI; configure agent hooks with `memo hook claude` or `memo hook codex`
-- `install-maven` - [Maven](https://maven.apache.org/) official binary distribution,
-  using the existing JDK ([java tooling](plugins/java/README.md)).
-- `install-mise` – [mise](https://mise.jdx.dev/)
-- `install-nub` - [Nub](https://nubjs.com/) all-in-one toolkit for Node.js
-- `install-ollama` – [Ollama](https://ollama.com/)
-- `install-openspec` – [OpenSpec](https://openspec.dev/) workflow CLI ([openspec](plugins/openspec/README.md))
-- `install-opencode` – [OpenCode](https://opencode.ai/)
-- `install-orbstack` - [OrbStack](https://orbstack.dev/) Docker Desktop alternative
-- `install-pi` - [Pi](https://pi.dev/) minimal terminal coding harness
-- `install-television` – [Television](https://alexpasmantier.github.io/television/) fuzzy finder; binds `Ctrl+T` to channel-aware completion (`Ctrl+R` goes to Atuin when present). Also installs `fd` and `bat`, which its channels shell out to
-- `install-rbenv` (or `install-ruby`) – [rbenv](https://github.com/rbenv/rbenv)
-- `install-rust` – [rustup](https://rustup.rs/)
-- `install-uv` (or `install-python`) – [uv](https://docs.astral.sh/uv/) + Python tooling ([python](plugins/python/README.md))
-- `install-viteplus` (or `install-node`) - [Vite+](https://viteplus.dev/) web toolchain
-  and Node.js version manager. `install-node` also works when Vite+ is already installed.
-  `update-node` installs the latest Node.js LTS, sets it as the global default,
-  activates it in the current shell, and updates npm and pnpm through Vite+.
-  pnpm uses Vite+ instead of Corepack, with a global default and project-specific versions.
-  It also runs through `update-all`. Bun remains independently managed.
-  `uninstall-unused-node-versions` cleans Vite+ Node.js installations, preserving
-  the current and default versions. When switching from fnm, open a new terminal
-  and run `update-node` once to enable Vite+ management; existing fnm installations
-  are not deleted.
-- `install-worktrunk` – [Worktrunk](https://worktrunk.dev) git worktree management
-- `install-zed` – [Zed](https://zed.dev/)
-- `install-zsh-bench` – [zsh-bench](https://github.com/romkatv/zsh-bench) benchmark for interactive zsh
-- `install-zellij` – [Zellij](https://zellij.dev/) terminal workspace ([zellij](plugins/zellij/README.md))
-- `install-zig` – [Zig](https://ziglang.org/)
-- `install-antigravity` – [Antigravity](https://antigravity.google/)
-- `install-agent-browser` – [agent-browser](https://agent-browser.dev/) browser automation CLI
-- `install-fonts` – [Homebrew](https://brew.sh/) font casks
+- `install-agent-browser`: [agent-browser](https://agent-browser.dev/) browser
+  automation for AI agents
+- `install-antigravity`: [Antigravity](https://antigravity.google/) AI editor
+- `install-aspire`: [Aspire](https://aspire.dev/) CLI for distributed apps
+- `install-bat`: [bat](https://github.com/sharkdp/bat) `cat` clone
+- `install-btop`: [btop](https://github.com/aristocratos/btop) resource monitor
+- `install-bun`: [Bun](https://bun.sh/) JavaScript runtime
+- `install-claude-code`: [Claude Code](https://www.anthropic.com/claude-code)
+  coding agent
+- `install-cmux`: [cmux](https://www.cmux.dev/) native macOS terminal for AI
+  agents
+- `install-code`: [VS Code](https://code.visualstudio.com/) editor
+- `install-codex`: [OpenAI Codex CLI](https://developers.openai.com/codex/cli)
+  ([codex plugin](plugins/codex/README.md))
+- `install-copilot`: [GitHub Copilot CLI](https://github.com/features/copilot/cli/)
+- `install-cursor`: [Cursor](https://www.cursor.com/) editor
+- `install-cursor-cli`: [Cursor CLI](https://cursor.com/docs/cli/installation)
+  terminal agent, through its native installer in `~/.local/bin`.
+  `update-cursor-cli` updates it, also through `update-all`, and
+  `uninstall-cursor-cli` removes it.
+- `install-deno`: [Deno](https://deno.land/) JavaScript runtime
+- `install-direnv`: [direnv](https://direnv.net/) per-directory environment
+  variables ([direnv plugin](plugins/direnv/README.md))
+- `install-docker`: [Docker](https://www.docker.com/) CLI
+- `install-dotenvx`: [dotenvx](https://github.com/dotenvx/dotenvx) encrypted
+  dotenv files
+- `install-dotnet`: [.NET SDK](https://dotnet.microsoft.com/)
+  ([dotnet plugin](plugins/dotnet/README.md))
+- `install-fabric`: [Fabric](https://github.com/danielmiessler/fabric) AI
+  prompt framework
+- `install-flutter`: [Flutter](https://flutter.dev/) SDK
+- `install-fonts`: Monaspace, Hack Nerd Font, and JetBrains Mono and Fira Code
+  with their Nerd Font variants, as Homebrew casks
+- `install-gemini`: [Gemini CLI](https://github.com/google/gemini-cli)
+- `install-gh`: [GitHub CLI](https://github.com/cli/cli), plus gist sync helpers
+  ([github-cli plugin](plugins/github-cli/README.md))
+- `install-ghostty`: [Ghostty](https://ghostty.org/) terminal with its config
+  ([ghostty plugin](plugins/ghostty/README.md))
+- `install-go`: [Go](https://golang.org/) and
+  [golangci-lint](https://golangci-lint.run/)
+  ([golang plugin](plugins/golang/README.md))
+- `install-gradle` and `install-maven`: [Gradle](https://gradle.org/) and
+  [Maven](https://maven.apache.org/) official binary distributions, using the
+  existing JDK ([java plugin](plugins/java/README.md))
+- `install-herdr`: [Herdr](https://herdr.dev/) agent multiplexer for the
+  terminal
+- `install-java-25` and `install-java-21`:
+  [Amazon Corretto](https://aws.amazon.com/corretto/) LTS JDKs through
+  Homebrew. When `JAVA_HOME` is unset, the newest installed JDK is selected
+  (25, then 21). `uninstall-java-25` and `uninstall-java-21` remove them, and
+  `update-brew` applies patch updates ([java plugin](plugins/java/README.md)).
+- `install-just`: [just](https://just.systems/) command runner
+- `install-lsd`: [lsd](https://github.com/lsd-rs/lsd) `ls` alternative, with a
+  config and color theme
+- `install-memo`: [memo](https://github.com/jcyamacho/memo) durable memory CLI.
+  Configure agent hooks with `memo hook claude` or `memo hook codex`.
+- `install-mise`: [mise](https://mise.jdx.dev/) dev tools, environment
+  variables, and task runner
+- `install-nub`: [Nub](https://nubjs.com/) all-in-one Node.js toolkit
+- `install-ollama`: [Ollama](https://ollama.com/) local LLM runner
+- `install-opencode`: [OpenCode](https://opencode.ai/) terminal coding agent
+- `install-openspec`: [OpenSpec](https://openspec.dev/) workflow CLI
+  ([openspec plugin](plugins/openspec/README.md))
+- `install-orbstack`: [OrbStack](https://orbstack.dev/) Docker Desktop
+  alternative
+- `install-pi`: [Pi](https://pi.dev/) minimal terminal coding harness
+- `install-rbenv` (or `install-ruby`): [rbenv](https://github.com/rbenv/rbenv)
+  Ruby version manager
+- `install-rust`: [Rust](https://www.rust-lang.org/) toolchain through rustup
+- `install-television`:
+  [Television](https://alexpasmantier.github.io/television/) fuzzy finder.
+  It binds `Ctrl+T` to channel-aware completion (`Ctrl+R` stays with Atuin when
+  installed) and also installs `fd` and `bat`, which its channels use.
+- `install-uv` (or `install-python`): [uv](https://docs.astral.sh/uv/) and
+  Python tooling ([python plugin](plugins/python/README.md))
+- `install-varlock`: [varlock](https://varlock.dev/) AI-safe `.env` files
+- `install-viteplus` (or `install-node`): [Vite+](https://viteplus.dev/) web
+  toolchain and Node.js version manager. `install-node` also works when Vite+
+  is already installed.
+  - `update-node` installs the latest Node.js LTS, makes it the global default,
+    activates it in the current shell, and updates npm and pnpm through Vite+.
+    It also runs through `update-all`.
+  - pnpm comes from Vite+ instead of Corepack, with a global default and
+    per-project versions. Bun stays independently managed.
+  - `uninstall-unused-node-versions` removes Vite+ Node.js installations other
+    than the current and default versions.
+  - When switching from fnm, open a new terminal and run `update-node` once to
+    enable Vite+ management. Existing fnm installations are not deleted.
+- `install-wezterm`: [WezTerm](https://wezterm.org/) terminal with its config
+  ([wezterm plugin](plugins/wezterm/README.md))
+- `install-worktrunk`: [Worktrunk](https://worktrunk.dev) git worktree
+  management ([worktrunk plugin](plugins/worktrunk/README.md))
+- `install-zed`: [Zed](https://zed.dev/) editor
+- `install-zellij`: [Zellij](https://zellij.dev/) terminal workspace
+  ([zellij plugin](plugins/zellij/README.md))
+- `install-zig`: [Zig](https://ziglang.org/) programming language
+- `install-zsh-bench`: [zsh-bench](https://github.com/romkatv/zsh-bench)
+  benchmark for interactive zsh
 
 ## Utility Plugins
 
-Additional helper functions (no external tool required):
+These plugins add helper functions and need no external tool:
 
-- [git](plugins/git/README.md) – `g`, `gaa`, `gf`, `gcb`, `gcmsg`, `gc!`, `ggl`, `ggp` shorthands plus `git-pull-all` and `git-hook`
-- [git-worktree](plugins/git-worktree/README.md) – `gwt-*` helpers for managing Git worktrees
-- [dotenv](plugins/dotenv.zsh) – `dotenv [-e environment] [--] command [args...]`
-  runs an executable with variables from `.env`, `.env.local`, and, with `-e`,
-  `.env.{environment}` and `.env.{environment}.local`, in that order. Only the
-  current directory is searched; missing files are skipped. Later values override
-  earlier ones and inherited environment variables without changing your shell.
-
-  Files accept `KEY=value`, optional `export`, blank lines, comments, and LF or
-  CRLF endings. Keys use letters, digits, and underscores and cannot start with a
-  digit. Surrounding whitespace is ignored; outer single or double quotes are
-  removed. Inline comments require whitespace before `#`; a `#` inside quotes or
-  attached to a value is literal. Values are literal: variables, command
-  substitutions, backticks, and escapes are never expanded. Multiline values and
-  concatenated quoted fragments are unsupported. Invalid or unreadable files
-  abort execution with a location-only diagnostic, without printing values.
-  Loaded variables can still affect the executable's behavior.
-
-  Examples: `dotenv -- bun run dev` or `dotenv -e production -- bun run start`.
+- [git](plugins/git/README.md): `g`, `gaa`, `gf`, `gcb`, `gcmsg`, `gc!`, `ggl`,
+  and `ggp` shorthands, plus `git-pull-all` and `git-hook`
+- [git-worktree](plugins/git-worktree/README.md): `gwt` commands to create,
+  switch, and remove Git worktrees
+- [dotenv](plugins/dotenv.zsh): `dotenv [-e environment] [--] command [args...]`
+  runs a command with variables from env files in the current directory,
+  without changing your shell.
+  - It loads `.env` and `.env.local`, then, with `-e`, `.env.<environment>` and
+    `.env.<environment>.local`. Missing files are skipped. Later values
+    override earlier ones and inherited environment variables.
+  - Files accept `KEY=value`, an optional `export`, blank lines, comments, and
+    LF or CRLF endings. Keys use letters, digits, and underscores and cannot
+    start with a digit.
+  - Surrounding whitespace is ignored, and outer single or double quotes are
+    removed. An inline comment needs whitespace before `#`; a `#` inside quotes
+    or attached to a value is literal.
+  - Values are literal: variables, command substitutions, backticks, and
+    escapes are never expanded. Multiline values and concatenated quoted
+    fragments are not supported.
+  - An invalid or unreadable file stops the command before it runs. The error
+    shows only the file and line, never values. Loaded variables can still
+    affect the command's behavior.
+  - Examples: `dotenv -- bun run dev` or
+    `dotenv -e production -- bun run start`.
 
 ## Utility Functions
 
 Shell helpers from `_utils.zsh`:
 
-- `mkcd <dir>` – create a directory and cd into it
-- `edit <file>` – open a file in `$EDITOR` (defaults to vim)
-- `home` – cd to `$HOME`
-- `zsh-config` – edit `~/.zshrc` and reload
-- `kill-port <port>` – kill the process listening on a given port
-- `zdotfiles-cache-clean` – remove all zdotfiles caches and reload
-- `cls` – alias for `clear`
-- `rmf` – alias for `rm -rf`
-- `cd..` – alias for `cd ..`
+- `mkcd <dir>`: create a directory and `cd` into it.
+- `edit <file>`: open a file in `$EDITOR`.
+- `home`: `cd` to `$HOME`.
+- `zsh-config`: edit `~/.zshrc` and reload it.
+- `kill-port <port>`: stop the process listening on a TCP port, forcing it if
+  it does not exit.
+- `zsh-plugins-regenerate`: rebuild the Antidote plugin bundle and reload.
+- `zdotfiles-cache-clean`: delete all zdotfiles caches, after confirmation, and
+  reload.
+- `cls`, `rmf`, and `cd..`: aliases for `clear`, `rm -rf`, and `cd ..`.
 
 ## Gist Sync
 
-Sync files and directories to/from private GitHub Gists. See [github-cli](plugins/github-cli/README.md) for details on `save-file-to-gist`, `load-file-from-gist`, and related functions.
+`save-file-to-gist` and `load-file-from-gist` sync individual files with
+private GitHub gists. See the [github-cli plugin](plugins/github-cli/README.md)
+for details.
 
 ## Updating
 
-- `reload` – reload the configuration.
-- `reload-full` – reload `~/.zshrc`, including your own settings in it.
-- `update-zdotfiles` – pull the latest repo changes and reload.
-- `update-antidote` – update Antidote and reload.
-- `update-all` – run all registered updaters and reload.
+- `reload`: reload zdotfiles.
+- `reload-full`: reload `~/.zshrc`, including your own settings in it.
+- `update-zdotfiles`: pull the latest repo changes (fast-forward only) and
+  reload.
+- `update-antidote`: update Antidote and its plugins, then reload.
+- `update-brew`: update Homebrew, upgrade every formula and cask (`--greedy`),
+  clean up, and reload.
+- `update-all`: run every registered updater, then reload once.
 
-### The `updates` Array
-
-`update-all` iterates over the `updates` array and calls each registered function. Plugins register their updaters like this:
-
-```zsh
-_update_mytool() {
-  info "Updating mytool..."
-  # update logic here
-}
-
-updates+=(_update_mytool)
-```
-
-Use an internal `_update_*` function (no `reload`) so `update-all` can batch updates and reload once at the end. Tools installed via Homebrew don't need individual updaters since `update-brew` runs `brew upgrade --greedy`.
+`update-all` runs the functions that plugins register in the `updates` array.
+Brew-managed tools need no updater of their own, because `update-brew` upgrades
+them. [AGENTS.md](AGENTS.md) describes how plugins register updaters.
 
 ## Performance
 
-- Benchmark before/after changes with `zsh-startup-bench`.
-- Use `zsh-startup-profile` for a quick zprof-enabled timing run.
-- Quick sanity check without launching an interactive shell: `zsh -lic exit`.
+- `zsh-startup-bench`: time 10 shell startups. Run it before and after a change.
+- `zsh-startup-profile`: profile one startup with zprof.
+- `zsh -lic exit`: check that a full startup works without opening a new
+  terminal.
+- For input latency rather than startup time, use zsh-bench
+  (`install-zsh-bench`).
