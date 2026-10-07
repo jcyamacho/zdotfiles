@@ -81,8 +81,9 @@ To remove a tool, run `uv tool uninstall <tool>`.
 | --- | --- |
 | `venv-sync` | Create or sync the current project's virtual environment with uv, then activate it |
 
-When the current directory has no `pyproject.toml`, `venv-sync` warns and does
-nothing. Otherwise, it deactivates any active virtual environment and then:
+When the current directory has no `pyproject.toml`, `requirements.txt`, or
+`requirements-dev.txt`, `venv-sync` warns and does nothing. Otherwise, it
+deactivates any active virtual environment and then:
 
 - With `uv.lock`: runs `uv sync` into `VENV_DIR` and activates it
 - Without `uv.lock`: creates `VENV_DIR` with `uv venv --seed` if it is missing,

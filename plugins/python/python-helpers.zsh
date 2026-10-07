@@ -1,4 +1,4 @@
-# python helpers (venv + pytest ergonomics): https://docs.astral.sh/uv/
+# python helpers (venv activation and cache cleanup): https://docs.python.org/3/library/venv.html
 
 if exists python3; then
   alias py="python3"

@@ -79,7 +79,7 @@ if exists uv; then
     local venv_dir=${VENV_DIR:-".venv"}
 
     # skip non-python projects
-    if [[ ! -f pyproject.toml ]]; then
+    if [[ ! -f pyproject.toml && ! -f requirements.txt && ! -f requirements-dev.txt ]]; then
       warn "No Python project found."
       return
     fi
