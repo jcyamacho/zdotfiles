@@ -1,136 +1,146 @@
 # git-worktree
 
-Helpers for managing
-[Git worktrees](https://git-scm.com/docs/git-worktree) -- separate
-working directories for different branches.
+Commands to create, switch between, and remove
+[Git worktrees](https://git-scm.com/docs/git-worktree), which let one
+repository have several branches checked out at once in separate directories.
+Each new worktree can run a per-repository setup script.
 
-## Functions / Aliases
+## Commands
 
-| Command / Alias       | Description                          |
-| --------------------- | ------------------------------------ |
-| `gwt <branch> [ref]`  | Create a worktree and cd into it     |
-| `gwts <worktree>`     | Switch to a worktree                 |
-| `gwt-rm <worktree>`   | Remove a worktree                    |
-| `gwt-ls`              | List active worktrees                |
-| `gwt-prune`           | Prune stale worktree metadata        |
-| `gwt-setup`           | Create or edit the setup script      |
+| Command | Description |
+| --- | --- |
+| `gwt <branch> [base-ref]` | Create a worktree for a branch, change into it, and run the setup script |
+| `gwts <worktree>` | Change to another worktree of the current repository |
+| `gwt-rm <worktree>` | Remove a worktree, then offer to delete its branch |
+| `gwt-setup` | Create the repository's setup script from the template if missing, then open it in `$EDITOR` |
 
-## Completion
+`<worktree>` is the name of the worktree's directory, such as
+`myrepo.feature-login`. Unlike a branch name, it exists even for a worktree
+with a detached HEAD.
 
-Every command that takes an argument completes it, and each one omits
-the candidates it would reject anyway.
+## Aliases
 
-`gwt` completes branch names, merging local branches with the ones on
-`origin`:
+| Alias | Expands to |
+| --- | --- |
+| `gwt-ls` | `git worktree list` |
+| `gwt-prune` | `git worktree prune` |
 
-- **First argument**: branches that do not have a worktree yet. Ones
-  that already have one are skipped because `git worktree add` refuses
-  them. Typing a brand new branch name still works; the menu is only a
-  shortcut for branches that already exist.
-- **Second argument**: every branch, since the base ref only applies
-  when the branch does not exist yet.
+## Environment Variables
 
-`gwts` and `gwt-rm` complete worktrees by the name of their directory,
-showing the branch each one holds as the description. A worktree in
-detached HEAD has no branch, so the directory name is the only handle
-that always exists.
-
-- `gwts` omits the current worktree, since switching to it does
-  nothing.
-- `gwt-rm` omits the current and the main worktree, since both are
-  refused.
-
-With `fzf-tab` installed the completion menu is itself a fuzzy picker,
-so this replaces the interactive selector these commands used to have
-while also working without `fzf` at all.
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `GIT_WORKTREE_BASE` | Parent directory of the current worktree | Directory where `gwt` creates worktrees |
 
 ## Usage
 
 ```zsh
-# New branch (from origin's default branch)
-gwt feature/my-feature
+# Check out a branch, or create it from origin's default branch
+gwt feature/login
 
-# New branch from a specific ref
-gwt hotfix/urgent-fix v1.2.3
+# Create a new branch from a specific ref
+gwt hotfix/urgent v1.2.3
 
-# Remote branch (fetches and tracks origin/<branch>)
-gwt feature/someone-elses-pr
+# Switch to another worktree, or back to the main one
+gwts myrepo.feature-login
+gwts myrepo
 
-# Existing local branch
-gwt feature/my-wip-branch
-
-# Switch to a worktree
-gwts myrepo.feature-my-feature
-
-# List all worktrees
-gwt-ls
-
-# Delete a worktree
-gwt-rm myrepo.feature-my-feature
-
-# Clean up stale worktree references
-gwt-prune
+# Remove a worktree and optionally its branch
+gwt-rm myrepo.feature-login
 ```
 
-If the selected worktree has local changes, `gwt-rm` warns first and
-asks for confirmation before retrying with `git worktree remove --force`.
+## Creating Worktrees
 
-### Branch detection
+`gwt` looks for the branch in this order:
 
-`gwt` detects the branch type automatically:
+1. **Local branch:** creates a worktree for it.
+2. **Branch on `origin`:** fetches it, and `git worktree add` creates a local
+   branch that tracks `origin/<branch>`.
+3. **Neither:** creates a new branch from `[base-ref]`. Without a base ref, it
+   fetches origin's default branch and starts from that. The new branch has
+   no upstream, even when it starts from `origin/<default>`.
 
-1. **Local** -- branch exists locally, attaches a worktree to it
-2. **Remote** -- branch exists on origin, creates a local tracking
-   branch
-3. **New** -- neither exists, creates a new branch from origin's
-   default branch (or the provided base ref)
+In the first two cases `gwt` ignores `[base-ref]` and prints a warning. A base
+ref you pass is used as is, without fetching.
 
-## Worktree Location
+To find origin's default branch, `gwt` asks the remote with
+`git remote show origin`, then falls back to the local `origin/HEAD` ref and
+finally to `main`. If fetching the default branch fails, for example in a
+repository without an `origin` remote, `gwt` stops. Pass a base ref instead.
 
-`gwt` places worktrees under `GIT_WORKTREE_BASE`:
+`gwt` creates the worktree at `$GIT_WORKTREE_BASE/<repo>.<branch>`, with
+slashes in the branch name replaced by dashes. `<repo>` is the directory name
+of the worktree you run `gwt` from. Run from `myrepo`, `gwt feature/login`
+creates `myrepo.feature-login`. Run from that new worktree, `gwt feature/b`
+creates `myrepo.feature-login.feature-b`.
 
-- Default (unset): `..` (next to the repo directory)
-- `export GIT_WORKTREE_BASE="$HOME/worktrees"`: centralized location
-- `export GIT_WORKTREE_BASE=".worktrees"`: inside repo (relative paths
-  work)
-
-Worktrees are named `<repo>.<branch>` (slashes in branch names become dashes).
-
-## Setup script
-
-After `git worktree add` completes (and Git's own `post-checkout` hook
-runs), `gwt` sources one setup script if it exists:
-
-```text
-$GIT_COMMON_DIR/setup-worktree.zsh
-```
-
-That path lives inside `.git`, so the script is local to the clone and
-never committed. Run `gwt-setup` to create it from a template and open
-it in `$EDITOR`.
-
-It is sourced rather than executed, so it can change the state of the
-shell you land in. `$ROOT_WORKTREE_PATH` points to the main worktree
-while it runs, which is how a script reaches back for gitignored files
-such as `.env`.
-
-**Example** (`setup-worktree.zsh`):
+A relative `GIT_WORKTREE_BASE` resolves against the current directory, so use
+an absolute path:
 
 ```zsh
-# Install dependencies
+export GIT_WORKTREE_BASE="$HOME/worktrees"
+```
+
+## Removing Worktrees
+
+`gwt-rm` refuses to remove the main worktree or the worktree you are in,
+including when you are in one of its subdirectories.
+
+If Git refuses to remove a worktree because it has modified or untracked files
+or contains submodules, `gwt-rm` shows Git's message and asks whether to retry
+with `git worktree remove --force`. Other Git errors end the command without a
+retry.
+
+After removing a worktree that had a branch checked out, `gwt-rm` asks whether
+to delete the branch with `git branch -D`, which also deletes unmerged
+branches. Both prompts default to no.
+
+## Setup Script
+
+After creating a worktree, `gwt` runs `setup-worktree.zsh` from the
+repository's Git common directory, which is `.git` in the main worktree of a
+regular clone. The script lives inside `.git`, so it is never committed and
+all worktrees of the clone share it.
+
+Run `gwt-setup` in any worktree of the repository to open the script, creating
+it from [the template](templates/setup-worktree.zsh) first if needed. The
+template symlinks the main worktree's `.claude/settings.local.json` into the
+new worktree when that file exists. While the script is missing, `gwt` prints
+the path where `gwt-setup` would create it.
+
+`gwt` sources the script rather than executing it, so the script can use zsh
+syntax and change the state of your shell. While it runs:
+
+- The current directory is the new worktree.
+- `ROOT_WORKTREE_PATH` holds the parent of the Git common directory, which is
+  the main worktree in a regular clone. Use it to reach gitignored files such
+  as `.env`.
+
+`gwt` returns the status of the script's last command and leaves you in the
+new worktree either way. Wrap optional steps in `if` blocks so a missing tool
+does not end the script with a failure status:
+
+```zsh
+cp "$ROOT_WORKTREE_PATH/.env" .env
 npm install
 
-# Allow direnv
-if command -v direnv &>/dev/null; then
-  command direnv allow
+if exists direnv; then
+  direnv allow
 fi
 ```
 
-`gwt` propagates the script's final status. Use `if` blocks for optional
-commands so a missing tool does not look like a setup failure.
+## Completion
 
-## Requirements
+`gwt`, `gwts`, and `gwt-rm` complete their arguments and leave out candidates
+that would fail or do nothing:
 
-- No hard requirements. [fzf](https://github.com/junegunn/fzf) with
-  `fzf-tab` turns the completion menus into fuzzy pickers, but plain zsh
-  completion works without it.
+- `gwt` completes branch names from local branches and `origin`. For the first
+  argument it omits branches that already have a worktree, because
+  `git worktree add` refuses them. You can still type a new branch name. For
+  the base ref it offers every branch.
+- `gwts` and `gwt-rm` complete worktree directory names, described by the
+  branch each worktree has checked out or `detached HEAD`. `gwts` omits the
+  current worktree, and `gwt-rm` omits the current and main worktrees.
+
+When `fzf` is installed, these dotfiles load
+[fzf-tab](https://github.com/Aloxaf/fzf-tab), which turns these menus into
+fuzzy pickers.

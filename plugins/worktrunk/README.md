@@ -1,38 +1,75 @@
 # worktrunk
 
-Git worktree management.
+Sets up [Worktrunk](https://worktrunk.dev), a Git worktree manager run as `wt`:
+shell integration, short aliases, and LLM commit message configs for
+[Claude Code](https://www.anthropic.com/claude-code) and
+[Codex](https://developers.openai.com/codex/cli).
 
-- <https://worktrunk.dev>
+## Commands
+
+| Command | Description |
+| --- | --- |
+| `install-worktrunk` | Install Worktrunk with Homebrew and apply a commit provider if Claude Code or Codex is installed |
+| `uninstall-worktrunk` | Uninstall Worktrunk with Homebrew, keeping the config file |
+| `wt-config` | Open the Worktrunk config file in `$EDITOR`, creating its directory if needed |
+| `wt-commit-claude` | Replace the Worktrunk config file with the Claude provider config |
+| `wt-commit-codex` | Replace the Worktrunk config file with the Codex provider config |
+
+`install-worktrunk` exists only while `wt` is missing. The other commands and
+the aliases exist only while `wt` is installed.
 
 ## Aliases
 
-| Alias   | Command                       |
-| ------- | ----------------------------- |
-| `wtl`   | `wt list`                     |
-| `wtm`   | `wt merge`                    |
-| `wts`   | `wt switch`                   |
-| `wtcm`  | `wt step commit`              |
+| Alias | Expands to |
+| --- | --- |
+| `wtl` | `wt list` |
+| `wtm` | `wt merge` |
+| `wts` | `wt switch` |
+| `wtcm` | `wt step commit` |
 | `wtcms` | `wt step commit --stage=none` |
 
-## Functions
+According to `wt step commit --help`, the command stages all changes and
+commits them with a generated message. With `--stage=none`, it stages nothing,
+so `wtcms` commits only what is already staged.
 
-| Function               | Description                           |
-| ---------------------- | ------------------------------------- |
-| `install-worktrunk`    | Install worktrunk via Homebrew        |
-| `uninstall-worktrunk`  | Remove worktrunk via Homebrew         |
-| `wt-config`            | Edit the worktrunk config file        |
-| `wt-commit-claude`     | Set Claude as the LLM commit provider |
-| `wt-commit-codex`      | Set Codex as the LLM commit provider  |
+## Configuration Paths
 
-## LLM Commit Providers
+| Purpose | Path |
+| --- | --- |
+| Worktrunk user config | `~/.config/worktrunk/config.toml` |
+| Commit provider configs | [`config/`](config) |
 
-Worktrunk can generate commit messages using an LLM. Provider configs
-are stored in `config/` and applied with `wt-commit-<provider>`.
+## Shell Integration
 
-Available providers:
+When `wt` is installed, the plugin sources the output of
+`wt config shell init zsh`. That code wraps `wt` in a shell function so
+commands such as `wt switch` can change the current directory, and it
+registers tab completion. You don't need to run `wt config shell install`.
 
-- `claude` -- uses Claude Code with haiku model
-- `codex` -- uses Codex with gpt-6-luna model
+## Commit Message Providers
 
-On install, the plugin auto-configures the first available provider
-(claude, then codex).
+Each file in [`config/`](config) is a complete Worktrunk config whose
+`[commit.generation]` command generates commit messages with an LLM:
+
+- [`claude.toml`](config/claude.toml): runs `claude -p` with the `haiku` model,
+  thinking turned off, and no tools, slash commands, settings files, system
+  prompt, or saved session
+- [`codex.toml`](config/codex.toml): runs `codex exec` with the `gpt-6-luna`
+  model, low reasoning effort, an empty system prompt, and a read-only sandbox,
+  then extracts the reply with `jq`, which must be installed
+
+Both files share the same prompts. They ask for a Conventional Commits 1.0.0
+message with one of the types `feat`, `fix`, `refactor`, `docs`, `chore`,
+`test`, `ci`, or `build`, and a lowercase, imperative summary under 50
+characters, not counting type and scope. A separate squash prompt combines
+several commits into one message. Both files also set `[list] summary = true`,
+which turns on LLM branch summaries in `wt list --full`.
+
+`wt-commit-claude` and `wt-commit-codex` copy the provider file over
+`~/.config/worktrunk/config.toml`. This replaces the whole file, so any other
+settings in it are lost. To keep extra settings across switches, add them to
+both provider files.
+
+`install-worktrunk` applies the Claude provider when `claude` is on the path,
+otherwise the Codex provider when `codex` is. It overwrites any existing config
+file the same way. When neither command is found, it leaves the config alone.

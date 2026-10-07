@@ -1,38 +1,54 @@
 # golang
 
-Go programming language plugin with golangci-lint.
+Sets up [Go](https://golang.org/) with `GOPATH` in `~/.go`, short `go`
+aliases, and a module starter. `install-go` also installs
+[golangci-lint](https://golangci-lint.run/).
 
-- <https://golang.org/>
-- <https://golangci-lint.run/>
+Everything except `install-go` is defined only when `go` is on `PATH`.
 
-## Environment Variables
+## Commands
 
-| Variable | Value       |
-| -------- | ----------- |
-| `GOPATH` | `~/.go`     |
-| `PATH`   | `$GOPATH/bin` is prepended |
+| Command | Description |
+| --- | --- |
+| `gmi` | Run `go mod init` with a module path based on the current directory and add a starter `main.go` |
+| `install-go` | Install Go and golangci-lint with Homebrew and turn off Go telemetry |
+| `uninstall-go` | Uninstall golangci-lint and Go with Homebrew, then delete `$GOPATH` without asking |
 
-## Functions
-
-| Function       | Description                                         |
-| -------------- | --------------------------------------------------- |
-| `install-go`   | Install Go and golangci-lint via Homebrew           |
-| `uninstall-go` | Uninstall Go, golangci-lint, and remove `$GOPATH`   |
-| `gmi`          | Initialize a Go module with namespace auto-detection |
+`update-brew` upgrades Go and golangci-lint along with other Homebrew packages.
 
 ## Aliases
 
-| Alias | Command       |
-| ----- | ------------- |
-| `gob` | `go build`    |
-| `gog` | `go get`      |
-| `gom` | `go mod`      |
-| `gor` | `go run`      |
-| `gow` | `go work`     |
+| Alias | Expands to |
+| --- | --- |
+| `gob` | `go build` |
+| `gog` | `go get` |
+| `gom` | `go mod` |
+| `gor` | `go run` |
+| `gow` | `go work` |
 | `gmt` | `go mod tidy` |
 
-## Notes
+The aliases call `command go`, so they bypass any alias or function named
+`go`.
 
-- `gmi` auto-detects namespace from path (e.g., `github.com/user/repo`)
-- Copies a starter `main.go` template if not present
-- Telemetry is disabled on install
+## Environment Variables
+
+| Variable | Value |
+| --- | --- |
+| `GOPATH` | `~/.go` |
+
+The plugin sets `GOPATH` in place of Go's default, `~/go`, and replaces any
+value set before it loads. It also prepends `$GOPATH/bin` to `PATH`, where
+[`go install`](https://go.dev/ref/mod#go-install) puts executables when
+`GOBIN` is not set.
+
+## Module Starter
+
+`gmi` takes no arguments. It derives the module path from the current
+directory:
+
+- If the path contains `github.com/`, the module path starts there. For
+  example, `~/src/github.com/user/repo` becomes `github.com/user/repo`.
+- Otherwise, the module path is the directory name.
+
+If the directory has no `main.go`, `gmi` copies the bundled
+[`main.go`](main.go), which logs `Hello, World!` with `log/slog`.

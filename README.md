@@ -40,7 +40,7 @@ Set these variables in `~/.zshrc`, before the `source` line:
 | `ZDOTFILES_CACHE_DIR` | `${XDG_CACHE_HOME:-~/.cache}/zdotfiles` | Cached tool init scripts and completions |
 | `CUSTOM_TOOLS_DIR` | `~/.local/bin` | Install location of self-managed tools |
 | `EDITOR` | `zed --wait` with Zed installed, otherwise `vim` | Editor for `edit`, `zsh-config`, and the `*-config` helpers |
-| `GIT_WORKTREE_BASE` | Parent directory of the repository | Where `gwt` creates worktrees ([git-worktree](plugins/git-worktree/README.md)) |
+| `GIT_WORKTREE_BASE` | Parent directory of the current worktree | Where `gwt` creates worktrees ([git-worktree](plugins/git-worktree/README.md)) |
 | `STARSHIP_CONFIG` | `~/.config/starship.toml` | Starship configuration file |
 | `ZSH_DISABLE_YOU_SHOULD_USE` | Unset | Any value turns off alias reminders |
 
@@ -99,6 +99,8 @@ every missing one.
   automation for AI agents
 - `install-antigravity`: [Antigravity](https://antigravity.google/) AI editor
 - `install-aspire`: [Aspire](https://aspire.dev/) CLI for distributed apps
+- `install-bash`: [Bash](https://www.gnu.org/software/bash/) current release
+  from Homebrew (macOS ships 3.2)
 - `install-bat`: [bat](https://github.com/sharkdp/bat) `cat` clone
 - `install-btop`: [btop](https://github.com/aristocratos/btop) resource monitor
 - `install-bun`: [Bun](https://bun.sh/) JavaScript runtime
@@ -241,7 +243,7 @@ Shell helpers from `_utils.zsh`:
 ## Gist Sync
 
 `save-file-to-gist` and `load-file-from-gist` sync individual files with
-private GitHub gists. See the [github-cli plugin](plugins/github-cli/README.md)
+secret GitHub gists. See the [github-cli plugin](plugins/github-cli/README.md)
 for details.
 
 ## Updating

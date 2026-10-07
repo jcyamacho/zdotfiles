@@ -1,49 +1,45 @@
 # dotnet
 
-.NET SDK lifecycle, completion, and global tool installers.
+Manages the [.NET SDK](https://dotnet.microsoft.com/) as the `dotnet-sdk`
+Homebrew cask and sets up its shell environment and `dotnet` completion. It
+also provides installers for two .NET
+[global tools](https://learn.microsoft.com/dotnet/core/tools/global-tools):
+the [EF Core CLI](https://learn.microsoft.com/ef/core/cli/dotnet) and the
+[dotnet-outdated](https://github.com/dotnet-outdated/dotnet-outdated)
+dependency checker.
 
-The SDK is managed as the `dotnet-sdk` Homebrew cask, so `update-brew`
-keeps it current. Global tools are installed per tool and refreshed by
-`update-dotnet-tools`.
+## Commands
 
-## SDK (requires `brew` for lifecycle)
+| Command | Description |
+| --- | --- |
+| `install-dotnet` | Install the `dotnet-sdk` cask and reload the shell |
+| `uninstall-dotnet` | Uninstall the `dotnet-sdk` cask and reload the shell |
+| `update-dotnet` | Upgrade the `dotnet-sdk` cask and reload the shell |
+| `install-dotnet-ef` | Install the EF Core CLI (package `dotnet-ef`) as a global tool |
+| `install-dotnet-outdated` | Install dotnet-outdated (package `dotnet-outdated-tool`) as a global tool |
+| `update-dotnet-tools` | Update every installed global tool with `dotnet tool update --all -g` |
 
-- `install-dotnet` - install the .NET SDK (`dotnet-sdk` cask)
-- `uninstall-dotnet` - remove the .NET SDK
-- `update-dotnet` - upgrade the .NET SDK and reload the shell configuration
+`install-dotnet` exists only when `dotnet` is not on `PATH`, and the other
+commands only when it is. A tool installer is also not defined when its
+command, `dotnet-ef` or `dotnet-outdated`, is already on `PATH`.
 
-On load the plugin sets `DOTNET_CLI_TELEMETRY_OPTOUT=1` and
-`DOTNET_NOLOGO=1`, prepends `~/.dotnet/tools` to `PATH` for global tools,
-and registers completion for the `dotnet` command via the SDK's built-in
-`dotnet complete` (computed on demand, no startup cost).
+`update-all` upgrades the SDK together with the other Homebrew packages, then
+runs `update-dotnet-tools`.
 
-## Tool installers (require `dotnet` on PATH)
+## Environment Variables
 
-- `install-dotnet-ef` -
-  [EF Core](https://learn.microsoft.com/ef/core/cli/dotnet) CLI
-- `install-dotnet-outdated` -
-  [dotnet-outdated](https://github.com/dotnet-outdated/dotnet-outdated)
-  dependency checker
+Exported only when `dotnet` is on `PATH`:
 
-## Update
+| Variable | Value |
+| --- | --- |
+| `DOTNET_CLI_TELEMETRY_OPTOUT` | `1` |
+| `DOTNET_NOLOGO` | `1` |
 
-- `update-dotnet-tools` - update all installed global tools
-  (`dotnet tool update --all -g`)
-- `update-all` upgrades the SDK through `update-brew` and then runs
-  `update-dotnet-tools`
+## PATH and Completion
 
-## Usage
+When `dotnet` is on `PATH`, the plugin also:
 
-```zsh
-# Install the SDK
-install-dotnet
-
-# Install EF tooling
-install-dotnet-ef
-
-# Update the SDK
-update-dotnet
-
-# Update all global tools
-update-dotnet-tools
-```
+- Prepends `~/.dotnet/tools`, where `dotnet tool install -g` puts global
+  tools, to `PATH`
+- Registers completion for `dotnet` that asks `dotnet complete` for candidates
+  each time you complete, so it does not run `dotnet` at startup

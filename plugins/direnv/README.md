@@ -1,8 +1,19 @@
 # direnv
 
-Per-directory environment variables via `.envrc` files.
+Hooks [direnv](https://direnv.net/) into zsh so it loads and unloads
+environment variables from `.envrc` files as you change directories. The plugin
+also adds commands to install, configure, and uninstall direnv.
 
-- <https://direnv.net/>
+## Commands
+
+| Command | Description |
+| --- | --- |
+| `install-direnv` | Install direnv with Homebrew and copy the bundled `direnv.toml` if no configuration file exists |
+| `uninstall-direnv` | Uninstall direnv with Homebrew and delete `~/.config/direnv` |
+| `direnv-config` | Open `~/.config/direnv/direnv.toml` in `$EDITOR` |
+
+`install-direnv` exists only while direnv is missing. The other commands exist
+only while it is installed.
 
 ## Configuration Paths
 
@@ -11,16 +22,19 @@ Per-directory environment variables via `.envrc` files.
 | Configuration directory | `~/.config/direnv` |
 | Configuration file | `~/.config/direnv/direnv.toml` |
 
-## Functions
+## Default Configuration
 
-| Function           | Description                              |
-| ------------------ | ---------------------------------------- |
-| `install-direnv`   | Install direnv and copy default config   |
-| `uninstall-direnv` | Remove direnv and its configuration      |
-| `direnv-config`    | Edit the direnv configuration file       |
+`install-direnv` copies [`direnv.toml`](direnv.toml) only when no configuration
+file exists, so it never overwrites yours. The bundled file sets
+`load_dotenv = true`, which makes direnv also load `.env` files. When a
+directory has both files, direnv uses `.envrc`
+([direnv.toml reference](https://direnv.net/man/direnv.toml.1.html)).
 
 ## Notes
 
-- Installs with Homebrew; `update-brew` keeps it current
-- Uses cached init for faster startup
-- Default config is copied from `plugins/direnv/direnv.toml`
+- `update-brew`, also run by `update-all`, updates direnv
+- The output of `direnv hook zsh` is cached in
+  `$ZDOTFILES_CACHE_DIR/direnv-init.zsh` and regenerated when the direnv binary
+  or the plugin file is newer than the cache
+- `uninstall-direnv` deletes the whole `~/.config/direnv` directory without a
+  prompt, including any files you added there

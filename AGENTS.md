@@ -51,8 +51,9 @@ installs through `install-<tool>`.
 - Never call `compinit -C`. Without it, `compinit` rescans `$fpath` by
   directory mtime, which is how the next shell picks up completions that
   `cache-completion` wrote during plugin load.
-- A completion generated for the first time appears one shell later. Do not
-  work around it: `install-<tool>` ends in `reload`, which picks it up.
+- A completion generated for the first time appears in the next shell or
+  `reload`, because `compinit` already ran when the plugin wrote it. Do not
+  work around it.
 
 ### Key helpers (`_utils.zsh`)
 

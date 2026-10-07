@@ -1,29 +1,47 @@
 # ghostty
 
-GPU-accelerated terminal emulator.
+Installs the [Ghostty](https://ghostty.org/) terminal with a bundled config,
+the [Monaspace](https://monaspace.githubnext.com/) font, and
+[Catppuccin](https://github.com/catppuccin/ghostty) themes, and adds commands to
+edit and restore the config and update the themes.
 
-- <https://ghostty.org/>
+## Commands
+
+| Command | Description |
+| --- | --- |
+| `install-ghostty` | Install the `font-monaspace` and `ghostty` casks, then restore the bundled config and download the themes |
+| `uninstall-ghostty` | Uninstall the `ghostty` cask and delete `~/.config/ghostty` |
+| `ghostty-config` | Open `~/.config/ghostty/config` in `$EDITOR` |
+| `ghostty-update-themes` | Download the latest Catppuccin themes into `~/.config/ghostty/themes` |
+| `ghostty-restore-config` | Download the themes and replace `~/.config/ghostty/config` with the bundled config |
+
+`install-ghostty` exists only when the `ghostty` command is not on `$PATH`. The
+other commands exist only when it is. `update-all` runs `ghostty-update-themes`.
 
 ## Configuration Paths
 
 | Purpose | Path |
 | --- | --- |
-| Configuration directory | `~/.config/ghostty` |
+| Config directory | `~/.config/ghostty` |
+| Config file | `~/.config/ghostty/config` |
 | Themes directory | `~/.config/ghostty/themes` |
-| Configuration file | `~/.config/ghostty/config` |
+| Bundled config | [`plugins/ghostty/config`](config) |
 
-## Functions
+## Bundled Configuration
 
-| Function                 | Description                                    |
-| ------------------------ | ---------------------------------------------- |
-| `install-ghostty`        | Install Ghostty and Monaspace via Homebrew     |
-| `uninstall-ghostty`      | Remove Ghostty and its configuration           |
-| `ghostty-update-themes`  | Download latest Catppuccin themes              |
-| `ghostty-restore-config` | Reset config to default and update themes      |
-| `ghostty-config`         | Edit the Ghostty config file                   |
+The bundled [`config`](config) uses the Monaspace Neon font and the
+`catppuccin-mocha.conf` theme. `ghostty-update-themes` downloads
+`catppuccin-mocha.conf`, `catppuccin-macchiato.conf`, `catppuccin-latte.conf`,
+and `catppuccin-frappe.conf`. To use another variant, set `theme` in your
+config to one of those file names.
 
 ## Notes
 
-- Includes Catppuccin theme variants (mocha, macchiato, latte, frappe)
-- On macOS, removes the default macOS config location on restore
-- Theme updates are registered with `update-all`
+- `install-ghostty` and `ghostty-restore-config` overwrite
+  `~/.config/ghostty/config` without asking.
+- On macOS, both commands also delete
+  `~/Library/Application Support/com.mitchellh.ghostty/config`. Ghostty loads
+  that file after `~/.config/ghostty/config`, so its values would override the
+  bundled ones ([Ghostty config docs](https://ghostty.org/docs/config)).
+- `uninstall-ghostty` deletes `~/.config/ghostty`, including your config edits
+  and themes, without asking. It leaves the Monaspace font installed.
