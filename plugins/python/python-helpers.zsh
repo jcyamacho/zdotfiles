@@ -27,6 +27,7 @@ if exists python3; then
 
   enable-venv-hook() {
     (( ${chpwd_functions[(Ie)venv]} )) && return 0
+    autoload -Uz add-zsh-hook
     add-zsh-hook chpwd venv
     venv
   }
