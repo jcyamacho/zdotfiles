@@ -18,14 +18,19 @@ if exists wezterm; then
   uninstall-wezterm() {
     info "Uninstalling wezterm..."
     command brew uninstall --cask wezterm || return
-    command rm -rf -- "$HOME/.config/wezterm"
+
+    local config_dir="${WEZTERM_CONFIG_FILE:h}"
+    if confirm "Delete WezTerm config in $config_dir?" no; then
+      command rm -rf -- "$config_dir"
+    fi
+
     reload
   }
 else
   install-wezterm() {
     info "Installing wezterm..."
     command brew install --no-ask --cask wezterm || return
-    _wezterm_restore_config
+    [[ -f "$WEZTERM_CONFIG_FILE" ]] || _wezterm_restore_config
     reload
   }
 fi

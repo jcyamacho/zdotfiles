@@ -55,7 +55,7 @@ Set these variables in `~/.zshrc`, before the `source` line:
 | `ZDOTFILES_CACHE_DIR` | `${XDG_CACHE_HOME:-~/.cache}/zdotfiles` | Cached tool init scripts and completions |
 | `CUSTOM_TOOLS_DIR` | `~/.local/bin` | Install location of self-managed tools |
 | `EDITOR` | `zed --wait` with Zed installed, otherwise `vim` | Editor for `edit`, `zsh-config`, and the `*-config` helpers |
-| `GIT_WORKTREE_BASE` | Parent directory of the current worktree | Where `gwt` creates worktrees ([git-worktree](plugins/git-worktree/README.md)) |
+| `GIT_WORKTREE_BASE` | Parent directory of the main worktree | Where `gwt` creates worktrees ([git-worktree](plugins/git-worktree/README.md)) |
 | `STARSHIP_CONFIG` | `~/.config/starship.toml` | Starship configuration file |
 | `ZSH_DISABLE_YOU_SHOULD_USE` | Unset | Any value turns off alias reminders |
 

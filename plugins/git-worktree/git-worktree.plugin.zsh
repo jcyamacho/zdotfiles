@@ -143,14 +143,18 @@ gwt() {
   local branch_name="${1:?Usage: gwt <branch-name>}"
   local base_ref="${2:-}"
 
-  local repo_root
-  repo_root="$(command git rev-parse --show-toplevel 2>/dev/null)" || {
+  command git rev-parse --show-toplevel &>/dev/null || {
     error "Not a git repository (or any of the parent directories)."
     return 1
   }
 
+  # Name and place worktrees after the main worktree, even when run from a
+  # linked one, so names do not nest (repo.a.b).
+  local main_worktree
+  main_worktree="$(_gwt_worktree_paths | command head -1)"
+
   local worktree_name="${branch_name//\//-}"
-  local worktree_path="${GIT_WORKTREE_BASE:-${repo_root:h}}/${repo_root:t}.${worktree_name}"
+  local worktree_path="${GIT_WORKTREE_BASE:-${main_worktree:h}}/${main_worktree:t}.${worktree_name}"
 
   if command git show-ref --verify --quiet "refs/heads/$branch_name"; then
     # Local branch exists -- attach a worktree to it

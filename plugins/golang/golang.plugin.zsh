@@ -21,7 +21,7 @@ if exists go; then
       namespace=${PWD:t}
     fi
 
-    command go mod init "$namespace"
+    command go mod init "$namespace" || return
 
     [[ -f main.go ]] || command cp -- "$ZDOTFILES_DIR/plugins/golang/main.go" .
   }
@@ -33,8 +33,10 @@ if exists go; then
     info "Uninstalling go..."
     command brew uninstall go || return
 
-    info "Removing $GOPATH..."
-    command rm -rf -- "$GOPATH"
+    if confirm "Delete Go workspace (modules and installed binaries) in $GOPATH?" no; then
+      # Go makes the module cache read-only, so rm -rf alone fails on it.
+      command chmod -R u+w "$GOPATH" && command rm -rf -- "$GOPATH"
+    fi
 
     reload
   }

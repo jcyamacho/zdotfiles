@@ -12,9 +12,14 @@ for _java_version in "${_java_versions[@]}"; do
       JAVA_HOME="$_java_home"
     fi
 
+    # reload keeps an existing JAVA_HOME, so drop it when it points at this JDK.
     functions[uninstall-java-$_java_version]="
       info \"Uninstalling Amazon Corretto $_java_version...\"
       command brew uninstall --cask corretto@$_java_version || return
+      if [[ \$JAVA_HOME == '$_java_home' ]]; then
+        path=(\"\${(@)path:#\$JAVA_HOME/bin}\")
+        unset JAVA_HOME
+      fi
       reload
     "
   else

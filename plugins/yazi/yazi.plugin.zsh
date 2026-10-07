@@ -4,11 +4,12 @@ export YAZI_CONFIG_HOME="${YAZI_CONFIG_HOME:-$HOME/.config/yazi}"
 
 _yazi_restore_config() {
   info "Installing catppuccin-mocha flavor..."
-  command ya pkg add yazi-rs/flavors:catppuccin-mocha
+  command ya pkg add yazi-rs/flavors:catppuccin-mocha ||
+    warn "Could not install the catppuccin-mocha flavor"
 
-  builtin print -r "Copying config files..."
-  command mkdir -p -- "$YAZI_CONFIG_HOME"
-  command cp -- "$ZDOTFILES_DIR/plugins/yazi/yazi.toml" "$YAZI_CONFIG_HOME/yazi.toml"
+  info "Copying config files..."
+  command mkdir -p -- "$YAZI_CONFIG_HOME" || return
+  command cp -- "$ZDOTFILES_DIR/plugins/yazi/yazi.toml" "$YAZI_CONFIG_HOME/yazi.toml" || return
   command cp -- "$ZDOTFILES_DIR/plugins/yazi/theme.toml" "$YAZI_CONFIG_HOME/theme.toml"
 }
 
@@ -42,14 +43,18 @@ if exists yazi; then
   uninstall-yazi() {
     info "Uninstalling yazi..."
     command brew uninstall yazi || return
-    command rm -rf -- "$YAZI_CONFIG_HOME"
+
+    if confirm "Delete yazi config in $YAZI_CONFIG_HOME?" no; then
+      command rm -rf -- "$YAZI_CONFIG_HOME"
+    fi
+
     reload
   }
 else
   install-yazi() {
     info "Installing yazi..."
     command brew install --no-ask yazi || return
-    _yazi_restore_config
+    [[ -d "$YAZI_CONFIG_HOME" ]] || _yazi_restore_config
     reload
   }
 fi

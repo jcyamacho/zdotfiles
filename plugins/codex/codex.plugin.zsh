@@ -30,7 +30,7 @@ if exists codex; then
       return 0
     fi
 
-    command rm -rf -- "${archived_sessions[@]}" || :
+    command rm -rf -- "${archived_sessions[@]}" || return
     info "Removed ${#archived_sessions[@]} archived session(s) from $archive_dir"
   }
 
@@ -48,7 +48,6 @@ else
   install-codex() {
     info "Installing codex..."
     command brew install --no-ask --cask codex || return
-    command mkdir -p -- "$CODEX_HOME/prompts"
     reload
   }
 fi

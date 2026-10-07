@@ -12,8 +12,8 @@ official binary distributions. The plugin also selects an installed JDK for
 | --- | --- |
 | `install-java-25` | Install Amazon Corretto 25 with Homebrew (`corretto@25` cask) |
 | `install-java-21` | Install Amazon Corretto 21 with Homebrew (`corretto@21` cask) |
-| `uninstall-java-25` | Uninstall the `corretto@25` cask |
-| `uninstall-java-21` | Uninstall the `corretto@21` cask |
+| `uninstall-java-25` | Uninstall the `corretto@25` cask; if `JAVA_HOME` points to it, select another JDK |
+| `uninstall-java-21` | Uninstall the `corretto@21` cask; if `JAVA_HOME` points to it, select another JDK |
 | `install-maven` | Install the newest Maven 3 release |
 | `update-maven` | Replace the installed Maven with the newest Maven 3 release |
 | `uninstall-maven` | Delete `$CUSTOM_TOOLS_DIR/.java/maven` |
@@ -55,8 +55,10 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Conte
 source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
 ```
 
-Once `JAVA_HOME` is set, `reload` keeps it, so installing or uninstalling a JDK
-does not switch the current shell to another one. To select a JDK again, run:
+Once `JAVA_HOME` is set, `reload` keeps it, so installing a JDK does not switch
+the current shell to it. Uninstalling the JDK that `JAVA_HOME` points to clears
+`JAVA_HOME` and its `bin` from `PATH` first, so the reload selects the next
+installed Corretto JDK, if any. To select a JDK again yourself, run:
 
 ```zsh
 unset JAVA_HOME

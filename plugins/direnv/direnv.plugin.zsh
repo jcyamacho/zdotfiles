@@ -7,7 +7,11 @@ if exists direnv; then
   uninstall-direnv() {
     info "Uninstalling direnv..."
     command brew uninstall direnv || return
-    command rm -rf -- "$_direnv_config_dir"
+
+    if confirm "Delete direnv config in $_direnv_config_dir?" no; then
+      command rm -rf -- "$_direnv_config_dir"
+    fi
+
     reload
   }
 

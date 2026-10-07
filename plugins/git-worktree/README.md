@@ -29,7 +29,7 @@ with a detached HEAD.
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `GIT_WORKTREE_BASE` | Parent directory of the current worktree | Directory where `gwt` creates worktrees |
+| `GIT_WORKTREE_BASE` | Parent directory of the main worktree | Directory where `gwt` creates worktrees |
 
 ## Usage
 
@@ -69,9 +69,9 @@ repository without an `origin` remote, `gwt` stops. Pass a base ref instead.
 
 `gwt` creates the worktree at `$GIT_WORKTREE_BASE/<repo>.<branch>`, with
 slashes in the branch name replaced by dashes. `<repo>` is the directory name
-of the worktree you run `gwt` from. Run from `myrepo`, `gwt feature/login`
-creates `myrepo.feature-login`. Run from that new worktree, `gwt feature/b`
-creates `myrepo.feature-login.feature-b`.
+of the main worktree, wherever you run `gwt` from. `gwt feature/login` creates
+`myrepo.feature-login` next to `myrepo`, and running `gwt feature/b` from
+inside that new worktree creates `myrepo.feature-b`.
 
 A relative `GIT_WORKTREE_BASE` resolves against the current directory, so use
 an absolute path:

@@ -12,8 +12,8 @@ Mocha flavor from [yazi-rs/flavors](https://github.com/yazi-rs/flavors).
 | `y [args]` | Open yazi with `args` and change to its last directory on quit |
 | `yazi-config` | Open `$YAZI_CONFIG_HOME` in `$EDITOR` |
 | `yazi-restore-config` | Install the flavor and overwrite `yazi.toml` and `theme.toml` with the bundled copies |
-| `install-yazi` | Install yazi with Homebrew, then apply the bundled config as `yazi-restore-config` does |
-| `uninstall-yazi` | Uninstall yazi with Homebrew and delete `$YAZI_CONFIG_HOME` |
+| `install-yazi` | Install yazi with Homebrew, then apply the bundled config as `yazi-restore-config` does if `$YAZI_CONFIG_HOME` does not exist |
+| `uninstall-yazi` | Uninstall yazi with Homebrew, then ask whether to delete `$YAZI_CONFIG_HOME` (default no) |
 
 `install-yazi` exists only while yazi is missing. The other commands and the
 `Ctrl+o` binding exist only when yazi is installed.
@@ -39,10 +39,11 @@ new directory.
 
 ## Bundled Configuration
 
-`install-yazi` and `yazi-restore-config` first run
-`ya pkg add yazi-rs/flavors:catppuccin-mocha` to install the flavor. They then
-copy these files into `$YAZI_CONFIG_HOME`, replacing existing copies and
-leaving other files there unchanged:
+`yazi-restore-config`, and `install-yazi` when you have no config directory,
+first run `ya pkg add yazi-rs/flavors:catppuccin-mocha` to install the flavor.
+If that fails, for example because the flavor is already installed, they print
+a warning and continue. They then copy these files into `$YAZI_CONFIG_HOME`,
+replacing existing copies and leaving other files there unchanged:
 
 | File | Effect |
 | --- | --- |
@@ -56,7 +57,7 @@ leaving other files there unchanged:
   [installation guide](https://yazi-rs.github.io/docs/installation) lists
   optional tools, such as ffmpeg, fd, and ripgrep, that enable previews and
   search.
-- `uninstall-yazi` deletes `$YAZI_CONFIG_HOME` without asking, including files
-  you added there.
+- An existing `$YAZI_CONFIG_HOME` makes `install-yazi` skip the bundled
+  config, so a reinstall keeps the config an uninstall kept.
 - The plugin has no updater. `update-brew` upgrades yazi, and
   `ya pkg upgrade` upgrades installed yazi packages such as the flavor.

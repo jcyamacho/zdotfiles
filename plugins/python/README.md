@@ -51,8 +51,10 @@ it installs that version as the default. It then upgrades all uv tools.
 `update-all` runs the same Python and tool updates, and its Homebrew step
 upgrades uv.
 
-`uninstall-uv` deletes the Python and tool directories reported by
-`uv python dir` and `uv tool dir` only when they are inside `$HOME`.
+`uninstall-uv` first runs `uv tool uninstall --all` and
+`uv python uninstall --all`, which also remove the executables they linked
+into `~/.local/bin`. It then deletes the Python and tool directories reported
+by `uv python dir` and `uv tool dir`, only when they are inside `$HOME`.
 
 When uv is installed, the plugin caches zsh completions for `uv` and `uvx`.
 

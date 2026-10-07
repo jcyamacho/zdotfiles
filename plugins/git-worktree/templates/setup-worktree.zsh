@@ -3,15 +3,20 @@
 # persists in the shell you land in.
 #
 # Available environment variables:
-#   $ROOT_WORKTREE_PATH — absolute path to the main (bare/root) worktree
+#   $ROOT_WORKTREE_PATH: absolute path to the main (bare/root) worktree
 #
 # Examples:
 #   - Copy local config:  cp "$ROOT_WORKTREE_PATH/.env" .env
 #   - Install deps:       npm install
 #   - Link node_modules:  ln -sfn "$ROOT_WORKTREE_PATH/node_modules" node_modules
+#
+# Wrap helper variables in an anonymous function, () { local ...; }, so they do
+# not leak into your shell.
 
-claude_settings=".claude/settings.local.json"
-if [[ -f "${ROOT_WORKTREE_PATH}/${claude_settings}" ]]; then
-  mkdir -p ".claude"
-  ln -sf "${ROOT_WORKTREE_PATH}/${claude_settings}" "${claude_settings}"
-fi
+() {
+  local claude_settings=".claude/settings.local.json"
+  if [[ -f "${ROOT_WORKTREE_PATH}/${claude_settings}" ]]; then
+    mkdir -p ".claude"
+    ln -sf "${ROOT_WORKTREE_PATH}/${claude_settings}" "${claude_settings}"
+  fi
+}

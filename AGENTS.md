@@ -97,7 +97,8 @@ installs through `install-<tool>`.
   assignment when the command's exit status matters.
 - Use `builtin print -r --` instead of `echo`. Prefix external commands with
   `command` and builtins with `builtin` to bypass aliases, and pass `--` before
-  path operands, as in `command rm -f -- "$path"`.
+  path operands, as in `command rm -f -- "$path"`. Exception: macOS `chmod`
+  rejects `--` and treats it as a file name.
 - Prefer zsh expansion over subshells and pipes for simple transforms.
 - Use `confirm` for destructive yes/no prompts instead of custom `read` logic.
   When the prompt guards the whole command, abort on decline with
@@ -140,10 +141,15 @@ Choose the ownership model first:
   step that later steps depend on, with `command ... || return`.
 - Keep secondary cleanup and optional configuration best-effort unless their
   success is part of the command's contract.
-- Uninstallers always remove the tool and its caches. They delete
-  non-reproducible user data (history, sessions, credentials, API keys) only
-  inside `if confirm "Delete ... in <path>?" no; then ... fi`, so declining
-  keeps the data.
+- Uninstallers always remove the tool and its own caches (for example
+  `~/.cache/<tool>`). They delete user data and configuration (history,
+  sessions, credentials, API keys, config directories, workspaces such as
+  `$GOPATH`) only inside `if confirm "Delete ... in <path>?" no; then ... fi`,
+  so declining keeps them. Cached init and completion files in
+  `$ZDOTFILES_CACHE_DIR` can stay; `zdotfiles-cache-clean` removes them.
+- Installers copy bundled config only when the user has none, so a
+  reinstall keeps the config an uninstall kept. Explicit `*-restore-config`
+  and copy commands overwrite.
 - Pass `--no-ask` to scripted `brew install` and `brew upgrade` calls. Do not
   export `HOMEBREW_NO_ASK`, so manual commands keep Homebrew's confirmation.
 - Utility-only plugins (aliases or helper functions, no managed binary) may

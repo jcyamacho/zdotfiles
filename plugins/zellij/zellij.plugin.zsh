@@ -2,11 +2,12 @@
 
 export ZELLIJ_CONFIG_DIR="${ZELLIJ_CONFIG_DIR:-$HOME/.config/zellij}"
 
+# Extra arguments go to cp: install passes -n to keep existing layouts.
 _zellij_copy_layouts() {
   local layouts_dir="$ZELLIJ_CONFIG_DIR/layouts"
   info "Copying zellij layouts..."
-  command mkdir -p -- "$layouts_dir"
-  command cp -R -- "$ZDOTFILES_DIR/plugins/zellij/layouts/." "$layouts_dir/"
+  command mkdir -p -- "$layouts_dir" || return
+  command cp -R "$@" -- "$ZDOTFILES_DIR/plugins/zellij/layouts/." "$layouts_dir/"
 }
 
 if exists zellij; then
@@ -40,14 +41,18 @@ if exists zellij; then
   uninstall-zellij() {
     info "Uninstalling zellij..."
     command brew uninstall zellij || return
-    command rm -rf -- "$ZELLIJ_CONFIG_DIR"
+
+    if confirm "Delete zellij config in $ZELLIJ_CONFIG_DIR?" no; then
+      command rm -rf -- "$ZELLIJ_CONFIG_DIR"
+    fi
+
     reload
   }
 else
   install-zellij() {
     info "Installing zellij..."
     command brew install --no-ask zellij || return
-    _zellij_copy_layouts
+    _zellij_copy_layouts -n
     reload
   }
 fi

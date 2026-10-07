@@ -17,7 +17,11 @@ if exists lsd; then
   uninstall-lsd() {
     info "Uninstalling lsd..."
     command brew uninstall lsd || return
-    command rm -rf -- "$_lsd_config_dir"
+
+    if confirm "Delete lsd config in $_lsd_config_dir?" no; then
+      command rm -rf -- "$_lsd_config_dir"
+    fi
+
     reload
   }
 else
@@ -32,7 +36,7 @@ else
   install-lsd() {
     info "Installing lsd..."
     command brew install --no-ask lsd || return
-    _lsd_restore_config
+    [[ -f "$_lsd_config_dir/config.yaml" ]] || _lsd_restore_config
     reload
   }
 fi

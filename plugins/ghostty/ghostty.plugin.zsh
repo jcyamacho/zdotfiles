@@ -11,26 +11,31 @@ _ghostty_update_themes() {
     catppuccin-frappe
   )
 
-  command mkdir -p -- "$_ghostty_config_dir/themes"
+  command mkdir -p -- "$_ghostty_config_dir/themes" || return
 
-  local theme
+  local theme result=0
   for theme in "${themes[@]}"; do
     builtin print -r -- "Downloading ${theme}..."
-    command curl -fsSL "${themes_url}/${theme}.conf" -o "$_ghostty_config_dir/themes/${theme}.conf"
+    command curl --proto '=https' --tlsv1.2 -fsSL "${themes_url}/${theme}.conf" \
+      -o "$_ghostty_config_dir/themes/${theme}.conf" || result=1
   done
+  return $result
 }
 
-_ghostty_restore_config() {
+_ghostty_copy_config() {
   if is-macos; then
-    # Remove existing macOS config file
+    # Ghostty loads this file after the XDG one, so it would override the copy.
     command rm -f -- "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
   fi
 
-  _ghostty_update_themes
-
   builtin print -r -- "Copying default config..."
-  command mkdir -p -- "$_ghostty_config_dir"
+  command mkdir -p -- "$_ghostty_config_dir" || return
   command cp -- "$ZDOTFILES_DIR/plugins/ghostty/config" "$_ghostty_config_dir/config"
+}
+
+_ghostty_restore_config() {
+  _ghostty_update_themes || warn "Some themes could not be downloaded"
+  _ghostty_copy_config
 }
 
 if exists ghostty; then
@@ -51,7 +56,11 @@ if exists ghostty; then
   uninstall-ghostty() {
     info "Uninstalling ghostty..."
     command brew uninstall --cask ghostty || return
-    command rm -rf -- "$_ghostty_config_dir"
+
+    if confirm "Delete Ghostty config in $_ghostty_config_dir?" no; then
+      command rm -rf -- "$_ghostty_config_dir"
+    fi
+
     reload
   }
 else
@@ -59,7 +68,8 @@ else
     info "Installing ghostty..."
     command brew install --no-ask --cask font-monaspace || return
     command brew install --no-ask --cask ghostty || return
-    _ghostty_restore_config
+    _ghostty_update_themes || warn "Some themes could not be downloaded"
+    [[ -f "$_ghostty_config_dir/config" ]] || _ghostty_copy_config
     reload
   }
 fi

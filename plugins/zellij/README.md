@@ -8,12 +8,12 @@ Code or Codex above a shell.
 
 | Command | Description |
 | --- | --- |
-| `install-zellij` | Install Zellij with Homebrew and copy the bundled layouts |
+| `install-zellij` | Install Zellij with Homebrew and copy the bundled layouts that are missing |
 | `zj` | Alias for `zellij` |
 | `za [session]` | Attach to a session or create it; see [Session Names](#session-names) |
 | `zellij-config` | Open `$ZELLIJ_CONFIG_DIR` in `$EDITOR` without waiting |
 | `zellij-copy-layouts` | Copy the bundled layouts to `$ZELLIJ_CONFIG_DIR/layouts` |
-| `uninstall-zellij` | Uninstall Zellij with Homebrew, then delete `$ZELLIJ_CONFIG_DIR` without asking |
+| `uninstall-zellij` | Uninstall Zellij with Homebrew, then ask whether to delete `$ZELLIJ_CONFIG_DIR` (default no) |
 
 `install-zellij` exists only while `zellij` is not on `PATH`. The other
 commands exist whenever `zellij` is on `PATH`, however it was installed, but
@@ -41,8 +41,10 @@ session or create it:
 
 ## Layouts
 
-`install-zellij` and `zellij-copy-layouts` copy these layouts to
-`$ZELLIJ_CONFIG_DIR/layouts`, replacing files with the same names:
+`install-zellij` copies these layouts to `$ZELLIJ_CONFIG_DIR/layouts` only
+when a file with the same name does not exist, so a reinstall keeps your
+versions. `zellij-copy-layouts` copies them all, replacing files with the same
+names:
 
 | Layout | Opens |
 | --- | --- |

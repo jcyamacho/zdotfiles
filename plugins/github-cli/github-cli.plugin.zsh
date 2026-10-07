@@ -80,7 +80,7 @@ if exists gh; then
   }
 
   uninstall-gh() {
-    info "Uninstalling gh-cli..."
+    info "Uninstalling GitHub CLI..."
     command brew uninstall gh || return
     reload
   }
@@ -94,7 +94,7 @@ else
   load-file-from-gist() { _require-gh; }
 
   install-gh() {
-    info "Installing gh-cli..."
+    info "Installing GitHub CLI..."
     command brew install --no-ask gh || return
     reload
   }

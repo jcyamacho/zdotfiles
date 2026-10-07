@@ -12,8 +12,8 @@ _wt_set_provider() {
     return 1
   fi
 
-  command mkdir -p -- "${_worktrunk_config_file:h}"
-  command cp -- "$provider_file" "$_worktrunk_config_file"
+  command mkdir -p -- "${_worktrunk_config_file:h}" || return
+  command cp -- "$provider_file" "$_worktrunk_config_file" || return
   info "Worktrunk commit provider set to $provider"
 }
 

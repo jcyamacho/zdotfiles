@@ -52,6 +52,10 @@ if exists uv; then
     local uv_python_dir="$(command uv python dir)"
     local uv_tool_dir="$(command uv tool dir)"
 
+    # Deleting the directories alone would leave broken links in ~/.local/bin.
+    command uv tool uninstall --all
+    command uv python uninstall --all
+
     command brew uninstall uv || return
 
     if [[ -n "$uv_python_dir" && "$uv_python_dir" == "$HOME"/* ]]; then

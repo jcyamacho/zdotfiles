@@ -12,7 +12,7 @@ Everything except `install-go` is defined only when `go` is on `PATH`.
 | --- | --- |
 | `gmi` | Run `go mod init` with a module path based on the current directory and add a starter `main.go` |
 | `install-go` | Install Go and golangci-lint with Homebrew and turn off Go telemetry |
-| `uninstall-go` | Uninstall golangci-lint and Go with Homebrew, then delete `$GOPATH` without asking |
+| `uninstall-go` | Uninstall golangci-lint and Go with Homebrew, then ask whether to delete `$GOPATH`, including its read-only module cache (default no) |
 
 `update-brew` upgrades Go and golangci-lint along with other Homebrew packages.
 
@@ -50,5 +50,5 @@ directory:
   example, `~/src/github.com/user/repo` becomes `github.com/user/repo`.
 - Otherwise, the module path is the directory name.
 
-If the directory has no `main.go`, `gmi` copies the bundled
-[`main.go`](main.go), which logs `Hello, World!` with `log/slog`.
+If `go mod init` succeeds and the directory has no `main.go`, `gmi` copies the
+bundled [`main.go`](main.go), which logs `Hello, World!` with `log/slog`.

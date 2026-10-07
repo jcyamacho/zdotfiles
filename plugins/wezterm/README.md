@@ -7,18 +7,18 @@ configured in Lua, with a bundled config and commands to edit or restore it.
 
 | Command | Description |
 | --- | --- |
-| `install-wezterm` | Install the WezTerm cask with Homebrew and copy the bundled config to `$WEZTERM_CONFIG_FILE` |
-| `uninstall-wezterm` | Uninstall the WezTerm cask and delete `~/.config/wezterm` |
+| `install-wezterm` | Install the WezTerm cask with Homebrew and copy the bundled config to `$WEZTERM_CONFIG_FILE` if no file exists there |
+| `uninstall-wezterm` | Uninstall the WezTerm cask, then ask whether to delete the directory of `$WEZTERM_CONFIG_FILE` (default no) |
 | `wezterm-config` | Open `$WEZTERM_CONFIG_FILE` in `$EDITOR` |
 | `wezterm-restore-config` | Replace `$WEZTERM_CONFIG_FILE` with the bundled config |
 
 `install-wezterm` exists only while `wezterm` is not on your `PATH`. The other
 commands exist only after WezTerm is installed.
 
-`install-wezterm` and `wezterm-restore-config` overwrite any existing file at
-`$WEZTERM_CONFIG_FILE` without asking. `uninstall-wezterm` deletes
-`~/.config/wezterm` without asking, even when `WEZTERM_CONFIG_FILE` points to a
-file elsewhere.
+`install-wezterm` keeps an existing config, so a reinstall keeps the config an
+uninstall kept. `wezterm-restore-config` overwrites it without asking. The
+uninstall prompt shows the directory it would delete, which is the whole
+directory that contains `$WEZTERM_CONFIG_FILE`.
 
 ## Environment Variables
 

@@ -9,7 +9,7 @@ also adds commands to install, configure, and uninstall direnv.
 | Command | Description |
 | --- | --- |
 | `install-direnv` | Install direnv with Homebrew and copy the bundled `direnv.toml` if no configuration file exists |
-| `uninstall-direnv` | Uninstall direnv with Homebrew and delete `~/.config/direnv` |
+| `uninstall-direnv` | Uninstall direnv with Homebrew, then ask whether to delete `~/.config/direnv` (default no) |
 | `direnv-config` | Open `~/.config/direnv/direnv.toml` in `$EDITOR` |
 
 `install-direnv` exists only while direnv is missing. The other commands exist
@@ -36,5 +36,5 @@ directory has both files, direnv uses `.envrc`
 - The output of `direnv hook zsh` is cached in
   `$ZDOTFILES_CACHE_DIR/direnv-init.zsh` and regenerated when the direnv binary
   or the plugin file is newer than the cache
-- `uninstall-direnv` deletes the whole `~/.config/direnv` directory without a
-  prompt, including any files you added there
+- If you confirm, `uninstall-direnv` deletes the whole `~/.config/direnv`
+  directory, including any files you added there

@@ -9,8 +9,8 @@ edit and restore the config and update the themes.
 
 | Command | Description |
 | --- | --- |
-| `install-ghostty` | Install the `font-monaspace` and `ghostty` casks, then restore the bundled config and download the themes |
-| `uninstall-ghostty` | Uninstall the `ghostty` cask and delete `~/.config/ghostty` |
+| `install-ghostty` | Install the `font-monaspace` and `ghostty` casks, download the themes, and copy the bundled config if you have none |
+| `uninstall-ghostty` | Uninstall the `ghostty` cask, then ask whether to delete `~/.config/ghostty` (default no) |
 | `ghostty-config` | Open `~/.config/ghostty/config` in `$EDITOR` |
 | `ghostty-update-themes` | Download the latest Catppuccin themes into `~/.config/ghostty/themes` |
 | `ghostty-restore-config` | Download the themes and replace `~/.config/ghostty/config` with the bundled config |
@@ -37,11 +37,14 @@ config to one of those file names.
 
 ## Notes
 
-- `install-ghostty` and `ghostty-restore-config` overwrite
-  `~/.config/ghostty/config` without asking.
-- On macOS, both commands also delete
-  `~/Library/Application Support/com.mitchellh.ghostty/config`. Ghostty loads
-  that file after `~/.config/ghostty/config`, so its values would override the
-  bundled ones ([Ghostty config docs](https://ghostty.org/docs/config)).
-- `uninstall-ghostty` deletes `~/.config/ghostty`, including your config edits
-  and themes, without asking. It leaves the Monaspace font installed.
+- `install-ghostty` keeps an existing `~/.config/ghostty/config`, so a
+  reinstall keeps the config an uninstall kept. `ghostty-restore-config`
+  overwrites it without asking.
+- Whenever they copy the bundled config, both commands also delete
+  `~/Library/Application Support/com.mitchellh.ghostty/config` on macOS.
+  Ghostty loads that file after `~/.config/ghostty/config`, so its values would
+  override the bundled ones
+  ([Ghostty config docs](https://ghostty.org/docs/config)).
+- If a theme fails to download, `ghostty-update-themes` (and so `update-all`)
+  reports an error; install and restore print a warning and continue.
+- `uninstall-ghostty` leaves the Monaspace font installed.

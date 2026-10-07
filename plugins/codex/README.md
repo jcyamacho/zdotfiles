@@ -11,7 +11,7 @@ for the Codex home directory.
 | `cdx [args...]` | Clear the screen, then run `codex` with the given arguments |
 | `codex-config` | Open the `$CODEX_HOME` directory in `$EDITOR` |
 | `codex-clear-archived-sessions` | Delete the files and directories in `$CODEX_HOME/archived_sessions` without asking |
-| `install-codex` | Install the `codex` cask and create `$CODEX_HOME/prompts` |
+| `install-codex` | Install the `codex` cask |
 | `uninstall-codex` | Uninstall the `codex` cask, then ask whether to delete `$CODEX_HOME` (default no) |
 
 ## Environment Variables
