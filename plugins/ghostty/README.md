@@ -40,10 +40,10 @@ config to one of those file names.
 - `install-ghostty` keeps an existing `~/.config/ghostty/config`, so a
   reinstall keeps the config an uninstall kept. `ghostty-restore-config`
   overwrites it without asking.
-- Whenever they copy the bundled config, both commands also delete
-  `~/Library/Application Support/com.mitchellh.ghostty/config` on macOS.
-  Ghostty loads that file after `~/.config/ghostty/config`, so its values would
-  override the bundled ones
+- Whenever they copy the bundled config, both commands also delete `config`
+  and `config.ghostty` from `~/Library/Application Support/com.mitchellh.ghostty`
+  on macOS. Ghostty loads those files after `~/.config/ghostty/config`, so their
+  values would override the bundled ones
   ([Ghostty config docs](https://ghostty.org/docs/config)).
 - If a theme fails to download, `ghostty-update-themes` (and so `update-all`)
   reports an error; install and restore print a warning and continue.

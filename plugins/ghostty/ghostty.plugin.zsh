@@ -24,8 +24,8 @@ _ghostty_update_themes() {
 
 _ghostty_copy_config() {
   if is-macos; then
-    # Ghostty loads this file after the XDG one, so it would override the copy.
-    command rm -f -- "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+    # Ghostty loads these after the XDG files, so they would override the copy.
+    command rm -f -- "$HOME/Library/Application Support/com.mitchellh.ghostty/"{config,config.ghostty}
   fi
 
   builtin print -r -- "Copying default config..."
