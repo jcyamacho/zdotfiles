@@ -1,191 +1,159 @@
-# AGENTS.md - Zsh Dotfiles Repository
+# AGENTS.md
 
-Repo defaults for AI agents editing this zsh dotfiles project.
-Prioritize secure, fast startup and minimal diffs.
+Prioritize a secure, fast shell startup and minimal diffs.
 
 ## Architecture
 
-`zshrc.sh` is sourced by `~/.zshrc` and bootstraps in order:
+`zshrc.sh` is sourced by `~/.zshrc` and loads, in order:
 
-1. Cache dir (`$ZDOTFILES_CACHE_DIR`), private completions dir on
-   `$fpath`, and `$CUSTOM_TOOLS_DIR`
-   on `$path`
-2. `_utils.zsh` — shared helpers (see below)
-3. The `updates` array and `update-all` dispatcher
-4. `_brew.zsh` — Homebrew discovery, `$HOMEBREW_PREFIX`, its
-   `site-functions` on `$fpath`, bootstrap install, and updater
-5. `_starship.zsh` — required prompt bootstrap, configuration, and updater
-6. `compinit` (see Completions below)
-7. Antidote — reads `.zsh_plugins.txt`, generates/compiles
-   `.zsh_plugins.zsh`, sources it
+1. The cache directory, the completions directory on `$fpath`, and
+   `$CUSTOM_TOOLS_DIR` on `$path`
+2. `_utils.zsh`: shared helpers
+3. The `updates` array and `update-all`
+4. `_brew.zsh`: Homebrew discovery, bootstrap install, `site-functions` on
+   `$fpath`, and updater
+5. `_starship.zsh`: prompt bootstrap, configuration, and updater
+6. `compinit`
+7. Antidote: builds `.zsh_plugins.zsh` from `.zsh_plugins.txt` and sources it
 
-Root-level `_<name>.zsh` files are sourced directly by `zshrc.sh`, not
-loaded as plugins. Use one when the code is not optional or has to run
-before Antidote (e.g. it must reach `$fpath` before `compinit`). Anything
-that can be conditional on a binary belongs in `plugins/` instead.
+Put code in a root-level `_<name>.zsh` file only when it is not optional or
+must run before Antidote, for example to reach `$fpath` before `compinit`.
+Anything that depends on an optional binary belongs in `plugins/`.
 
-Antidote sources entries in `.zsh_plugins.txt` in order. Each local plugin
-runs its own guard logic and conditionally defines
-`install-*`/`uninstall-*`/`update-*` functions.
+Bootstrap only Antidote, Homebrew, and Starship at startup. Everything else
+installs through `install-<tool>`.
 
-### Antidote annotations
+### Plugin list
 
-Entries in `.zsh_plugins.txt` support these annotations:
-
-- `conditional:"<expr>"` — wraps the entry in `if <expr>; then ... fi`
-  in the generated `.zsh_plugins.zsh`. The expression is pasted
-  verbatim as the `if` condition. Any valid shell expression works:
-  - `conditional:"exists <cmd>"` — loads only when `<cmd>` is present.
-  - `conditional:"[[ $VAR == value ]]"` — loads based on a variable.
-- `path:plugins/<name>` — loads a sub-path from a remote repo.
-
-### Load order rules
-
-Order in `.zsh_plugins.txt` matters:
-
-1. Tool, completion, history, and keybinding plugins load before UX
-   plugins so later ZLE hooks wrap the final widget state.
-2. Dev-tool managers (e.g. mise) load after tool plugins — their
-   activate hooks override other plugins' shims and paths.
-3. UX plugins (autosuggestions, syntax highlighting, you-should-use)
-   load last.
+- Edit `.zsh_plugins.txt`, never the generated `.zsh_plugins.zsh`. The shell
+  regenerates it when the list is newer.
+- Keep this load order:
+  1. Tool, completion, history, and keybinding plugins load before UX plugins,
+     so later ZLE hooks wrap the final widget state.
+  2. Dev-tool managers such as mise load after tool plugins, because their
+     activation overrides other plugins' shims and paths.
+  3. UX plugins (autosuggestions, syntax highlighting, you-should-use) load
+     last.
+- To load a remote plugin only when a condition holds, use
+  `conditional:"<expr>"`, for example `conditional:"exists fzf"`. Antidote
+  pastes the expression verbatim as an `if` condition.
+- Never use `kind:defer`. Deferred plugins block input after the prompt
+  appears, so the shell feels frozen
+  (see <https://github.com/romkatv/zsh-defer/issues/13>).
 
 ### Completions
 
-`zshrc.sh` owns `compinit` and runs it before Antidote sources the
-plugins. Consequences to respect:
+`zshrc.sh` runs `compinit` before Antidote sources the plugins, so:
 
-- Anything that must be on `$fpath` for `compinit` to see it belongs in
-  a root-level `_<name>.zsh`, not in a plugin. A plugin's `fpath`
-  addition is too late.
-- `compdef` is available inside plugins, so tools with a dynamic
-  completion function can register directly.
-- Never call `compinit -C`. The `$fpath` rescan by directory mtime is
-  what picks up completions written by `cache-completion` during plugin
-  load, on the next shell.
-- A completion generated for the first time appears one shell later.
-  This self-heals because `install-<tool>` ends in `reload`.
+- A plugin's `$fpath` addition is too late for `compinit`. Put anything
+  `compinit` must see in a root-level `_<name>.zsh`.
+- Plugins can call `compdef` to register dynamic completion functions.
+- Never call `compinit -C`. Without it, `compinit` rescans `$fpath` by
+  directory mtime, which is how the next shell picks up completions that
+  `cache-completion` wrote during plugin load.
+- A completion generated for the first time appears one shell later. Do not
+  work around it: `install-<tool>` ends in `reload`, which picks it up.
 
 ### Key helpers (`_utils.zsh`)
 
-- `exists <cmd>` - checks `$path` for an executable (ignores aliases and
-  functions). Prefer it over `$commands[cmd]`, which rehashes `$path` after
-  every path change
-- `source-cached-init <cmd> <args...>` - caches tool init output
-  and sources it; regenerates when the binary or the calling plugin file
-  is newer, so argument changes apply on the next load
-  - Use only when output is deterministic/static across sessions.
-  - Do not cache commands that emit per-session values (PID,
-    timestamps, temp paths). Example: do not cache `fnm env --shell zsh`.
-  - Do not use for `#compdef` completion scripts; use
-    `cache-completion` instead.
-- `cache-completion <cmd> <args...>` - caches `#compdef` completion
-  output to `$ZDOTFILES_CACHE_DIR/completions/_<cmd>` and adds it to
-  `fpath`; regenerates like `source-cached-init`. Use instead of
-  `source-cached-init` when the tool outputs a `#compdef` file
-  (completion functions that use `_arguments`).
-- `_run_remote_installer <url> [shell] [--env K=V]... [-- args...]` -
-  secure download-and-run with `~/.zshrc` write-lock
-- `_run_with_zshrc_locked <cmd> [args...]` - locks `~/.zshrc` while running
-  an updater known to write it, then unlocks it even when the command fails
-- `info`, `warn`, `error` - colored output helpers
-- `confirm <prompt> [yes|no]` - terminal-only yes/no prompt that accepts
-  `y`/`yes`, `n`/`no`, or bare `Enter` for the default, and re-prompts on
-  invalid input
-- `reload` - re-sources `zshrc.sh`
-- `reload-full` - re-sources `~/.zshrc`, including the user's own lines
+- `exists <cmd>`: checks `$path` for an executable, ignoring aliases and
+  functions. Use it instead of `$commands[cmd]`, which rehashes every `$path`
+  directory after a path change.
+- `source-cached-init <cmd> <args...>`: caches a tool's shell init output and
+  sources it. It regenerates the cache when the binary or the calling plugin
+  file is newer, so argument changes apply on the next load. Use it only for
+  output that is identical in every session; for example, `mise activate zsh`
+  includes the current `PATH`, so it is not cached. For `#compdef` output, use
+  `cache-completion`.
+- `cache-completion <cmd> <args...>`: writes a tool's `#compdef` completion to
+  `$ZDOTFILES_CACHE_DIR/completions/_<cmd>`, a directory already on `$fpath`.
+  It regenerates like `source-cached-init`.
+- `_run_remote_installer <url> [shell [--env K=V]... [-- args...]]`: downloads
+  the script over HTTPS to a temp file and runs it with `shell` (default `sh`)
+  while `~/.zshrc` is locked. Pass the shell explicitly whenever `--env` or
+  `--` follows, because the second argument is always read as the shell.
+- `_run_with_zshrc_locked <cmd> [args...]`: locks `~/.zshrc` while an updater
+  known to write it runs, then unlocks it, even when the command fails.
+- `confirm <prompt> [yes|no]`: terminal-only yes/no prompt. It accepts `y`,
+  `yes`, `n`, `no`, or Enter for the default, and re-prompts on invalid input.
+- `edit` and `edit-open`: open a file in `$EDITOR`. Use `edit-open` in
+  `*-config` helpers so the shell does not wait. Use `edit` only when the next
+  step needs the saved file, as `starship-config` does before `reload`.
+- `info`, `warn`, `error`: colored output.
+- `reload`: re-sources `zshrc.sh`. Lifecycle functions end with it.
+- `reload-full`: re-sources `~/.zshrc`, including the user's own lines.
 
-## Core Rules
+## Core rules
 
-- 2-space indentation, LF endings, UTF-8, single blank lines.
-- Keep implementations minimal: avoid extra logic/state unless it delivers
+- Follow `.editorconfig` and keep single blank lines.
+- Keep implementations minimal. Add logic or state only when it delivers
   clear, lasting user value.
 - Start plugin files with `# <tool> (<short description>): https://...`.
-- Quote scalars (`"$var"`); pass arrays as `"${array[@]}"`.
-- Use `[[ ... ]]`, `local`, `${1:?message}`, and `while IFS= read -r line`.
-- Give variables the smallest useful scope. Separate declaration from assignment
-  when the command's exit status matters.
-- Use `builtin print -r --` instead of `echo`; prefix external calls
-  with `command`/`builtin` to bypass aliases.
-- Prefer zsh native expansion over subshells/pipes for simple transforms.
-- Use `command mkdir -p -- "$dir"` and `command rm -f -- "$path"`.
-- Use `_utils.zsh`'s `confirm` helper for destructive yes/no prompts
-  instead of hand-rolled `read` logic. When the prompt guards the whole
-  command, abort on decline with the canonical pattern
+- Quote scalars (`"$var"`) and pass arrays as `"${array[@]}"`.
+- Use `[[ ... ]]`, `local`, `${1:?message}`, and
+  `while IFS= read -r line`.
+- Give variables the smallest useful scope. Separate declaration from
+  assignment when the command's exit status matters.
+- Use `builtin print -r --` instead of `echo`. Prefix external commands with
+  `command` and builtins with `builtin` to bypass aliases, and pass `--` before
+  path operands, as in `command rm -f -- "$path"`.
+- Prefer zsh expansion over subshells and pipes for simple transforms.
+- Use `confirm` for destructive yes/no prompts instead of custom `read` logic.
+  When the prompt guards the whole command, abort on decline with
   `confirm "..." no || { info "Aborted"; return 0; }`.
-- Never use `kind:defer` in `.zsh_plugins.txt`. Deferred plugins
-  block input after the prompt appears, making the shell feel frozen
-  (see <https://github.com/romkatv/zsh-defer/issues/13>).
 - Never use `sudo`, interactive installers, or `curl | sh`.
-- Never `eval` untrusted input; prefer `source-cached-init` for tool init.
-- Use `mktemp` for temp files; never log or cache secrets.
-- Escape `%` in untrusted prompt text as `%%`.
+- Never `eval` untrusted input. Use `source-cached-init` for tool init.
+- Use `mktemp` for temp files, and never log or cache secrets.
+- Escape `%` as `%%` in untrusted text passed to prompt expansion, such as
+  `print -P`.
 
-## Plugin Patterns
+## Plugin patterns
+
+Choose the ownership model first:
+
+| Pattern | Ownership | Use when |
+| --- | --- | --- |
+| Brew-managed | Homebrew owns install, removal, and updates | A formula or cask has no heavy dependencies (check `brew info`) |
+| Self-managed | The tool's installer owns the binary and updates | Brew would pull extra runtimes such as node or python |
 
 ### Guards
 
-- Homebrew is a required bootstrap dependency: never guard on
-  `exists brew`. Guard only on the tool itself.
-- Guard on optional package managers (e.g. `npm`) for lifecycle
-  functions. Use early return (`exists npm || return`) only when the
-  entire file depends on it.
-- When a tool registers shell hooks (e.g. via `source-cached-init`),
-  define empty stub functions in the else-branch so other plugins
-  calling those hooks don't error.
-
-Choose the ownership model first. The templates below define the canonical
-guard and lifecycle structure.
-
-| Pattern | Ownership |
-| --- | --- |
-| Brew-managed | Homebrew owns install, removal, and updates |
-| Self-managed | The installer owns the binary and updater |
+- Guard on the tool itself. Homebrew is a required bootstrap dependency, so
+  never guard on `exists brew`.
+- Guard lifecycle functions on optional package managers such as `npm`. Use an
+  early `exists npm || return` only when the whole file depends on it.
+- When a tool registers shell hooks, for example through
+  `source-cached-init`, define empty stubs in the else branch so plugins that
+  call those hooks do not fail.
 
 ### Lifecycle
 
-- Register `_update_<tool>` in `updates`; expose `update-<tool>`
-  wrapper that calls updater then `reload`.
-- Preserve failures from the primary lifecycle operation before `reload`, and
-  from a step when later steps depend on it: use `command ... || return`, and
-  have public update wrappers call `_update_<tool> || return`.
+- Add an updater only when the tool has an independent update path: always for
+  self-managed tools, and for brew-managed tools only when they need extra
+  post-update steps. `update-brew` updates the rest.
+- Implement an updater as `_update_<tool>`, registered in `updates`, plus a
+  public `update-<tool>` that runs `_update_<tool> || return` and then
+  `reload`. When an update never needs `reload` (models, themes, data), define
+  one public function and register it directly in `updates`.
+- Propagate the failure of the primary operation before `reload`, and of any
+  step that later steps depend on, with `command ... || return`.
 - Keep secondary cleanup and optional configuration best-effort unless their
-  success is part of the command's core contract.
-- Uninstallers always remove the tool and its caches, but delete
+  success is part of the command's contract.
+- Uninstallers always remove the tool and its caches. They delete
   non-reproducible user data (history, sessions, credentials, API keys) only
   inside `if confirm "Delete ... in <path>?" no; then ... fi`, so declining
   keeps the data.
-- If the update never needs `reload` under any circumstance (e.g.,
-  pulling models, themes, or data), skip the split: define a single
-  public function and register it directly in `updates`. Otherwise use
-  the `_update_<tool>` plus `update-<tool>` split.
-- Brew-managed tools are updated by `update-brew` unless they
-  need extra post-update steps.
-- Pass `--no-ask` to scripted `brew install` and `brew upgrade` calls.
-  Do not export `HOMEBREW_NO_ASK`; manual commands keep Homebrew's
-  confirmation behavior.
-- Self-managed tools (e.g. `rustup`, `bun`, `mise`) need explicit
-  updater functions.
-- Bootstrap only essentials at startup (Antidote, Homebrew, Starship);
-  everything else installs via `install-<tool>`.
-- Utility-only plugins (only aliases or helper functions, no managed
-  binary) may omit lifecycle functions.
-- Prefer brew-managed when the formula has no heavy dependencies
-  (check `brew info`). Fall back to self-managed (script install
-  to `$CUSTOM_TOOLS_DIR`) when brew would pull extra runtimes
-  (e.g. node, python).
-- List installable tools in root `README.md`; list utility
-  plugins in the Utility Plugins section.
+- Pass `--no-ask` to scripted `brew install` and `brew upgrade` calls. Do not
+  export `HOMEBREW_NO_ASK`, so manual commands keep Homebrew's confirmation.
+- Utility-only plugins (aliases or helper functions, no managed binary) may
+  omit lifecycle functions.
 
 ### Canonical templates
 
-Use these templates for branch structure and lifecycle ownership. Replace
-placeholders and add only the configuration required by the tool.
+Use these templates for branch structure and lifecycle ownership. Replace the
+placeholders and add only the configuration the tool requires.
 
-#### Brew-managed
-
-Use when a Homebrew formula or cask provides the tool. `update-brew` keeps it
-current.
+Brew-managed:
 
 ```zsh
 if exists tool; then
@@ -205,10 +173,7 @@ else
 fi
 ```
 
-#### Self-managed
-
-Use when the tool's installer owns the binary and the tool has an independent
-update path. Remove `source-cached-init` when the tool has no shell init.
+Self-managed (remove `source-cached-init` when the tool has no shell init):
 
 ```zsh
 if exists tool; then
@@ -241,53 +206,54 @@ else
 fi
 ```
 
-### General
+### Variables and paths
 
-- Prepend to `PATH` with `path=("$NEW_DIR" "${path[@]}")`. `path` is
-  already declared `typeset -gU` in `zshrc.sh`, so do not redeclare it
-  per plugin; the global `-U` keeps prepends deduped across reloads.
-- Disable tool telemetry when supported.
-- Use `local` for function state.
-- For temporary variables used only while sourcing the file, use
-  `typeset _name="value"` and `unset _name` after their last use.
-- Use `typeset -g _name="value"` only when plugin functions need private
-  state after the file is sourced. Reassigning it on `reload` is intentional.
-- Use a normal global assignment for user configuration that the shell consumes.
-- Use `export` only for environment variables consumed by external processes.
-- Before removing or renaming an exported variable, verify the tool's current
-  contract in its official documentation or source and inspect why the variable
-  was introduced. Absence of local references is not evidence that child
-  processes ignore it.
-- Derive secondary paths from their owned base path at the point of use.
+- Prepend directories with `path=("$NEW_DIR" "${path[@]}")`. `zshrc.sh`
+  already declares `path` with `typeset -gU`, so do not redeclare it; `-U`
+  keeps prepends deduplicated across reloads. Append instead when the
+  directory must not outrank existing entries, as `_brew.zsh` and
+  `cursor.zsh` do.
+- Disable tool telemetry when the tool supports it.
+- For temporary variables used only while sourcing a file, use
+  `typeset _name="value"` and `unset _name` after the last use.
+- Use `typeset -g _name="value"` only when plugin functions need private state
+  after the file is sourced. Reassigning it on `reload` is intentional.
+- Use a plain global assignment for user configuration that the shell
+  consumes, and `export` only for variables that external processes consume.
+- Before removing or renaming an exported variable, check the tool's current
+  contract in its official documentation or source, and find out why the
+  variable was introduced. A missing local reference does not prove that
+  child processes ignore it.
+- Derive secondary paths from their owning base path at the point of use.
 
 ### File layout
 
-- **Simple** (`plugins/<tool>.zsh`): single file, conditional
-  brew install/uninstall.
-- **Self-managed** (`plugins/<tool>.zsh`): binary in
-  `$CUSTOM_TOOLS_DIR`, uses `source-cached-init`, registers in
-  `updates`.
-- **Complex** (`plugins/<tool>/<tool>.plugin.zsh` + `README.md`):
-  subdirectory for plugins with configs or detailed docs.
+- Use a single file, `plugins/<tool>.zsh`, by default.
+- Use a subdirectory, `plugins/<tool>/` with `<tool>.plugin.zsh` and a
+  `README.md`, when the plugin ships config files or needs detailed docs.
 
-## Adding a Plugin (Checklist)
+## Adding a plugin
 
-1. Choose the matching plugin pattern and file layout.
+1. Choose the ownership model and file layout.
 2. Add the entry at the correct position in `.zsh_plugins.txt`.
-3. Add the standard header, guards, and required lifecycle functions.
-4. Register an updater only when the tool has an independent update path.
-5. Update the relevant tool or utility listing in `README.md`.
+3. Add the standard header, guards, and lifecycle functions.
+4. Add an updater only where the lifecycle rules call for one.
+5. List installable tools in the root `README.md`, and utility-only plugins in
+   its Utility Plugins section.
 
 ## Validation
 
-```sh
-zsh -n <file>              # syntax check edited files
-zsh -lic exit              # full startup sanity
-zsh-startup-bench          # 10-iteration startup benchmark
-zsh-startup-profile        # zprof-enabled timing run
-```
+- Run `zsh -n <file>` on every edited shell file.
+- After changing `zshrc.sh`, a root-level `_*.zsh`, `.zsh_plugins.txt`, or
+  code that runs while a plugin loads, run `zsh -lic exit`. It must finish
+  without errors or unexpected output.
+- When a change can affect startup time, compare before and after with
+  `zsh -ic zsh-startup-bench` (10 timed runs) and
+  `zsh -ic zsh-startup-profile` (zprof).
 
 ## References
+
+Style and security guides behind these rules:
 
 - <https://wiki.zshell.dev/community/zsh_handbook>
 - <https://github.com/ohmyzsh/ohmyzsh/wiki/Secure-Code>
