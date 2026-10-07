@@ -38,6 +38,8 @@ $ZDOTFILES_DIR/plugins/fabric.zsh
 
 $ZDOTFILES_DIR/plugins/fonts.zsh
 
+$ZDOTFILES_DIR/plugins/bash.zsh
+
 $ZDOTFILES_DIR/plugins/jq.zsh
 
 $ZDOTFILES_DIR/plugins/just.zsh
