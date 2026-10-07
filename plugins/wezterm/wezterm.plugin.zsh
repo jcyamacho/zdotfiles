@@ -4,7 +4,7 @@ export WEZTERM_CONFIG_FILE="${WEZTERM_CONFIG_FILE:-$HOME/.config/wezterm/wezterm
 
 _wezterm_restore_config() {
   builtin print -r -- "Copying default config..."
-  command mkdir -p -- "${WEZTERM_CONFIG_FILE:h}"
+  command mkdir -p -- "${WEZTERM_CONFIG_FILE:h}" || return
   command cp -- "$ZDOTFILES_DIR/plugins/wezterm/wezterm.lua" "$WEZTERM_CONFIG_FILE"
 }
 
