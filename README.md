@@ -175,6 +175,8 @@ every missing one.
   ([openspec plugin](plugins/openspec/README.md))
 - `install-orbstack`: [OrbStack](https://orbstack.dev/) Docker Desktop
   alternative
+- `install-orca`: [Orca](https://www.onorca.dev/) desktop IDE for running coding
+  agents in parallel worktrees
 - `install-pi`: [Pi](https://pi.dev/) minimal terminal coding harness
 - `install-rbenv` (or `install-ruby`): [rbenv](https://github.com/rbenv/rbenv)
   Ruby version manager
