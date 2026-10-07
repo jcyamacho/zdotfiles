@@ -30,6 +30,8 @@ _gwt_path_for() {
 # branch does not exist yet. Branches that already have a worktree are dropped
 # from the first argument because `git worktree add` refuses them.
 _gwt() {
+  (( CURRENT > 3 )) && return 1
+
   local refs
   refs="$(GIT_OPTIONAL_LOCKS=0 command git for-each-ref \
     --format='%(refname:short)' --exclude=refs/remotes/origin/HEAD \
@@ -40,7 +42,7 @@ _gwt() {
   branches=("${(@)branches#origin/}")
 
   local expl
-  if (( CURRENT > 2 )); then
+  if (( CURRENT == 3 )); then
     _wanted refs expl 'base ref' compadd -a branches
     return
   fi
@@ -140,7 +142,7 @@ _gwt_run_setup_hooks() {
 }
 
 gwt() {
-  local branch_name="${1:?Usage: gwt <branch-name>}"
+  local branch_name="${1:?Usage: gwt <branch-name> [base-ref]}"
   local base_ref="${2:-}"
 
   command git rev-parse --show-toplevel &>/dev/null || {
