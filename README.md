@@ -79,6 +79,7 @@ Run `install-recommended` to install every missing tool in this group.
 ### Optional
 
 - `install-aspire` - [Aspire](https://aspire.dev/) CLI for distributed apps
+- `install-bash` - [Bash](https://www.gnu.org/software/bash/) current release from Homebrew (macOS ships 3.2)
 - `install-bat` – [bat](https://github.com/sharkdp/bat) `cat` clone
 - `install-btop` - [btop](https://github.com/aristocratos/btop) resource monitor
 - `install-bun` – [Bun](https://bun.sh/) runtime
