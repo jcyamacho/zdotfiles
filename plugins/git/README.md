@@ -43,8 +43,8 @@ Without arguments, `ggl` and `ggp` act on the current branch:
   branch has no upstream yet. A branch that already tracks another remote keeps
   its upstream.
 
-On a detached HEAD there is no current branch, so both return status 1 without
-pulling, pushing, or printing a message.
+On a detached HEAD there is no current branch, so both print an error and
+return status 1 without pulling or pushing.
 
 With arguments, both pass them unchanged after `origin`, as in
 `git push origin <args>`. Refspecs and flags such as `--delete` work, and `ggp`
@@ -97,4 +97,5 @@ creating the hooks directory if needed. The new hook starts from:
 - An empty `#!/bin/sh` script otherwise
 
 A copied sample is active right away and runs Git's example checks until you
-change it.
+change it. `git-hook` also makes an existing hook executable if it is not,
+because Git skips hooks without the executable bit.

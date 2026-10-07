@@ -12,7 +12,10 @@ ggl() {
   fi
 
   local branch
-  branch="$(_git_current_branch)" || return 1
+  branch="$(_git_current_branch)" || {
+    error "Not on a branch (detached HEAD or not a git repository)."
+    return 1
+  }
 
   command git pull origin "$branch"
 }
@@ -27,7 +30,10 @@ ggp() {
   fi
 
   local branch
-  branch="$(_git_current_branch)" || return 1
+  branch="$(_git_current_branch)" || {
+    error "Not on a branch (detached HEAD or not a git repository)."
+    return 1
+  }
 
   # Only adopt origin as upstream when the branch has none, so a branch that
   # deliberately tracks another remote is never repointed.
