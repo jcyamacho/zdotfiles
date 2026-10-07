@@ -45,6 +45,8 @@ broken symlink. Otherwise:
   unchanged.
 - An existing file keeps its permissions. A new file gets the default
   permissions from your umask, and missing parent directories are created.
+- A read-only existing file is refused with an error, and nothing is
+  downloaded.
 - If `<file_path>` is a symlink, the file it points to is updated and the link
   stays in place.
 

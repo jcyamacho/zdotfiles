@@ -55,6 +55,11 @@ if exists gh; then
       return 1
     fi
 
+    if [[ -e "$file_path" && ! -w "$file_path" ]]; then
+      error "Cannot load gist into read-only file: $file_path"
+      return 1
+    fi
+
     local gist_filename="${file_path:t}"
     local target_path="${file_path:A}"
     local target_dir="${target_path:h}"
