@@ -10,10 +10,27 @@ single `zshrc.sh` drives everything.
 
 ## Install
 
+### Automatic
+
+Paste this into a terminal:
+
+```sh
+git clone https://github.com/jcyamacho/zdotfiles.git "$HOME/.zdotfiles" &&
+  printf '%s\n%s\n' 'source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"' \
+    "$(cat ~/.zshrc 2>/dev/null)" > ~/.zshrc &&
+  exec zsh
+```
+
+It clones the repo to `~/.zdotfiles`, adds the line that loads it to the top of
+your `~/.zshrc`, and starts a new shell. If `~/.zdotfiles` already exists, the
+clone fails and `~/.zshrc` is left unchanged.
+
+### Manual
+
 1. Clone the repo:
 
    ```sh
-   git clone git@github.com:jcyamacho/zdotfiles.git "$HOME/.zdotfiles"
+   git clone https://github.com/jcyamacho/zdotfiles.git "$HOME/.zdotfiles"
    ```
 
 2. Source the main file from your `~/.zshrc`:
@@ -22,13 +39,11 @@ single `zshrc.sh` drives everything.
    source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
    ```
 
+### After Installing
+
 On first load, zdotfiles installs Homebrew and Starship if they are missing.
 Every other tool is opt-in through an `install-*` command (see
 [Installable Tools](#installable-tools)).
-
-Remote installers, and updaters known to edit `~/.zshrc`, run while the file is
-temporarily read-only. This keeps them from appending their own init lines;
-zdotfiles loads each tool itself.
 
 ## Customizing
 
@@ -64,13 +79,11 @@ source "${ZDOTFILES_DIR:-$HOME/.zdotfiles}/zshrc.sh"
 
 ## Plugins
 
-Antidote reads `.zsh_plugins.txt` and builds a static `.zsh_plugins.zsh`. The
-setup always loads `zsh-autosuggestions`, `fast-syntax-highlighting`, and
+zdotfiles always loads `zsh-autosuggestions`, `fast-syntax-highlighting`, and
 `zsh-you-should-use`, plus `fzf-tab` when fzf is installed.
 
-The local plugins in `plugins/` add `install-*`, `update-*`, `uninstall-*`, and
-`*-config` helpers. Each integration activates only when its tool is
-installed, which keeps startup fast and free of errors.
+The commands for each tool, such as its `*-config` helper or `uninstall-*`,
+become available once the tool is installed.
 
 ## Installable Tools
 
@@ -253,13 +266,12 @@ for details.
 - `update-zdotfiles`: pull the latest repo changes (fast-forward only) and
   reload.
 - `update-antidote`: update Antidote and its plugins, then reload.
-- `update-brew`: update Homebrew, upgrade every formula and cask (`--greedy`),
-  clean up, and reload.
-- `update-all`: run every registered updater, then reload once.
-
-`update-all` runs the functions that plugins register in the `updates` array.
-Brew-managed tools need no updater of their own, because `update-brew` upgrades
-them. [AGENTS.md](AGENTS.md) describes how plugins register updaters.
+- `update-brew`: update Homebrew and upgrade every formula and cask
+  (`--greedy`), which covers most tools installed by zdotfiles, then clean up
+  and reload.
+- `update-all`: update everything at once (the repo, Antidote, Homebrew,
+  Starship, and the extra updates of installed tools, such as Node.js versions
+  or Ollama models), then reload.
 
 ## Performance
 
