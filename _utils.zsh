@@ -104,12 +104,10 @@ run-quiet() {
   return "$result"
 }
 
+# A new shell drops the functions, aliases, and hooks of removed tools, which
+# re-sourcing would keep. Exported variables survive.
 reload() {
-  builtin source "$ZDOTFILES_DIR/zshrc.sh"
-}
-
-reload-full() {
-  builtin source "$_zshrc_file"
+  builtin exec zsh
 }
 
 zsh-plugins-regenerate() {
@@ -258,7 +256,7 @@ edit-open() {
 zsh-config() {
   # Unlock first in case a killed updater left the file read-only.
   _unlock_zshrc
-  edit "$_zshrc_file" && reload-full
+  edit "$_zshrc_file" && reload
 }
 
 zsh-startup-profile() {

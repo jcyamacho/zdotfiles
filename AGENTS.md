@@ -81,8 +81,9 @@ installs through `install-<tool>`.
   `*-config` helpers so the shell does not wait. Use `edit` only when the next
   step needs the saved file, as `starship-config` does before `reload`.
 - `info`, `warn`, `error`: colored output.
-- `reload`: re-sources `zshrc.sh`. Lifecycle functions end with it.
-- `reload-full`: re-sources `~/.zshrc`, including the user's own lines.
+- `reload`: replaces the shell with `exec zsh`, which loads `~/.zshrc` from a
+  clean state. Only exported variables carry over. Lifecycle functions end with
+  it, and code after it never runs.
 
 ## Core rules
 

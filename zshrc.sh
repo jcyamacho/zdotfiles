@@ -42,15 +42,16 @@ update-zdotfiles() {
 updates+=(_update_zdotfiles)
 
 update-all() {
-  local result=0
+  local -a failed=()
   local update
   for update in "${updates[@]}"; do
-    "$update" || result=1
+    "$update" || failed+=("$update")
     builtin print
   done
 
-  reload || return
-  return $result
+  # reload replaces the shell, so failures cannot be returned after it.
+  (( ${#failed} )) && error "Failed updates: ${failed[*]#_update_}"
+  reload
 }
 # UPDATES end
 

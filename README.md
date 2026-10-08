@@ -263,8 +263,9 @@ for details.
 
 ## Updating
 
-- `reload`: reload zdotfiles.
-- `reload-full`: reload `~/.zshrc`, including your own settings in it.
+- `reload`: restart the shell (`exec zsh`) to reload `~/.zshrc`, including your
+  own settings in it. Anything defined only in the current session is lost,
+  except exported variables.
 - `update-zdotfiles`: pull the latest repo changes (fast-forward only) and
   reload.
 - `update-antidote`: update Antidote and its plugins, then reload.
