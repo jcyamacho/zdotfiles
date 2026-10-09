@@ -14,7 +14,7 @@ if exists uv; then
   }
 
   _update_uv_python() {
-    command uv python upgrade --preview || return
+    command uv python upgrade || return
 
     local latest="$(_get_latest_python_version --only-downloads)"
     if [[ -z "$latest" ]]; then
@@ -22,10 +22,12 @@ if exists uv; then
       return 0
     fi
 
-    local installed="$(_get_latest_python_version --only-installed)"
+    # Without --managed-python, a Homebrew Python of the same version would
+    # count as installed and the managed default would never be installed.
+    local installed="$(_get_latest_python_version --only-installed --managed-python)"
     if [[ "$latest" != "$installed" ]]; then
       info "Installing new version: $latest..."
-      command uv python install "$latest" --default --preview
+      command uv python install "$latest" --default --preview-features python-install-default
     fi
   }
 
@@ -124,7 +126,7 @@ else
     builtin rehash
 
     info "Installing python..."
-    command uv python install --default --preview || return
+    command uv python install --default --preview-features python-install-default || return
 
     reload
   }
