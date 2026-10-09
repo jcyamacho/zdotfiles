@@ -107,6 +107,20 @@ run-quiet() {
 # A new shell drops the functions, aliases, and hooks of removed tools, which
 # re-sourcing would keep. Exported variables survive.
 reload() {
+  # Scripts and `zsh -c` callers must keep running instead of becoming an
+  # interactive shell, a subshell cannot restart its parent, and batch callers
+  # reload once after their loop.
+  if [[ ! -o interactive || -n ${ZSH_EXECUTION_STRING-} ]] || (( ZSH_SUBSHELL )) ||
+    [[ -n ${_zdotfiles_reload_deferred-} ]]; then
+    return 0
+  fi
+
+  # exec discards the job table, so the new shell could not resume these jobs.
+  if (( ${#jobstates} )); then
+    warn "Jobs are still running or stopped. Finish them, then run reload."
+    return 1
+  fi
+
   builtin exec zsh
 }
 

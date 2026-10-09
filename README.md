@@ -265,7 +265,9 @@ for details.
 
 - `reload`: restart the shell (`exec zsh`) to reload `~/.zshrc`, including your
   own settings in it. Anything defined only in the current session is lost,
-  except exported variables.
+  except exported variables. It refuses to restart while jobs are running or
+  stopped, and does nothing in scripts, `zsh -c`, or subshells such as the left
+  side of a pipe.
 - `update-zdotfiles`: pull the latest repo changes (fast-forward only) and
   reload.
 - `update-antidote`: update Antidote and its plugins, then reload.

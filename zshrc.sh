@@ -49,9 +49,10 @@ update-all() {
     builtin print
   done
 
-  # reload replaces the shell, so failures cannot be returned after it.
-  (( ${#failed} )) && error "Failed updates: ${failed[*]#_update_}"
-  reload
+  # reload replaces an interactive shell, so report failures before it.
+  (( ${#failed} )) && error "Failed updates:" "${(@)failed#_update_}"
+  reload || return
+  return $(( ${#failed} > 0 ))
 }
 # UPDATES end
 
@@ -154,17 +155,27 @@ install-recommended() {
     return 0
   fi
 
-  local result=0
-  local installer
-  for installer in "${installers[@]}"; do
-    if (( ! $+functions[$installer] )); then
-      error "Installer unavailable: $installer"
-      result=1
-      continue
-    fi
+  local -a failed=()
 
-    "$installer" || result=1
-  done
-  return $result
+  # Each installer ends with reload, which would replace the shell after the
+  # first one. The deferral ends with this scope instead of an unset, which
+  # would hide a caller's own deferral.
+  () {
+    local _zdotfiles_reload_deferred=1
+    local installer
+    for installer in "${installers[@]}"; do
+      if (( ! $+functions[$installer] )); then
+        error "Installer unavailable: $installer"
+        failed+=("$installer")
+        continue
+      fi
+
+      "$installer" || failed+=("$installer")
+    done
+  }
+
+  (( ${#failed} )) && error "Failed installers:" "${(@)failed#install-}"
+  reload || return
+  return $(( ${#failed} > 0 ))
 }
 # RECOMMENDED_TOOLS end

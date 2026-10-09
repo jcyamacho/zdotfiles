@@ -83,7 +83,13 @@ installs through `install-<tool>`.
 - `info`, `warn`, `error`: colored output.
 - `reload`: replaces the shell with `exec zsh`, which loads `~/.zshrc` from a
   clean state. Only exported variables carry over. Lifecycle functions end with
-  it, and code after it never runs.
+  it, and code after it never runs. It returns 0 without restarting in scripts,
+  `zsh -c`, and subshells, and while `_zdotfiles_reload_deferred` is set, and
+  returns 1 while jobs are running or stopped. A function that calls several
+  lifecycle functions runs its loop in an anonymous function that sets
+  `local _zdotfiles_reload_deferred=1`, then reports failures and calls
+  `reload` once, as `install-recommended` does. Do not `unset` the variable
+  instead, because an unset local hides a caller's deferral.
 
 ## Core rules
 
