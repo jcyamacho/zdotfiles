@@ -72,9 +72,9 @@ installs through `install-<tool>`.
   `$ZDOTFILES_CACHE_DIR/completions/_<cmd>`, a directory already on `$fpath`.
   It regenerates like `source-cached-init`. If the script only defines its
   function and calls `compdef` when autoloaded, the first Tab completes
-  nothing; source it with `source-cached-init` instead, as openspec does. If
-  the tool's Homebrew package already installs the completion into
-  `site-functions`, cache nothing.
+  nothing; source it with `source-cached-init` instead. If the tool's Homebrew
+  package already installs the completion into `site-functions`, cache
+  nothing.
 - `_run_remote_installer <url> [shell [--env K=V]... [-- args...]]`: downloads
   the script over HTTPS to a temp file and runs it with `shell` (default `sh`)
   while `~/.zshrc` is locked. Pass the shell explicitly whenever `--env` or
@@ -97,15 +97,16 @@ installs through `install-<tool>`.
   returns 1 while jobs are running or stopped. A function that calls several
   lifecycle functions runs its loop in an anonymous function that sets
   `local _zdotfiles_reload_deferred=1`, then reports failures and calls
-  `reload` once, as `install-recommended` does. Do not `unset` the variable
-  instead, because an unset local hides a caller's deferral.
+  `reload` once. Do not `unset` the variable instead, because an unset local
+  hides a caller's deferral.
 
 ## Core rules
 
 - Follow `.editorconfig` and keep single blank lines.
 - Keep implementations minimal. Add logic or state only when it delivers
   clear, lasting user value.
-- Start plugin files with `# <tool> (<short description>): https://...`.
+- Start plugin files with `# <tool> (<short description>): https://...`. Omit
+  the URL when the plugin wraps no external tool.
 - Quote scalars (`"$var"`) and pass arrays as `"${array[@]}"`.
 - Use `[[ ... ]]`, `local`, `${1:?message}`, and
   `while IFS= read -r line`.
@@ -120,8 +121,8 @@ installs through `install-<tool>`.
   When the prompt guards the whole command, abort on decline with
   `confirm "..." no || { info "Aborted"; return 0; }`.
 - Never use `sudo`, interactive installers, or `curl | sh`. The one exception
-  is the Homebrew bootstrap in `_brew.zsh`: Homebrew's official installer is
-  interactive and may ask for `sudo`, and nothing else can install it.
+  is the Homebrew bootstrap: Homebrew's official installer is interactive and
+  may ask for `sudo`, and nothing else can install it.
 - Never `eval` untrusted input. Use `source-cached-init` for tool init.
 - Use `mktemp` for temp files, and never log or cache secrets.
 - Never pass untrusted text, such as file names, to prompt expansion like

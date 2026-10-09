@@ -4,7 +4,9 @@ if exists docker; then
   cache-completion docker completion zsh
 
   docker-run-it() {
-    command docker run -it "$(command docker build -q .)"
+    local image
+    image="$(command docker build -q .)" || return
+    command docker run -it "$image"
   }
 
   uninstall-docker() {

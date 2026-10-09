@@ -4,6 +4,8 @@ typeset -g _cargo_dir="$HOME/.cargo"
 if [[ -f "$_cargo_dir/env" ]]; then
   builtin source "$_cargo_dir/env"
 
+  exists rustup || return
+
   cache-completion rustup completions zsh
 
   uninstall-rust() {
@@ -33,7 +35,7 @@ if [[ -f "$_cargo_dir/env" ]]; then
 else
   install-rust() {
     info "Installing rust..."
-    _run_remote_installer "https://sh.rustup.rs" "sh" -- -y || return
+    _run_remote_installer "https://sh.rustup.rs" "sh" -- -y --no-modify-path || return
     reload
   }
 fi

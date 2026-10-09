@@ -1,13 +1,12 @@
 # claude (Anthropic coding assistant): https://www.anthropic.com/claude-code
 if exists claude; then
-  # Not CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC, which also stops auto-updates.
   export DISABLE_TELEMETRY=1
 
   typeset -g _claude_home="$HOME/.claude"
 
   uninstall-claude-code() {
     info "Uninstalling claude..."
-    command rm -f -- "${commands[claude]}" || return
+    command rm -f -- "$(whence -p claude)" || return
     command rm -rf -- "$HOME/.local/share/claude"
 
     local worktrees_dir="$HOME/.claude-worktrees"
@@ -42,7 +41,6 @@ else
   install-claude-code() {
     info "Installing claude code..."
     _run_remote_installer "https://claude.ai/install.sh" "bash" || return
-    info "Intelligent automation and multi-agent orchestration for Claude Code: https://github.com/wshobson/agents"
     reload
   }
 fi

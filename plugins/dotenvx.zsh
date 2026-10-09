@@ -9,7 +9,7 @@ if exists dotenvx; then
 
   _update_dotenvx() {
     info "Updating dotenvx..."
-    _run_remote_installer "https://dotenvx.sh" "sh" -- --directory="$CUSTOM_TOOLS_DIR" --force
+    _run_remote_installer "https://dotenvx.sh" "sh" -- --directory="$CUSTOM_TOOLS_DIR"
   }
 
   update-dotenvx() {

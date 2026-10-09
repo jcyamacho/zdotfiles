@@ -1,4 +1,4 @@
-# dotenv: run commands with literal environment files
+# dotenv (run commands with literal environment files)
 
 dotenv() (
   # Subshell body so nothing leaks into the caller; the trimming patterns below

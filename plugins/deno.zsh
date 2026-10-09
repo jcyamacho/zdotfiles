@@ -10,6 +10,8 @@ if [[ -d "$_deno_dir/bin" ]]; then
 
   uninstall-deno() {
     info "Uninstalling deno..."
+    # The module cache lives outside $_deno_dir (DENO_DIR), so clear it first.
+    command deno clean || warn "Could not clear the deno cache"
     command rm -rf -- "$_deno_dir" || return
     reload
   }

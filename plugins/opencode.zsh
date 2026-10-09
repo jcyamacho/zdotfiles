@@ -6,7 +6,9 @@ if [[ -d "$_opencode_dir/bin" ]]; then
 
   exists opencode || return
 
-  cache-completion opencode completion
+  # Sourced, not autoloaded from $fpath: a stray quote in the yargs script's
+  # autoload check makes it only call compdef, which would waste the first Tab.
+  source-cached-init opencode completion
 
   typeset -g _opencode_config_dir="$HOME/.config/opencode"
   typeset -g _opencode_data_dir="$HOME/.local/share/opencode"
@@ -64,7 +66,7 @@ if [[ -d "$_opencode_dir/bin" ]]; then
 else
   install-opencode() {
     info "Installing opencode..."
-    _run_remote_installer "https://opencode.ai/install" || return
+    _run_remote_installer "https://opencode.ai/install" "bash" -- --no-modify-path || return
     reload
   }
 fi

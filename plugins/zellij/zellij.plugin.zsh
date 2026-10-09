@@ -19,7 +19,7 @@ if exists zellij; then
     local max_session_name_len=36
     local session_name=${1:-${PWD:t}}
 
-    session_name="${session_name//\//-}"
+    session_name="${${session_name//\//-}:-root}"
     if (( ${#session_name} > max_session_name_len )); then
       local session_hash="$(builtin print -r -- "$session_name" | command cksum)"
       session_hash="${session_hash%% *}"

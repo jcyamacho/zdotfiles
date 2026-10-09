@@ -27,6 +27,10 @@ if exists zed; then
     reload
   }
 else
+  # reload keeps exported variables, so drop the default set above once zed is
+  # gone.
+  [[ ${EDITOR-} == "zed --wait" ]] && unset EDITOR
+
   install-zed() {
     info "Installing zed..."
     command brew install --no-ask --cask zed || return
