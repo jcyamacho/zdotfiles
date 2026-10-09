@@ -18,7 +18,12 @@ if exists agent-browser; then
       info "Uninstalling agent-browser..."
 
       command npm uninstall -g agent-browser > /dev/null || return
-      command rm -rf -- "$HOME/.agent-browser"
+
+      local data_dir="$HOME/.agent-browser"
+      if confirm "Delete agent-browser sessions, config, and encryption key in $data_dir?" no; then
+        command rm -rf -- "$data_dir"
+      fi
+
       reload
     }
   fi
