@@ -2,15 +2,7 @@
 export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 
 if exists codex; then
-  cache-completion codex completion zsh
-  autoload -Uz _codex
-  compdef _codex codex cdx
-
-  cdx() {
-    # Human launcher that clears the screen; use `codex` directly for scripting.
-    command clear
-    command codex "$@"
-  }
+  alias cdx="codex"
 
   codex-config() {
     edit-open "$CODEX_HOME"
