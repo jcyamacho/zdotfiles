@@ -38,10 +38,8 @@ _ghostty_copy_config() {
   command mkdir -p -- "$_ghostty_config_dir" || return
   command cp -- "$ZDOTFILES_DIR/plugins/ghostty/config" "$_ghostty_config_dir/config" || return
 
-  if is-macos; then
-    # Ghostty loads these after the XDG files, so they would override the copy.
-    command rm -f -- "$_ghostty_macos_config_dir/"{config,config.ghostty}
-  fi
+  # Ghostty loads these after the XDG files, so they would override the copy.
+  command rm -f -- "$_ghostty_macos_config_dir/"{config,config.ghostty}
 }
 
 _ghostty_restore_config() {

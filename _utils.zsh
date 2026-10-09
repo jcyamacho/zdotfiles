@@ -254,10 +254,6 @@ _run_remote_installer() {
   }
 }
 
-is-macos() {
-  [[ $OSTYPE == darwin* ]]
-}
-
 alias cls="clear"
 alias rmf="rm -rf"
 alias cd..="cd .."

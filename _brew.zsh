@@ -11,7 +11,7 @@ export HOMEBREW_NO_ANALYTICS=1
 # whether or not the shell is a login shell.
 _brew_add_to_path() {
   local prefix
-  for prefix in /opt/homebrew /usr/local /home/linuxbrew/.linuxbrew "$HOME/.linuxbrew"; do
+  for prefix in /opt/homebrew /usr/local; do
     [[ -x "$prefix/bin/brew" ]] || continue
     path=("${path[@]}" "$prefix/bin")
     return 0

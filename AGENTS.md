@@ -89,7 +89,6 @@ installs through `install-<tool>`.
 - `info`, `warn`, `error`: colored output.
 - `run-quiet <cmd> [args...]`: runs a command or function and shows its output
   only when it fails.
-- `is-macos`: succeeds on macOS.
 - `reload`: replaces the shell with `exec zsh`, which loads `~/.zshrc` from a
   clean state. Only exported variables carry over. Lifecycle functions end with
   it, and code after it never runs. It returns 0 without restarting in scripts,
