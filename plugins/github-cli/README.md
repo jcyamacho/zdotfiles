@@ -33,8 +33,9 @@ Both commands find the gist by its description:
   Public gists are ignored.
 - If several gists match, they use the first one GitHub returns.
 
-`save-file-to-gist` updates the matching gist with the file. When no gist
-matches, it creates one, which `gh` makes secret by default.
+`save-file-to-gist` replaces the file in the matching gist that is named after
+the base name of `<file_path>`, the same file `load-file-from-gist` reads. When
+no gist matches, it creates one, which `gh` makes secret by default.
 
 `load-file-from-gist` fails when no gist matches or when `<file_path>` is a
 broken symlink. Otherwise:

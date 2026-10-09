@@ -29,7 +29,7 @@ if exists gh; then
     gist_id="$(_find_gist_id "$file_description")" || return
     if [[ -n $gist_id ]]; then
       info "Updating gist: ${gist_id} (${file_description})"
-      command gh gist edit "${gist_id}" "${file_path}" --desc "${file_description}"
+      command gh gist edit "${gist_id}" "${file_path}" --filename "${file_path:t}" --desc "${file_description}"
     else
       info "Creating new gist: ${file_description}"
       command gh gist create "${file_path}" --desc "${file_description}"
