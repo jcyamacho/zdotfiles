@@ -239,6 +239,9 @@ These plugins add helper functions and need no external tool:
     affect the command's behavior.
   - Examples: `dotenv -- bun run dev` or
     `dotenv -e production -- bun run start`.
+- [cloudflare](plugins/cloudflare.zsh): exports
+  `CREATE_CLOUDFLARE_TELEMETRY_DISABLED=1` to turn off create-cloudflare
+  telemetry.
 
 ## Utility Functions
 
