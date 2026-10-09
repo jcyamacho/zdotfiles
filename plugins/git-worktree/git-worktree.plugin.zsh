@@ -169,7 +169,8 @@ gwt() {
     # Remote branch exists -- worktree will create a local tracking branch
     [[ -n "$base_ref" ]] && warn "Ignoring base ref '$base_ref': remote branch '$branch_name' already exists."
     info "Creating worktree at '$worktree_path' for remote branch '$branch_name'..."
-    command git worktree add "$worktree_path" "$branch_name" || return 1
+    # Explicit, because git's guess fails when another remote has the branch too.
+    command git worktree add --track -b "$branch_name" "$worktree_path" "origin/$branch_name" || return 1
 
   else
     # New branch -- resolve base_ref from origin's default branch
