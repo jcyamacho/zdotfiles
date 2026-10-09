@@ -46,6 +46,13 @@ if exists uv; then
   alias update-python="update-uv"
 
   uninstall-uv() {
+    # The steps below delete Pythons and tools before brew removes uv, so a uv
+    # that brew does not own must stop here instead of failing halfway.
+    command brew list --formula uv &>/dev/null || {
+      error "uv is not installed with Homebrew. Uninstall it with the tool that installed it."
+      return 1
+    }
+
     info "Uninstalling uv..."
     command uv cache clean
 
