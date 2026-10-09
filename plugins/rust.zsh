@@ -7,6 +7,11 @@ if [[ -f "$_cargo_dir/env" ]]; then
   cache-completion rustup completions zsh
 
   uninstall-rust() {
+    # rustup self uninstall always deletes all of $_cargo_dir, so the prompt
+    # guards the whole command instead of only the user files.
+    warn "This deletes $_cargo_dir, including crates.io credentials and cargo-installed binaries."
+    confirm "Continue?" no || { info "Aborted"; return 0; }
+
     info "Uninstalling rust..."
     command rustup self uninstall -y || return
     info "Removing $_cargo_dir..."

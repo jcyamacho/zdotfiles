@@ -113,8 +113,9 @@ installs through `install-<tool>`.
 - Never use `sudo`, interactive installers, or `curl | sh`.
 - Never `eval` untrusted input. Use `source-cached-init` for tool init.
 - Use `mktemp` for temp files, and never log or cache secrets.
-- Escape `%` as `%%` in untrusted text passed to prompt expansion, such as
-  `print -P`.
+- Never pass untrusted text, such as file names, to prompt expansion like
+  `print -P`. Starship sets `promptsubst`, so `$(...)` in that text runs.
+  Print it with `builtin print -r --` and color it with `$fg`.
 
 ## Plugin patterns
 
