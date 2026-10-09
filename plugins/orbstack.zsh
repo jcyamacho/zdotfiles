@@ -5,25 +5,28 @@ if exists orb; then
   fi
 
   uninstall-orbstack() {
-    warn "This will remove OrbStack and prune all unused Docker data, including volumes."
-    confirm "Continue?" no || { info "Aborted"; return 0; }
+    # --zap must be chosen before the single brew call that removes the app.
+    local -a zap=()
+    if confirm "Delete all OrbStack data (Linux machines, containers, images, and volumes)?" no; then
+      zap=(--zap)
 
-    if exists docker; then
-      local docker_context
-      docker_context="$(command docker context show 2>/dev/null)"
+      if exists docker; then
+        local docker_context
+        docker_context="$(command docker context show 2>/dev/null)"
 
-      if [[ "$docker_context" == orbstack ]]; then
-        info "Pruning orbstack docker data..."
-        command docker system prune --all --volumes --force
+        if [[ "$docker_context" == orbstack ]]; then
+          info "Pruning orbstack docker data..."
+          command docker system prune --all --volumes --force
+        else
+          warn "Skipping docker system prune because current Docker context is '${docker_context:-unknown}', not 'orbstack'"
+        fi
       else
-        warn "Skipping docker system prune because current Docker context is '${docker_context:-unknown}', not 'orbstack'"
+        warn "Skipping docker system prune because docker is not available"
       fi
-    else
-      warn "Skipping docker system prune because docker is not available"
     fi
 
     info "Uninstalling orbstack..."
-    command brew uninstall --zap --cask orbstack || return
+    command brew uninstall "${zap[@]}" --cask orbstack || return
     reload
   }
 else
