@@ -32,16 +32,22 @@ if exists rbenv; then
     confirm "Remove every Ruby version except $current_version?" no || { info "Aborted"; return 0; }
     info "Cleaning up unused Ruby versions (keeping $current_version)..."
 
+    # zsh runs the loop in this shell, so it can record failures.
+    local version failed=0
     rbenv versions --bare | command grep -Fvx -e "$current_version" -e system | while IFS= read -r version; do
       info "Removing Ruby $version..."
-      rbenv uninstall --force "$version"
+      rbenv uninstall --force "$version" || failed=1
     done
+    return "$failed"
   }
 
   updates+=(update-ruby)
 
   alias uninstall-ruby="uninstall-rbenv"
   uninstall-rbenv() {
+    warn "This deletes $HOME/.rbenv, including every installed Ruby version and its gems."
+    confirm "Continue?" no || { info "Aborted"; return 0; }
+
     info "Uninstalling rbenv..."
     command brew uninstall rbenv || return
     command rm -rf -- "$HOME/.rbenv"

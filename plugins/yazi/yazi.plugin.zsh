@@ -16,14 +16,15 @@ _yazi_restore_config() {
 if exists yazi; then
   # Shell wrapper that changes CWD when exiting yazi
   y() {
-    local tmp cwd
-    tmp="$(command mktemp -t "yazi-cwd.XXXXXX")"
-    command yazi "$@" --cwd-file="$tmp"
+    local tmp cwd result=0
+    tmp="$(command mktemp -t "yazi-cwd.XXXXXX")" || return
+    command yazi "$@" --cwd-file="$tmp" || result=$?
     IFS= builtin read -r cwd < "$tmp" || :
     if [[ -n $cwd && $cwd != "$PWD" && -d $cwd ]]; then
       builtin cd -- "$cwd"
     fi
     command rm -f -- "$tmp"
+    return "$result"
   }
 
   # ZLE widget for Ctrl+o keybinding

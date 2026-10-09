@@ -7,10 +7,14 @@ if [[ -f "$_cargo_dir/env" ]]; then
   exists rustup || return
 
   cache-completion rustup completions zsh
+  # rustup prints the cargo completion stub, so the cache file is named _cargo
+  # explicitly. The stub loads the active toolchain's _cargo.
+  _cache_command_output "$_zdotfiles_completions_dir/_cargo" "${(%):-%x}" -- rustup completions zsh cargo
 
   uninstall-rust() {
-    # rustup self uninstall always deletes all of $_cargo_dir, so the prompt
-    # guards the whole command instead of only the user files.
+    # rustup self uninstall deletes $_cargo_dir except the cargo-installed
+    # binaries that newer releases keep, which the rm below removes. User files
+    # cannot be kept, so the prompt guards the whole command.
     warn "This deletes $_cargo_dir, including crates.io credentials and cargo-installed binaries."
     confirm "Continue?" no || { info "Aborted"; return 0; }
 

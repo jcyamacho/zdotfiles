@@ -4,26 +4,27 @@ if exists zed; then
   export EDITOR="${EDITOR:-zed --wait}"
 
   zd() {
-    local dir="${1:-$PWD}"
-    command zed "$dir"
+    command zed "${@:-$PWD}"
   }
 
-  if exists gh; then
-    typeset -g _zed_settings_path="$HOME/.config/zed/settings.json"
-    typeset -g _zed_gist_description="zed-settings"
+  zed-settings-load-from-gist() {
+    load-file-from-gist "$HOME/.config/zed/settings.json" "zed-settings"
+  }
 
-    zed-settings-load-from-gist() {
-      load-file-from-gist "${_zed_settings_path}" "${_zed_gist_description}"
-    }
-
-    zed-settings-save-to-gist() {
-      save-file-to-gist "${_zed_settings_path}" "${_zed_gist_description}"
-    }
-  fi
+  zed-settings-save-to-gist() {
+    save-file-to-gist "$HOME/.config/zed/settings.json" "zed-settings"
+  }
 
   uninstall-zed() {
     info "Uninstalling zed..."
     command brew uninstall --cask zed || return
+    command rm -rf -- "$HOME/Library/Caches/Zed" "$HOME/Library/Caches/dev.zed.Zed"
+
+    local -a data_dirs=("$HOME/.config/zed" "$HOME/Library/Application Support/Zed")
+    if confirm "Delete Zed settings and data in ${data_dirs[*]}?" no; then
+      command rm -rf -- "${data_dirs[@]}"
+    fi
+
     reload
   }
 else

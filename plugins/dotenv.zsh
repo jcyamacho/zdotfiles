@@ -103,3 +103,5 @@ dotenv() (
   # env takes the names as data, so keys may match special zsh parameters.
   command env -- "${assignments[@]}" "$@"
 )
+
+compdef '_arguments "-e[load .env.<environment> files]:environment" "(-)--[end of options]" "*::command:_normal"' dotenv

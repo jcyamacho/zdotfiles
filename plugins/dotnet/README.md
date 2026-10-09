@@ -13,7 +13,7 @@ dependency checker.
 | Command | Description |
 | --- | --- |
 | `install-dotnet` | Install the `dotnet-sdk` cask and reload the shell |
-| `uninstall-dotnet` | Uninstall the `dotnet-sdk` cask and reload the shell |
+| `uninstall-dotnet` | Clear the NuGet caches, uninstall the `dotnet-sdk` cask, and reload the shell |
 | `install-dotnet-ef` | Install the EF Core CLI (package `dotnet-ef`) as a global tool |
 | `install-dotnet-outdated` | Install dotnet-outdated (package `dotnet-outdated-tool`) as a global tool |
 | `update-dotnet-tools` | Update every installed global tool with `dotnet tool update --all -g` |

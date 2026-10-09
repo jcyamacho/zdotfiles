@@ -1,17 +1,17 @@
 # deno (JavaScript runtime): https://deno.land/
 typeset -g _deno_dir="$HOME/.deno"
 
-if [[ -d "$_deno_dir/bin" ]]; then
+if [[ -x "$_deno_dir/bin/deno" ]]; then
   path=("$_deno_dir/bin" "${path[@]}")
-
-  exists deno || return
 
   cache-completion deno completions zsh
 
   uninstall-deno() {
     info "Uninstalling deno..."
     # The module cache lives outside $_deno_dir (DENO_DIR), so clear it first.
-    command deno clean || warn "Could not clear the deno cache"
+    if confirm "Delete the deno cache, REPL history, and origin storage (localStorage, KV) in DENO_DIR?" no; then
+      command deno clean || warn "Could not clear the deno cache"
+    fi
     command rm -rf -- "$_deno_dir" || return
     reload
   }

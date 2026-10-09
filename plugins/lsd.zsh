@@ -10,6 +10,8 @@ if exists lsd; then
     command lsd --tree "$@"
   }
 
+  compdef _lsd ll lt
+
   lsd-config() {
     edit-open "$_lsd_config_dir/config.yaml"
   }
@@ -38,7 +40,8 @@ else
   install-lsd() {
     info "Installing lsd..."
     command brew install --no-ask lsd || return
-    [[ -f "$_lsd_config_dir/config.yaml" ]] || _lsd_restore_config || warn "Could not set up the lsd color theme"
+    [[ -f "$_lsd_config_dir/config.yaml" || -f "$_lsd_config_dir/colors.yaml" ]] ||
+      _lsd_restore_config || warn "Could not set up the lsd color theme"
     reload
   }
 fi

@@ -8,23 +8,23 @@ if exists dotnet; then
 
   # Completion for the dotnet command. The SDK computes candidates from the live
   # command line, so this is a dynamic completion function registered with compdef
-  # (which lets fzf-tab wrap it); there is no static #compdef script to cache.
+  # (which lets fzf-tab wrap it). `dotnet completions script zsh` is not cached
+  # because it gives project arguments and most path options no file completion.
   _dotnet() {
-    local -a completions=("${(@f)$(command dotnet complete "$words")}")
-    completions=("${(@)completions:#}")
+    # Only the words up to the cursor, so later arguments do not change the
+    # candidates for the word being completed.
+    local -a completions=("${(@f)$(command dotnet complete "${words[1,CURRENT]}")}")
 
-    # The SDK returns nothing for path arguments such as --project.
-    if (( ! $#completions )); then
-      _files
-      return
-    fi
-
-    compadd -- "${completions[@]}"
+    # For path arguments, the SDK returns nothing or only options that contain
+    # the typed text, which compadd rejects.
+    compadd -- "${(@)completions:#}" || _files
   }
   compdef _dotnet dotnet
 
   uninstall-dotnet() {
     info "Uninstalling dotnet..."
+    # Only dotnet knows where the NuGet caches are, so clear them first.
+    command dotnet nuget locals all --clear || warn "Could not clear the NuGet caches"
     command brew uninstall --cask dotnet-sdk || return
     reload
   }

@@ -16,6 +16,7 @@ if exists direnv; then
   }
 
   direnv-config() {
+    command mkdir -p -- "$_direnv_config_dir"
     edit-open "$_direnv_config_dir/direnv.toml"
   }
 else
@@ -23,7 +24,8 @@ else
     info "Installing direnv..."
     command brew install --no-ask direnv || return
 
-    [[ -f "$_direnv_config_dir/direnv.toml" ]] || {
+    # direnv reads the legacy config.toml only when direnv.toml is missing.
+    [[ -f "$_direnv_config_dir/direnv.toml" || -f "$_direnv_config_dir/config.toml" ]] || {
       command mkdir -p -- "$_direnv_config_dir"
       command cp -- "$ZDOTFILES_DIR/plugins/direnv/direnv.toml" "$_direnv_config_dir/direnv.toml"
     }

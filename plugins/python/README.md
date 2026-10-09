@@ -57,7 +57,8 @@ Homebrew. Otherwise it first runs `uv tool uninstall --all` and
 into `~/.local/bin`. It then deletes the Python and tool directories reported
 by `uv python dir` and `uv tool dir`, only when they are inside `$HOME`.
 
-When uv is installed, the plugin caches zsh completions for `uv` and `uvx`.
+The Homebrew `uv` formula installs the zsh completions for `uv` and `uvx`
+into Homebrew's `site-functions`.
 
 ## Tool Installers
 

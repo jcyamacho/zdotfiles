@@ -72,5 +72,5 @@ Other plugins wrap the gist commands for their config files:
 | `zed-settings-load-from-gist` | Load `~/.config/zed/settings.json` from the `zed-settings` gist |
 
 [`opencode.zsh`](../opencode.zsh) defines the OpenCode helpers when OpenCode is
-installed. [`zed.zsh`](../zed.zsh) defines the Zed helpers only when both Zed
-and `gh` are installed.
+installed. [`zed.zsh`](../zed.zsh) defines the Zed helpers when Zed is
+installed.

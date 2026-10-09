@@ -1,10 +1,6 @@
 # python uv lifecycle (install/update/uninstall): https://docs.astral.sh/uv/
 
 if exists uv; then
-  # uvx ships with uv and takes its own completion flag spelling.
-  cache-completion uv generate-shell-completion zsh
-  cache-completion uvx --generate-shell-completion zsh
-
   _get_latest_python_version() {
     command uv python list "$@" \
       | command awk '{print $1}' \
@@ -62,8 +58,8 @@ if exists uv; then
     local uv_tool_dir="$(command uv tool dir)"
 
     # Deleting the directories alone would leave broken links in ~/.local/bin.
-    command uv tool uninstall --all
-    command uv python uninstall --all
+    command uv tool uninstall --all || return
+    command uv python uninstall --all || return
 
     command brew uninstall uv || return
 

@@ -67,8 +67,9 @@ reload
 
 ## Maven and Gradle
 
-Installing or updating Maven or Gradle requires `JAVA_HOME` to point to a JDK
-with executable `java` and `javac`. These commands never install a JDK.
+Installing Maven or Gradle, or updating it to a new release, requires
+`JAVA_HOME` to point to a JDK with executable `java` and `javac`. These
+commands never install a JDK.
 
 | Tool | Version source | Checksum | Install directory |
 | --- | --- | --- | --- |

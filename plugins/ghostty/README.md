@@ -15,8 +15,9 @@ edit and restore the config and update the themes.
 | `ghostty-update-themes` | Download the latest Catppuccin themes into `~/.config/ghostty/themes` |
 | `ghostty-restore-config` | Download the themes and replace `~/.config/ghostty/config` with the bundled config |
 
-`install-ghostty` exists only when the `ghostty` command is not on `$PATH`. The
-other commands exist only when it is. `update-all` runs `ghostty-update-themes`.
+`install-ghostty` exists only when Ghostty is not installed (no `ghostty` on
+`$PATH` and no `/Applications/Ghostty.app`). The other commands exist only when
+it is. `update-all` runs `ghostty-update-themes`.
 
 ## Configuration Paths
 

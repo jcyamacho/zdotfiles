@@ -11,8 +11,6 @@ _zellij_copy_layouts() {
 }
 
 if exists zellij; then
-  cache-completion zellij setup --generate-completion zsh
-
   alias zj="zellij"
 
   za() {

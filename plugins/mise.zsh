@@ -4,7 +4,14 @@ if exists mise; then
   # Activation includes the current PATH, so generate it for each session.
   builtin source <(command mise activate zsh)
 
+  cache-completion mise completion zsh
+
   uninstall-mise() {
+    # mise implode removes every installed tool along with mise; it keeps the
+    # config directory.
+    warn "This deletes every tool that mise installed."
+    confirm "Continue?" no || { info "Aborted"; return 0; }
+
     info "Uninstalling mise..."
     command mise implode --yes || return
     reload

@@ -15,7 +15,7 @@ if exists atuin; then
     command brew uninstall atuin || return
 
     local history_dir="$HOME/.local/share/atuin"
-    if confirm "Delete atuin history in $history_dir?" no; then
+    if confirm "Delete atuin history and sync encryption key in $history_dir?" no; then
       command rm -rf -- "$history_dir"
     fi
 

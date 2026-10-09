@@ -32,6 +32,8 @@ $ZDOTFILES_DIR/plugins/dotenvx.zsh
 
 $ZDOTFILES_DIR/plugins/varlock.zsh
 
+# orbstack must load before docker so docker.zsh sees OrbStack's xbin docker.
+$ZDOTFILES_DIR/plugins/orbstack.zsh
 $ZDOTFILES_DIR/plugins/docker.zsh
 
 $ZDOTFILES_DIR/plugins/fabric.zsh
@@ -39,8 +41,6 @@ $ZDOTFILES_DIR/plugins/fabric.zsh
 $ZDOTFILES_DIR/plugins/fonts.zsh
 
 $ZDOTFILES_DIR/plugins/bash.zsh
-
-$ZDOTFILES_DIR/plugins/jq.zsh
 
 $ZDOTFILES_DIR/plugins/just.zsh
 
@@ -63,8 +63,6 @@ $ZDOTFILES_DIR/plugins/zed.zsh
 $ZDOTFILES_DIR/plugins/zig.zsh
 
 $ZDOTFILES_DIR/plugins/zoxide.zsh
-
-$ZDOTFILES_DIR/plugins/gemini-cli.zsh
 
 $ZDOTFILES_DIR/plugins/copilot-cli.zsh
 
@@ -111,8 +109,6 @@ $ZDOTFILES_DIR/plugins/atuin.zsh
 
 # Java preserves the selected JAVA_HOME and adds its bin to PATH.
 $ZDOTFILES_DIR/plugins/java
-
-$ZDOTFILES_DIR/plugins/orbstack.zsh
 
 $ZDOTFILES_DIR/plugins/golang
 

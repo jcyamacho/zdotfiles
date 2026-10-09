@@ -10,9 +10,9 @@ Everything except `install-go` is defined only when `go` is on `PATH`.
 
 | Command | Description |
 | --- | --- |
-| `gmi` | Run `go mod init` with a module path based on the current directory and add a starter `main.go` |
+| `gmi` | Run `go mod init` with a module path based on the current directory and add a starter `main.go` when the directory has no Go files |
 | `install-go` | Install Go and golangci-lint with Homebrew and turn off Go telemetry |
-| `uninstall-go` | Uninstall golangci-lint and Go with Homebrew, then ask whether to delete `$GOPATH`, including its read-only module cache (default no) |
+| `uninstall-go` | Uninstall golangci-lint and Go with Homebrew, clear Go's build cache, then ask whether to delete `$GOPATH`, including its read-only module cache (default no) |
 
 `update-brew` upgrades Go and golangci-lint along with other Homebrew packages.
 

@@ -1,5 +1,5 @@
 [commit.generation]
-command = "codex exec -m gpt-6-luna -c model_reasoning_effort='low' -c system_prompt='' --sandbox=read-only --json - | jq -sre '[.[] | select(.item.type? == \"agent_message\")] | last | .item.text // empty'"
+command = "codex exec --ephemeral -m gpt-6-luna -c model_reasoning_effort='low' --sandbox=read-only --json - | jq -sre '[.[] | select(.item.type? == \"agent_message\")] | last | .item.text // empty'"
 template = """
 Write a commit message for the staged changes below.
 

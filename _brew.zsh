@@ -25,7 +25,8 @@ if ! exists brew && ! _brew_add_to_path; then
   _brew_add_to_path || return
 fi
 
-export HOMEBREW_PREFIX="${commands[brew]:h:h}"
+# Unquoted on purpose: equals expansion does not happen inside double quotes.
+export HOMEBREW_PREFIX=${${:-=brew}:h:h}
 
 # Homebrew's completions must be on $fpath before compinit runs, which is why
 # this file is sourced from zshrc.sh instead of loaded as a plugin.

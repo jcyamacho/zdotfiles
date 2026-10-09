@@ -2,9 +2,7 @@
 
 if exists cursor; then
   cr() {
-    local dir="${1:-$PWD}"
-
-    command cursor --classic "$dir"
+    command cursor --classic "${@:-$PWD}"
   }
 
   uninstall-cursor() {

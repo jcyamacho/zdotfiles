@@ -19,9 +19,12 @@ if exists wezterm; then
     info "Uninstalling wezterm..."
     command brew uninstall --cask wezterm || return
 
-    local config_dir="${WEZTERM_CONFIG_FILE:h}"
-    if confirm "Delete WezTerm config in $config_dir?" no; then
-      command rm -rf -- "$config_dir"
+    # WezTerm exports the file it loaded, such as ~/.wezterm.lua, so only a
+    # directory named wezterm is safe to delete as a whole.
+    local config_path="${WEZTERM_CONFIG_FILE:h}"
+    [[ "${config_path:t}" == wezterm ]] || config_path="$WEZTERM_CONFIG_FILE"
+    if confirm "Delete WezTerm config in $config_path?" no; then
+      command rm -rf -- "$config_path"
     fi
 
     reload
@@ -29,6 +32,7 @@ if exists wezterm; then
 else
   install-wezterm() {
     info "Installing wezterm..."
+    command brew install --no-ask --cask font-monaspace || return
     command brew install --no-ask --cask wezterm || return
     [[ -f "$WEZTERM_CONFIG_FILE" ]] || _wezterm_restore_config
     reload

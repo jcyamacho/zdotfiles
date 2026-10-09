@@ -54,7 +54,9 @@ gwt-rm myrepo.feature-login
 
 1. **Local branch:** creates a worktree for it.
 2. **Branch on `origin`:** fetches it, and `git worktree add` creates a local
-   branch that tracks `origin/<branch>`.
+   branch that tracks `origin/<branch>`. In a single-branch clone, such as one
+   made with `--depth`, it first adds the branch to the clone's fetch list with
+   `git remote set-branches --add`.
 3. **Neither:** creates a new branch from `[base-ref]`. Without a base ref, it
    fetches origin's default branch and starts from that. The new branch has
    no upstream, even when it starts from `origin/<default>`.
@@ -136,7 +138,7 @@ that would fail or do nothing:
 - `gwt` completes branch names from local branches and `origin`. For the first
   argument it omits branches that already have a worktree, because
   `git worktree add` refuses them. You can still type a new branch name. For
-  the base ref it offers every branch.
+  the base ref it offers local branches and `origin/<branch>`.
 - `gwts` and `gwt-rm` complete worktree directory names, described by the
   branch each worktree has checked out or `detached HEAD`. `gwts` omits the
   current worktree, and `gwt-rm` omits the current and main worktrees.

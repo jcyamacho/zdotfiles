@@ -240,7 +240,8 @@ fi
   keeps prepends deduplicated across reloads. Append instead when the
   directory must not outrank existing entries, as `_brew.zsh` and
   `cursor.zsh` do.
-- Disable tool telemetry when the tool supports it.
+- Disable tool telemetry when the tool supports it and the opt-out disables
+  nothing else, such as feature flags.
 - For temporary variables used only while sourcing a file, use
   `typeset _name="value"` and `unset _name` after the last use.
 - Use `typeset -g _name="value"` only when plugin functions need private state

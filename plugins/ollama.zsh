@@ -21,9 +21,10 @@ if exists ollama; then
 
   uninstall-ollama() {
     info "Uninstalling ollama..."
-    command pkill -x Ollama 2>/dev/null || :
-    command rm -rf -- /Applications/Ollama.app || return
-    command rm -f -- /usr/local/bin/ollama 2>/dev/null || warn "Could not remove /usr/local/bin/ollama"
+    command brew uninstall --cask ollama-app || return
+    command rm -rf -- "$HOME/Library/Caches/ollama" \
+      "$HOME/Library/Caches/com.electron.ollama" \
+      "$HOME/Library/Caches/com.electron.ollama.ShipIt"
 
     local data_dir="$HOME/.ollama"
     if confirm "Delete Ollama models and keys in $data_dir?" no; then
@@ -35,7 +36,7 @@ if exists ollama; then
 else
   install-ollama() {
     info "Installing ollama..."
-    _run_remote_installer "https://ollama.com/install.sh" || return
+    command brew install --no-ask --cask ollama-app || return
     reload
   }
 fi

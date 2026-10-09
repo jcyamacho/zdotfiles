@@ -58,6 +58,5 @@ with `zellij --layout claude`. The `claude` layout needs Claude Code
 
 ## Notes
 
-- Zsh completions come from `zellij setup --generate-completion zsh` and are
-  cached in `$ZDOTFILES_CACHE_DIR/completions/_zellij`. The cache regenerates
-  when the `zellij` binary or the plugin file is newer than the cache.
+- The `zellij` formula installs the zsh completion into Homebrew's
+  `site-functions`.

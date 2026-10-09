@@ -1,10 +1,8 @@
 # OpenCode (AI coding agent built for the terminal): https://opencode.ai/
 typeset -g _opencode_dir="$HOME/.opencode"
 
-if [[ -d "$_opencode_dir/bin" ]]; then
+if [[ -x "$_opencode_dir/bin/opencode" ]]; then
   path=("$_opencode_dir/bin" "${path[@]}")
-
-  exists opencode || return
 
   # Sourced, not autoloaded from $fpath: a stray quote in the yargs script's
   # autoload check makes it only call compdef, which would waste the first Tab.
@@ -28,8 +26,9 @@ if [[ -d "$_opencode_dir/bin" ]]; then
     command rm -rf -- "$_opencode_dir" || return
     command rm -rf -- "$HOME/.cache/opencode"
 
-    if confirm "Delete opencode config and sessions in $_opencode_config_dir and $_opencode_data_dir?" no; then
-      command rm -rf -- "$_opencode_config_dir" "$_opencode_data_dir"
+    local state_dir="$HOME/.local/state/opencode"
+    if confirm "Delete opencode config, sessions, credentials, and history in $_opencode_config_dir, $_opencode_data_dir, and $state_dir?" no; then
+      command rm -rf -- "$_opencode_config_dir" "$_opencode_data_dir" "$state_dir"
     fi
 
     reload
@@ -46,14 +45,6 @@ if [[ -d "$_opencode_dir/bin" ]]; then
   }
 
   updates+=(_update_opencode)
-
-  opencode-clear-sessions() {
-    warn "This will delete ALL opencode sessions and project data"
-    confirm "Continue?" no || { info "Aborted"; return 0; }
-
-    command rm -rf -- "$_opencode_data_dir/storage"
-    info "All sessions cleared"
-  }
 
   opencode-config-load-from-gist() {
     load-file-from-gist "$_opencode_config_dir/opencode.json" "opencode-settings"

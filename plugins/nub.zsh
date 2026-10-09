@@ -4,6 +4,7 @@ if exists nub; then
   uninstall-nub() {
     info "Uninstalling Nub..."
     command brew uninstall nubjs/tap/nub || return
+    command rm -rf -- "$HOME/.cache/nub"
     reload
   }
 else

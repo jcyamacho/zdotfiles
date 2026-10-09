@@ -7,8 +7,8 @@ configured in Lua, with a bundled config and commands to edit or restore it.
 
 | Command | Description |
 | --- | --- |
-| `install-wezterm` | Install the WezTerm cask with Homebrew and copy the bundled config to `$WEZTERM_CONFIG_FILE` if no file exists there |
-| `uninstall-wezterm` | Uninstall the WezTerm cask, then ask whether to delete the directory of `$WEZTERM_CONFIG_FILE` (default no) |
+| `install-wezterm` | Install the `font-monaspace` and `wezterm` casks with Homebrew and copy the bundled config to `$WEZTERM_CONFIG_FILE` if no file exists there |
+| `uninstall-wezterm` | Uninstall the WezTerm cask, then ask whether to delete the config of `$WEZTERM_CONFIG_FILE` (default no) |
 | `wezterm-config` | Open `$WEZTERM_CONFIG_FILE` in `$EDITOR` |
 | `wezterm-restore-config` | Replace `$WEZTERM_CONFIG_FILE` with the bundled config |
 
@@ -17,8 +17,9 @@ commands exist only after WezTerm is installed.
 
 `install-wezterm` keeps an existing config, so a reinstall keeps the config an
 uninstall kept. `wezterm-restore-config` overwrites it without asking. The
-uninstall prompt shows the directory it would delete, which is the whole
-directory that contains `$WEZTERM_CONFIG_FILE`.
+uninstall prompt shows the path it would delete: the whole directory that
+contains `$WEZTERM_CONFIG_FILE` when that directory is named `wezterm`, and
+otherwise only the file.
 
 ## Environment Variables
 
@@ -36,7 +37,7 @@ use another path, set it in `~/.zshrc` before the `source` line.
 [`wezterm.lua`](wezterm.lua) configures:
 
 - Catppuccin Mocha colors, including the tab bar
-- Monaspace Neon at 14 pt (install it with `install-fonts`)
+- Monaspace Neon at 14 pt
 - Windows that open at 120 columns by 40 rows, with the window buttons in the
   tab bar instead of a title bar (`INTEGRATED_BUTTONS|RESIZE`), 92% opacity,
   and background blur

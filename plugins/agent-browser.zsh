@@ -20,6 +20,8 @@ if exists agent-browser; then
       command npm uninstall -g agent-browser > /dev/null || return
 
       local data_dir="$HOME/.agent-browser"
+      # The Chrome download is a cache that nothing else uses.
+      command rm -rf -- "$data_dir/browsers"
       if confirm "Delete agent-browser sessions, config, and encryption key in $data_dir?" no; then
         command rm -rf -- "$data_dir"
       fi

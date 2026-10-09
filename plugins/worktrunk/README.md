@@ -55,8 +55,8 @@ Each file in [`config/`](config) is a complete Worktrunk config whose
   thinking turned off, and no tools, slash commands, settings files, system
   prompt, or saved session
 - [`codex.toml`](config/codex.toml): runs `codex exec` with the `gpt-6-luna`
-  model, low reasoning effort, an empty system prompt, and a read-only sandbox,
-  then extracts the reply with `jq`, which must be installed
+  model, low reasoning effort, and a read-only sandbox, without saving a
+  session, then extracts the reply with `jq`, which must be installed
 
 Both files share the same prompts. They ask for a Conventional Commits 1.0.0
 message with one of the types `feat`, `fix`, `refactor`, `docs`, `chore`,

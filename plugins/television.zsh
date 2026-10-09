@@ -25,7 +25,7 @@ else
     # `bat` renders their previews. Without fd the channels return nothing, so
     # the Ctrl+T binding this plugin installs would be dead.
     info "Installing fd and bat (television channel dependencies)..."
-    command brew install --no-ask fd bat
+    command brew install --no-ask fd bat || warn "Could not install fd and bat, so television channels may return nothing"
 
     reload
   }

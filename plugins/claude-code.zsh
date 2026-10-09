@@ -1,17 +1,18 @@
 # claude (Anthropic coding assistant): https://www.anthropic.com/claude-code
 if exists claude; then
-  export DISABLE_TELEMETRY=1
-
   typeset -g _claude_home="$HOME/.claude"
 
   uninstall-claude-code() {
     info "Uninstalling claude..."
-    command rm -f -- "$(whence -p claude)" || return
+    # The native installer always places its launcher here; another claude on
+    # $PATH belongs to npm or Homebrew.
+    command rm -f -- "$HOME/.local/bin/claude" || return
     command rm -rf -- "$HOME/.local/share/claude"
 
+    local state_file="$HOME/.claude.json"
     local worktrees_dir="$HOME/.claude-worktrees"
-    if confirm "Delete Claude Code data in $_claude_home and $worktrees_dir?" no; then
-      command rm -rf -- "$_claude_home" "$worktrees_dir"
+    if confirm "Delete Claude Code data in $_claude_home, $state_file, and $worktrees_dir?" no; then
+      command rm -rf -- "$_claude_home" "$state_file" "$state_file.backup" "$worktrees_dir"
     fi
 
     reload

@@ -9,18 +9,19 @@ update-node() {
   current_version="$(command vp env exec --node lts node --version)" || return
   run-quiet vp env default "$current_version" || return
   run-quiet vp env on node || return
-  run-quiet vp env use "$current_version" || return
 
   info "Updating npm..."
   run-quiet vp env install npm@latest || return
   run-quiet vp env default npm@latest || return
   run-quiet vp env on npm || return
-  run-quiet vp env use npm@latest || return
 
   info "Updating pnpm..."
   run-quiet vp env install pnpm@latest || return
   run-quiet vp env default pnpm@latest || return
-  run-quiet vp env on pnpm
+  run-quiet vp env on pnpm || return
+
+  # Keep the bun that install-bun manages ahead of the Vite+ bun shim.
+  run-quiet vp env off bun
 }
 
 if [[ -f "$_viteplus_dir/env" ]]; then
@@ -37,6 +38,11 @@ if [[ -f "$_viteplus_dir/env" ]]; then
   }
 
   uninstall-viteplus() {
+    # Node.js versions and global packages live inside $_viteplus_dir, so the
+    # prompt guards the whole command instead of only the user files.
+    warn "This deletes $_viteplus_dir, including installed Node.js versions and global packages."
+    confirm "Continue?" no || { info "Aborted"; return 0; }
+
     info "Uninstalling Vite+..."
     command env VP_HOME="$_viteplus_dir" vp implode --yes || return
     command rm -rf -- "$_viteplus_dir"

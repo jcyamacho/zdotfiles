@@ -24,6 +24,12 @@ if exists pi; then
     uninstall-pi() {
       info "Uninstalling pi..."
       command npm uninstall -g "$_pi_package" > /dev/null || return
+
+      local agent_dir="${PI_CODING_AGENT_DIR:-$HOME/.pi/agent}"
+      if confirm "Delete pi config, credentials, sessions, and packages in $agent_dir?" no; then
+        command rm -rf -- "$agent_dir"
+      fi
+
       reload
     }
   fi

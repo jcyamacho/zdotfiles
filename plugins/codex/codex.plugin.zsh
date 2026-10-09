@@ -40,6 +40,8 @@ else
   install-codex() {
     info "Installing codex..."
     command brew install --no-ask --cask codex || return
+    # Codex refuses to start when the exported CODEX_HOME does not exist.
+    command mkdir -p -- "$CODEX_HOME" || return
     reload
   }
 fi

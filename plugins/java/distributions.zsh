@@ -8,15 +8,15 @@ _java_install_distribution() {
   local archive_dir="${5:?missing archive directory}"
   local binary="${6:?missing executable}"
 
-  if [[ -z ${JAVA_HOME:-} || ! -x "$JAVA_HOME/bin/java" || ! -x "$JAVA_HOME/bin/javac" ]]; then
-    error "Set JAVA_HOME to an installed JDK before installing $tool"
-    return 1
-  fi
-
   local destination="$CUSTOM_TOOLS_DIR/.java/$tool"
   if [[ -r "$destination/version" && "$(< "$destination/version")" == "$version" ]]; then
     info "$tool $version is already installed"
     return 0
+  fi
+
+  if [[ -z ${JAVA_HOME:-} || ! -x "$JAVA_HOME/bin/java" || ! -x "$JAVA_HOME/bin/javac" ]]; then
+    error "Set JAVA_HOME to an installed JDK before installing $tool"
+    return 1
   fi
 
   local tmp

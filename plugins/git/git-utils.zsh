@@ -56,20 +56,20 @@ git-hook() {
   local hook_file="$hooks_dir/$hook_name"
 
   if [[ ! -f "$hook_file" ]]; then
-    command mkdir -p -- "$hooks_dir"
+    command mkdir -p -- "$hooks_dir" || return
     if [[ -f "$hook_file.sample" ]]; then
-      command cp -- "$hook_file.sample" "$hook_file"
+      command cp -- "$hook_file.sample" "$hook_file" || return
       info "Created $hook_file (from sample)"
     else
-      builtin print -r -- '#!/bin/sh' > "$hook_file"
+      builtin print -r -- '#!/bin/sh' > "$hook_file" || return
       info "Created $hook_file"
     fi
   fi
 
   # Git skips hooks that are not executable, including existing ones.
-  [[ -x "$hook_file" ]] || command chmod +x "$hook_file"
+  [[ -x "$hook_file" ]] || command chmod +x "$hook_file" || return
 
-  edit "$hook_file"
+  edit-open "$hook_file"
 }
 
 alias gpa="git-pull-all"

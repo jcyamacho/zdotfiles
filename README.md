@@ -99,7 +99,6 @@ every missing one.
 - `install-carapace`: [Carapace](https://carapace.sh/) multi-shell completions
 - `install-fzf`: [fzf](https://junegunn.github.io/fzf/) fuzzy finder, which
   also enables `fzf-tab`
-- `install-jq`: [jq](https://jqlang.org/) command-line JSON processor
 - `install-yazi`: [yazi](https://yazi-rs.github.io/) terminal file manager;
   `y` or `Ctrl+o` opens it and changes to its directory on exit
   ([yazi plugin](plugins/yazi/README.md))
@@ -110,7 +109,11 @@ every missing one.
 
 - `install-agent-browser`: [agent-browser](https://agent-browser.dev/) browser
   automation for AI agents
-- `install-antigravity`: [Antigravity](https://antigravity.google/) AI editor
+- `install-antigravity`: [Antigravity](https://antigravity.google/product/antigravity-2)
+  agent orchestration platform
+- `install-antigravity-cli`:
+  [Antigravity CLI](https://antigravity.google/product/antigravity-cli)
+  terminal agent, run as `agy`
 - `install-aspire`: [Aspire](https://aspire.dev/) CLI for distributed apps
 - `install-bash`: [Bash](https://www.gnu.org/software/bash/) current release
   from Homebrew (macOS ships 3.2)
@@ -143,7 +146,6 @@ every missing one.
 - `install-flutter`: [Flutter](https://flutter.dev/) SDK
 - `install-fonts`: Monaspace, Hack Nerd Font, and JetBrains Mono and Fira Code
   with their Nerd Font variants, as Homebrew casks
-- `install-gemini`: [Gemini CLI](https://github.com/google/gemini-cli)
 - `install-gh`: [GitHub CLI](https://github.com/cli/cli), plus gist sync helpers
   ([github-cli plugin](plugins/github-cli/README.md))
 - `install-ghostty`: [Ghostty](https://ghostty.org/) terminal with its config
@@ -176,10 +178,15 @@ every missing one.
 - `install-orbstack`: [OrbStack](https://orbstack.dev/) Docker Desktop
   alternative
 - `install-orca`: [Orca](https://www.onorca.dev/) desktop IDE for running coding
-  agents in parallel worktrees
+  agents in parallel worktrees. The exported `ORCA_TELEMETRY_DISABLED=1` only
+  reaches Orca when it starts from a shell that loaded this plugin, so also
+  turn off usage data sharing in Orca's settings.
 - `install-pi`: [Pi](https://pi.dev/) minimal terminal coding harness
 - `install-rbenv` (or `install-ruby`): [rbenv](https://github.com/rbenv/rbenv)
-  Ruby version manager
+  Ruby version manager. It also installs the latest stable Ruby and makes it
+  the global default. `update-ruby` does the same when a newer release exists,
+  also through `update-all`, and `uninstall-unused-ruby-versions` removes every
+  other installed version after confirmation.
 - `install-rust`: [Rust](https://www.rust-lang.org/) toolchain through rustup
 - `install-television`:
   [Television](https://alexpasmantier.github.io/television/) fuzzy finder.
@@ -191,9 +198,9 @@ every missing one.
 - `install-viteplus` (or `install-node`): [Vite+](https://viteplus.dev/) web
   toolchain and Node.js version manager. `install-node` also works when Vite+
   is already installed.
-  - `update-node` installs the latest Node.js LTS, makes it the global default,
-    activates it in the current shell, and updates npm and pnpm through Vite+.
-    It also runs through `update-all`.
+  - `update-node` installs the latest Node.js LTS, makes it the global default
+    (used wherever a project does not pin a version), and updates npm and pnpm
+    through Vite+. It also runs through `update-all`.
   - pnpm comes from Vite+ instead of Corepack, with a global default and
     per-project versions. Bun stays independently managed.
   - `uninstall-unused-node-versions` removes Vite+ Node.js installations other
@@ -240,8 +247,8 @@ These plugins add helper functions and need no external tool:
   - Examples: `dotenv -- bun run dev` or
     `dotenv -e production -- bun run start`.
 - [cloudflare](plugins/cloudflare.zsh): exports
-  `CREATE_CLOUDFLARE_TELEMETRY_DISABLED=1` to turn off create-cloudflare
-  telemetry.
+  `CREATE_CLOUDFLARE_TELEMETRY_DISABLED=1` and `WRANGLER_SEND_METRICS=false`
+  to turn off create-cloudflare and Wrangler telemetry.
 
 ## Utility Functions
 

@@ -3,6 +3,11 @@
 if exists dotenvx; then
   uninstall-dotenvx() {
     info "Uninstalling dotenvx..."
+    # The installer also links dx to dotenvx when nothing else owns that name.
+    if [[ "$CUSTOM_TOOLS_DIR/dx" -ef "$CUSTOM_TOOLS_DIR/dotenvx" ]]; then
+      command rm -f -- "$CUSTOM_TOOLS_DIR/dx" || return
+    fi
+
     command rm -f -- "$CUSTOM_TOOLS_DIR/dotenvx" || return
     reload
   }

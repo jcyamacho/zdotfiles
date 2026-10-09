@@ -23,7 +23,9 @@ if exists go; then
 
     command go mod init "$namespace" || return
 
-    [[ -f main.go ]] || command cp -- "$ZDOTFILES_DIR/plugins/golang/main.go" .
+    # A starter package main would break a directory that already has a package.
+    local -a go_files=(*.go(N))
+    (( $#go_files )) || command cp -- "$ZDOTFILES_DIR/plugins/golang/main.go" .
   }
 
   uninstall-go() {
@@ -48,7 +50,7 @@ else
     command brew install --no-ask go || return
 
     info "Installing golangci-lint..."
-    command brew install --no-ask golangci-lint
+    command brew install --no-ask golangci-lint || warn "Could not install golangci-lint"
 
     command go telemetry off 2>/dev/null
 

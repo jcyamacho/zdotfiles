@@ -2,13 +2,20 @@
 
 if exists code; then
   c() {
-    local dir="${1:-$PWD}"
-    command code "$dir"
+    command code "${@:-$PWD}"
   }
 
   uninstall-code() {
     info "Uninstalling visual studio code..."
     command brew uninstall --cask visual-studio-code || return
+    command rm -rf -- "$HOME/Library/Caches/com.microsoft.VSCode" \
+      "$HOME/Library/Caches/com.microsoft.VSCode.ShipIt"
+
+    local -a data_dirs=("$HOME/.vscode" "$HOME/Library/Application Support/Code")
+    if confirm "Delete VS Code settings and extensions in ${data_dirs[*]}?" no; then
+      command rm -rf -- "${data_dirs[@]}"
+    fi
+
     reload
   }
 else

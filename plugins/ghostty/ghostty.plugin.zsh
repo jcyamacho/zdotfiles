@@ -34,14 +34,14 @@ _ghostty_has_config() {
 }
 
 _ghostty_copy_config() {
+  builtin print -r -- "Copying default config..."
+  command mkdir -p -- "$_ghostty_config_dir" || return
+  command cp -- "$ZDOTFILES_DIR/plugins/ghostty/config" "$_ghostty_config_dir/config" || return
+
   if is-macos; then
     # Ghostty loads these after the XDG files, so they would override the copy.
     command rm -f -- "$_ghostty_macos_config_dir/"{config,config.ghostty}
   fi
-
-  builtin print -r -- "Copying default config..."
-  command mkdir -p -- "$_ghostty_config_dir" || return
-  command cp -- "$ZDOTFILES_DIR/plugins/ghostty/config" "$_ghostty_config_dir/config"
 }
 
 _ghostty_restore_config() {
@@ -49,7 +49,9 @@ _ghostty_restore_config() {
   _ghostty_copy_config
 }
 
-if exists ghostty; then
+# The cask links no ghostty binary; Ghostty adds it to $PATH only in its own
+# shells, so other terminals need the app bundle check.
+if exists ghostty || [[ -d "/Applications/Ghostty.app" ]]; then
   alias ghostty-restore-config="_ghostty_restore_config"
 
   ghostty-config() {

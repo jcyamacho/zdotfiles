@@ -15,15 +15,23 @@ _gwt_worktree_paths() {
 _gwt_path_for() {
   local name="${1:?_gwt_path_for: missing worktree name}"
 
+  local -a matches=()
   local worktree
   for worktree in "${(@f)$(_gwt_worktree_paths)}"; do
-    if [[ "${worktree:t}" == "$name" ]]; then
-      builtin print -r -- "$worktree"
-      return 0
-    fi
+    [[ "${worktree:t}" == "$name" ]] && matches+=("$worktree")
   done
 
-  return 1
+  # Callers capture stdout, so errors go to stderr.
+  if (( $#matches == 0 )); then
+    error "No worktree named '$name'." >&2
+    return 1
+  fi
+  if (( $#matches > 1 )); then
+    error "Worktree name '$name' is ambiguous:" "${matches[@]}" >&2
+    return 1
+  fi
+
+  builtin print -r -- "$matches[1]"
 }
 
 # gwt takes a branch name, plus an optional base ref that only applies when the
@@ -39,13 +47,16 @@ _gwt() {
   [[ -n "$refs" ]] || return 1
 
   local -aU branches=("${(@f)refs}")
-  branches=("${(@)branches#origin/}")
 
+  # Base refs keep origin/: a bare remote-only name would make `git worktree
+  # add -b` check out that branch instead of creating the new one.
   local expl
   if (( CURRENT == 3 )); then
     _wanted refs expl 'base ref' compadd -a branches
     return
   fi
+
+  branches=("${(@)branches#origin/}")
 
   local -a attached
   attached=("${(@f)$(GIT_OPTIONAL_LOCKS=0 command git worktree list --porcelain 2>/dev/null \
@@ -108,8 +119,12 @@ _gwt_default_branch() {
   local default_branch
   default_branch="$(command git remote show origin 2>/dev/null \
     | command grep 'HEAD branch' | command awk '{print $NF}')"
-  # An ambiguous remote HEAD yields the last word of a sentence, not a branch.
-  command git check-ref-format --branch "$default_branch" &>/dev/null || default_branch=""
+  # An ambiguous remote HEAD yields the last word of a sentence, and a remote
+  # without HEAD reports "(unknown)", which check-ref-format accepts.
+  if [[ "$default_branch" == "(unknown)" ]] ||
+    ! command git check-ref-format --branch "$default_branch" &>/dev/null; then
+    default_branch=""
+  fi
 
   # Strategy 2: read the local cached ref (offline-safe).
   # Set by `git clone` or `git remote set-head`. Can be stale or missing
@@ -143,6 +158,21 @@ _gwt_run_setup_hooks() {
   builtin source "$setup_script"
 }
 
+# Succeeds when origin has the branch and origin/<branch> is up to date.
+# Single-branch clones, including --depth ones, fetch only their configured
+# branches, and `git worktree add --track` refuses any other branch, so it is
+# added to that list.
+_gwt_fetch_remote_branch() {
+  local branch_name="${1:?_gwt_fetch_remote_branch: missing branch name}"
+
+  command git fetch origin "$branch_name" 2>/dev/null || return
+  command git show-ref --verify --quiet "refs/remotes/origin/$branch_name" && return
+
+  command git remote set-branches --add origin "$branch_name" || return
+  command git fetch origin "$branch_name" 2>/dev/null || return
+  command git show-ref --verify --quiet "refs/remotes/origin/$branch_name"
+}
+
 gwt() {
   local branch_name="${1:?Usage: gwt <branch-name> [base-ref]}"
   local base_ref="${2:-}"
@@ -166,8 +196,7 @@ gwt() {
     info "Creating worktree at '$worktree_path' for local branch '$branch_name'..."
     command git worktree add "$worktree_path" "$branch_name" || return 1
 
-  elif command git fetch origin "$branch_name" 2>/dev/null \
-    && command git show-ref --verify --quiet "refs/remotes/origin/$branch_name"; then
+  elif _gwt_fetch_remote_branch "$branch_name"; then
     # Remote branch exists -- worktree will create a local tracking branch
     [[ -n "$base_ref" ]] && warn "Ignoring base ref '$base_ref': remote branch '$branch_name' already exists."
     info "Creating worktree at '$worktree_path' for remote branch '$branch_name'..."
@@ -184,9 +213,15 @@ gwt() {
       base_ref="origin/$default_branch"
     fi
 
+    # A remote-only branch name would make `git worktree add -b` check it out
+    # instead of creating the new branch.
+    command git rev-parse --verify --quiet "${base_ref}^{commit}" >/dev/null || {
+      error "Invalid base ref '$base_ref'."
+      return 1
+    }
+
     info "Creating worktree at '$worktree_path' with new branch from '$base_ref'..."
-    command git worktree add -b "$branch_name" "$worktree_path" "$base_ref" || return 1
-    command git -C "$worktree_path" branch --unset-upstream 2>/dev/null || :
+    command git worktree add --no-track -b "$branch_name" "$worktree_path" "$base_ref" || return 1
   fi
 
   builtin cd "$worktree_path" || return 1
@@ -209,10 +244,7 @@ gwt-rm() {
   local name="${1:?Usage: gwt-rm <worktree>}"
 
   local selected_worktree_path
-  selected_worktree_path="$(_gwt_path_for "$name")" || {
-    error "No worktree named '$name'."
-    return 1
-  }
+  selected_worktree_path="$(_gwt_path_for "$name")" || return 1
 
   # `git worktree list` always reports the main worktree first. --show-toplevel
   # cannot be used here: it reports whichever worktree we are standing in, so it
@@ -264,10 +296,7 @@ gwts() {
   local name="${1:?Usage: gwts <worktree>}"
 
   local target
-  target="$(_gwt_path_for "$name")" || {
-    error "No worktree named '$name'."
-    return 1
-  }
+  target="$(_gwt_path_for "$name")" || return 1
 
   if [[ "$target" == "$PWD" ]]; then
     info "Already in worktree '$name'."

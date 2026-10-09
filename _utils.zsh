@@ -1,5 +1,8 @@
 autoload -Uz colors 2>/dev/null && colors
 
+# Loads only zstat, so the stat command keeps resolving to /usr/bin/stat.
+builtin zmodload -F zsh/stat b:zstat
+
 typeset -g _reset_color=${reset_color:-$'\e[0m'}
 
 info() {
@@ -168,9 +171,19 @@ _cache_command_output() {
 
   local -a newer=()
   local dep
-  for dep in "$cmd_path" "${deps[@]}"; do
+  for dep in "${deps[@]}"; do
     [[ "$dep" -nt "$cache" ]] && newer+=("$dep")
   done
+
+  # Installers keep archive mtimes (Homebrew bottles use the source date), so
+  # an upgrade shows only in the binary's inode change time.
+  local -a binary_time cache_time
+  if [[ -n $cmd_path && -e $cache ]] &&
+    builtin zstat -A binary_time +ctime -- "$cmd_path" &&
+    builtin zstat -A cache_time +mtime -- "$cache" &&
+    (( binary_time[1] > cache_time[1] )); then
+    newer+=("$cmd_path")
+  fi
   [[ -s "$cache" ]] && (( ! $#newer )) && return 0
 
   local tmp
@@ -205,7 +218,7 @@ source-cached-init() {
 
 # Caches the output of `cmd args...` as a #compdef completion file on fpath.
 # Usage: cache-completion <cmd> [args...]
-#   e.g., cache-completion zellij setup --generate-completion zsh
+#   e.g., cache-completion deno completions zsh
 cache-completion() {
   local cmd=${1:?cache-completion: missing command}
   _cache_command_output "${_zdotfiles_completions_dir}/_${cmd}" "${funcfiletrace[1]%:*}" -- "$@"

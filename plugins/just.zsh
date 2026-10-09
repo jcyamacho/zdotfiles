@@ -1,8 +1,6 @@
 # just (command runner): https://just.systems/
 
 if exists just; then
-  cache-completion just --completions zsh
-
   uninstall-just() {
     info "Uninstalling just..."
     command brew uninstall just || return

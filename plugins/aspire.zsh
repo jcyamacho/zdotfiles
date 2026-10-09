@@ -4,7 +4,13 @@ if exists aspire; then
 
   uninstall-aspire() {
     info "Uninstalling aspire..."
+    command aspire cache clear || warn "Could not clear the aspire cache"
     command brew uninstall --cask aspire || return
+
+    if confirm "Delete Aspire config and deployment state in $HOME/.aspire?" no; then
+      command rm -rf -- "$HOME/.aspire"
+    fi
+
     reload
   }
 else
