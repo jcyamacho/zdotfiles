@@ -2,6 +2,8 @@
 typeset -g _openspec_package="@fission-ai/openspec"
 
 if exists openspec; then
+  export OPENSPEC_TELEMETRY=0
+
   cache-completion openspec completion generate zsh
 
   alias osp="openspec"

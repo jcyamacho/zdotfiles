@@ -23,6 +23,9 @@ a target directory. The
 [OpenSpec CLI reference](https://github.com/Fission-AI/OpenSpec/blob/main/docs/cli.md)
 lists the arguments and tool IDs that `openspec init` accepts.
 
+While `openspec` is installed, the plugin exports `OPENSPEC_TELEMETRY=0` to
+turn off OpenSpec telemetry.
+
 ## Aliases
 
 | Alias | Expands to |

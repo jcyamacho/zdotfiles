@@ -1,5 +1,7 @@
 # github-cli (GitHub on the command line): https://github.com/cli/cli
 if exists gh; then
+  export GH_TELEMETRY=false
+
   cache-completion gh completion --shell zsh
 
   _find_gist_id() {

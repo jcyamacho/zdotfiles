@@ -1,5 +1,8 @@
 # claude (Anthropic coding assistant): https://www.anthropic.com/claude-code
 if exists claude; then
+  # Not CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC, which also stops auto-updates.
+  export DISABLE_TELEMETRY=1
+
   typeset -g _claude_home="$HOME/.claude"
 
   uninstall-claude-code() {

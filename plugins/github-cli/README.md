@@ -14,7 +14,8 @@ adds commands that sync single files with your secret GitHub gists.
 
 `install-gh` exists only while `gh` is missing, and `uninstall-gh` only while it
 is installed. Without `gh`, the gist commands print an error that tells you to
-run `install-gh`.
+run `install-gh`. While `gh` is installed, the plugin exports
+`GH_TELEMETRY=false` to turn off GitHub CLI telemetry.
 
 ## Gist Sync
 

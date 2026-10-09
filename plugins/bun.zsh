@@ -6,6 +6,9 @@ if [[ -d "$_bun_dir/bin" ]]; then
 
   exists bun || return
 
+  # Bun has no tool-specific opt-out; other tools honor this convention too.
+  export DO_NOT_TRACK=1
+
   cache-completion bun completions
 
   uninstall-bun() {
