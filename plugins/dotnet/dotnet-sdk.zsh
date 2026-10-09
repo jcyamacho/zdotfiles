@@ -10,8 +10,16 @@ if exists dotnet; then
   # command line, so this is a dynamic completion function registered with compdef
   # (which lets fzf-tab wrap it); there is no static #compdef script to cache.
   _dotnet() {
-    local completions=("${(@f)$(command dotnet complete "$words")}")
-    compadd -- "${(@)completions:#}"
+    local -a completions=("${(@f)$(command dotnet complete "$words")}")
+    completions=("${(@)completions:#}")
+
+    # The SDK returns nothing for path arguments such as --project.
+    if (( ! $#completions )); then
+      _files
+      return
+    fi
+
+    compadd -- "${completions[@]}"
   }
   compdef _dotnet dotnet
 
