@@ -37,14 +37,15 @@ config to one of those file names.
 
 ## Notes
 
-- `install-ghostty` keeps an existing `~/.config/ghostty/config`, so a
-  reinstall keeps the config an uninstall kept. `ghostty-restore-config`
-  overwrites it without asking.
-- Whenever they copy the bundled config, both commands also delete `config`
-  and `config.ghostty` from `~/Library/Application Support/com.mitchellh.ghostty`
-  on macOS. Ghostty loads those files after `~/.config/ghostty/config`, so their
-  values would override the bundled ones
-  ([Ghostty config docs](https://ghostty.org/docs/config)).
+- `install-ghostty` copies the bundled config only when none of `config` or
+  `config.ghostty` exists in `~/.config/ghostty` or, on macOS,
+  `~/Library/Application Support/com.mitchellh.ghostty`. A reinstall keeps the
+  config an uninstall kept. `ghostty-restore-config` overwrites it without
+  asking.
+- `ghostty-restore-config` also deletes `config` and `config.ghostty` from
+  `~/Library/Application Support/com.mitchellh.ghostty` on macOS. Ghostty loads
+  those files after `~/.config/ghostty/config`, so their values would override
+  the bundled ones ([Ghostty config docs](https://ghostty.org/docs/config)).
 - If a theme fails to download, `ghostty-update-themes` (and so `update-all`)
   reports an error; install and restore print a warning and continue.
 - `uninstall-ghostty` leaves the Monaspace font installed.

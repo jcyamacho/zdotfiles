@@ -22,10 +22,21 @@ _ghostty_update_themes() {
   return $result
 }
 
+typeset -g _ghostty_macos_config_dir="$HOME/Library/Application Support/com.mitchellh.ghostty"
+
+# Ghostty reads config and config.ghostty from both directories.
+_ghostty_has_config() {
+  local -a files=(
+    "$_ghostty_config_dir"/config{,.ghostty}(N)
+    "$_ghostty_macos_config_dir"/config{,.ghostty}(N)
+  )
+  (( $#files ))
+}
+
 _ghostty_copy_config() {
   if is-macos; then
     # Ghostty loads these after the XDG files, so they would override the copy.
-    command rm -f -- "$HOME/Library/Application Support/com.mitchellh.ghostty/"{config,config.ghostty}
+    command rm -f -- "$_ghostty_macos_config_dir/"{config,config.ghostty}
   fi
 
   builtin print -r -- "Copying default config..."
@@ -69,7 +80,7 @@ else
     command brew install --no-ask --cask font-monaspace || return
     command brew install --no-ask --cask ghostty || return
     _ghostty_update_themes || warn "Some themes could not be downloaded"
-    [[ -f "$_ghostty_config_dir/config" ]] || _ghostty_copy_config
+    _ghostty_has_config || _ghostty_copy_config
     reload
   }
 fi
