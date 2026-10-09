@@ -1,11 +1,14 @@
 # television (terminal fuzzy finder): https://alexpasmantier.github.io/television/
 
 if exists tv; then
-  source-cached-init tv init zsh
+  typeset -g _tv_config_file="$HOME/.config/television/config.toml"
+
+  # The init output binds the keys set in [shell_integration.keybindings].
+  source-cached-init --dep "$_tv_config_file" tv init zsh
 
   tv-config() {
-    command mkdir -p -- "$HOME/.config/television"
-    edit-open "$HOME/.config/television/config.toml"
+    command mkdir -p -- "${_tv_config_file:h}"
+    edit-open "$_tv_config_file"
   }
 
   uninstall-television() {

@@ -1,10 +1,13 @@
 # atuin (command-line history): https://atuin.sh/
 
 if exists atuin; then
-  source-cached-init atuin init zsh --disable-up-arrow
+  typeset -g _atuin_config_file="$HOME/.config/atuin/config.toml"
+
+  # The init output includes settings from the config, such as tmux options.
+  source-cached-init --dep "$_atuin_config_file" atuin init zsh --disable-up-arrow
 
   atuin-config() {
-    edit-open "$HOME/.config/atuin/config.toml"
+    edit-open "$_atuin_config_file"
   }
 
   uninstall-atuin() {

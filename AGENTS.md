@@ -60,12 +60,14 @@ installs through `install-<tool>`.
 - `exists <cmd>`: checks `$path` for an executable, ignoring aliases and
   functions. Use it instead of `$commands[cmd]`, which rehashes every `$path`
   directory after a path change.
-- `source-cached-init <cmd> <args...>`: caches a tool's shell init output and
-  sources it. It regenerates the cache when the binary or the calling plugin
-  file is newer, so argument changes apply on the next load. Use it only for
-  output that is identical in every session; for example, `mise activate zsh`
-  includes the current `PATH`, so it is not cached. For `#compdef` output, use
-  `cache-completion`.
+- `source-cached-init [--dep <file>]... <cmd> <args...>`: caches a tool's
+  shell init output and sources it. It regenerates the cache when the binary
+  or the calling plugin file is newer, so argument changes apply on the next
+  load. When the output is also built from a file, such as the tool's config,
+  pass it with `--dep <file>` so edits to it regenerate the cache. Use it only
+  for output that is identical in every session; for example,
+  `mise activate zsh` includes the current `PATH`, so it is not cached. For
+  `#compdef` output, use `cache-completion`.
 - `cache-completion <cmd> <args...>`: writes a tool's `#compdef` completion to
   `$ZDOTFILES_CACHE_DIR/completions/_<cmd>`, a directory already on `$fpath`.
   It regenerates like `source-cached-init`.

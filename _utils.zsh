@@ -142,11 +142,23 @@ zdotfiles-cache-clean() {
 }
 
 # Writes the output of `cmd args...` to cache when the cache is missing or older
-# than the tool binary or the plugin file that requested it, so editing a
-# plugin's arguments takes effect on the next load.
+# than the tool binary or any dependency file. Dependencies are the plugin file
+# that requested it, so editing a plugin's arguments takes effect on the next
+# load, plus any file the output is built from.
+# Usage: _cache_command_output <cache> <dependency>... -- <cmd> [args...]
 _cache_command_output() {
-  local cache="$1" caller="$2" cmd="$3"
-  shift 3
+  local cache="$1"
+  shift
+
+  local -a deps=()
+  while (( $# )) && [[ $1 != -- ]]; do
+    deps+=("$1")
+    shift
+  done
+  shift
+
+  local cmd="$1"
+  shift
 
   # Resolved by hand for the same reason exists avoids $commands.
   local dir cmd_path
@@ -154,7 +166,12 @@ _cache_command_output() {
     [[ -f "$dir/$cmd" && -x "$dir/$cmd" ]] && { cmd_path="$dir/$cmd"; break }
   done
 
-  [[ -s "$cache" && ! "$cmd_path" -nt "$cache" && ! "$caller" -nt "$cache" ]] && return 0
+  local -a newer=()
+  local dep
+  for dep in "$cmd_path" "${deps[@]}"; do
+    [[ "$dep" -nt "$cache" ]] && newer+=("$dep")
+  done
+  [[ -s "$cache" ]] && (( ! $#newer )) && return 0
 
   local tmp
   tmp="$(command mktemp "${cache}.XXXXXX")" || return
@@ -168,11 +185,20 @@ _cache_command_output() {
 }
 
 # Caches the output of `cmd args...` (e.g., `starship init zsh`) and sources it.
+# Usage: source-cached-init [--dep <file>]... <cmd> [args...]
+#   --dep also regenerates the cache when <file> is newer, e.g. a config file
+#   the init output is built from.
 source-cached-init() {
+  local -a deps=("${funcfiletrace[1]%:*}")
+  while [[ ${1-} == --dep ]]; do
+    deps+=("${2:?source-cached-init: missing --dep file}")
+    shift 2
+  done
+
   local cmd=${1:?source-cached-init: missing command}
   local cache="${ZDOTFILES_CACHE_DIR}/${cmd}-init.zsh"
 
-  _cache_command_output "$cache" "${funcfiletrace[1]%:*}" "$@" || return
+  _cache_command_output "$cache" "${deps[@]}" -- "$@" || return
   [[ "${cache}.zwc" -nt "$cache" ]] || builtin zcompile "$cache" 2>/dev/null
   builtin source "$cache"
 }
@@ -182,7 +208,7 @@ source-cached-init() {
 #   e.g., cache-completion zellij setup --generate-completion zsh
 cache-completion() {
   local cmd=${1:?cache-completion: missing command}
-  _cache_command_output "${_zdotfiles_completions_dir}/_${cmd}" "${funcfiletrace[1]%:*}" "$@"
+  _cache_command_output "${_zdotfiles_completions_dir}/_${cmd}" "${funcfiletrace[1]%:*}" -- "$@"
 }
 
 _run_remote_installer() {
