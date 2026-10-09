@@ -87,10 +87,13 @@ When the current directory has no `pyproject.toml`, `requirements.txt`, or
 `requirements-dev.txt`, `venv-sync` warns and does nothing. Otherwise, it
 deactivates any active virtual environment and then:
 
-- With `uv.lock`: runs `uv sync` into `VENV_DIR` and activates it
-- Without `uv.lock`: creates `VENV_DIR` with `uv venv --seed` if it is missing,
-  activates it, and runs `uv pip install -r` on `requirements-dev.txt`, or on
-  `requirements.txt` when there is no `requirements-dev.txt`
+- With `uv.lock`, or with `pyproject.toml` and no requirements file: runs
+  `uv sync` into `VENV_DIR` and activates it. `uv sync` creates `uv.lock` when
+  it is missing.
+- Otherwise, with a requirements file and no `uv.lock`: creates `VENV_DIR` with
+  `uv venv --seed` if it is missing, activates it, and runs `uv pip install -r`
+  on `requirements-dev.txt`, or on `requirements.txt` when there is no
+  `requirements-dev.txt`
 
 ## Environment Variables
 

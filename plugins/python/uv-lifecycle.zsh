@@ -91,8 +91,9 @@ if exists uv; then
 
     (( $+functions[deactivate] )) && deactivate
 
-    # uv project
-    if [[ -f uv.lock ]]; then
+    # uv project. A pyproject.toml without requirements files is one too, and
+    # uv sync creates its missing uv.lock.
+    if [[ -f uv.lock || ( -f pyproject.toml && ! -f requirements.txt && ! -f requirements-dev.txt ) ]]; then
       UV_PROJECT_ENVIRONMENT="$venv_dir" command uv sync "${python_flag[@]}" || return
       builtin source "${venv_dir}/bin/activate" || return
       return
