@@ -108,6 +108,8 @@ _gwt_default_branch() {
   local default_branch
   default_branch="$(command git remote show origin 2>/dev/null \
     | command grep 'HEAD branch' | command awk '{print $NF}')"
+  # An ambiguous remote HEAD yields the last word of a sentence, not a branch.
+  command git check-ref-format --branch "$default_branch" &>/dev/null || default_branch=""
 
   # Strategy 2: read the local cached ref (offline-safe).
   # Set by `git clone` or `git remote set-head`. Can be stale or missing
