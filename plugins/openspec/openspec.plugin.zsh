@@ -4,7 +4,9 @@ typeset -g _openspec_package="@fission-ai/openspec"
 if exists openspec; then
   export OPENSPEC_TELEMETRY=0
 
-  cache-completion openspec completion generate zsh
+  # Sourced, not autoloaded from $fpath: the script only defines _openspec and
+  # calls compdef, so autoloading it would waste the first Tab.
+  source-cached-init openspec completion generate zsh
 
   alias osp="openspec"
   alias ospl="openspec list"
