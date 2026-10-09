@@ -31,6 +31,8 @@ if exists go; then
     command brew uninstall golangci-lint
 
     info "Uninstalling go..."
+    # The build cache lives outside $GOPATH, and only go knows where.
+    command go clean -cache || warn "Could not clear the Go build cache"
     command brew uninstall go || return
 
     if confirm "Delete Go workspace (modules and installed binaries) in $GOPATH?" no; then
