@@ -35,7 +35,7 @@ _confirm_read_line() {
 confirm() {
   local prompt="${1:?confirm: missing prompt}"
   local default_answer="${2:-yes}"
-  local suffix
+  local suffix REPLY
 
   case "$default_answer" in
     yes) suffix="[Y/n]" ;;
@@ -74,8 +74,8 @@ confirm() {
 
 mkcd() {
   local target=${1:?mkcd: missing directory name}
-  command mkdir -p -- "$target"
-  builtin cd "$target"
+  command mkdir -p -- "$target" || return
+  builtin cd -- "$target"
 }
 
 # whence -p searches $path directly; a $commands miss rehashes every $path
@@ -275,7 +275,7 @@ _run_with_zshrc_locked() {
 edit() {
   local -a editor_cmd
   if [[ -n $EDITOR ]]; then
-    editor_cmd=("${(z)EDITOR}")
+    editor_cmd=("${(@Q)${(z)EDITOR}}")
   else
     editor_cmd=(vim)
   fi
@@ -285,7 +285,7 @@ edit() {
 edit-open() {
   local -a editor_cmd
   if [[ -n $EDITOR ]]; then
-    editor_cmd=("${(z)EDITOR}")
+    editor_cmd=("${(@Q)${(z)EDITOR}}")
     editor_cmd=("${(@)editor_cmd:#--wait}")
   else
     editor_cmd=(vim)
@@ -338,7 +338,7 @@ kill-port() {
     done
     (( $#still_running == 0 )) && return 0
     remaining=("${still_running[@]}")
-    sleep 0.1
+    command sleep 0.1
   done
 
   for pid in "${remaining[@]}"; do

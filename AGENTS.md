@@ -70,7 +70,11 @@ installs through `install-<tool>`.
   `#compdef` output, use `cache-completion`.
 - `cache-completion <cmd> <args...>`: writes a tool's `#compdef` completion to
   `$ZDOTFILES_CACHE_DIR/completions/_<cmd>`, a directory already on `$fpath`.
-  It regenerates like `source-cached-init`.
+  It regenerates like `source-cached-init`. If the script only defines its
+  function and calls `compdef` when autoloaded, the first Tab completes
+  nothing; source it with `source-cached-init` instead, as openspec does. If
+  the tool's Homebrew package already installs the completion into
+  `site-functions`, cache nothing.
 - `_run_remote_installer <url> [shell [--env K=V]... [-- args...]]`: downloads
   the script over HTTPS to a temp file and runs it with `shell` (default `sh`)
   while `~/.zshrc` is locked. Pass the shell explicitly whenever `--env` or
@@ -83,6 +87,9 @@ installs through `install-<tool>`.
   `*-config` helpers so the shell does not wait. Use `edit` only when the next
   step needs the saved file, as `starship-config` does before `reload`.
 - `info`, `warn`, `error`: colored output.
+- `run-quiet <cmd> [args...]`: runs a command or function and shows its output
+  only when it fails.
+- `is-macos`: succeeds on macOS.
 - `reload`: replaces the shell with `exec zsh`, which loads `~/.zshrc` from a
   clean state. Only exported variables carry over. Lifecycle functions end with
   it, and code after it never runs. It returns 0 without restarting in scripts,
@@ -112,7 +119,9 @@ installs through `install-<tool>`.
 - Use `confirm` for destructive yes/no prompts instead of custom `read` logic.
   When the prompt guards the whole command, abort on decline with
   `confirm "..." no || { info "Aborted"; return 0; }`.
-- Never use `sudo`, interactive installers, or `curl | sh`.
+- Never use `sudo`, interactive installers, or `curl | sh`. The one exception
+  is the Homebrew bootstrap in `_brew.zsh`: Homebrew's official installer is
+  interactive and may ask for `sudo`, and nothing else can install it.
 - Never `eval` untrusted input. Use `source-cached-init` for tool init.
 - Use `mktemp` for temp files, and never log or cache secrets.
 - Never pass untrusted text, such as file names, to prompt expansion like

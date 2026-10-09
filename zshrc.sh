@@ -83,7 +83,11 @@ fi
 # ANTIDOTE
 ANTIDOTE_DIR="${ANTIDOTE_DIR:-$HOME/.antidote}"
 ANTIDOTE_HOME="${ANTIDOTE_HOME:-$HOME/.cache/antidote}"
-[[ -d "$ANTIDOTE_DIR" ]] || command git clone --depth=1 https://github.com/mattmc3/antidote.git "$ANTIDOTE_DIR"
+if [[ ! -d "$ANTIDOTE_DIR" ]] &&
+  ! command git clone --depth=1 https://github.com/mattmc3/antidote.git "$ANTIDOTE_DIR"; then
+  error "Could not clone Antidote, so plugins are not loaded. Open a new shell to retry."
+  return 1
+fi
 
 # Lazy-load antidote from its functions directory.
 fpath=("$ANTIDOTE_DIR/functions" "${fpath[@]}")
@@ -120,17 +124,17 @@ fi
 builtin source "${zsh_plugins}.zsh"
 unset zsh_plugins
 
-_antidote_update() {
+_update_antidote() {
   info "Updating antidote..."
   antidote update
 }
 
 update-antidote() {
-  _antidote_update || return
+  _update_antidote || return
   reload
 }
 
-updates+=(_antidote_update)
+updates+=(_update_antidote)
 # ANTIDOTE end
 
 # STARTUP_PROFILING_RESULTS
