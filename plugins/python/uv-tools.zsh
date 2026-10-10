@@ -1,21 +1,11 @@
 # python uv tools installers: https://docs.astral.sh/uv/concepts/tools/
 
-exists ruff || install-python-ruff() {
-  info "Installing ruff..."
-  command uv tool install --force ruff@latest
+_install_uv_tool() {
+  info "Installing $1..."
+  command uv tool install --force "$1@latest"
 }
 
-exists basedpyright || install-python-basedpyright() {
-  info "Installing basedpyright..."
-  command uv tool install --force basedpyright@latest
-}
-
-exists ty || install-python-ty() {
-  info "Installing ty..."
-  command uv tool install --force ty@latest
-}
-
-exists pyrefly || install-python-pyrefly() {
-  info "Installing pyrefly..."
-  command uv tool install --force pyrefly@latest
-}
+exists ruff || install-python-ruff() { _install_uv_tool ruff; }
+exists basedpyright || install-python-basedpyright() { _install_uv_tool basedpyright; }
+exists ty || install-python-ty() { _install_uv_tool ty; }
+exists pyrefly || install-python-pyrefly() { _install_uv_tool pyrefly; }

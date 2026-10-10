@@ -14,7 +14,7 @@ if exists dotenvx; then
 
   _update_dotenvx() {
     info "Updating dotenvx..."
-    _run_remote_installer "https://dotenvx.sh" "sh" -- --directory="$CUSTOM_TOOLS_DIR"
+    _run_remote_installer "https://dotenvx.sh" -- --directory="$CUSTOM_TOOLS_DIR"
   }
 
   update-dotenvx() {
@@ -25,7 +25,7 @@ if exists dotenvx; then
 else
   install-dotenvx() {
     info "Installing dotenvx..."
-    _run_remote_installer "https://dotenvx.sh" "sh" -- --directory="$CUSTOM_TOOLS_DIR" || return
+    _run_remote_installer "https://dotenvx.sh" -- --directory="$CUSTOM_TOOLS_DIR" || return
     reload
   }
 fi

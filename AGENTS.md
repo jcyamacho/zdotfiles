@@ -75,10 +75,9 @@ installs through `install-<tool>`.
   nothing; source it with `source-cached-init` instead. If the tool's Homebrew
   package already installs the completion into `site-functions`, cache
   nothing.
-- `_run_remote_installer <url> [shell [--env K=V]... [-- args...]]`: downloads
-  the script over HTTPS to a temp file and runs it with `shell` (default `sh`)
-  while `~/.zshrc` is locked. Pass the shell explicitly whenever `--env` or
-  `--` follows, because the second argument is always read as the shell.
+- `_run_remote_installer <url> [--env K=V]... [-- args...]`: downloads the
+  script over HTTPS to a temp file and runs it with bash while `~/.zshrc` is
+  locked. Bash runs both bash and POSIX `sh` installers.
 - `_run_with_zshrc_locked <cmd> [args...]`: locks `~/.zshrc` while an updater
   known to write it runs, then unlocks it, even when the command fails.
 - `confirm <prompt> [yes|no]`: terminal-only yes/no prompt. It accepts `y`,
@@ -230,8 +229,7 @@ if exists tool; then
 else
   install-tool() {
     info "Installing tool..."
-    _run_remote_installer "https://..." "sh" \
-      -- --bin-dir "$CUSTOM_TOOLS_DIR" || return
+    _run_remote_installer "https://..." -- --bin-dir "$CUSTOM_TOOLS_DIR" || return
     reload
   }
 fi

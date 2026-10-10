@@ -14,7 +14,7 @@ if [[ -x "$_opencode_dir/bin/opencode" ]]; then
   alias oc="opencode"
 
   opencode-config() {
-    [[ -d "$_opencode_config_dir" ]] || command mkdir -p -- "$_opencode_config_dir"
+    command mkdir -p -- "$_opencode_config_dir"
     [[ -f "$_opencode_config_dir/opencode.json" ]] \
       || builtin print -r -- '{ "$schema": "https://opencode.ai/config.json" }' >| "$_opencode_config_dir/opencode.json"
 
@@ -57,7 +57,7 @@ if [[ -x "$_opencode_dir/bin/opencode" ]]; then
 else
   install-opencode() {
     info "Installing opencode..."
-    _run_remote_installer "https://opencode.ai/install" "bash" -- --no-modify-path || return
+    _run_remote_installer "https://opencode.ai/install" -- --no-modify-path || return
     reload
   }
 fi

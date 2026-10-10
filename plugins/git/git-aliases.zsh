@@ -1,8 +1,10 @@
 # git shorthands (aliases plus origin pull/push helpers): https://git-scm.com/
 
-# GIT_OPTIONAL_LOCKS=0 keeps this read-only query from taking the index lock.
+# Callers capture stdout, so the error goes to stderr.
 _git_current_branch() {
-  GIT_OPTIONAL_LOCKS=0 command git symbolic-ref --quiet --short HEAD 2>/dev/null
+  command git symbolic-ref --quiet --short HEAD 2>/dev/null && return
+  error "Not on a branch (detached HEAD or not a git repository)." >&2
+  return 1
 }
 
 ggl() {
@@ -12,10 +14,7 @@ ggl() {
   fi
 
   local branch
-  branch="$(_git_current_branch)" || {
-    error "Not on a branch (detached HEAD or not a git repository)."
-    return 1
-  }
+  branch="$(_git_current_branch)" || return
 
   command git pull origin "$branch"
 }
@@ -30,15 +29,12 @@ ggp() {
   fi
 
   local branch
-  branch="$(_git_current_branch)" || {
-    error "Not on a branch (detached HEAD or not a git repository)."
-    return 1
-  }
+  branch="$(_git_current_branch)" || return
 
   # Only adopt origin as upstream when the branch has none, so a branch that
   # deliberately tracks another remote is never repointed.
   local -a upstream_flag=()
-  GIT_OPTIONAL_LOCKS=0 command git rev-parse --verify --quiet "$branch@{upstream}" >/dev/null \
+  command git rev-parse --verify --quiet "$branch@{upstream}" >/dev/null \
     || upstream_flag=(--set-upstream)
 
   command git push "${upstream_flag[@]}" origin "$branch"
@@ -51,7 +47,7 @@ ggp() {
 # pushes a local one.
 _ggl_ggp() {
   local refs
-  refs="$(GIT_OPTIONAL_LOCKS=0 command git for-each-ref \
+  refs="$(command git for-each-ref \
     --format='%(refname:short)' --exclude=refs/remotes/origin/HEAD \
     refs/heads refs/remotes/origin 2>/dev/null)"
   [[ -n "$refs" ]] || return 1

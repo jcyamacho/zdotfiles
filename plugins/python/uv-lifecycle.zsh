@@ -63,13 +63,8 @@ if exists uv; then
 
     command brew uninstall uv || return
 
-    if [[ -n "$uv_python_dir" && "$uv_python_dir" == "$HOME"/* ]]; then
-      command rm -rf -- "$uv_python_dir"
-    fi
-
-    if [[ -n "$uv_tool_dir" && "$uv_tool_dir" == "$HOME"/* ]]; then
-      command rm -rf -- "$uv_tool_dir"
-    fi
+    [[ "$uv_python_dir" == "$HOME"/* ]] && command rm -rf -- "$uv_python_dir"
+    [[ "$uv_tool_dir" == "$HOME"/* ]] && command rm -rf -- "$uv_tool_dir"
 
     reload
   }
@@ -77,10 +72,7 @@ if exists uv; then
   alias uninstall-python="uninstall-uv"
 
   function venv-sync {
-    local python_flag=()
-    if [[ -n "${PYTHON_VERSION:-}" ]]; then
-      python_flag=(--python "$PYTHON_VERSION")
-    fi
+    local python_flag=(${PYTHON_VERSION:+"--python=$PYTHON_VERSION"})
     local venv_dir=${VENV_DIR:-".venv"}
 
     # skip non-python projects

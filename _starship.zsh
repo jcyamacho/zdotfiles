@@ -1,7 +1,5 @@
 # starship: https://starship.rs
 
-unset ZSH_THEME
-
 export STARSHIP_CONFIG="${STARSHIP_CONFIG:-$HOME/.config/starship.toml}"
 export STARSHIP_LOG="${STARSHIP_LOG:-error}"
 
@@ -19,7 +17,7 @@ _update_starship() {
   fi
 
   info "Updating starship..."
-  _run_remote_installer "https://starship.rs/install.sh" "sh" -- --yes --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
+  _run_remote_installer "https://starship.rs/install.sh" -- --yes --bin-dir "$CUSTOM_TOOLS_DIR" > /dev/null
 }
 
 updates+=(_update_starship)

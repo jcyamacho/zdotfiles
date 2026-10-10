@@ -32,16 +32,13 @@ if exists claude; then
     reload
   }
 
-  cc() {
-    # Human launcher with opinionated terminal UX; use `claude` directly for scripting.
-    CLAUDE_CODE_NO_FLICKER=1 command claude "$@"
-  }
+  alias cc="CLAUDE_CODE_NO_FLICKER=1 command claude"
 
   updates+=(_update_claude_code)
 else
   install-claude-code() {
     info "Installing claude code..."
-    _run_remote_installer "https://claude.ai/install.sh" "bash" || return
+    _run_remote_installer "https://claude.ai/install.sh" || return
     reload
   }
 fi

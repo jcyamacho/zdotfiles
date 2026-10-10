@@ -21,7 +21,7 @@ _brew_add_to_path() {
 
 if ! exists brew && ! _brew_add_to_path; then
   info "Installing brew..."
-  _run_remote_installer "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" "bash" || return
+  _run_remote_installer "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh" || return
   _brew_add_to_path || return
 fi
 

@@ -6,9 +6,7 @@ local config = wezterm.config_builder()
 config.color_scheme = 'catppuccin-mocha'
 
 -- Typography
-config.font = wezterm.font_with_fallback {
-  'Monaspace Neon',
-}
+config.font = wezterm.font 'Monaspace Neon'
 config.font_size = 14
 
 -- Window layout
@@ -45,12 +43,10 @@ config.macos_window_background_blur = 18
 -- Cursor & input
 config.default_cursor_style = 'SteadyBar'
 config.cursor_blink_rate = 0
-config.use_dead_keys = true
 config.send_composed_key_when_left_alt_is_pressed = true
 
 -- Behavior
 config.window_close_confirmation = 'NeverPrompt'
-config.quit_when_all_windows_are_closed = true
 config.scrollback_lines = 100000
 
 -- Tabs (keep minimal; mostly hidden like Ghostty)

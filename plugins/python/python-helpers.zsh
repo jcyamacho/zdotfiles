@@ -5,9 +5,7 @@ if exists python3; then
 
   pyclean() {
     command find "${@:-.}" -type f -name "*.py[co]" -delete
-    command find "${@:-.}" -type d -name "__pycache__" -delete
-    command find "${@:-.}" -depth -type d -name ".mypy_cache" -exec rm -rf -- "{}" +
-    command find "${@:-.}" -depth -type d -name ".pytest_cache" -exec rm -rf -- "{}" +
+    command find "${@:-.}" -depth -type d \( -name "__pycache__" -o -name ".mypy_cache" -o -name ".pytest_cache" \) -exec rm -rf -- "{}" +
   }
 
   venv() {
@@ -26,7 +24,6 @@ if exists python3; then
   }
 
   enable-venv-hook() {
-    (( ${chpwd_functions[(Ie)venv]} )) && return 0
     autoload -Uz add-zsh-hook
     add-zsh-hook chpwd venv
     venv

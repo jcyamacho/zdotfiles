@@ -66,16 +66,8 @@ dotenv() (
 
       # Values stay literal: no evaluation or escape processing, so $(...) is text.
       case "$value" in
-        \"*)
-          if [[ "$value" =~ "$double_pattern" ]]; then
-            value="$match[1]"
-          else
-            builtin print -ru2 -- "dotenv: invalid quoted value at $file:$line_number"
-            return 1
-          fi
-          ;;
-        \'*)
-          if [[ "$value" =~ "$single_pattern" ]]; then
+        [\"\']*)
+          if [[ "$value" =~ "$double_pattern" || "$value" =~ "$single_pattern" ]]; then
             value="$match[1]"
           else
             builtin print -ru2 -- "dotenv: invalid quoted value at $file:$line_number"

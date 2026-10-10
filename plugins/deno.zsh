@@ -30,7 +30,7 @@ if [[ -x "$_deno_dir/bin/deno" ]]; then
 else
   install-deno() {
     info "Installing deno..."
-    _run_remote_installer "https://deno.land/install.sh" "sh" --env "DENO_INSTALL=$_deno_dir" -- --no-modify-path -y || return
+    _run_remote_installer "https://deno.land/install.sh" --env "DENO_INSTALL=$_deno_dir" -- --no-modify-path -y || return
     reload
   }
 fi

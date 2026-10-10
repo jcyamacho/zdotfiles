@@ -50,5 +50,5 @@ directory:
   example, `~/src/github.com/user/repo` becomes `github.com/user/repo`.
 - Otherwise, the module path is the directory name.
 
-If `go mod init` succeeds and the directory has no `main.go`, `gmi` copies the
+If `go mod init` succeeds and the directory has no Go files, `gmi` copies the
 bundled [`main.go`](main.go), which logs `Hello, World!` with `log/slog`.

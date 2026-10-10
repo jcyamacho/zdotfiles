@@ -1,16 +1,10 @@
 # worktrunk (git worktree management): https://worktrunk.dev
 
 typeset -g _worktrunk_config_file="$HOME/.config/worktrunk/config.toml"
-typeset -g _worktrunk_providers_dir="$ZDOTFILES_DIR/plugins/worktrunk/config"
 
 _wt_set_provider() {
   local provider="${1:?provider name required}"
-  local provider_file="$_worktrunk_providers_dir/${provider}.toml"
-
-  if [[ ! -f "$provider_file" ]]; then
-    error "Unknown provider: $provider"
-    return 1
-  fi
+  local provider_file="$ZDOTFILES_DIR/plugins/worktrunk/config/${provider}.toml"
 
   command mkdir -p -- "${_worktrunk_config_file:h}" || return
   command cp -- "$provider_file" "$_worktrunk_config_file" || return

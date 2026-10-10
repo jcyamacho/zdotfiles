@@ -13,18 +13,12 @@ if exists openspec; then
   alias osps="openspec list --specs"
   alias ospv="openspec validate --all --strict"
 
-  _openspec_init() {
-    local tool="${1:?_openspec_init: missing tool}"
-    shift
-    command openspec init --tools "$tool" "$@"
-  }
-
-  openspec-init-opencode() { _openspec_init opencode "$@" }
-  openspec-init-codex() { _openspec_init codex "$@" }
-  openspec-init-claude() { _openspec_init claude "$@" }
-  openspec-init-cursor() { _openspec_init cursor "$@" }
-  openspec-init-gemini() { _openspec_init gemini "$@" }
-  openspec-init-copilot() { _openspec_init github-copilot "$@" }
+  openspec-init-opencode() { command openspec init --tools opencode "$@" }
+  openspec-init-codex() { command openspec init --tools codex "$@" }
+  openspec-init-claude() { command openspec init --tools claude "$@" }
+  openspec-init-cursor() { command openspec init --tools cursor "$@" }
+  openspec-init-gemini() { command openspec init --tools gemini "$@" }
+  openspec-init-copilot() { command openspec init --tools github-copilot "$@" }
 
   if exists npm; then
     _update_openspec() {

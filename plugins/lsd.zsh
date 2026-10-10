@@ -2,15 +2,8 @@
 typeset -g _lsd_config_dir="$HOME/.config/lsd"
 
 if exists lsd; then
-  ll() {
-    command lsd -lahg "$@"
-  }
-
-  lt() {
-    command lsd --tree "$@"
-  }
-
-  compdef _lsd ll lt
+  alias ll="command lsd -lahg"
+  alias lt="command lsd --tree"
 
   lsd-config() {
     edit-open "$_lsd_config_dir/config.yaml"

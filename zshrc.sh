@@ -6,8 +6,6 @@ ZDOTFILES_DIR="${ZDOTFILES_DIR:-$HOME/.zdotfiles}"
 
 # CACHE
 ZDOTFILES_CACHE_DIR="${ZDOTFILES_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zdotfiles}"
-[[ -d "$ZDOTFILES_CACHE_DIR" ]] || command mkdir -p -- "$ZDOTFILES_CACHE_DIR"
-
 typeset -g _zdotfiles_completions_dir="$ZDOTFILES_CACHE_DIR/completions"
 [[ -d "$_zdotfiles_completions_dir" ]] || command mkdir -p -- "$_zdotfiles_completions_dir"
 # CACHE end
@@ -75,9 +73,8 @@ typeset -g _zdotfiles_zcompdump="$ZDOTFILES_CACHE_DIR/zcompdump-$ZSH_VERSION"
 # picks up the completions cache-completion writes while plugins load.
 compinit -i -d "$_zdotfiles_zcompdump"
 
-if [[ ! -s "${_zdotfiles_zcompdump}.zwc" || "$_zdotfiles_zcompdump" -nt "${_zdotfiles_zcompdump}.zwc" ]]; then
-  builtin zcompile "$_zdotfiles_zcompdump" 2>/dev/null || :
-fi
+[[ "${_zdotfiles_zcompdump}.zwc" -nt "$_zdotfiles_zcompdump" ]] ||
+  builtin zcompile "$_zdotfiles_zcompdump" 2>/dev/null
 # COMPLETIONS end
 
 # ANTIDOTE
@@ -114,11 +111,8 @@ if [[ ! "${zsh_plugins}.zsh" -nt "${zsh_plugins}.txt" ]]; then
 fi
 
 # Compile the static plugins file for faster sourcing.
-if [[ -f "${zsh_plugins}.zsh" ]]; then
-  if [[ ! -f "${zsh_plugins}.zsh.zwc" || "${zsh_plugins}.zsh" -nt "${zsh_plugins}.zsh.zwc" ]]; then
-    builtin zcompile "${zsh_plugins}.zsh" 2>/dev/null || :
-  fi
-fi
+[[ "${zsh_plugins}.zsh.zwc" -nt "${zsh_plugins}.zsh" ]] ||
+  builtin zcompile "${zsh_plugins}.zsh" 2>/dev/null
 
 # Source your static plugins file.
 builtin source "${zsh_plugins}.zsh"
@@ -167,12 +161,6 @@ install-recommended() {
     local _zdotfiles_reload_deferred=1
     local installer
     for installer in "${installers[@]}"; do
-      if (( ! $+functions[$installer] )); then
-        error "Installer unavailable: $installer"
-        failed+=("$installer")
-        continue
-      fi
-
       "$installer" || failed+=("$installer")
     done
   }

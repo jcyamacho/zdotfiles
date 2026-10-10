@@ -31,7 +31,7 @@ if [[ -x "$_bun_dir/bin/bun" ]]; then
 else
   install-bun() {
     info "Installing bun..."
-    _run_remote_installer "https://bun.sh/install" "bash" --env "BUN_INSTALL=$_bun_dir" || return
+    _run_remote_installer "https://bun.sh/install" --env "BUN_INSTALL=$_bun_dir" || return
     reload
   }
 fi

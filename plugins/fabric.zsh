@@ -2,7 +2,7 @@
 exists fabric || {
   install-fabric() {
     info "Installing fabric..."
-    _run_remote_installer "https://raw.githubusercontent.com/danielmiessler/fabric/main/scripts/installer/install.sh" "bash" \
+    _run_remote_installer "https://raw.githubusercontent.com/danielmiessler/fabric/main/scripts/installer/install.sh" \
       --env "INSTALL_DIR=$CUSTOM_TOOLS_DIR" || return
     info "Run 'fabric --setup' to configure API keys"
     reload
@@ -12,17 +12,11 @@ exists fabric || {
 
 typeset -g _fabric_config_dir="$HOME/.config/fabric"
 
-_fabric_load_patterns() {
-  [[ -d "$_fabric_config_dir/patterns" ]] || return
-  local pattern_file
-  local pattern_name
-  for pattern_file in "$_fabric_config_dir/patterns"/*(N-/); do
-    pattern_name="${pattern_file:t}"
-    alias "$pattern_name"="fabric --pattern ${(q)pattern_name} --stream"
-  done
-}
-
-_fabric_load_patterns
+typeset _fabric_pattern
+for _fabric_pattern in "$_fabric_config_dir/patterns"/*(N-/:t); do
+  alias "$_fabric_pattern"="fabric --pattern ${(q)_fabric_pattern} --stream"
+done
+unset _fabric_pattern
 
 yt() {
   local transcript_flag="--transcript"
@@ -54,7 +48,7 @@ uninstall-fabric() {
 
 _update_fabric() {
   info "Updating fabric..."
-  _run_remote_installer "https://raw.githubusercontent.com/danielmiessler/fabric/main/scripts/installer/install.sh" "bash" \
+  _run_remote_installer "https://raw.githubusercontent.com/danielmiessler/fabric/main/scripts/installer/install.sh" \
     --env "INSTALL_DIR=$CUSTOM_TOOLS_DIR"
 }
 

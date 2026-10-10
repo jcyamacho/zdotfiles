@@ -48,7 +48,7 @@ if exists cursor-agent; then
 else
   install-cursor-cli() {
     info "Installing cursor CLI..."
-    _run_remote_installer "https://cursor.com/install" "bash" || return
+    _run_remote_installer "https://cursor.com/install" || return
     reload
   }
 fi

@@ -10,17 +10,12 @@ if exists zsh-bench; then
     reload
   }
 
-  _update_zsh_bench() {
+  update-zsh-bench() {
     info "Updating zsh-bench..."
     command git -C "$_zsh_bench_dir" pull --quiet
   }
 
-  update-zsh-bench() {
-    _update_zsh_bench || return
-    reload
-  }
-
-  updates+=(_update_zsh_bench)
+  updates+=(update-zsh-bench)
 else
   install-zsh-bench() {
     info "Installing zsh-bench..."

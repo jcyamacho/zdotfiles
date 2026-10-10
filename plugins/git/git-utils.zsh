@@ -25,7 +25,7 @@ git-pull-all() {
   for dir in "$base_dir"/*(N/); do
     command git -C "$dir" rev-parse --git-dir &>/dev/null || continue
 
-    builtin print -r -- "${fg[cyan]}->$_reset_color ${dir:t}"
+    builtin print -r -- "${fg[cyan]}->$reset_color ${dir:t}"
 
     command git -C "$dir" pull --ff-only 2>&1 | command sed 's/^/  /' || result=1
 
@@ -43,11 +43,6 @@ git-pull-all() {
 
 git-hook() {
   local hook_name="${1:?Usage: git-hook <hook-name>}"
-
-  command git rev-parse --git-dir &>/dev/null || {
-    error "Not a git repository."
-    return 1
-  }
 
   # --git-path resolves core.hooksPath (husky, lefthook, etc.) against the
   # repository root and falls back to the common hooks dir in linked worktrees.

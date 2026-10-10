@@ -224,14 +224,6 @@ gwt() {
   info "Now in worktree '${PWD:t}'."
 }
 
-_gwt_force_remove_error() {
-  local output="${1:-}"
-
-  [[ "$output" == *"contains modified or untracked files"* \
-    || "$output" == *"cannot be moved or removed"* \
-    || "$output" == *"use --force"* ]]
-}
-
 gwt-rm() {
   local name="${1:?Usage: gwt-rm <worktree>}"
 
@@ -267,8 +259,8 @@ gwt-rm() {
   remove_output="$(command git worktree remove "$selected_worktree_path" 2>&1)"
   local remove_status=$?
   if (( remove_status != 0 )); then
-    if _gwt_force_remove_error "$remove_output"; then
-      [[ -n "$remove_output" ]] && warn "$remove_output"
+    if [[ "$remove_output" == *"use --force"* || "$remove_output" == *"cannot be moved or removed"* ]]; then
+      warn "$remove_output"
       confirm "Force remove dirty worktree '$selected_worktree_path'?" no || {
         info "Skipped worktree removal."
         return 1
@@ -308,13 +300,11 @@ gwts() {
 }
 
 gwt-setup() {
-  command git rev-parse --git-dir &>/dev/null || {
+  local common_git_dir
+  common_git_dir="$(command git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || {
     error "Not a git repository."
     return 1
   }
-
-  local common_git_dir
-  common_git_dir="$(command git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
   local setup_file="$common_git_dir/setup-worktree.zsh"
 
   if [[ ! -f "$setup_file" ]]; then

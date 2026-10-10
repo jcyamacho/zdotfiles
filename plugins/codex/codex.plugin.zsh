@@ -10,11 +10,6 @@ if exists codex; then
 
   codex-clear-archived-sessions() {
     local archive_dir="${CODEX_HOME:?}/archived_sessions"
-    if [[ ! -d "$archive_dir" ]]; then
-      warn "No archived sessions directory found at $archive_dir"
-      return 0
-    fi
-
     local -a archived_sessions
     archived_sessions=("$archive_dir"/*(N))
     if (( ${#archived_sessions[@]} == 0 )); then

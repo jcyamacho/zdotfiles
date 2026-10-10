@@ -9,8 +9,7 @@ _yazi_restore_config() {
 
   info "Copying config files..."
   command mkdir -p -- "$YAZI_CONFIG_HOME" || return
-  command cp -- "$ZDOTFILES_DIR/plugins/yazi/yazi.toml" "$YAZI_CONFIG_HOME/yazi.toml" || return
-  command cp -- "$ZDOTFILES_DIR/plugins/yazi/theme.toml" "$YAZI_CONFIG_HOME/theme.toml"
+  command cp -- "$ZDOTFILES_DIR/plugins/yazi/"{yazi,theme}.toml "$YAZI_CONFIG_HOME/"
 }
 
 if exists yazi; then

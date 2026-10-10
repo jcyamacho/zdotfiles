@@ -4,22 +4,11 @@ typeset -g _ghostty_config_dir="$HOME/.config/ghostty"
 _ghostty_update_themes() {
   local themes_url="https://raw.githubusercontent.com/catppuccin/ghostty/refs/heads/main/themes"
 
-  local themes=(
-    catppuccin-mocha
-    catppuccin-macchiato
-    catppuccin-latte
-    catppuccin-frappe
-  )
-
   command mkdir -p -- "$_ghostty_config_dir/themes" || return
-
-  local theme result=0
-  for theme in "${themes[@]}"; do
-    builtin print -r -- "Downloading ${theme}..."
-    command curl --proto '=https' --tlsv1.2 -fsSL "${themes_url}/${theme}.conf" \
-      -o "$_ghostty_config_dir/themes/${theme}.conf" || result=1
-  done
-  return $result
+  # Without --fail-early, curl returns only the last URL's status.
+  command curl --proto '=https' --tlsv1.2 -fsSL --fail-early \
+    --output-dir "$_ghostty_config_dir/themes" --remote-name-all \
+    "$themes_url/catppuccin-"{mocha,macchiato,latte,frappe}.conf
 }
 
 typeset -g _ghostty_macos_config_dir="$HOME/Library/Application Support/com.mitchellh.ghostty"

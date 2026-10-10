@@ -26,7 +26,7 @@ if exists mise; then
 else
   install-mise() {
     info "Installing mise..."
-    _run_remote_installer "https://mise.run" "sh" --env "MISE_INSTALL_PATH=$CUSTOM_TOOLS_DIR/mise" || return
+    _run_remote_installer "https://mise.run" --env "MISE_INSTALL_PATH=$CUSTOM_TOOLS_DIR/mise" || return
     reload
   }
 

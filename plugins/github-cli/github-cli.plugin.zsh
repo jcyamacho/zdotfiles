@@ -4,24 +4,17 @@ if exists gh; then
 
   _find_gist_id() {
     local gist_description="${1:?_find_gist_id: missing gist description}"
-    local jq_description="${gist_description//\\/\\\\}"
-    jq_description=${jq_description//\"/\\\"}
 
     local output
-    output="$(command gh api /gists --paginate --jq ".[] | select((.description==\"${jq_description}\") and (.public==false)) | .id")" || return
+    output="$(GIST_DESCRIPTION="$gist_description" command gh api /gists --paginate --jq '.[] | select((.description == env.GIST_DESCRIPTION) and (.public == false)) | .id')" || return
 
     local -a ids=("${(@f)output}")
     builtin print -r -- "${ids[1]}"
   }
 
   save-file-to-gist() {
-    local file_path="$1"
-    local file_description="$2"
-
-    if [[ -z $file_path || -z $file_description ]]; then
-      error "Usage: save-file-to-gist <file_path> <file_description>"
-      return 1
-    fi
+    local file_path="${1:?Usage: save-file-to-gist <file_path> <file_description>}"
+    local file_description="${2:?Usage: save-file-to-gist <file_path> <file_description>}"
 
     local gist_id
     gist_id="$(_find_gist_id "$file_description")" || return
@@ -35,13 +28,8 @@ if exists gh; then
   }
 
   load-file-from-gist() {
-    local file_path="$1"
-    local file_description="$2"
-
-    if [[ -z $file_path || -z $file_description ]]; then
-      error "Usage: load-file-from-gist <file_path> <file_description>"
-      return 1
-    fi
+    local file_path="${1:?Usage: load-file-from-gist <file_path> <file_description>}"
+    local file_description="${2:?Usage: load-file-from-gist <file_path> <file_description>}"
 
     local gist_id
     gist_id="$(_find_gist_id "$file_description")" || return
@@ -60,10 +48,8 @@ if exists gh; then
       return 1
     fi
 
-    local gist_filename="${file_path:t}"
     local target_path="${file_path:A}"
-    local target_dir="${target_path:h}"
-    command mkdir -p -- "$target_dir" || return
+    command mkdir -p -- "${target_path:h}" || return
 
     local tmp
     tmp="$(command mktemp "${target_path}.XXXXXX")" || return
@@ -76,7 +62,7 @@ if exists gh; then
       fi
 
       info "Loading \"${file_description}\" from gist: ${gist_id}"
-      command gh gist view "$gist_id" --filename "$gist_filename" --raw >| "$tmp" || return
+      command gh gist view "$gist_id" --filename "${file_path:t}" --raw >| "$tmp" || return
 
       command mv -f -- "$tmp" "$target_path"
     } always {

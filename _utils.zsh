@@ -3,18 +3,16 @@ autoload -Uz colors 2>/dev/null && colors
 # Loads only zstat, so the stat command keeps resolving to /usr/bin/stat.
 builtin zmodload -F zsh/stat b:zstat
 
-typeset -g _reset_color=${reset_color:-$'\e[0m'}
-
 info() {
-  builtin print -r -- "${fg_bold[cyan]}$*$_reset_color"
+  builtin print -r -- "${fg_bold[cyan]}$*$reset_color"
 }
 
 warn() {
-  builtin print -r -- "${fg_bold[yellow]}$*$_reset_color"
+  builtin print -r -- "${fg_bold[yellow]}$*$reset_color"
 }
 
 error() {
-  builtin print -r -- "${fg_bold[red]}$*$_reset_color"
+  builtin print -r -- "${fg_bold[red]}$*$reset_color"
 }
 
 _confirm_discard_input() {
@@ -54,7 +52,7 @@ confirm() {
     # Drop type-ahead buffered before this prompt so answers can't spill across confirms.
     _confirm_discard_input
 
-    builtin print -n -r -- "${fg_bold[yellow]}$prompt $suffix$_reset_color "
+    builtin print -n -r -- "${fg_bold[yellow]}$prompt $suffix$reset_color "
     _confirm_read_line || {
       builtin print ""
       error "confirm: no terminal available"
@@ -226,12 +224,7 @@ cache-completion() {
 
 _run_remote_installer() {
   local url="${1:?_run_remote_installer: missing url}"
-  local shell="${2:-sh}"
-  if (( $# >= 2 )); then
-    shift 2
-  else
-    shift 1
-  fi
+  shift
 
   local -a envs=()
   while [[ ${1-} == "--env" ]]; do
@@ -248,7 +241,7 @@ _run_remote_installer() {
 
   {
     command curl --proto '=https' --tlsv1.2 -fsSL "$url" -o "$tmp" || return
-    _run_with_zshrc_locked env "${envs[@]}" "$shell" "$tmp" "$@"
+    _run_with_zshrc_locked env "${envs[@]}" bash "$tmp" "$@"
   } always {
     command rm -f -- "$tmp"
   }
@@ -264,47 +257,28 @@ home() {
 
 typeset -g _zshrc_file="$HOME/.zshrc"
 
-_lock_zshrc() {
-  command chmod -w "$_zshrc_file"
-}
-
-_unlock_zshrc() {
-  command chmod +w "$_zshrc_file"
-}
-
 _run_with_zshrc_locked() {
-  _lock_zshrc || return
+  command chmod -w "$_zshrc_file" || return
   {
     command "$@"
   } always {
-    _unlock_zshrc
+    command chmod +w "$_zshrc_file"
   }
 }
 
 edit() {
-  local -a editor_cmd
-  if [[ -n $EDITOR ]]; then
-    editor_cmd=("${(@Q)${(z)EDITOR}}")
-  else
-    editor_cmd=(vim)
-  fi
+  local -a editor_cmd=("${(@Q)${(z)${EDITOR:-vim}}}")
   "${editor_cmd[@]}" "$@"
 }
 
 edit-open() {
-  local -a editor_cmd
-  if [[ -n $EDITOR ]]; then
-    editor_cmd=("${(@Q)${(z)EDITOR}}")
-    editor_cmd=("${(@)editor_cmd:#--wait}")
-  else
-    editor_cmd=(vim)
-  fi
-  "${editor_cmd[@]}" "$@"
+  local -a editor_cmd=("${(@Q)${(z)${EDITOR:-vim}}}")
+  "${(@)editor_cmd:#--wait}" "$@"
 }
 
 zsh-config() {
   # Unlock first in case a killed updater left the file read-only.
-  _unlock_zshrc
+  command chmod +w "$_zshrc_file"
   edit "$_zshrc_file" && reload
 }
 
@@ -336,21 +310,18 @@ kill-port() {
     command kill "$pid" 2>/dev/null || warn "Process $pid was already gone"
   done
 
-  local -a remaining
-  remaining=("${pids[@]}")
-
   local i
   for i in {1..5}; do
     local -a still_running=()
-    for pid in "${remaining[@]}"; do
+    for pid in "${pids[@]}"; do
       command kill -0 "$pid" 2>/dev/null && still_running+=("$pid")
     done
     (( $#still_running == 0 )) && return 0
-    remaining=("${still_running[@]}")
+    pids=("${still_running[@]}")
     command sleep 0.1
   done
 
-  for pid in "${remaining[@]}"; do
+  for pid in "${pids[@]}"; do
     warn "Force-killing process $pid"
     command kill -9 "$pid" 2>/dev/null
   done

@@ -12,7 +12,6 @@ else
     info "Installing flutter..."
     command brew install --no-ask --cask flutter || return
     command flutter --disable-analytics
-    command dart --disable-analytics
     reload
   }
 fi

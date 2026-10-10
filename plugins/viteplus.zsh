@@ -28,9 +28,7 @@ if [[ -f "$_viteplus_dir/env" ]]; then
   builtin source "$_viteplus_dir/env"
   exists vp || return
 
-  install-node() {
-    update-node
-  }
+  alias install-node="update-node"
 
   uninstall-unused-node-versions() {
     confirm "Remove unused Vite+ Node.js versions?" no || { info "Aborted"; return 0; }
@@ -56,13 +54,11 @@ if [[ -f "$_viteplus_dir/env" ]]; then
 
   updates+=(_update_viteplus update-node)
 else
-  install-node() {
-    install-viteplus
-  }
+  alias install-node="install-viteplus"
 
   install-viteplus() {
     info "Installing Vite+..."
-    _run_remote_installer "https://vite.plus" "bash" \
+    _run_remote_installer "https://vite.plus" \
       --env "VP_HOME=$_viteplus_dir" --env "VP_NODE_MANAGER=yes" \
       --env "VP_PM_MANAGER=no" --env "VP_NPM_MANAGER=yes" \
       --env "VP_PNPM_MANAGER=yes" || return

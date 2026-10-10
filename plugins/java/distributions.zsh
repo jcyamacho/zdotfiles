@@ -28,10 +28,6 @@ _java_install_distribution() {
     local checksum actual
     checksum="$(command curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "$url.sha$algorithm")" || return
     checksum="${checksum%%[[:space:]]*}"
-    if (( ${#checksum} != algorithm / 4 )) || [[ "$checksum" == *[^0-9a-fA-F]* ]]; then
-      error "Invalid $tool checksum"
-      return 1
-    fi
 
     command curl --proto '=https' --proto-redir '=https' --tlsv1.2 -fsSL "$url" -o "$tmp/distribution" || return
     actual="$(command shasum -a "$algorithm" "$tmp/distribution")" || return
@@ -40,16 +36,7 @@ _java_install_distribution() {
       return 1
     fi
 
-    if [[ "$url" == *.zip ]]; then
-      command unzip -q "$tmp/distribution" -d "$tmp" || return
-    else
-      command tar -xzf "$tmp/distribution" -C "$tmp" || return
-    fi
-
-    if [[ ! -x "$tmp/$archive_dir/bin/$binary" ]]; then
-      error "Missing executable in $tool distribution"
-      return 1
-    fi
+    command tar -xf "$tmp/distribution" -C "$tmp" || return
 
     command "$tmp/$archive_dir/bin/$binary" --version > /dev/null || {
       error "$tool $version could not run with JAVA_HOME=$JAVA_HOME"
@@ -62,12 +49,6 @@ _java_install_distribution() {
     fi
     command mv -- "$tmp/$archive_dir" "$destination" || return
   } always {
-    if [[ -d "$tmp/previous" && ! -e "$destination" ]]; then
-      command mv -- "$tmp/previous" "$destination" || {
-        error "Previous $tool installation preserved at $tmp/previous"
-        return 1
-      }
-    fi
     command rm -rf -- "$tmp"
   }
 }
