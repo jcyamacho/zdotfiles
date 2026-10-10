@@ -4,10 +4,10 @@ if exists atuin; then
   typeset -g _atuin_config_file="$HOME/.config/atuin/config.toml"
 
   # The init output includes settings from the config, such as tmux options.
-  source-cached-init --dep "$_atuin_config_file" atuin init zsh --disable-up-arrow
+  source-cached-output --dep "$_atuin_config_file" atuin init zsh --disable-up-arrow
 
   atuin-config() {
-    edit-open "$_atuin_config_file"
+    edit "$_atuin_config_file"
   }
 
   uninstall-atuin() {

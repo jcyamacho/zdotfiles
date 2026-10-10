@@ -7,7 +7,7 @@ if exists herdr; then
     local config_dir="$HOME/.config/herdr"
 
     command mkdir -p -- "$config_dir"
-    edit-open "$config_dir"
+    edit "$config_dir"
   }
 
   uninstall-herdr() {

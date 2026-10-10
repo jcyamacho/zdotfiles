@@ -5,7 +5,7 @@ if exists codex; then
   alias cdx="codex"
 
   codex-config() {
-    edit-open "$CODEX_HOME"
+    edit "$CODEX_HOME"
   }
 
   codex-clear-archived-sessions() {

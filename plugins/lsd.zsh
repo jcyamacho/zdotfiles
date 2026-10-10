@@ -6,7 +6,7 @@ if exists lsd; then
   alias lt="command lsd --tree"
 
   lsd-config() {
-    edit-open "$_lsd_config_dir/config.yaml"
+    edit "$_lsd_config_dir/config.yaml"
   }
 
   uninstall-lsd() {

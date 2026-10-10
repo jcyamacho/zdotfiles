@@ -9,7 +9,7 @@ if [[ -x "$_bun_dir/bin/bun" ]]; then
 
   # Sourced, not autoloaded from $fpath: the script only defines _bun and
   # calls compdef, so autoloading it would waste the first Tab.
-  source-cached-init bun completions
+  source-cached-output bun completions
 
   uninstall-bun() {
     info "Uninstalling bun..."

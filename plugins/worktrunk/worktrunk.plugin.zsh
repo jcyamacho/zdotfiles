@@ -12,7 +12,7 @@ _wt_set_provider() {
 }
 
 if exists wt; then
-  source-cached-init wt config shell init zsh
+  source-cached-output wt config shell init zsh
 
   alias wtl="wt list"
   alias wtm="wt merge"
@@ -22,7 +22,7 @@ if exists wt; then
 
   wt-config() {
     command mkdir -p -- "${_worktrunk_config_file:h}"
-    edit-open "$_worktrunk_config_file"
+    edit "$_worktrunk_config_file"
   }
 
   wt-commit-claude() { _wt_set_provider claude; }

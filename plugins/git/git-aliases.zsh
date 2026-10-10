@@ -1,9 +1,8 @@
 # git shorthands (aliases plus origin pull/push helpers): https://git-scm.com/
 
-# Callers capture stdout, so the error goes to stderr.
 _git_current_branch() {
   command git symbolic-ref --quiet --short HEAD 2>/dev/null && return
-  error "Not on a branch (detached HEAD or not a git repository)." >&2
+  error "Not on a branch (detached HEAD or not a git repository)."
   return 1
 }
 

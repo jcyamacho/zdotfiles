@@ -25,7 +25,7 @@ updates+=(_update_starship)
 exists starship || _update_starship || return
 
 if [[ $TERM != dumb ]]; then
-  source-cached-init starship init zsh
+  source-cached-output starship init zsh
 fi
 
 _starship_write_preset() {
@@ -43,6 +43,6 @@ starship-preset-custom() {
 }
 
 starship-config() {
-  edit "$STARSHIP_CONFIG" || return
+  edit-wait "$STARSHIP_CONFIG" || return
   reload
 }

@@ -19,7 +19,7 @@ if exists claude; then
   }
 
   claude-config() {
-    edit-open "$_claude_home"
+    edit "$_claude_home"
   }
 
   _update_claude_code() {

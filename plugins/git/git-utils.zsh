@@ -64,7 +64,7 @@ git-hook() {
   # Git skips hooks that are not executable, including existing ones.
   [[ -x "$hook_file" ]] || command chmod +x "$hook_file" || return
 
-  edit-open "$hook_file"
+  edit "$hook_file"
 }
 
 alias gpa="git-pull-all"

@@ -60,8 +60,8 @@ installs through `install-<tool>`.
 - `exists <cmd>`: checks `$path` for an executable, ignoring aliases and
   functions. Use it instead of `$commands[cmd]`, which rehashes every `$path`
   directory after a path change.
-- `source-cached-init [--dep <file>]... <cmd> <args...>`: caches a tool's
-  shell init output and sources it. It regenerates the cache when the binary
+- `source-cached-output [--dep <file>]... <cmd> <args...>`: caches a
+  command's zsh output and sources it. It regenerates the cache when the binary
   or the calling plugin file is newer, so argument changes apply on the next
   load. When the output is also built from a file, such as the tool's config,
   pass it with `--dep <file>` so edits to it regenerate the cache. Use it only
@@ -70,9 +70,9 @@ installs through `install-<tool>`.
   `#compdef` output, use `cache-completion`.
 - `cache-completion <cmd> <args...>`: writes a tool's `#compdef` completion to
   `$ZDOTFILES_CACHE_DIR/completions/_<cmd>`, a directory already on `$fpath`.
-  It regenerates like `source-cached-init`. If the script only defines its
+  It regenerates like `source-cached-output`. If the script only defines its
   function and calls `compdef` when autoloaded, the first Tab completes
-  nothing; source it with `source-cached-init` instead. If the tool's Homebrew
+  nothing; source it with `source-cached-output` instead. If the tool's Homebrew
   package already installs the completion into `site-functions`, cache
   nothing.
 - `_run_remote_installer <url> [--env K=V]... [-- args...]`: downloads the
@@ -82,10 +82,11 @@ installs through `install-<tool>`.
   known to write it runs, then unlocks it, even when the command fails.
 - `confirm <prompt> [yes|no]`: terminal-only yes/no prompt. It accepts `y`,
   `yes`, `n`, `no`, or Enter for the default, and re-prompts on invalid input.
-- `edit` and `edit-open`: open a file in `$EDITOR`. Use `edit-open` in
-  `*-config` helpers so the shell does not wait. Use `edit` only when the next
-  step needs the saved file, as `starship-config` does before `reload`.
-- `info`, `warn`, `error`: colored output.
+- `edit` and `edit-wait`: open a file in `$EDITOR`. `edit` drops a `--wait`
+  flag so GUI editors return at once; other editors still wait. Use
+  `edit-wait` only when the next step needs the saved file, such as a
+  `reload`.
+- `info`, `warn`, `error`: colored output. `error` writes to stderr.
 - `run-quiet <cmd> [args...]`: runs a command or function and shows its output
   only when it fails.
 - `reload`: replaces the shell with `exec zsh`, which loads `~/.zshrc` from a
@@ -123,7 +124,7 @@ installs through `install-<tool>`.
 - Never use `sudo`, interactive installers, or `curl | sh`. The one exception
   is the Homebrew bootstrap: Homebrew's official installer is interactive and
   may ask for `sudo`, and nothing else can install it.
-- Never `eval` untrusted input. Use `source-cached-init` for tool init.
+- Never `eval` untrusted input. Use `source-cached-output` for tool init.
 - Use `mktemp` for temp files, and never log or cache secrets.
 - Never pass untrusted text, such as file names, to prompt expansion like
   `print -P`. Starship sets `promptsubst`, so `$(...)` in that text runs.
@@ -145,7 +146,7 @@ Choose the ownership model first:
 - Guard lifecycle functions on optional package managers such as `npm`. Use an
   early `exists npm || return` only when the whole file depends on it.
 - When a tool registers shell hooks, for example through
-  `source-cached-init`, define empty stubs in the else branch so plugins that
+  `source-cached-output`, define empty stubs in the else branch so plugins that
   call those hooks do not fail.
 
 ### Lifecycle
@@ -203,11 +204,11 @@ else
 fi
 ```
 
-Self-managed (remove `source-cached-init` when the tool has no shell init):
+Self-managed (remove `source-cached-output` when the tool has no shell init):
 
 ```zsh
 if exists tool; then
-  source-cached-init tool init zsh
+  source-cached-output tool init zsh
 
   uninstall-tool() {
     info "Uninstalling tool..."
@@ -229,7 +230,8 @@ if exists tool; then
 else
   install-tool() {
     info "Installing tool..."
-    _run_remote_installer "https://..." -- --bin-dir "$CUSTOM_TOOLS_DIR" || return
+    _run_remote_installer "https://..." \
+      -- --bin-dir "$CUSTOM_TOOLS_DIR" || return
     reload
   }
 fi

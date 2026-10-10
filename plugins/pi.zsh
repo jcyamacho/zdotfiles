@@ -5,7 +5,7 @@ export PI_TELEMETRY=0
 
 if exists pi; then
   pi-config() {
-    edit-open "${PI_CODING_AGENT_DIR:-$HOME/.pi/agent}"
+    edit "${PI_CODING_AGENT_DIR:-$HOME/.pi/agent}"
   }
 
   _update_pi() {

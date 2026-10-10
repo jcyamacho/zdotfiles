@@ -255,8 +255,8 @@ These plugins add helper functions and need no external tool:
 Shell helpers from `_utils.zsh`:
 
 - `mkcd <dir>`: create a directory and `cd` into it.
-- `edit <file>`: open a file in `$EDITOR`.
-- `home`: `cd` to `$HOME`.
+- `edit <file>`: open a file in `$EDITOR`, without waiting when it uses
+  `--wait`.
 - `zsh-config`: edit `~/.zshrc` and reload it.
 - `kill-port <port>`: stop the process listening on a TCP port, forcing it if
   it does not exit.

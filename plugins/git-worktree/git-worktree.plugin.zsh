@@ -131,6 +131,7 @@ _gwt_default_branch() {
 }
 
 _gwt_run_setup_hooks() {
+  local worktree_path="${1:?_gwt_run_setup_hooks: missing worktree path}"
   local common_git_dir
   common_git_dir="$(command git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || return 0
   local setup_script="$common_git_dir/setup-worktree.zsh"
@@ -144,10 +145,14 @@ _gwt_run_setup_hooks() {
 
   info "Running setup script: $setup_script"
 
-  # Sourced rather than executed so the script can affect the new shell state,
-  # and $ROOT_WORKTREE_PATH lets it reach back into the main worktree.
+  # Sourced in a subshell so the script can use the shell's functions and
+  # variables without changing them, and $ROOT_WORKTREE_PATH lets it reach back
+  # into the main worktree.
   local -x ROOT_WORKTREE_PATH="${common_git_dir:h}"
-  builtin source "$setup_script"
+  (
+    builtin cd "$worktree_path" || exit
+    builtin source "$setup_script"
+  )
 }
 
 # Succeeds when origin has the branch and origin/<branch> is up to date.
@@ -216,9 +221,13 @@ gwt() {
     command git worktree add --no-track -b "$branch_name" "$worktree_path" "$base_ref" || return 1
   fi
 
-  builtin cd "$worktree_path" || return 1
+  # Change into the worktree after setup, so chpwd hooks such as venv
+  # activation see what the script created.
+  local setup_status=0
+  _gwt_run_setup_hooks "$worktree_path" || setup_status=$?
 
-  _gwt_run_setup_hooks || return
+  builtin cd "$worktree_path" || return 1
+  (( setup_status == 0 )) || return "$setup_status"
 
   builtin print ""
   info "Now in worktree '${PWD:t}'."
@@ -313,5 +322,5 @@ gwt-setup() {
     info "Created $setup_file (from template)"
   fi
 
-  edit-open "$setup_file"
+  edit "$setup_file"
 }

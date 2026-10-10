@@ -2,7 +2,7 @@
 typeset -g _direnv_config_dir="$HOME/.config/direnv"
 
 if exists direnv; then
-  source-cached-init direnv hook zsh
+  source-cached-output direnv hook zsh
 
   uninstall-direnv() {
     info "Uninstalling direnv..."
@@ -17,7 +17,7 @@ if exists direnv; then
 
   direnv-config() {
     command mkdir -p -- "$_direnv_config_dir"
-    edit-open "$_direnv_config_dir/direnv.toml"
+    edit "$_direnv_config_dir/direnv.toml"
   }
 else
   install-direnv() {

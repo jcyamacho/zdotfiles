@@ -6,7 +6,7 @@ if [[ -x "$_opencode_dir/bin/opencode" ]]; then
 
   # Sourced, not autoloaded from $fpath: a stray quote in the yargs script's
   # autoload check makes it only call compdef, which would waste the first Tab.
-  source-cached-init opencode completion
+  source-cached-output opencode completion
 
   typeset -g _opencode_config_dir="$HOME/.config/opencode"
   typeset -g _opencode_data_dir="$HOME/.local/share/opencode"
@@ -18,7 +18,7 @@ if [[ -x "$_opencode_dir/bin/opencode" ]]; then
     [[ -f "$_opencode_config_dir/opencode.json" ]] \
       || builtin print -r -- '{ "$schema": "https://opencode.ai/config.json" }' >| "$_opencode_config_dir/opencode.json"
 
-    edit-open "$_opencode_config_dir"
+    edit "$_opencode_config_dir"
   }
 
   uninstall-opencode() {

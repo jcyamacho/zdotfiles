@@ -12,7 +12,7 @@ warn() {
 }
 
 error() {
-  builtin print -r -- "${fg_bold[red]}$*$reset_color"
+  builtin print -u2 -r -- "${fg_bold[red]}$*$reset_color"
 }
 
 _confirm_discard_input() {
@@ -196,18 +196,18 @@ _cache_command_output() {
 }
 
 # Caches the output of `cmd args...` (e.g., `starship init zsh`) and sources it.
-# Usage: source-cached-init [--dep <file>]... <cmd> [args...]
+# Usage: source-cached-output [--dep <file>]... <cmd> [args...]
 #   --dep also regenerates the cache when <file> is newer, e.g. a config file
 #   the init output is built from.
-source-cached-init() {
+source-cached-output() {
   local -a deps=("${funcfiletrace[1]%:*}")
   while [[ ${1-} == --dep ]]; do
-    deps+=("${2:?source-cached-init: missing --dep file}")
+    deps+=("${2:?source-cached-output: missing --dep file}")
     shift 2
   done
 
-  local cmd=${1:?source-cached-init: missing command}
-  local cache="${ZDOTFILES_CACHE_DIR}/${cmd}-init.zsh"
+  local cmd=${1:?source-cached-output: missing command}
+  local cache="${ZDOTFILES_CACHE_DIR}/${cmd}.zsh"
 
   _cache_command_output "$cache" "${deps[@]}" -- "$@" || return
   [[ "${cache}.zwc" -nt "$cache" ]] || builtin zcompile "$cache" 2>/dev/null
@@ -251,10 +251,6 @@ alias cls="clear"
 alias rmf="rm -rf"
 alias cd..="cd .."
 
-home() {
-  builtin cd "$HOME"
-}
-
 typeset -g _zshrc_file="$HOME/.zshrc"
 
 _run_with_zshrc_locked() {
@@ -266,20 +262,23 @@ _run_with_zshrc_locked() {
   }
 }
 
+# Drops the common --wait flag so GUI editors return at once. Other editors
+# keep waiting, which is the safe fallback.
 edit() {
   local -a editor_cmd=("${(@Q)${(z)${EDITOR:-vim}}}")
-  "${editor_cmd[@]}" "$@"
+  "${(@)editor_cmd:#--wait}" "$@"
 }
 
-edit-open() {
+# $EDITOR must wait until the file is saved, because git and crontab rely on it.
+edit-wait() {
   local -a editor_cmd=("${(@Q)${(z)${EDITOR:-vim}}}")
-  "${(@)editor_cmd:#--wait}" "$@"
+  "${editor_cmd[@]}" "$@"
 }
 
 zsh-config() {
   # Unlock first in case a killed updater left the file read-only.
   command chmod +w "$_zshrc_file"
-  edit "$_zshrc_file" && reload
+  edit-wait "$_zshrc_file" && reload
 }
 
 zsh-startup-profile() {

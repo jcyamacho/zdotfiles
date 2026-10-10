@@ -14,7 +14,7 @@ update-ruby() {
 }
 
 if exists rbenv; then
-  source-cached-init rbenv init - --no-rehash zsh
+  source-cached-output rbenv init - --no-rehash zsh
 
   uninstall-unused-ruby-versions() {
     local current_version

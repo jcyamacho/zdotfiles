@@ -3,7 +3,7 @@ if exists copilot; then
   typeset -g _copilot_home="${COPILOT_HOME:-$HOME/.copilot}"
 
   copilot-config() {
-    edit-open "$_copilot_home"
+    edit "$_copilot_home"
   }
 
   uninstall-copilot() {

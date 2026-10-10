@@ -42,7 +42,7 @@ if exists ghostty || [[ -d "/Applications/Ghostty.app" ]]; then
   alias ghostty-restore-config="_ghostty_restore_config"
 
   ghostty-config() {
-    edit-open "$_ghostty_config_dir/config"
+    edit "$_ghostty_config_dir/config"
   }
 
   ghostty-update-themes() {

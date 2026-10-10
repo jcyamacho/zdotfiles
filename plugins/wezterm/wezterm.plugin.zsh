@@ -12,7 +12,7 @@ if exists wezterm; then
   alias wezterm-restore-config="_wezterm_restore_config"
 
   wezterm-config() {
-    edit-open "$WEZTERM_CONFIG_FILE"
+    edit "$WEZTERM_CONFIG_FILE"
   }
 
   uninstall-wezterm() {

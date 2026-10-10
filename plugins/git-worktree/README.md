@@ -9,7 +9,7 @@ Each new worktree can run a per-repository setup script.
 
 | Command | Description |
 | --- | --- |
-| `gwt <branch> [base-ref]` | Create a worktree for a branch, change into it, and run the setup script |
+| `gwt <branch> [base-ref]` | Create a worktree for a branch, run the setup script in it, and change into it |
 | `gwts <worktree>` | Change to another worktree of the current repository |
 | `gwt-rm <worktree>` | Remove a worktree, then offer to delete its branch |
 | `gwt-setup` | Create the repository's setup script from the template if missing, then open it in `$EDITOR` |
@@ -104,21 +104,22 @@ regular clone. The script lives inside `.git`, so it is never committed and
 all worktrees of the clone share it.
 
 Run `gwt-setup` in any worktree of the repository to open the script, creating
-it from [the template](templates/setup-worktree.zsh) first if needed. The
-template symlinks the main worktree's `.claude/settings.local.json` into the
-new worktree when that file exists. While the script is missing, `gwt` prints
-the path where `gwt-setup` would create it.
+it from [the template](templates/setup-worktree.zsh) first if needed. While the
+script is missing, `gwt` prints the path where `gwt-setup` would create it.
 
-`gwt` sources the script rather than executing it, so the script can use zsh
-syntax and change the state of your shell. While it runs:
+`gwt` sources the script in a subshell, so the script can use zsh syntax and
+your shell's functions and variables, but cannot change your shell's state.
+While it runs:
 
 - The current directory is the new worktree.
 - `ROOT_WORKTREE_PATH` holds the parent of the Git common directory, which is
   the main worktree in a regular clone. Use it to reach gitignored files such
   as `.env`.
 
-`gwt` returns the status of the script's last command and leaves you in the
-new worktree either way. Wrap optional steps in `if` blocks so a missing tool
+`gwt` changes into the new worktree after the script finishes, so `chpwd`
+hooks, such as virtualenv activation, see the files the script created. It
+returns the status of the script's last command and leaves you in the new
+worktree either way. Wrap optional steps in `if` blocks so a missing tool
 does not end the script with a failure status:
 
 ```zsh

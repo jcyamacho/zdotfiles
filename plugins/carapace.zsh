@@ -2,7 +2,7 @@
 # full list: https://carapace-sh.github.io/carapace-bin/completers.html
 
 if exists carapace; then
-  source-cached-init carapace _carapace zsh
+  source-cached-output carapace _carapace zsh
 
   uninstall-carapace() {
     info "Uninstalling carapace..."

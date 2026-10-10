@@ -34,7 +34,7 @@ directory has both files, direnv uses `.envrc`
 
 - `update-brew`, also run by `update-all`, updates direnv
 - The output of `direnv hook zsh` is cached in
-  `$ZDOTFILES_CACHE_DIR/direnv-init.zsh` and regenerated when the direnv binary
+  `$ZDOTFILES_CACHE_DIR/direnv.zsh` and regenerated when the direnv binary
   or the plugin file is newer than the cache
 - If you confirm, `uninstall-direnv` deletes the whole `~/.config/direnv`
   directory, including any files you added there
