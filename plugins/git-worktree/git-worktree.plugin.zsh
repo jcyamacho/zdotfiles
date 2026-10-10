@@ -15,23 +15,15 @@ _gwt_worktree_paths() {
 _gwt_path_for() {
   local name="${1:?_gwt_path_for: missing worktree name}"
 
-  local -a matches=()
   local worktree
   for worktree in "${(@f)$(_gwt_worktree_paths)}"; do
-    [[ "${worktree:t}" == "$name" ]] && matches+=("$worktree")
+    if [[ "${worktree:t}" == "$name" ]]; then
+      builtin print -r -- "$worktree"
+      return 0
+    fi
   done
 
-  # Callers capture stdout, so errors go to stderr.
-  if (( $#matches == 0 )); then
-    error "No worktree named '$name'." >&2
-    return 1
-  fi
-  if (( $#matches > 1 )); then
-    error "Worktree name '$name' is ambiguous:" "${matches[@]}" >&2
-    return 1
-  fi
-
-  builtin print -r -- "$matches[1]"
+  return 1
 }
 
 # gwt takes a branch name, plus an optional base ref that only applies when the
@@ -244,7 +236,10 @@ gwt-rm() {
   local name="${1:?Usage: gwt-rm <worktree>}"
 
   local selected_worktree_path
-  selected_worktree_path="$(_gwt_path_for "$name")" || return 1
+  selected_worktree_path="$(_gwt_path_for "$name")" || {
+    error "No worktree named '$name'."
+    return 1
+  }
 
   # `git worktree list` always reports the main worktree first. --show-toplevel
   # cannot be used here: it reports whichever worktree we are standing in, so it
@@ -296,7 +291,10 @@ gwts() {
   local name="${1:?Usage: gwts <worktree>}"
 
   local target
-  target="$(_gwt_path_for "$name")" || return 1
+  target="$(_gwt_path_for "$name")" || {
+    error "No worktree named '$name'."
+    return 1
+  }
 
   if [[ "$target" == "$PWD" ]]; then
     info "Already in worktree '$name'."

@@ -45,9 +45,6 @@ if exists rbenv; then
 
   alias uninstall-ruby="uninstall-rbenv"
   uninstall-rbenv() {
-    warn "This deletes $HOME/.rbenv, including every installed Ruby version and its gems."
-    confirm "Continue?" no || { info "Aborted"; return 0; }
-
     info "Uninstalling rbenv..."
     command brew uninstall rbenv || return
     command rm -rf -- "$HOME/.rbenv"

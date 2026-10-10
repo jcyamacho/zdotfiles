@@ -38,11 +38,6 @@ if [[ -f "$_viteplus_dir/env" ]]; then
   }
 
   uninstall-viteplus() {
-    # Node.js versions and global packages live inside $_viteplus_dir, so the
-    # prompt guards the whole command instead of only the user files.
-    warn "This deletes $_viteplus_dir, including installed Node.js versions and global packages."
-    confirm "Continue?" no || { info "Aborted"; return 0; }
-
     info "Uninstalling Vite+..."
     command env VP_HOME="$_viteplus_dir" vp implode --yes || return
     command rm -rf -- "$_viteplus_dir"

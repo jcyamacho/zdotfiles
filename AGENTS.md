@@ -102,8 +102,10 @@ installs through `install-<tool>`.
 ## Core rules
 
 - Follow `.editorconfig` and keep single blank lines.
-- Keep implementations minimal. Add logic or state only when it delivers
-  clear, lasting user value.
+- Keep implementations minimal. Make a change only when it fixes a real bug,
+  or when its benefit is decisive and clearly outweighs its size and
+  complexity. Skip marginal improvements, consistency-only edits, and
+  defensive extras.
 - Start plugin files with `# <tool> (<short description>): https://...`. Omit
   the URL when the plugin wraps no external tool.
 - Quote scalars (`"$var"`) and pass arrays as `"${array[@]}"`.
@@ -160,12 +162,15 @@ Choose the ownership model first:
   step that later steps depend on, with `command ... || return`.
 - Keep secondary cleanup and optional configuration best-effort unless their
   success is part of the command's contract.
-- Uninstallers always remove the tool and its own caches (for example
-  `~/.cache/<tool>`). They delete user data and configuration (history,
-  sessions, credentials, API keys, config directories, workspaces such as
-  `$GOPATH`) only inside `if confirm "Delete ... in <path>?" no; then ... fi`,
-  so declining keeps them. Cached init and completion files in
-  `$ZDOTFILES_CACHE_DIR` can stay; `zdotfiles-cache-clean` removes them.
+- Uninstallers always remove, without asking, the tool and everything a
+  reinstall can recover: caches (for example `~/.cache/<tool>`), downloaded
+  runtimes and toolchains, and global packages. They ask only before deleting
+  data that cannot be recovered (history, sessions, credentials, API keys,
+  config directories, workspaces such as `$GOPATH`), inside
+  `if confirm "Delete ... in <path>?" no; then ... fi`, so declining keeps
+  them. When the tool can only delete both kinds together, the prompt guards
+  that deletion. Cached init and completion files in `$ZDOTFILES_CACHE_DIR`
+  can stay; `zdotfiles-cache-clean` removes them.
 - Installers copy bundled config only when the user has none, so a
   reinstall keeps the config an uninstall kept. Explicit `*-restore-config`
   and copy commands overwrite.

@@ -12,11 +12,6 @@ if [[ -x "$_bun_dir/bin/bun" ]]; then
   source-cached-init bun completions
 
   uninstall-bun() {
-    # Global packages live inside $_bun_dir, so the prompt guards the whole
-    # command instead of only the user files.
-    warn "This deletes $_bun_dir, including globally installed packages."
-    confirm "Continue?" no || { info "Aborted"; return 0; }
-
     info "Uninstalling bun..."
     command rm -rf -- "$_bun_dir" "$HOME/Library/Caches/bun" || return
     reload

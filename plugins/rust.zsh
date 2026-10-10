@@ -7,9 +7,6 @@ if [[ -f "$_cargo_dir/env" ]]; then
   exists rustup || return
 
   cache-completion rustup completions zsh
-  # rustup prints the cargo completion stub, so the cache file is named _cargo
-  # explicitly. The stub loads the active toolchain's _cargo.
-  _cache_command_output "$_zdotfiles_completions_dir/_cargo" "${(%):-%x}" -- rustup completions zsh cargo
 
   uninstall-rust() {
     # rustup self uninstall deletes $_cargo_dir except the cargo-installed
