@@ -76,8 +76,8 @@ installs through `install-<tool>`.
   package already installs the completion into `site-functions`, cache
   nothing.
 - `_run_remote_installer <url> [--env K=V]... [-- args...]`: downloads the
-  script over HTTPS to a temp file and runs it with bash while `~/.zshrc` is
-  locked. Bash runs both bash and POSIX `sh` installers.
+  script over HTTPS to a temp file and runs it with the interpreter its
+  shebang names, while `~/.zshrc` is locked.
 - `_run_with_zshrc_locked <cmd> [args...]`: locks `~/.zshrc` while an updater
   known to write it runs, then unlocks it, even when the command fails.
 - `confirm <prompt> [yes|no]`: terminal-only yes/no prompt. It accepts `y`,

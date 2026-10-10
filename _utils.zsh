@@ -241,7 +241,11 @@ _run_remote_installer() {
 
   {
     command curl --proto '=https' --tlsv1.2 -fsSL "$url" -o "$tmp" || return
-    _run_with_zshrc_locked env "${envs[@]}" bash "$tmp" "$@"
+
+    # Installers run with the interpreter their shebang names: some refuse to
+    # run under bash and others need it.
+    command chmod u+x "$tmp" || return
+    _run_with_zshrc_locked env "${envs[@]}" "$tmp" "$@"
   } always {
     command rm -f -- "$tmp"
   }
