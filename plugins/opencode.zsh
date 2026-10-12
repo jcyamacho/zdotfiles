@@ -4,9 +4,7 @@ typeset -g _opencode_dir="$HOME/.opencode"
 if [[ -x "$_opencode_dir/bin/opencode" ]]; then
   path=("$_opencode_dir/bin" "${path[@]}")
 
-  # Sourced, not autoloaded from $fpath: a stray quote in the yargs script's
-  # autoload check makes it only call compdef, which would waste the first Tab.
-  source-cached-output opencode completion
+  cache-completion opencode --completions zsh
 
   typeset -g _opencode_config_dir="$HOME/.config/opencode"
   typeset -g _opencode_data_dir="$HOME/.local/share/opencode"
@@ -23,8 +21,10 @@ if [[ -x "$_opencode_dir/bin/opencode" ]]; then
 
   uninstall-opencode() {
     info "Uninstalling opencode..."
+    # Stops the background service and removes the cache, but leaves a
+    # curl-installed binary in place.
+    run-quiet opencode uninstall --force || return
     command rm -rf -- "$_opencode_dir" || return
-    command rm -rf -- "$HOME/.cache/opencode"
 
     local state_dir="$HOME/.local/state/opencode"
     if confirm "Delete opencode config, sessions, credentials, and history in $_opencode_config_dir, $_opencode_data_dir, and $state_dir?" no; then
@@ -36,7 +36,7 @@ if [[ -x "$_opencode_dir/bin/opencode" ]]; then
 
   _update_opencode() {
     info "Updating opencode..."
-    _run_with_zshrc_locked opencode upgrade
+    command opencode upgrade
   }
 
   update-opencode() {
@@ -57,7 +57,7 @@ if [[ -x "$_opencode_dir/bin/opencode" ]]; then
 else
   install-opencode() {
     info "Installing opencode..."
-    _run_remote_installer "https://opencode.ai/install" -- --no-modify-path || return
+    _run_remote_installer "https://opencode.ai/v2/install" -- --no-modify-path || return
     reload
   }
 fi
