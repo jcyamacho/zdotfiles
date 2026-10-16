@@ -6,7 +6,7 @@ if exists copilot; then
     edit "$_copilot_home"
   }
 
-  uninstall-copilot() {
+  uninstall-copilot-cli() {
     info "Uninstalling copilot..."
     command brew uninstall --cask copilot-cli || return
 
@@ -17,7 +17,7 @@ if exists copilot; then
     reload
   }
 else
-  install-copilot() {
+  install-copilot-cli() {
     info "Installing copilot..."
     command brew install --no-ask --cask copilot-cli || return
     reload

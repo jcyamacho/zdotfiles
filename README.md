@@ -127,7 +127,7 @@ every missing one.
 - `install-code`: [VS Code](https://code.visualstudio.com/) editor
 - `install-codex`: [OpenAI Codex CLI](https://developers.openai.com/codex/cli)
   ([codex plugin](plugins/codex/README.md))
-- `install-copilot`: [GitHub Copilot CLI](https://github.com/features/copilot/cli/)
+- `install-copilot-cli`: [GitHub Copilot CLI](https://github.com/features/copilot/cli/)
 - `install-cursor`: [Cursor](https://www.cursor.com/) editor
 - `install-cursor-cli`: [Cursor CLI](https://cursor.com/docs/cli/installation)
   terminal agent, through its native installer in `~/.local/bin`.
