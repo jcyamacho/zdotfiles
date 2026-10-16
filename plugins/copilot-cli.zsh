@@ -1,4 +1,18 @@
-# GitHub Copilot CLI (Copilot coding agent in the terminal): https://github.com/features/copilot/cli/
+# GitHub Copilot (desktop app and terminal agent): https://github.com/features/copilot/
+if [[ -d "/Applications/GitHub Copilot.app" ]]; then
+  uninstall-copilot() {
+    info "Uninstalling copilot..."
+    command brew uninstall --cask github-copilot-app || return
+    reload
+  }
+else
+  install-copilot() {
+    info "Installing copilot..."
+    command brew install --no-ask --cask github-copilot-app || return
+    reload
+  }
+fi
+
 if exists copilot; then
   typeset -g _copilot_home="${COPILOT_HOME:-$HOME/.copilot}"
 
