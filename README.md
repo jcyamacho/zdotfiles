@@ -194,6 +194,9 @@ every missing one.
   [Television](https://alexpasmantier.github.io/television/) fuzzy finder.
   It binds `Ctrl+T` to channel-aware completion (`Ctrl+R` stays with Atuin when
   installed) and also installs `fd` and `bat`, which its channels use.
+- `install-unsloth`: [Unsloth](https://unsloth.ai/docs) desktop app to run and
+  fine-tune local LLMs. It needs uv (`install-uv`). Its first launch downloads
+  the backend and adds the `unsloth` CLI to `~/.local/bin`.
 - `install-uv` (or `install-python`): [uv](https://docs.astral.sh/uv/) and
   Python tooling ([python plugin](plugins/python/README.md))
 - `install-varlock`: [varlock](https://varlock.dev/) AI-safe `.env` files
