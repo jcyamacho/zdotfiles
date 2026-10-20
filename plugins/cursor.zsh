@@ -29,7 +29,8 @@ if exists cursor-agent; then
       command rm -f -- "$HOME/.local/bin/agent" || return
     fi
 
-    command rm -f -- "$HOME/.local/bin/cursor-agent" || return
+    # The CLI also installs a `cursor` shim that forwards to the IDE or agent.
+    command rm -f -- "$HOME/.local/bin/cursor" "$HOME/.local/bin/cursor-agent" || return
     command rm -rf -- "$HOME/.local/share/cursor-agent" || return
     reload
   }
