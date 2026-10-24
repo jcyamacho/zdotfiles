@@ -1,5 +1,29 @@
-# Codex CLI: https://developers.openai.com/codex/cli
+# Codex (CLI and ChatGPT desktop app): https://developers.openai.com/codex/cli
 export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+
+if [[ -d "/Applications/ChatGPT.app" ]]; then
+  uninstall-chatgpt() {
+    # --zap must be chosen before the single brew call that removes the app.
+    local -a zap=()
+    if confirm "Delete ChatGPT desktop app data and sign-in in ~/Library?" no; then
+      zap=(--zap)
+    fi
+
+    info "Uninstalling chatgpt..."
+    command brew uninstall "${zap[@]}" --cask chatgpt || return
+
+    # A plain uninstall leaves the caches the app downloaded.
+    command rm -rf -- "$HOME/Library/Caches"/{Codex,com.openai.codex,com.openai.sky.CUAService}
+
+    reload
+  }
+else
+  install-chatgpt() {
+    info "Installing chatgpt..."
+    command brew install --no-ask --cask chatgpt || return
+    reload
+  }
+fi
 
 if exists codex; then
   alias cdx="codex"
@@ -25,7 +49,7 @@ if exists codex; then
     info "Uninstalling codex..."
     command brew uninstall --cask codex || return
 
-    if confirm "Delete Codex data in $CODEX_HOME?" no; then
+    if confirm "Delete Codex data in $CODEX_HOME, which the ChatGPT desktop app also uses?" no; then
       command rm -rf -- "$CODEX_HOME"
     fi
 

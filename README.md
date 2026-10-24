@@ -120,6 +120,8 @@ every missing one.
 - `install-bat`: [bat](https://github.com/sharkdp/bat) `cat` clone
 - `install-btop`: [btop](https://github.com/aristocratos/btop) resource monitor
 - `install-bun`: [Bun](https://bun.sh/) JavaScript runtime
+- `install-chatgpt`: [ChatGPT](https://chatgpt.com/) desktop app with Codex
+  ([codex plugin](plugins/codex/README.md))
 - `install-claude-code`: [Claude Code](https://www.anthropic.com/claude-code)
   coding agent
 - `install-claude-desktop`: [Claude](https://claude.com/download) desktop app
