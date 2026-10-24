@@ -1,4 +1,36 @@
-# claude (Anthropic coding assistant): https://www.anthropic.com/claude-code
+# Claude (desktop app and Claude Code terminal agent): https://claude.com/download
+if [[ -d "/Applications/Claude.app" ]]; then
+  typeset -g _claude_desktop_dir="$HOME/Library/Application Support/Claude"
+
+  claude-desktop-config() {
+    edit "$_claude_desktop_dir/claude_desktop_config.json"
+  }
+
+  uninstall-claude-desktop() {
+    # --zap must be chosen before the single brew call that removes the app.
+    local -a zap=()
+    if confirm "Delete Claude desktop sessions, settings, MCP servers, and sign-in in $_claude_desktop_dir and ~/Library?" no; then
+      zap=(--zap)
+    fi
+
+    info "Uninstalling claude desktop..."
+    command brew uninstall "${zap[@]}" --cask claude || return
+
+    # A plain uninstall leaves the Claude Code builds, VM image, and caches the
+    # app downloaded.
+    command rm -rf -- "$_claude_desktop_dir"/{claude-code,claude-code-vm,Cache,"Code Cache",GPUCache} \
+      "$HOME/Library/Caches"/com.anthropic.claudefordesktop{,.ShipIt}
+
+    reload
+  }
+else
+  install-claude-desktop() {
+    info "Installing claude desktop..."
+    command brew install --no-ask --cask claude || return
+    reload
+  }
+fi
+
 if exists claude; then
   typeset -g _claude_home="$HOME/.claude"
 
@@ -11,7 +43,7 @@ if exists claude; then
 
     local state_file="$HOME/.claude.json"
     local worktrees_dir="$HOME/.claude-worktrees"
-    if confirm "Delete Claude Code data in $_claude_home, $state_file, and $worktrees_dir?" no; then
+    if confirm "Delete Claude Code data in $_claude_home, $state_file, and $worktrees_dir, which the Claude desktop app also uses?" no; then
       command rm -rf -- "$_claude_home" "$state_file" "$state_file.backup" "$worktrees_dir"
     fi
 
