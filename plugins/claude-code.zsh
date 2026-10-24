@@ -18,8 +18,16 @@ if exists claude; then
     reload
   }
 
-  claude-config() {
+  claude-code-config() {
     edit "$_claude_home"
+  }
+
+  claude-code-settings-load-from-gist() {
+    load-file-from-gist "$_claude_home/settings.json" "claude-code-settings"
+  }
+
+  claude-code-settings-save-to-gist() {
+    save-file-to-gist "$_claude_home/settings.json" "claude-code-settings"
   }
 
   _update_claude_code() {

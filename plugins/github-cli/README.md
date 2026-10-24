@@ -66,11 +66,14 @@ Other plugins wrap the gist commands for their config files:
 
 | Command | Description |
 | --- | --- |
+| `claude-code-settings-save-to-gist` | Save `~/.claude/settings.json` to the `claude-code-settings` gist |
+| `claude-code-settings-load-from-gist` | Load `~/.claude/settings.json` from the `claude-code-settings` gist |
 | `opencode-config-save-to-gist` | Save `~/.config/opencode/opencode.json` to the `opencode-settings` gist |
 | `opencode-config-load-from-gist` | Load `~/.config/opencode/opencode.json` from the `opencode-settings` gist |
 | `zed-settings-save-to-gist` | Save `~/.config/zed/settings.json` to the `zed-settings` gist |
 | `zed-settings-load-from-gist` | Load `~/.config/zed/settings.json` from the `zed-settings` gist |
 
-[`opencode.zsh`](../opencode.zsh) defines the OpenCode helpers when OpenCode is
-installed. [`zed.zsh`](../zed.zsh) defines the Zed helpers when Zed is
-installed.
+[`claude-code.zsh`](../claude-code.zsh) defines the Claude Code helpers when
+Claude Code is installed. [`opencode.zsh`](../opencode.zsh) defines the
+OpenCode helpers when OpenCode is installed. [`zed.zsh`](../zed.zsh) defines
+the Zed helpers when Zed is installed.
