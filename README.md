@@ -172,7 +172,9 @@ every missing one.
 - `install-lsd`: [lsd](https://github.com/lsd-rs/lsd) `ls` alternative, with a
   config and color theme
 - `install-memo`: [memo](https://github.com/jcyamacho/memo) durable memory CLI.
-  Configure agent hooks with `memo hook claude` or `memo hook codex`.
+  It configures the session-start hook for Claude Code and Codex when they are
+  installed; for an agent installed later, run `memo hook claude` or
+  `memo hook codex`. `memo-config` opens the memory store.
 - `install-mise`: [mise](https://mise.jdx.dev/) dev tools, environment
   variables, and task runner
 - `install-nub`: [Nub](https://nubjs.com/) all-in-one Node.js toolkit
