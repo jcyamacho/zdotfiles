@@ -144,7 +144,8 @@ every missing one.
 - `install-docker`: [Docker](https://www.docker.com/) CLI
 - `install-dotenvx`: [dotenvx](https://github.com/dotenvx/dotenvx) encrypted
   dotenv files
-- `install-dotnet`: [.NET SDK](https://dotnet.microsoft.com/)
+- `install-dotnet`: [.NET SDK](https://dotnet.microsoft.com/) through
+  [dotnetup](https://learn.microsoft.com/dotnet/core/tools/dotnetup/)
   ([dotnet plugin](plugins/dotnet/README.md))
 - `install-fabric`: [Fabric](https://github.com/danielmiessler/fabric) AI
   prompt framework

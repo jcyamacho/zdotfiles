@@ -1,10 +1,19 @@
-# .NET SDK env, PATH, completion, lifecycle: https://dotnet.microsoft.com/
-if exists dotnet; then
+# .NET SDK through dotnetup (user-level toolchain manager): https://learn.microsoft.com/dotnet/core/tools/dotnetup/
+typeset -g _dotnetup_data_dir="$HOME/Library/Application Support/dotnetup"
+
+if exists dotnetup; then
   export DOTNET_CLI_TELEMETRY_OPTOUT=1
   export DOTNET_NOLOGO=1
 
-  # Global tools (dotnet tool install -g) install here.
-  path=("$HOME/.dotnet/tools" "${path[@]}")
+  # The SDK is not in the machine-wide location, so framework-dependent apps,
+  # including global tools, need DOTNET_ROOT to find the runtime. dotnetup does
+  # not read DOTNET_ROOT: it installs into the root in its data directory unless
+  # a command passes --install-path or global.json sets sdk.paths, so this value
+  # must match that root and cannot move it.
+  export DOTNET_ROOT="$_dotnetup_data_dir/dotnet"
+
+  # Global tools (dotnet tool install -g) install in ~/.dotnet/tools.
+  path=("$DOTNET_ROOT" "$HOME/.dotnet/tools" "${path[@]}")
 
   # Completion for the dotnet command. The SDK computes candidates from the live
   # command line, so this is a dynamic completion function registered with compdef
@@ -25,13 +34,30 @@ if exists dotnet; then
     info "Uninstalling dotnet..."
     # Only dotnet knows where the NuGet caches are, so clear them first.
     command dotnet nuget locals all --clear || warn "Could not clear the NuGet caches"
-    command brew uninstall --cask dotnet-sdk || return
+    command rm -rf -- "$HOME/.dotnet/tools" "$_dotnetup_data_dir" "$CUSTOM_TOOLS_DIR/dotnetup" || return
     reload
   }
+
+  _update_dotnet() {
+    info "Updating dotnet..."
+    command dotnetup self update || return
+    command dotnetup update
+  }
+
+  update-dotnet() {
+    _update_dotnet || return
+    reload
+  }
+
+  updates+=(_update_dotnet)
 else
   install-dotnet() {
     info "Installing dotnet..."
-    command brew install --no-ask --cask dotnet-sdk || return
+    _run_remote_installer "https://aka.ms/dotnetup/get-dotnetup.sh" \
+      -- --install-dir "$CUSTOM_TOOLS_DIR" || return
+    # The opt-outs above are not exported until dotnetup is installed.
+    DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1 \
+      command "$CUSTOM_TOOLS_DIR/dotnetup" install lts --interactive false || return
     reload
   }
 fi
