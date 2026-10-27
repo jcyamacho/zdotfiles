@@ -73,6 +73,7 @@ if exists claude; then
   }
 
   alias cc="CLAUDE_CODE_NO_FLICKER=1 command claude"
+  alias cc-config="claude-code-config"
 
   updates+=(_update_claude_code)
 else
