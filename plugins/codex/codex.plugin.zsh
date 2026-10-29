@@ -20,7 +20,7 @@ if [[ -d "/Applications/ChatGPT.app" ]]; then
 else
   install-chatgpt() {
     info "Installing chatgpt..."
-    command brew install --no-ask --cask chatgpt || return
+    command brew install --no-ask --cask --adopt chatgpt || return
     reload
   }
 fi
@@ -58,7 +58,7 @@ if exists codex; then
 else
   install-codex() {
     info "Installing codex..."
-    command brew install --no-ask --cask codex || return
+    command brew install --no-ask --cask --adopt codex || return
     # Codex refuses to start when the exported CODEX_HOME does not exist.
     command mkdir -p -- "$CODEX_HOME" || return
     reload

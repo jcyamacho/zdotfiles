@@ -2,7 +2,7 @@
 
 install-fonts() {
   info "Installing fonts..."
-  command brew install --no-ask --cask \
+  command brew install --no-ask --cask --adopt \
     font-monaspace \
     font-hack-nerd-font \
     font-jetbrains-mono \

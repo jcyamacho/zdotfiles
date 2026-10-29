@@ -36,7 +36,7 @@ if exists ollama; then
 else
   install-ollama() {
     info "Installing ollama..."
-    command brew install --no-ask --cask ollama-app || return
+    command brew install --no-ask --cask --adopt ollama-app || return
     reload
   }
 fi

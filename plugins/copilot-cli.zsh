@@ -8,7 +8,7 @@ if [[ -d "/Applications/GitHub Copilot.app" ]]; then
 else
   install-copilot() {
     info "Installing copilot..."
-    command brew install --no-ask --cask github-copilot-app || return
+    command brew install --no-ask --cask --adopt github-copilot-app || return
     reload
   }
 fi
@@ -33,7 +33,7 @@ if exists copilot; then
 else
   install-copilot-cli() {
     info "Installing copilot..."
-    command brew install --no-ask --cask copilot-cli || return
+    command brew install --no-ask --cask --adopt copilot-cli || return
     reload
   }
 fi

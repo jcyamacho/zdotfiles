@@ -176,6 +176,8 @@ Choose the ownership model first:
   and copy commands overwrite.
 - Pass `--no-ask` to scripted `brew install` and `brew upgrade` calls. Do not
   export `HOMEBREW_NO_ASK`, so manual commands keep Homebrew's confirmation.
+- Pass `--adopt` to scripted `brew install --cask` calls, so they take over an
+  app or font installed outside Homebrew instead of failing.
 - Utility-only plugins (aliases or helper functions, no managed binary) may
   omit lifecycle functions.
 

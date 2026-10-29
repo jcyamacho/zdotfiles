@@ -25,7 +25,7 @@ for _java_version in "${_java_versions[@]}"; do
   else
     functions[install-java-$_java_version]="
       info \"Installing Amazon Corretto $_java_version...\"
-      command brew install --no-ask --cask corretto@$_java_version || return
+      command brew install --no-ask --cask --adopt corretto@$_java_version || return
       reload
     "
   fi

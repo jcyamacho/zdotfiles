@@ -84,6 +84,8 @@ $ZDOTFILES_DIR/plugins/herdr.zsh
 
 $ZDOTFILES_DIR/plugins/orca.zsh
 
+$ZDOTFILES_DIR/plugins/t3-code.zsh
+
 $ZDOTFILES_DIR/plugins/ghostty
 
 $ZDOTFILES_DIR/plugins/wezterm

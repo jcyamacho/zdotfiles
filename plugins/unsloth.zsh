@@ -30,7 +30,7 @@ elif exists uv; then
   # ~/.local/bin, where the python plugin would take it for its Homebrew uv.
   install-unsloth() {
     info "Installing unsloth..."
-    command brew install --no-ask --cask unsloth || return
+    command brew install --no-ask --cask --adopt unsloth || return
     reload
   }
 fi

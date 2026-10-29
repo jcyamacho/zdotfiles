@@ -32,7 +32,7 @@ if exists orb; then
 else
   install-orbstack() {
     info "Installing orbstack..."
-    command brew install --no-ask --cask orbstack || return
+    command brew install --no-ask --cask --adopt orbstack || return
     reload
   }
 fi

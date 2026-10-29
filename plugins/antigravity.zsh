@@ -8,7 +8,7 @@ if [[ -f "/Applications/Antigravity.app/Contents/MacOS/Antigravity" ]]; then
 else
   install-antigravity() {
     info "Installing antigravity..."
-    command brew install --no-ask --cask antigravity || return
+    command brew install --no-ask --cask --adopt antigravity || return
     reload
   }
 fi
@@ -28,7 +28,7 @@ if exists agy; then
 else
   install-antigravity-cli() {
     info "Installing antigravity CLI..."
-    command brew install --no-ask --cask antigravity-cli || return
+    command brew install --no-ask --cask --adopt antigravity-cli || return
     reload
   }
 fi

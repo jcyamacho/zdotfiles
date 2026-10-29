@@ -66,8 +66,8 @@ if exists ghostty || [[ -d "/Applications/Ghostty.app" ]]; then
 else
   install-ghostty() {
     info "Installing ghostty..."
-    command brew install --no-ask --cask font-monaspace || return
-    command brew install --no-ask --cask ghostty || return
+    command brew install --no-ask --cask --adopt font-monaspace || return
+    command brew install --no-ask --cask --adopt ghostty || return
     _ghostty_update_themes || warn "Some themes could not be downloaded"
     _ghostty_has_config || _ghostty_copy_config
     reload

@@ -8,7 +8,7 @@ if exists cmux; then
 else
   install-cmux() {
     info "Installing cmux..."
-    command brew install --no-ask --cask cmux || return
+    command brew install --no-ask --cask --adopt cmux || return
     reload
   }
 fi

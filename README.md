@@ -196,6 +196,12 @@ every missing one.
   also through `update-all`, and `uninstall-unused-ruby-versions` removes every
   other installed version after confirmation.
 - `install-rust`: [Rust](https://www.rust-lang.org/) toolchain through rustup
+- `install-t3-code`: [T3 Code](https://t3.codes/) desktop app for running
+  coding agents such as Claude Code and Codex. If you installed it from the
+  website, run `install-t3-code` once so Homebrew adopts that copy. The
+  exported `T3CODE_TELEMETRY_ENABLED=false` only reaches the `t3` CLI and
+  `npx t3` when they start from a shell that loaded this plugin; the desktop
+  app does not read it from your shell.
 - `install-television`:
   [Television](https://alexpasmantier.github.io/television/) fuzzy finder.
   It binds `Ctrl+T` to channel-aware completion (`Ctrl+R` stays with Atuin when

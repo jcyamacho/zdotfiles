@@ -32,8 +32,8 @@ if exists wezterm; then
 else
   install-wezterm() {
     info "Installing wezterm..."
-    command brew install --no-ask --cask font-monaspace || return
-    command brew install --no-ask --cask wezterm || return
+    command brew install --no-ask --cask --adopt font-monaspace || return
+    command brew install --no-ask --cask --adopt wezterm || return
     [[ -f "$WEZTERM_CONFIG_FILE" ]] || _wezterm_restore_config
     reload
   }

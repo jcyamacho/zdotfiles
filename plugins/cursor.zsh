@@ -13,7 +13,7 @@ if exists cursor; then
 else
   install-cursor() {
     info "Installing cursor..."
-    command brew install --no-ask --cask cursor || return
+    command brew install --no-ask --cask --adopt cursor || return
     reload
   }
 fi

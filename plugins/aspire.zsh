@@ -16,7 +16,7 @@ if exists aspire; then
 else
   install-aspire() {
     info "Installing aspire..."
-    command brew install --no-ask --cask microsoft/aspire/aspire || return
+    command brew install --no-ask --cask --adopt microsoft/aspire/aspire || return
     reload
   }
 fi

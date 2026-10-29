@@ -18,7 +18,7 @@ if exists orca; then
 else
   install-orca() {
     info "Installing Orca..."
-    command brew install --no-ask --cask stablyai/orca/orca || return
+    command brew install --no-ask --cask --adopt stablyai/orca/orca || return
     reload
   }
 fi

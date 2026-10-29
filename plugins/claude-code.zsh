@@ -26,7 +26,7 @@ if [[ -d "/Applications/Claude.app" ]]; then
 else
   install-claude-desktop() {
     info "Installing claude desktop..."
-    command brew install --no-ask --cask claude || return
+    command brew install --no-ask --cask --adopt claude || return
     reload
   }
 fi

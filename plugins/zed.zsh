@@ -34,7 +34,7 @@ else
 
   install-zed() {
     info "Installing zed..."
-    command brew install --no-ask --cask zed || return
+    command brew install --no-ask --cask --adopt zed || return
     reload
   }
 fi
