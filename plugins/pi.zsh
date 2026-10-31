@@ -22,6 +22,12 @@ if exists pi; then
 
   if exists npm; then
     uninstall-pi() {
+      # npm uninstall succeeds for a package npm does not have.
+      command npm ls -g --depth=0 "$_pi_package" &>/dev/null || {
+        error "pi is not installed with npm. Uninstall it with the tool that installed it."
+        return 1
+      }
+
       info "Uninstalling pi..."
       command npm uninstall -g "$_pi_package" > /dev/null || return
 

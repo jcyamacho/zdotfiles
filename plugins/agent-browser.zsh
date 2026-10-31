@@ -15,6 +15,12 @@ if exists agent-browser; then
 
   if exists npm; then
     uninstall-agent-browser() {
+      # npm uninstall succeeds for a package npm does not have.
+      command npm ls -g --depth=0 agent-browser &>/dev/null || {
+        error "agent-browser is not installed with npm. Uninstall it with the tool that installed it."
+        return 1
+      }
+
       info "Uninstalling agent-browser..."
 
       command npm uninstall -g agent-browser > /dev/null || return

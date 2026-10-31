@@ -1,6 +1,6 @@
 # mise (dev tools, env vars, task runner): https://mise.jdx.dev/
 
-if exists mise; then
+if [[ -x "$CUSTOM_TOOLS_DIR/mise" ]]; then
   # Activation includes the current PATH, so generate it for each session.
   builtin source <(command mise activate zsh)
 

@@ -1,5 +1,5 @@
 # Orca (IDE for orchestrating AI coding agents across worktrees): https://www.onorca.dev/
-if exists orca; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/orca" ]]; then
   export ORCA_TELEMETRY_DISABLED=1
 
   uninstall-orca() {

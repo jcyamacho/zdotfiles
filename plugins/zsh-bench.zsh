@@ -2,7 +2,7 @@
 
 typeset -g _zsh_bench_dir="${XDG_DATA_HOME:-$HOME/.local/share}/zsh-bench"
 
-if exists zsh-bench; then
+if [[ -x "$CUSTOM_TOOLS_DIR/zsh-bench" ]]; then
   uninstall-zsh-bench() {
     info "Uninstalling zsh-bench..."
     command rm -f -- "$CUSTOM_TOOLS_DIR/zsh-bench" || return

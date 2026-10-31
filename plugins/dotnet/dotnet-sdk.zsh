@@ -1,7 +1,7 @@
 # .NET SDK through dotnetup (user-level toolchain manager): https://learn.microsoft.com/dotnet/core/tools/dotnetup/
 typeset -g _dotnetup_data_dir="$HOME/Library/Application Support/dotnetup"
 
-if exists dotnetup; then
+if [[ -x "$CUSTOM_TOOLS_DIR/dotnetup" ]]; then
   export DOTNET_CLI_TELEMETRY_OPTOUT=1
   export DOTNET_NOLOGO=1
 

@@ -43,7 +43,8 @@ turn off OpenSpec telemetry.
 - The install, update, and uninstall commands exist only when `npm` is on
   `PATH`: `install-openspec` while `openspec` is missing, and `update-openspec`
   and `uninstall-openspec` once it is installed. Each runs `reload` after it
-  succeeds.
+  succeeds. `uninstall-openspec` stops without changes when npm did not
+  install `openspec`.
 - When `update-openspec` is available, `update-all` runs the same update.
 - After an upgrade, run `openspec update` in each initialized project to
   refresh its OpenSpec instruction files

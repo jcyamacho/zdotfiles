@@ -30,10 +30,11 @@ desktop app opened that way.
 
 ## Notes
 
-- `install-codex` exists only while `codex` is missing from `PATH`, and the
-  other Codex CLI commands exist only after it is installed. Likewise,
-  `install-chatgpt` exists only while `/Applications/ChatGPT.app` is missing,
-  and `uninstall-chatgpt` only while it exists.
+- `install-codex` exists only while the `codex` cask is not installed, and the
+  other Codex CLI commands exist only after it is. Likewise,
+  `install-chatgpt` exists only while the `chatgpt` cask is not installed, and
+  adopts an app installed from the website. `uninstall-chatgpt` exists only
+  while the cask is installed.
 - `update-brew` keeps the Codex CLI up to date, and the ChatGPT desktop app
   updates itself. The plugin has no separate updater.
 - The ChatGPT desktop app reads its Codex config from `~/.codex` and bundles

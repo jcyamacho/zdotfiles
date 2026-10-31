@@ -1,6 +1,6 @@
 # Cursor (IDE and terminal agent): https://www.cursor.com/
 
-if exists cursor; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/cursor" ]]; then
   cr() {
     command cursor --classic "${@:-$PWD}"
   }
@@ -22,7 +22,7 @@ fi
 # is already on $path as $CUSTOM_TOOLS_DIR, it keeps its position.
 path+=("$HOME/.local/bin")
 
-if exists cursor-agent; then
+if [[ -x "$HOME/.local/bin/cursor-agent" ]]; then
   uninstall-cursor-cli() {
     info "Uninstalling cursor CLI..."
     if [[ "$HOME/.local/bin/agent" -ef "$HOME/.local/bin/cursor-agent" ]]; then

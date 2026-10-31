@@ -1,5 +1,5 @@
 # fabric (AI prompts framework): https://github.com/danielmiessler/fabric
-exists fabric || {
+[[ -x "$CUSTOM_TOOLS_DIR/fabric" ]] || {
   install-fabric() {
     info "Installing fabric..."
     _run_remote_installer "https://raw.githubusercontent.com/danielmiessler/fabric/main/scripts/installer/install.sh" \
@@ -37,7 +37,7 @@ yt() {
 
 uninstall-fabric() {
   info "Uninstalling fabric..."
-  command rm -f -- "$(whence -p fabric)" || return
+  command rm -f -- "$CUSTOM_TOOLS_DIR/fabric" || return
 
   if confirm "Delete fabric config, API keys, and patterns in $_fabric_config_dir?" no; then
     command rm -rf -- "$_fabric_config_dir"

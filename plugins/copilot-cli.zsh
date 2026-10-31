@@ -1,5 +1,5 @@
 # GitHub Copilot (desktop app and terminal agent): https://github.com/features/copilot/
-if [[ -d "/Applications/GitHub Copilot.app" ]]; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/github-copilot-app" ]]; then
   uninstall-copilot() {
     info "Uninstalling copilot..."
     command brew uninstall --cask github-copilot-app || return
@@ -13,7 +13,7 @@ else
   }
 fi
 
-if exists copilot; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/copilot-cli" ]]; then
   typeset -g _copilot_home="${COPILOT_HOME:-$HOME/.copilot}"
 
   copilot-config() {

@@ -1,12 +1,12 @@
 # .NET global tools (dotnet tool install -g): https://learn.microsoft.com/dotnet/core/tools/global-tools
 
-exists dotnet-ef || install-dotnet-ef() {
+[[ -x "$HOME/.dotnet/tools/dotnet-ef" ]] || install-dotnet-ef() {
   info "Installing dotnet-ef..."
   command dotnet tool update -g dotnet-ef || return
   reload
 }
 
-exists dotnet-outdated || install-dotnet-outdated() {
+[[ -x "$HOME/.dotnet/tools/dotnet-outdated" ]] || install-dotnet-outdated() {
   info "Installing dotnet-outdated..."
   command dotnet tool update -g dotnet-outdated-tool || return
   reload

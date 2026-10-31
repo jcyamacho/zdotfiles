@@ -1,6 +1,4 @@
 # T3 Code (desktop GUI for coding agents): https://t3.codes/
-# The app bundle name changes with its release label, such as "(Beta)", so
-# detect the cask instead.
 if [[ -d "$HOMEBREW_PREFIX/Caskroom/t3-code" ]]; then
   export T3CODE_TELEMETRY_ENABLED=false
 

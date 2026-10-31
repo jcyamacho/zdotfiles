@@ -5,7 +5,11 @@ _install_uv_tool() {
   command uv tool install --force "$1@latest"
 }
 
-exists ruff || install-python-ruff() { _install_uv_tool ruff; }
-exists basedpyright || install-python-basedpyright() { _install_uv_tool basedpyright; }
-exists ty || install-python-ty() { _install_uv_tool ty; }
-exists pyrefly || install-python-pyrefly() { _install_uv_tool pyrefly; }
+typeset _uv_tool_dir="${UV_TOOL_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/uv/tools}"
+
+[[ -d "$_uv_tool_dir/ruff" ]] || install-python-ruff() { _install_uv_tool ruff; }
+[[ -d "$_uv_tool_dir/basedpyright" ]] || install-python-basedpyright() { _install_uv_tool basedpyright; }
+[[ -d "$_uv_tool_dir/ty" ]] || install-python-ty() { _install_uv_tool ty; }
+[[ -d "$_uv_tool_dir/pyrefly" ]] || install-python-pyrefly() { _install_uv_tool pyrefly; }
+
+unset _uv_tool_dir

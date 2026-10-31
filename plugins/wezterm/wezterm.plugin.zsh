@@ -8,7 +8,7 @@ _wezterm_restore_config() {
   command cp -- "$ZDOTFILES_DIR/plugins/wezterm/wezterm.lua" "$WEZTERM_CONFIG_FILE"
 }
 
-if exists wezterm; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/wezterm" ]]; then
   alias wezterm-restore-config="_wezterm_restore_config"
 
   wezterm-config() {

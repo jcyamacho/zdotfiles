@@ -1,5 +1,5 @@
 # Antigravity (agent orchestration platform and terminal agent): https://antigravity.google/
-if [[ -f "/Applications/Antigravity.app/Contents/MacOS/Antigravity" ]]; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/antigravity" ]]; then
   uninstall-antigravity() {
     info "Uninstalling antigravity..."
     command brew uninstall --cask antigravity || return
@@ -13,7 +13,7 @@ else
   }
 fi
 
-if exists agy; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/antigravity-cli" ]]; then
   uninstall-antigravity-cli() {
     info "Uninstalling antigravity CLI..."
     command brew uninstall --cask antigravity-cli || return

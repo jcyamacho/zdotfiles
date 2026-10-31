@@ -1,6 +1,6 @@
 # dotenvx (a secure dotenv): https://github.com/dotenvx/dotenvx
 
-if exists dotenvx; then
+if [[ -x "$CUSTOM_TOOLS_DIR/dotenvx" ]]; then
   uninstall-dotenvx() {
     info "Uninstalling dotenvx..."
     # The installer also links dx to dotenvx when nothing else owns that name.

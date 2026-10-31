@@ -1,6 +1,6 @@
 # ollama (Local tool for running LLMs): https://ollama.com/
 
-if exists ollama; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/ollama-app" ]]; then
   update-ollama-models() {
     info "Updating ollama models..."
     local output

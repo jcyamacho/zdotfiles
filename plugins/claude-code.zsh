@@ -1,5 +1,5 @@
 # Claude (desktop app and Claude Code terminal agent): https://claude.com/download
-if [[ -d "/Applications/Claude.app" ]]; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/claude" ]]; then
   typeset -g _claude_desktop_dir="$HOME/Library/Application Support/Claude"
 
   claude-desktop-config() {
@@ -31,13 +31,12 @@ else
   }
 fi
 
-if exists claude; then
+# The native installer always places its launcher in ~/.local/bin.
+if [[ -x "$HOME/.local/bin/claude" ]]; then
   typeset -g _claude_home="$HOME/.claude"
 
   uninstall-claude-code() {
     info "Uninstalling claude..."
-    # The native installer always places its launcher here; another claude on
-    # $PATH belongs to npm or Homebrew.
     command rm -f -- "$HOME/.local/bin/claude" || return
     command rm -rf -- "$HOME/.local/share/claude"
 

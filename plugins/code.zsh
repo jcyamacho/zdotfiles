@@ -1,6 +1,6 @@
 # VSCode (IDE): https://code.visualstudio.com/
 
-if exists code; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/visual-studio-code" ]]; then
   c() {
     command code "${@:-$PWD}"
   }

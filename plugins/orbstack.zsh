@@ -1,5 +1,5 @@
 # OrbStack (Docker Desktop alternative): https://orbstack.dev/
-if exists orb; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/orbstack" ]]; then
   if [[ -d "/Applications/OrbStack.app/Contents/MacOS/xbin" ]]; then
     path=("/Applications/OrbStack.app/Contents/MacOS/xbin" "${path[@]}")
   fi

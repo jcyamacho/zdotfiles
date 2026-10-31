@@ -90,6 +90,17 @@ become available once the tool is installed.
 Each `install-*` command installs a tool. Its integration loads on `reload` or
 in the next shell.
 
+Plugins for Homebrew casks and for tools with their own installer manage only
+the copy that source installs. A copy installed another way gets no
+integration, and its `install-*` command stays available. For a cask, that
+command adopts an app installed from the vendor's website. Adopting an app
+that has already been opened needs App Management permission for your
+terminal, in System Settings under Privacy & Security; without it, Homebrew
+fails with `Operation not permitted` even when it uses `sudo`. For other tools,
+`install-*` installs the managed copy, which goes first on `PATH`. Plugins for
+Homebrew formulas work with a copy from any source, but their `uninstall-*`
+command removes only a Homebrew install.
+
 ### Recommended
 
 These tools are not installed by default. Run `install-recommended` to install

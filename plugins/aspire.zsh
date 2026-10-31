@@ -1,5 +1,5 @@
 # Aspire (CLI for distributed apps): https://aspire.dev/
-if exists aspire; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/aspire" ]]; then
   export ASPIRE_CLI_TELEMETRY_OPTOUT=1
 
   uninstall-aspire() {

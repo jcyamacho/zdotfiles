@@ -12,8 +12,9 @@ configured in Lua, with a bundled config and commands to edit or restore it.
 | `wezterm-config` | Open `$WEZTERM_CONFIG_FILE` in `$EDITOR` |
 | `wezterm-restore-config` | Replace `$WEZTERM_CONFIG_FILE` with the bundled config |
 
-`install-wezterm` exists only while `wezterm` is not on your `PATH`. The other
-commands exist only after WezTerm is installed.
+`install-wezterm` exists only while the `wezterm` cask is not installed. It
+adopts an app installed from the website only when its version matches the
+cask's. The other commands exist only once the cask is installed.
 
 `install-wezterm` keeps an existing config, so a reinstall keeps the config an
 uninstall kept. `wezterm-restore-config` overwrites it without asking. The

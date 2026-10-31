@@ -36,9 +36,7 @@ _ghostty_restore_config() {
   _ghostty_copy_config
 }
 
-# The cask links no ghostty binary; Ghostty adds it to $PATH only in its own
-# shells, so other terminals need the app bundle check.
-if exists ghostty || [[ -d "/Applications/Ghostty.app" ]]; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/ghostty" ]]; then
   alias ghostty-restore-config="_ghostty_restore_config"
 
   ghostty-config() {

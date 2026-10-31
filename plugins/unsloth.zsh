@@ -1,5 +1,5 @@
 # Unsloth (desktop app to run and fine-tune local LLMs): https://unsloth.ai/docs
-if [[ -d "/Applications/Unsloth.app" ]]; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/unsloth" ]]; then
   uninstall-unsloth() {
     local unsloth_dir="$HOME/.unsloth"
     local studio_dir="$unsloth_dir/studio"

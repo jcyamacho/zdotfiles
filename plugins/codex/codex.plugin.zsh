@@ -1,7 +1,7 @@
 # Codex (CLI and ChatGPT desktop app): https://developers.openai.com/codex/cli
 export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 
-if [[ -d "/Applications/ChatGPT.app" ]]; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/chatgpt" ]]; then
   uninstall-chatgpt() {
     # --zap must be chosen before the single brew call that removes the app.
     local -a zap=()
@@ -25,7 +25,7 @@ else
   }
 fi
 
-if exists codex; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/codex" ]]; then
   alias cdx="codex"
 
   codex-config() {

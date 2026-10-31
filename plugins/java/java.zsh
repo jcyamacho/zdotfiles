@@ -3,11 +3,10 @@
 typeset -aU _java_versions=(25 21)
 typeset _java_version _java_home
 
-# macOS provides java launchers even when no JDK is installed.
 for _java_version in "${_java_versions[@]}"; do
   _java_home="/Library/Java/JavaVirtualMachines/amazon-corretto-$_java_version.jdk/Contents/Home"
 
-  if [[ -x "$_java_home/bin/java" && -x "$_java_home/bin/javac" ]]; then
+  if [[ -d "$HOMEBREW_PREFIX/Caskroom/corretto@$_java_version" ]]; then
     if (( ! ${+JAVA_HOME} )); then
       JAVA_HOME="$_java_home"
     fi

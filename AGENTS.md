@@ -141,8 +141,23 @@ Choose the ownership model first:
 
 ### Guards
 
-- Guard on the tool itself. Homebrew is a required bootstrap dependency, so
-  never guard on `exists brew`.
+- Guard a cask or a self-managed tool on the copy that its source installs
+  instead of any copy on `$path`, so a copy installed another way gets
+  `install-<tool>` instead of configuration and lifecycle commands that act on
+  it. Check `[[ -d "$HOMEBREW_PREFIX/Caskroom/<cask>" ]]` for a cask, so
+  `--adopt` can take over an app installed from the vendor's website, and the
+  path where the installer puts the tool otherwise, such as
+  `[[ -x "$CUSTOM_TOOLS_DIR/<cmd>" ]]`.
+- Guard a formula on `exists <cmd>`. Homebrew's `bin` comes last on `$path`,
+  so installing the formula would not replace a copy installed another way.
+  When an uninstaller deletes data or runs other steps before
+  `brew uninstall`, make it stop first unless
+  `brew list --formula <formula>` succeeds.
+- When the source has no marker that a file test can check, such as npm global
+  packages, guard on `exists <cmd>` and make the uninstaller stop unless the
+  source owns the tool.
+- Homebrew is a required bootstrap dependency, so never guard on
+  `exists brew`.
 - Guard lifecycle functions on optional package managers such as `npm`. Use an
   early `exists npm || return` only when the whole file depends on it.
 - When a tool registers shell hooks, for example through
@@ -186,7 +201,9 @@ Choose the ownership model first:
 Use these templates for branch structure and lifecycle ownership. Replace the
 placeholders and add only the configuration the tool requires.
 
-Brew-managed:
+Brew-managed (for a cask, guard on
+`[[ -d "$HOMEBREW_PREFIX/Caskroom/tool" ]]` and install with
+`--cask --adopt`):
 
 ```zsh
 if exists tool; then
@@ -209,7 +226,7 @@ fi
 Self-managed (remove `source-cached-output` when the tool has no shell init):
 
 ```zsh
-if exists tool; then
+if [[ -x "$CUSTOM_TOOLS_DIR/tool" ]]; then
   source-cached-output tool init zsh
 
   uninstall-tool() {

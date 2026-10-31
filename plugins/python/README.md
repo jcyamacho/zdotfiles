@@ -62,7 +62,7 @@ into Homebrew's `site-functions`.
 
 ## Tool Installers
 
-Each installer exists when uv is installed and its tool is not on `PATH`. It
+Each installer exists when uv is installed and has not installed its tool. It
 installs the latest release with `uv tool install`, and `update-uv` and
 `update-all` upgrade it along with the other uv tools.
 

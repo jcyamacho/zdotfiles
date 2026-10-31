@@ -32,6 +32,12 @@ if exists openspec; then
     }
 
     uninstall-openspec() {
+      # npm uninstall succeeds for a package npm does not have.
+      command npm ls -g --depth=0 "$_openspec_package" &>/dev/null || {
+        error "openspec is not installed with npm. Uninstall it with the tool that installed it."
+        return 1
+      }
+
       info "Uninstalling openspec..."
       command npm uninstall -g "$_openspec_package" > /dev/null || return
       reload

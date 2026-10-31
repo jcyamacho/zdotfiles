@@ -1,5 +1,5 @@
 # cmux (native macOS terminal for AI agents): https://www.cmux.dev/
-if exists cmux; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/cmux" ]]; then
   uninstall-cmux() {
     info "Uninstalling cmux..."
     command brew uninstall --cask cmux || return

@@ -20,10 +20,11 @@ dependency checker.
 | `install-dotnet-outdated` | Install dotnet-outdated (package `dotnet-outdated-tool`) as a global tool |
 | `update-dotnet-tools` | Update every installed global tool with `dotnet tool update --all -g` |
 
-`install-dotnet` exists only when `dotnetup` is not on `PATH`, and
-`uninstall-dotnet` and `update-dotnet` only when it is. The tool commands exist
-only when `dotnet` is on `PATH`, and a tool installer is also not defined when
-its command, `dotnet-ef` or `dotnet-outdated`, is already on `PATH`.
+`install-dotnet` exists only while `dotnetup` is missing from
+`$CUSTOM_TOOLS_DIR`, and `uninstall-dotnet` and `update-dotnet` only when it is
+there. The tool commands exist only when `dotnet` is on `PATH`, and a tool
+installer is also not defined when its command, `dotnet-ef` or
+`dotnet-outdated`, is already in `~/.dotnet/tools`.
 
 `update-all` runs `update-dotnet` without the reload, then
 `update-dotnet-tools`. The tool installers reload the shell after a successful

@@ -40,7 +40,7 @@ if [[ -x "$CUSTOM_TOOLS_DIR/.java/maven/bin/mvn" ]]; then
   }
 
   updates+=(_update_maven)
-elif ! exists mvn; then
+else
   install-maven() {
     _java_install_maven || return
     reload

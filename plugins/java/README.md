@@ -22,8 +22,8 @@ official binary distributions. The plugin also selects an installed JDK for
 | `uninstall-gradle` | Delete `$CUSTOM_TOOLS_DIR/.java/gradle` |
 
 Each command reloads the shell after it succeeds. An install command exists
-only while its tool is missing, and the update and uninstall commands only
-while it is installed.
+only while the plugin's own copy of its tool is missing, and the update and
+uninstall commands only while that copy is installed.
 
 Corretto has no update command: `update-brew` upgrades the casks. `update-all`
 includes both the Homebrew update and the Maven and Gradle updates.
@@ -89,9 +89,8 @@ version already matches the release.
 
 - `uninstall-maven` and `uninstall-gradle` delete only their install
   directories. Dependency caches such as `~/.m2` and `~/.gradle` stay in place.
-- When `mvn` or `gradle` is already on `PATH` from another installation and no
-  copy exists in the install directory, the plugin defines no commands for that
-  tool.
+- A `mvn` or `gradle` from another installation does not hide
+  `install-maven` or `install-gradle`.
 
 Updates can change the build tool version: Maven stays on Maven 3, but Gradle
 follows the current release and can move to a new major version. To build with

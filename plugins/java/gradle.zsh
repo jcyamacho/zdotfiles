@@ -36,7 +36,7 @@ if [[ -x "$CUSTOM_TOOLS_DIR/.java/gradle/bin/gradle" ]]; then
   }
 
   updates+=(_update_gradle)
-elif ! exists gradle; then
+else
   install-gradle() {
     _java_install_gradle || return
     reload

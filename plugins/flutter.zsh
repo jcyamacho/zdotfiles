@@ -1,6 +1,6 @@
 # flutter (multi-platform app framework): https://flutter.dev/
 
-if exists flutter; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/flutter" ]]; then
   uninstall-flutter() {
     info "Uninstalling flutter..."
     command brew uninstall --cask flutter || return

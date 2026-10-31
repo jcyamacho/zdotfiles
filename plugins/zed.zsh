@@ -1,6 +1,6 @@
 # zed (modern text editor): https://zed.dev/
 
-if exists zed; then
+if [[ -d "$HOMEBREW_PREFIX/Caskroom/zed" ]]; then
   export EDITOR="${EDITOR:-zed --wait}"
 
   zd() {
