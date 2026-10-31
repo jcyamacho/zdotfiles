@@ -288,6 +288,8 @@ Shell helpers from `_utils.zsh`:
 - `zsh-config`: edit `~/.zshrc` and reload it.
 - `kill-port <port>`: stop the process listening on a TCP port, forcing it if
   it does not exit.
+- `gen-secret [bytes]`: print a random hex secret, 32 bytes by default, which
+  fits HS256 JWT keys and cookie signing secrets.
 - `zsh-plugins-regenerate`: rebuild the Antidote plugin bundle and reload.
 - `zdotfiles-cache-clean`: delete all zdotfiles caches, after confirmation, and
   reload.

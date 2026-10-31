@@ -329,3 +329,8 @@ kill-port() {
     command kill -9 "$pid" 2>/dev/null
   done
 }
+
+# 32 bytes (256 bits) is the minimum key size for HS256 JWTs (RFC 7518).
+gen-secret() {
+  command openssl rand -hex "${1:-32}"
+}
