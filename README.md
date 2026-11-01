@@ -149,7 +149,6 @@ every missing one.
   terminal agent, through its native installer in `~/.local/bin`.
   `update-cursor-cli` updates it, also through `update-all`, and
   `uninstall-cursor-cli` removes it.
-- `install-deno`: [Deno](https://deno.land/) JavaScript runtime
 - `install-direnv`: [direnv](https://direnv.net/) per-directory environment
   variables ([direnv plugin](plugins/direnv/README.md))
 - `install-docker`: [Docker](https://www.docker.com/) CLI
@@ -158,6 +157,8 @@ every missing one.
 - `install-dotnet`: [.NET SDK](https://dotnet.microsoft.com/) through
   [dotnetup](https://learn.microsoft.com/dotnet/core/tools/dotnetup/)
   ([dotnet plugin](plugins/dotnet/README.md))
+- `install-duckdb`: [DuckDB](https://duckdb.org/) analytical SQL database
+  CLI, run as `ddb`
 - `install-fabric`: [Fabric](https://github.com/danielmiessler/fabric) AI
   prompt framework
 - `install-flutter`: [Flutter](https://flutter.dev/) SDK

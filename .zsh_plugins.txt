@@ -24,9 +24,9 @@ $ZDOTFILES_DIR/plugins/cursor.zsh
 
 $ZDOTFILES_DIR/plugins/antigravity.zsh
 
-$ZDOTFILES_DIR/plugins/deno.zsh
-
 $ZDOTFILES_DIR/plugins/direnv
+
+$ZDOTFILES_DIR/plugins/duckdb.zsh
 
 $ZDOTFILES_DIR/plugins/dotenvx.zsh
 

@@ -216,7 +216,7 @@ source-cached-output() {
 
 # Caches the output of `cmd args...` as a #compdef completion file on fpath.
 # Usage: cache-completion <cmd> [args...]
-#   e.g., cache-completion deno completions zsh
+#   e.g., cache-completion tool completion zsh
 cache-completion() {
   local cmd=${1:?cache-completion: missing command}
   _cache_command_output "${_zdotfiles_completions_dir}/_${cmd}" "${funcfiletrace[1]%:*}" -- "$@"
