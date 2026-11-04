@@ -27,6 +27,7 @@ if exists wt; then
 
   wt-commit-claude() { _wt_set_provider claude; }
   wt-commit-codex() { _wt_set_provider codex; }
+  wt-commit-cursor() { _wt_set_provider cursor; }
 
   uninstall-worktrunk() {
     info "Uninstalling worktrunk..."
@@ -43,6 +44,8 @@ else
         _wt_set_provider claude
       elif exists codex; then
         _wt_set_provider codex
+      elif exists cursor-agent; then
+        _wt_set_provider cursor
       fi
     fi
 
