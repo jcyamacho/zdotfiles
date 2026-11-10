@@ -1,5 +1,9 @@
 # git utils (bulk pull and hook scaffolding): https://git-scm.com/docs
 
+git-config() {
+  edit "$HOME/.gitconfig"
+}
+
 git-pull-all() {
   setopt localoptions pipefail
 

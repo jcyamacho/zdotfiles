@@ -11,25 +11,26 @@ hooks. Worktree commands live in the separate
 | --- | --- |
 | `ggl [args]` | Run `git pull origin` for the current branch, or with `args` |
 | `ggp [args]` | Run `git push origin` for the current branch, or with `args` |
+| `git-config` | Open `~/.gitconfig` with `$EDITOR`, or `vim` when `EDITOR` is unset |
 | `git-pull-all [dir]` | Fast-forward pull the repository containing `dir`, or every repository directly under `dir` |
 | `git-hook <hook-name>` | Create a hook in the current repository if missing, then open it in your editor |
 
 ## Aliases
 
-| Alias | Expands to |
-| --- | --- |
-| `g` | `git` |
-| `gaa` | `git add --all` |
-| `gf` | `git fetch` |
-| `gcb` | `git checkout -b` |
-| `gcmsg` | `git commit --message` |
-| `gc!` | `git commit --verbose --amend` |
-| `gpa` | `git-pull-all` |
-| `ghk-pre-commit` | `git-hook pre-commit` |
-| `ghk-commit-msg` | `git-hook commit-msg` |
-| `ghk-post-merge` | `git-hook post-merge` |
-| `ghk-post-checkout` | `git-hook post-checkout` |
-| `ghk-pre-push` | `git-hook pre-push` |
+| Alias               | Expands to                     |
+| ------------------- | ------------------------------ |
+| `g`                 | `git`                          |
+| `gaa`               | `git add --all`                |
+| `gf`                | `git fetch`                    |
+| `gcb`               | `git checkout -b`              |
+| `gcmsg`             | `git commit --message`         |
+| `gc!`               | `git commit --verbose --amend` |
+| `gpa`               | `git-pull-all`                 |
+| `ghk-pre-commit`    | `git-hook pre-commit`          |
+| `ghk-commit-msg`    | `git-hook commit-msg`          |
+| `ghk-post-merge`    | `git-hook post-merge`          |
+| `ghk-post-checkout` | `git-hook post-checkout`       |
+| `ghk-pre-push`      | `git-hook pre-push`            |
 
 The `g`, `gaa`, `gf`, `gcb`, `gcmsg`, and `gc!` aliases call `command git`, so
 they bypass any alias or function named `git`.
