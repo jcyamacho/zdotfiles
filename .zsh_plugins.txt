@@ -90,7 +90,7 @@ $ZDOTFILES_DIR/plugins/ghostty
 
 $ZDOTFILES_DIR/plugins/wezterm
 
-$ZDOTFILES_DIR/plugins/claude-code.zsh
+$ZDOTFILES_DIR/plugins/claude-code
 
 $ZDOTFILES_DIR/plugins/lsd.zsh
 

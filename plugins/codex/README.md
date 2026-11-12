@@ -12,6 +12,7 @@ directory.
 | `cdx [args...]` | Alias for `codex` |
 | `codex-config` | Open the `$CODEX_HOME` directory in `$EDITOR` |
 | `codex-clear-archived-sessions` | Delete the files and directories in `$CODEX_HOME/archived_sessions` without asking |
+| `update-codex-marketplaces` | Refresh all configured Git marketplaces |
 | `install-codex` | Install the `codex` cask and create `$CODEX_HOME` if missing |
 | `uninstall-codex` | Uninstall the `codex` cask, then ask whether to delete `$CODEX_HOME` (default no) |
 | `install-chatgpt` | Install the `chatgpt` cask |
@@ -36,7 +37,7 @@ desktop app opened that way.
   adopts an app installed from the website. `uninstall-chatgpt` exists only
   while the cask is installed.
 - `update-brew` keeps the Codex CLI up to date, and the ChatGPT desktop app
-  updates itself. The plugin has no separate updater.
+  updates itself. `update-all` also runs `update-codex-marketplaces`.
 - The ChatGPT desktop app reads its Codex config from `~/.codex` and bundles
   its own `codex`. `uninstall-chatgpt` keeps the data in `$CODEX_HOME`; the
   cask's zap removes `~/.codex` only when it is empty.

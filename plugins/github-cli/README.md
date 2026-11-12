@@ -41,7 +41,7 @@ no gist matches, it creates one, which `gh` makes secret by default.
 broken symlink. Otherwise:
 
 - It reads the gist file named after the base name of `<file_path>`. For
-  `~/.config/zed/settings.json`, that is `settings.json`.
+  `~/.config/example/settings.json`, that is `settings.json`.
 - It downloads to a temporary file next to the target and moves it into place
   only after the download succeeds. A failed load leaves the existing file
   unchanged.
@@ -53,27 +53,9 @@ broken symlink. Otherwise:
   stays in place.
 
 ```zsh
-# Save the Starship config to the "starship-config" gist
-save-file-to-gist ~/.config/starship.toml starship-config
+# Save the settings file to the "example-settings" gist
+save-file-to-gist ~/.config/example/settings.json example-settings
 
 # Restore it on another machine
-load-file-from-gist ~/.config/starship.toml starship-config
+load-file-from-gist ~/.config/example/settings.json example-settings
 ```
-
-## Built-in Sync Helpers
-
-Other plugins wrap the gist commands for their config files:
-
-| Command | Description |
-| --- | --- |
-| `claude-code-settings-save-to-gist` | Save `~/.claude/settings.json` to the `claude-code-settings` gist |
-| `claude-code-settings-load-from-gist` | Load `~/.claude/settings.json` from the `claude-code-settings` gist |
-| `opencode-config-save-to-gist` | Save `~/.config/opencode/opencode.json` to the `opencode-settings` gist |
-| `opencode-config-load-from-gist` | Load `~/.config/opencode/opencode.json` from the `opencode-settings` gist |
-| `zed-settings-save-to-gist` | Save `~/.config/zed/settings.json` to the `zed-settings` gist |
-| `zed-settings-load-from-gist` | Load `~/.config/zed/settings.json` from the `zed-settings` gist |
-
-[`claude-code.zsh`](../claude-code.zsh) defines the Claude Code helpers when
-Claude Code is installed. [`opencode.zsh`](../opencode.zsh) defines the
-OpenCode helpers when OpenCode is installed. [`zed.zsh`](../zed.zsh) defines
-the Zed helpers when Zed is installed.

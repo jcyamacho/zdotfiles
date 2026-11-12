@@ -32,6 +32,13 @@ if [[ -d "$HOMEBREW_PREFIX/Caskroom/codex" ]]; then
     edit "$CODEX_HOME"
   }
 
+  update-codex-marketplaces() {
+    info "Updating Codex marketplaces..."
+    command codex plugin marketplace upgrade
+  }
+
+  updates+=(update-codex-marketplaces)
+
   codex-clear-archived-sessions() {
     local archive_dir="${CODEX_HOME:?}/archived_sessions"
     local -a archived_sessions

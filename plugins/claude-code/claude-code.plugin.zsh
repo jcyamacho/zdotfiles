@@ -71,10 +71,15 @@ if [[ -x "$HOME/.local/bin/claude" ]]; then
     reload
   }
 
+  update-claude-code-marketplaces() {
+    info "Updating Claude Code marketplaces..."
+    command claude plugin marketplace update
+  }
+
   alias cc="CLAUDE_CODE_NO_FLICKER=1 command claude"
   alias cc-config="claude-code-config"
 
-  updates+=(_update_claude_code)
+  updates+=(_update_claude_code update-claude-code-marketplaces)
 else
   install-claude-code() {
     info "Installing claude code..."

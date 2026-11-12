@@ -133,9 +133,10 @@ every missing one.
 - `install-bun`: [Bun](https://bun.sh/) JavaScript runtime
 - `install-chatgpt`: [ChatGPT](https://chatgpt.com/) desktop app with Codex
   ([codex plugin](plugins/codex/README.md))
-- `install-claude-code`: [Claude Code](https://www.anthropic.com/claude-code)
-  coding agent
-- `install-claude-desktop`: [Claude](https://claude.com/download) desktop app
+- `install-claude-code` for the [Claude Code](https://www.anthropic.com/claude-code)
+  coding agent and `install-claude-desktop` for the
+  [Claude desktop app](https://claude.com/download)
+  ([claude-code plugin](plugins/claude-code/README.md))
 - `install-cmux`: [cmux](https://www.cmux.dev/) native macOS terminal for AI
   agents
 - `install-code`: [VS Code](https://code.visualstudio.com/) editor
