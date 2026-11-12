@@ -30,6 +30,36 @@ if [[ -f "$_viteplus_dir/env" ]]; then
 
   alias install-node="update-node"
 
+  vpnvm() {
+    if [[ ! -f .nvmrc ]]; then
+      warn "No .nvmrc file found in the current directory"
+      return 0
+    fi
+
+    emulate -L zsh -o extendedglob
+
+    local line version
+    while IFS= builtin read -r line || [[ -n "$line" ]]; do
+      line="${line%%\#*}"
+      line="${${line##[[:space:]]#}%%[[:space:]]#}"
+      [[ -z "$line" || "$line" == [[:alnum:]_-]##=* ]] && continue
+
+      if [[ -n "$version" ]]; then
+        error "Multiple Node.js versions found in .nvmrc"
+        return 1
+      fi
+      version="$line"
+    done < .nvmrc || return
+
+    if [[ -z "$version" ]]; then
+      error "No Node.js version found in .nvmrc"
+      return 1
+    fi
+
+    [[ "$version" == node ]] && version=latest
+    vp env use "node@$version"
+  }
+
   uninstall-unused-node-versions() {
     confirm "Remove unused Vite+ Node.js versions?" no || { info "Aborted"; return 0; }
     command vp env clean node

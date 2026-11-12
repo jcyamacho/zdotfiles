@@ -225,17 +225,8 @@ every missing one.
   Python tooling ([python plugin](plugins/python/README.md))
 - `install-varlock`: [varlock](https://varlock.dev/) AI-safe `.env` files
 - `install-viteplus` (or `install-node`): [Vite+](https://viteplus.dev/) web
-  toolchain and Node.js version manager. `install-node` also works when Vite+
-  is already installed.
-  - `update-node` installs the latest Node.js LTS, makes it the global default
-    (used wherever a project does not pin a version), and updates npm and pnpm
-    through Vite+. It also runs through `update-all`.
-  - pnpm comes from Vite+ instead of Corepack, with a global default and
-    per-project versions. Bun stays independently managed.
-  - `uninstall-unused-node-versions` removes Vite+ Node.js installations other
-    than the current and default versions.
-  - When switching from fnm, open a new terminal and run `update-node` once to
-    enable Vite+ management. Existing fnm installations are not deleted.
+  toolchain and Node.js version manager
+  ([Vite+ plugin](plugins/viteplus/README.md))
 - `install-wezterm`: [WezTerm](https://wezterm.org/) terminal with its config
   ([wezterm plugin](plugins/wezterm/README.md))
 - `install-worktrunk`: [Worktrunk](https://worktrunk.dev) git worktree

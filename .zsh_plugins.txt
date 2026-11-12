@@ -46,7 +46,7 @@ $ZDOTFILES_DIR/plugins/just.zsh
 
 $ZDOTFILES_DIR/plugins/memo.zsh
 
-$ZDOTFILES_DIR/plugins/viteplus.zsh
+$ZDOTFILES_DIR/plugins/viteplus
 
 $ZDOTFILES_DIR/plugins/ollama.zsh
 
