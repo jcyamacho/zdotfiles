@@ -22,5 +22,7 @@ its Homebrew cask.
 
 - `install-claude-desktop` installs or adopts the Claude Homebrew cask.
 - `claude-desktop-config` opens `claude_desktop_config.json` in `$EDITOR`.
+- `claude-desktop-open [dir]` opens a new Claude Desktop session in `dir`, or
+  in the current directory. `cc-desktop` is an alias.
 - `uninstall-claude-desktop` asks whether to delete app data, then removes the
   cask, downloaded builds, and caches.

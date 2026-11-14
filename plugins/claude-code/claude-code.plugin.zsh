@@ -6,6 +6,18 @@ if [[ -d "$HOMEBREW_PREFIX/Caskroom/claude" ]]; then
     edit "$_claude_desktop_dir/claude_desktop_config.json"
   }
 
+  claude-desktop-open() {
+    local dir="${${1:-$PWD}:A}"
+    [[ -d "$dir" ]] || { error "Not a directory: $dir"; return 1; }
+
+    local encoded
+    encoded="$(command jq -rn --arg p "$dir" '$p|@uri')" || { error "Failed to encode path: $dir"; return 1; }
+
+    command open "claude://code/new?folder=$encoded"
+  }
+
+  alias cc-desktop="claude-desktop-open"
+
   uninstall-claude-desktop() {
     # --zap must be chosen before the single brew call that removes the app.
     local -a zap=()
