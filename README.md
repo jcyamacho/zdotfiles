@@ -1,8 +1,9 @@
 # ZDOTFILES
 
-A compact zsh setup for macOS. [Antidote](https://github.com/mattmc3/antidote)
-manages the plugins, [Starship](https://starship.rs) draws the prompt, and a
-single `zshrc.sh` drives everything.
+A compact zsh setup for macOS 15 or later.
+[Antidote](https://github.com/mattmc3/antidote) manages the plugins,
+[Starship](https://starship.rs) draws the prompt, and a single `zshrc.sh`
+drives everything.
 
 <p align="center">
   <img src="docs/avatar.webp" alt="ZDOTFILES avatar" width="220">

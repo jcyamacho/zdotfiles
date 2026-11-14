@@ -89,11 +89,10 @@ installs through `install-<tool>`.
 - `info`, `warn`, `error`: colored output. `error` writes to stderr.
 - `run-quiet <cmd> [args...]`: runs a command or function and shows its output
   only when it fails.
-- `reload`: replaces the shell with `exec zsh`, which loads `~/.zshrc` from a
-  clean state. Only exported variables carry over. Lifecycle functions end with
-  it, and code after it never runs. It returns 0 without restarting in scripts,
-  `zsh -c`, and subshells, and while `_zdotfiles_reload_deferred` is set, and
-  returns 1 while jobs are running or stopped. A function that calls several
+- `reload`: replaces the interactive shell with a new one, so only exported
+  variables carry over and code after it never runs. Lifecycle functions end
+  with it. It does nothing in scripts, `zsh -c`, and subshells, and returns 1
+  while jobs are running or stopped. A function that calls several
   lifecycle functions runs its loop in an anonymous function that sets
   `local _zdotfiles_reload_deferred=1`, then reports failures and calls
   `reload` once. Do not `unset` the variable instead, because an unset local
@@ -118,6 +117,15 @@ installs through `install-<tool>`.
   path operands, as in `command rm -f -- "$path"`. Exception: macOS `chmod`
   rejects `--` and treats it as a file name.
 - Prefer zsh expansion over subshells and pipes for simple transforms.
+- Target macOS 15 or later. Use the utilities it ships in `/usr/bin`, `/bin`,
+  `/usr/sbin`, and `/sbin`, such as `jq`, `plutil`, `curl`, `security`, and
+  `trash`, without an `exists` guard or an install step. They are the BSD
+  variants, so avoid GNU-only options. A utility on the current machine may
+  be newer than macOS 15: before using one that this repository does not use
+  yet, confirm that macOS 15 ships it, from the HISTORY section of its man
+  page or an external source, and guard it with `exists` when you cannot. Do
+  not add code that depends on the bundled `perl` or `ruby`, which Apple has
+  deprecated.
 - Use `confirm` for destructive yes/no prompts instead of custom `read` logic.
   When the prompt guards the whole command, abort on decline with
   `confirm "..." no || { info "Aborted"; return 0; }`.
@@ -150,6 +158,8 @@ Choose the ownership model first:
   `[[ -x "$CUSTOM_TOOLS_DIR/<cmd>" ]]`.
 - Guard a formula on `exists <cmd>`. Homebrew's `bin` comes last on `$path`,
   so installing the formula would not replace a copy installed another way.
+  When macOS ships a command with the same name, `exists` is always true, so
+  guard on `[[ -x "$HOMEBREW_PREFIX/bin/<cmd>" ]]` instead.
   When an uninstaller deletes data or runs other steps before
   `brew uninstall`, make it stop first unless
   `brew list --formula <formula>` succeeds.
@@ -261,8 +271,7 @@ fi
 - Prepend directories with `path=("$NEW_DIR" "${path[@]}")`. `zshrc.sh`
   already declares `path` with `typeset -gU`, so do not redeclare it; `-U`
   keeps prepends deduplicated across reloads. Append instead when the
-  directory must not outrank existing entries, as `_brew.zsh` and
-  `cursor.zsh` do.
+  directory must not outrank existing entries.
 - Disable tool telemetry when the tool supports it and the opt-out disables
   nothing else, such as feature flags.
 - For temporary variables used only while sourcing a file, use
@@ -304,7 +313,8 @@ fi
 
 ## References
 
-Style and security guides behind these rules:
+Consult these style and security guides when a zsh question is not covered by
+the rules above:
 
 - <https://wiki.zshell.dev/community/zsh_handbook>
 - <https://github.com/ohmyzsh/ohmyzsh/wiki/Secure-Code>
