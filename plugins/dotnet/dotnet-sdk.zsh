@@ -30,6 +30,13 @@ if [[ -x "$CUSTOM_TOOLS_DIR/dotnetup" ]]; then
   }
   compdef _dotnet dotnet
 
+  nuget-config() {
+    local config_file="$HOME/.nuget/NuGet/NuGet.Config"
+
+    command mkdir -p -- "${config_file:h}"
+    edit "$config_file"
+  }
+
   uninstall-dotnet() {
     info "Uninstalling dotnet..."
     # Only dotnet knows where the NuGet caches are, so clear them first.

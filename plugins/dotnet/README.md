@@ -16,13 +16,14 @@ dependency checker.
 | `install-dotnet` | Install `dotnetup` in `$CUSTOM_TOOLS_DIR`, install the `lts` SDK channel (latest LTS release), and reload the shell |
 | `uninstall-dotnet` | Clear the NuGet caches, delete the global tools, the dotnetup-managed SDKs and state, and `dotnetup`, and reload the shell |
 | `update-dotnet` | Update `dotnetup` and every tracked SDK and runtime channel, and reload the shell |
+| `nuget-config` | Open the user NuGet config, `~/.nuget/NuGet/NuGet.Config`, in `$EDITOR` |
 | `install-dotnet-ef` | Install the EF Core CLI (package `dotnet-ef`) as a global tool |
 | `install-dotnet-outdated` | Install dotnet-outdated (package `dotnet-outdated-tool`) as a global tool |
 | `update-dotnet-tools` | Update every installed global tool with `dotnet tool update --all -g` |
 
 `install-dotnet` exists only while `dotnetup` is missing from
-`$CUSTOM_TOOLS_DIR`, and `uninstall-dotnet` and `update-dotnet` only when it is
-there. The tool commands exist only when `dotnet` is on `PATH`, and a tool
+`$CUSTOM_TOOLS_DIR`, and `uninstall-dotnet`, `update-dotnet`, and
+`nuget-config` only when it is there. The tool commands exist only when `dotnet` is on `PATH`, and a tool
 installer is also not defined when its command, `dotnet-ef` or
 `dotnet-outdated`, is already in `~/.dotnet/tools`.
 
