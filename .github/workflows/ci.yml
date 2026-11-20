@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    # The oldest macOS release that zdotfiles supports.
+    runs-on: macos-15
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: zsh -e {0}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check syntax
+        run: |
+          for file in zshrc.sh _*.zsh plugins/**/*.zsh; do
+            zsh -n "$file"
+          done
+
+      - name: Start a shell in an empty home directory
+        env:
+          # Without a terminal type, plugins that call tput print errors.
+          TERM: xterm-256color
+        run: |
+          export HOME="$RUNNER_TEMP/home"
+          export ZDOTFILES_DIR="$GITHUB_WORKSPACE"
+          mkdir -p "$HOME"
+          print -r -- 'source "$ZDOTFILES_DIR/zshrc.sh"' > "$HOME/.zshrc"
+
+          # The first start installs Starship, clones Antidote and the plugins,
+          # and fills the caches, so it prints progress.
+          zsh -lic exit
+
+          output="$(zsh -lic exit 2>&1)"
+          if [[ -n "$output" ]]; then
+            print -r -- "The second start printed:" "$output"
+            exit 1
+          fi
+
+          # An empty output alone would also pass when nothing loaded.
+          zsh -lic 'exists starship && [[ "$STARSHIP_SHELL" == zsh ]] &&
+            (( ${+ZSH_AUTOSUGGEST_STRATEGY} ))'

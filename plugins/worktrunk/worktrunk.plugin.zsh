@@ -4,10 +4,13 @@ typeset -g _worktrunk_config_file="$HOME/.config/worktrunk/config.toml"
 
 _wt_set_provider() {
   local provider="${1:?provider name required}"
-  local provider_file="$ZDOTFILES_DIR/plugins/worktrunk/config/${provider}.toml"
+  local config_dir="$ZDOTFILES_DIR/plugins/worktrunk/config"
 
   command mkdir -p -- "${_worktrunk_config_file:h}" || return
-  command cp -- "$provider_file" "$_worktrunk_config_file" || return
+  # The provider file opens [commit.generation] with its command and
+  # shared.toml continues that table, so the provider file goes first.
+  command cat -- "$config_dir/$provider.toml" "$config_dir/shared.toml" \
+    >| "$_worktrunk_config_file" || return
   info "Worktrunk commit provider set to $provider"
 }
 

@@ -39,7 +39,7 @@ so `wtcms` commits only what is already staged.
 | Purpose | Path |
 | --- | --- |
 | Worktrunk user config | `~/.config/worktrunk/config.toml` |
-| Commit provider configs | [`config/`](config) |
+| Commit provider commands and shared settings | [`config/`](config) |
 
 ## Shell Integration
 
@@ -50,8 +50,8 @@ registers tab completion. You don't need to run `wt config shell install`.
 
 ## Commit Message Providers
 
-Each file in [`config/`](config) is a complete Worktrunk config whose
-`[commit.generation]` command generates commit messages with an LLM:
+Each provider file in [`config/`](config) holds only the
+`[commit.generation]` command that generates commit messages with an LLM:
 
 - [`claude.toml`](config/claude.toml): runs `claude -p` with the `haiku` model,
   thinking turned off, and no tools, slash commands, settings files, system
@@ -66,18 +66,20 @@ Each file in [`config/`](config) is a complete Worktrunk config whose
   CLI can still search the repo, and it has no flag to skip saving the
   session.
 
-All three files share the same prompts. They ask for a Conventional Commits
-1.0.0 message with one of the types `feat`, `fix`, `refactor`, `docs`,
-`chore`, `test`, `ci`, or `build`, and a lowercase, imperative summary under
-50 characters, not counting type and scope. A separate squash prompt combines
-several commits into one message. All three files also set
-`[list] summary = true`, which turns on LLM branch summaries in
+[`shared.toml`](config/shared.toml) holds the settings that every provider
+uses. Its prompts ask for a Conventional Commits 1.0.0 message with one of the
+types `feat`, `fix`, `refactor`, `docs`, `chore`, `test`, `ci`, or `build`, and
+a lowercase, imperative summary under 50 characters, not counting type and
+scope. A separate squash prompt combines several commits into one message. The
+file also sets `[list] summary = true`, which turns on LLM branch summaries in
 `wt list --full`.
 
-`wt-commit-claude`, `wt-commit-codex`, and `wt-commit-cursor` copy the provider
-file over `~/.config/worktrunk/config.toml`. This replaces the whole file, so
-any other settings in it are lost. To keep extra settings across switches, add
-them to every provider file.
+`wt-commit-claude`, `wt-commit-codex`, and `wt-commit-cursor` write the
+provider file followed by `shared.toml` to `~/.config/worktrunk/config.toml`.
+This replaces the whole file, so any other settings in it are lost. To keep
+extra settings across switches, add them to `shared.toml`. Its first keys
+continue the provider's `[commit.generation]` table, so put other tables after
+them.
 
 When no config file exists, `install-worktrunk` applies the Claude provider if
 `claude` is on the path, otherwise the Codex provider if `codex` is, otherwise

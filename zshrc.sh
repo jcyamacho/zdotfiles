@@ -69,9 +69,27 @@ autoload -Uz compinit
 
 typeset -g _zdotfiles_zcompdump="$ZDOTFILES_CACHE_DIR/zcompdump-$ZSH_VERSION"
 
-# Deliberately no -C: compinit rescans $fpath by directory mtime, which is what
-# picks up the completions cache-completion writes while plugins load.
-compinit -i -d "$_zdotfiles_zcompdump"
+# Left to itself, compinit reuses the dump while the number of completion files
+# on $fpath matches it, so it misses one completion replacing another, and it
+# audits every directory on each start. Instead, the dump is rebuilt only when
+# a directory on $fpath is newer than it: a directory's mtime changes when a
+# file is added or removed, which is what picks up the completions
+# cache-completion writes while plugins load.
+() {
+  local dir
+  for dir in "${fpath[@]}"; do
+    [[ "$dir" -nt "$_zdotfiles_zcompdump" ]] || continue
+    command rm -f -- "$_zdotfiles_zcompdump"
+    break
+  done
+}
+
+if [[ -s "$_zdotfiles_zcompdump" ]]; then
+  # -C loads the dump without the $fpath scan or the audit.
+  compinit -C -d "$_zdotfiles_zcompdump"
+else
+  compinit -i -d "$_zdotfiles_zcompdump"
+fi
 
 [[ "${_zdotfiles_zcompdump}.zwc" -nt "$_zdotfiles_zcompdump" ]] ||
   builtin zcompile "$_zdotfiles_zcompdump" 2>/dev/null

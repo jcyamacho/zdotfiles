@@ -48,9 +48,13 @@ installs through `install-<tool>`.
 - A plugin's `$fpath` addition is too late for `compinit`. Put anything
   `compinit` must see in a root-level `_<name>.zsh`.
 - Plugins can call `compdef` to register dynamic completion functions.
-- Never call `compinit -C`. Without it, `compinit` rescans `$fpath` by
-  directory mtime, which is how the next shell picks up completions that
-  `cache-completion` wrote during plugin load.
+- `zshrc.sh` rebuilds the completion dump only when a directory on `$fpath`
+  is newer than the dump, which is how the next shell picks up completions
+  that `cache-completion` wrote during plugin load. Otherwise it loads the
+  dump with `compinit -C`, which skips the `$fpath` scan and the security
+  audit. Never call `compinit -C` without that check before it.
+- Add, rename, or delete a file in a `$fpath` directory only when a completion
+  changes, because each such change rebuilds the dump in the next shell.
 - A completion generated for the first time appears in the next shell or
   `reload`, because `compinit` already ran when the plugin wrote it. Do not
   work around it.
@@ -170,9 +174,6 @@ Choose the ownership model first:
   `exists brew`.
 - Guard lifecycle functions on optional package managers such as `npm`. Use an
   early `exists npm || return` only when the whole file depends on it.
-- When a tool registers shell hooks, for example through
-  `source-cached-output`, define empty stubs in the else branch so plugins that
-  call those hooks do not fail.
 
 ### Lifecycle
 
@@ -310,6 +311,9 @@ fi
 - When a change can affect startup time, compare before and after with
   `zsh -ic zsh-startup-bench` (10 timed runs) and
   `zsh -ic zsh-startup-profile` (zprof).
+- `.github/workflows/ci.yml` runs the syntax check and a startup in an empty
+  home directory on each push to `main` and each pull request. Consult it when
+  a CI run fails or when a change needs a new check there.
 
 ## References
 

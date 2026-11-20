@@ -36,11 +36,12 @@ includes both the Homebrew update and the Maven and Gradle updates.
 
 ## JDK Selection
 
-The plugin treats Corretto `<version>` as installed when `bin/java` and
-`bin/javac` are executable in
+The plugin treats Corretto `<version>` as installed when its Homebrew cask,
+`corretto@<version>`, is installed. The cask puts the JDK in
 `/Library/Java/JavaVirtualMachines/amazon-corretto-<version>.jdk/Contents/Home`.
-Other JDKs are ignored: the plugin never selects them automatically, and
-`install-java-25` and `install-java-21` stay available when they are installed.
+Other JDKs, including a Corretto installed another way, are ignored: the
+plugin never selects them automatically, and `install-java-25` and
+`install-java-21` stay available when they are installed.
 
 The plugin sets `JAVA_HOME` only when it is unset. It keeps a value that is
 already set, even an empty or invalid one. Whenever `JAVA_HOME` is set, the

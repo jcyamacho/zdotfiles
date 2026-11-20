@@ -29,8 +29,4 @@ else
     _run_remote_installer "https://mise.run" --env "MISE_INSTALL_PATH=$CUSTOM_TOOLS_DIR/mise" || return
     reload
   }
-
-  # Stub functions to prevent errors when mise isn't installed but other plugins expect these hooks
-  _mise_hook_precmd() {}
-  _mise_hook_chpwd() {}
 fi

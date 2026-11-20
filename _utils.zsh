@@ -184,8 +184,10 @@ _cache_command_output() {
   fi
   [[ -s "$cache" ]] && (( ! $#newer )) && return 0
 
+  # Created outside the directory of $cache, which may be on $fpath: a file
+  # appearing there marks the directory as changed even when the command fails.
   local tmp
-  tmp="$(command mktemp "${cache}.XXXXXX")" || return
+  tmp="$(command mktemp "$ZDOTFILES_CACHE_DIR/tmp.XXXXXX")" || return
   {
     command "$cmd" "$@" >| "$tmp" || return
     [[ -s "$tmp" ]] || return 1
@@ -255,7 +257,7 @@ alias cls="clear"
 alias rmf="rm -rf"
 alias cd..="cd .."
 
-typeset -g _zshrc_file="$HOME/.zshrc"
+typeset -g _zshrc_file="${ZDOTDIR:-$HOME}/.zshrc"
 
 _run_with_zshrc_locked() {
   command chmod -w "$_zshrc_file" || return

@@ -1,7 +1,8 @@
 # github-cli
 
-Sets up [GitHub CLI](https://github.com/cli/cli) (`gh`) with zsh completion and
-adds commands that sync single files with your secret GitHub gists.
+Sets up [GitHub CLI](https://github.com/cli/cli) (`gh`) and adds commands that
+sync single files with your secret GitHub gists. The Homebrew `gh` formula
+installs the zsh completion.
 
 ## Commands
 

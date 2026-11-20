@@ -32,6 +32,4 @@ else
 
     reload
   }
-
-  _direnv_hook() {}
 fi

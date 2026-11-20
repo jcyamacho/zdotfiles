@@ -23,9 +23,9 @@ dependency checker.
 
 `install-dotnet` exists only while `dotnetup` is missing from
 `$CUSTOM_TOOLS_DIR`, and `uninstall-dotnet`, `update-dotnet`, and
-`nuget-config` only when it is there. The tool commands exist only when `dotnet` is on `PATH`, and a tool
-installer is also not defined when its command, `dotnet-ef` or
-`dotnet-outdated`, is already in `~/.dotnet/tools`.
+`nuget-config` only when it is there. The tool commands exist only when
+`dotnet` is on `PATH`, and a tool installer is also not defined when its
+command, `dotnet-ef` or `dotnet-outdated`, is already in `~/.dotnet/tools`.
 
 `update-all` runs `update-dotnet` without the reload, then
 `update-dotnet-tools`. The tool installers reload the shell after a successful
@@ -39,7 +39,7 @@ profile.
 
 ## Environment Variables
 
-Exported only when `dotnetup` is on `PATH`:
+Exported only when `dotnetup` is in `$CUSTOM_TOOLS_DIR`:
 
 | Variable | Value |
 | --- | --- |
@@ -58,7 +58,7 @@ anywhere else only hides the SDKs that dotnetup installs.
 
 ## PATH and Completion
 
-When `dotnetup` is on `PATH`, the plugin also:
+When `dotnetup` is in `$CUSTOM_TOOLS_DIR`, the plugin also:
 
 - Prepends `DOTNET_ROOT`, which contains `dotnet`, and `~/.dotnet/tools`, where
   `dotnet tool install -g` puts global tools, to `PATH`
